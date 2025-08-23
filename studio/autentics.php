@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>WebCaixa v1.19_beta</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<script>
+function F5(event) {
+var tecla = document.all ? window.event.keyCode : event.which;
+if (document.all) { window.event.keyCode = 0; window.event.returnValue = false; }
+if (tecla == 116) return false;
+}
+
+document.onkeydown = F5;
+</script>
+  </head>
+
+  <body background="../images/bg1.jpg" text="#FFFFFF">
+    <?php
+      // Importando os Dados do Formulário
+	 $Sis       = "S7";
+	 $Rot       = "S7R5.2.1.1.1";
+ 
+    // Imprimindo Cabeçalho da Spool de Impressão
+       shell_exec("echo '--- A U T E N T I C A C O E S - D O - D I A ---' > /dev/lp0");
+       shell_exec("echo '-----------------------------------------------' > /dev/lp0");
+
+    // Imprimindo a Spool de Impressão
+       include "conexao.php";
+       include "dbselect.php";
+
+       $SqlSp = "select * from spool2 order by rec";
+       $rsSp  = mysqli_query ($conec, $SqlSp) or die ("Não foi possível obter dados da spool");
+       while ($lnSp  = mysqli_fetch_array($rsSp))
+	    {
+	     $Spo = $lnSp['spo2'];
+	     shell_exec("echo '$Spo' > /dev/lp0");
+	    }
+
+    // Encerrando a Conexão
+       mysqli_free_result($rsSp);
+       $SisRot = "S-7.5.2.1.1.1"; ?>
+
+  </body>
+
+</html>

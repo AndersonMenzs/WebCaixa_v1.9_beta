@@ -1,0 +1,14 @@
+body {
+    margin-top: 5%;
+    margin-left: 3%;
+    margin-right: 3%;
+    border: 3px solid gray;
+    padding: 10px 10px 10px 10px;
+    font-family: sans-serif;
+}
+
+.campos {
+    background-color: #C0C0C0;
+    font: 16px sans-serif;
+    color: #000000;
+}

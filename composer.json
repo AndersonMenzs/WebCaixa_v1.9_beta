@@ -1,0 +1,11 @@
+{
+    "name": "menzsdeveloper/caixa",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Menzsdeveloper\\Caixa\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
