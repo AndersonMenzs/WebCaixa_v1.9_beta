@@ -41,7 +41,7 @@ error_reporting(E_ALL);
 	$Rot       = "S7R2.2.1.1";
 	$dtRec     = date('Y-m-d');
 	$dtComp    = date('Y-m-d');
-	$lg_user   = trim($_POST['txtuser']);
+	$lg_user   = trim($_POST['txtuser']);	
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
 	$NDoc      = trim($_POST['txtdoc']);
@@ -60,6 +60,9 @@ error_reporting(E_ALL);
 	$txt1 = isset($_POST['txtvalor1']) ? (float) trim($_POST['txtvalor1']) : 0;
 	$txt2 = isset($_POST['txtvalor2']) ? (float) trim($_POST['txtvalor2']) : 0;
 	$txt3 = isset($_POST['txtvalor3']) ? (float) trim($_POST['txtvalor3']) : 0;
+	$VrEnt	 = $txt1 + $txt2 + $txt3;
+	$VrEntr    = number_format($VrEnt, 2, ',', '.');
+
 
 	// Truncar o nome da vendedora com o primeiro nome completo e após o primeiro espaco, deixar somente uma letra e ponto.
 	$Vendedora = strtoupper($Vendedora);
@@ -161,7 +164,6 @@ error_reporting(E_ALL);
 				</center>
 			</form>
 		<?php
-		exit();
 		} else {
 		?>
 			<font size='6'><b>

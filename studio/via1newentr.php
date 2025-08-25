@@ -43,7 +43,6 @@
 	$FPag_1      = trim($_POST['lsPr1']);
 	$FPag_2      = trim($_POST['lsPr2']);
 	$FPag_3      = trim($_POST['lsPr3']);
-	//$ModPag    = trim($_POST['modpag']);
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
 	$mRec    = substr($dtRec, 5, 2);
@@ -53,7 +52,6 @@
 	$h1 = substr($hora, 0, 2);
 	$h2 = substr($hora, 3, 2);
 	$horaaut   = $h1 . $h2;
-	//$VrEnt     = trim($_POST['txtvalor']);
 	$txt1 = isset($_POST['txtvalor1']) ? (float) trim($_POST['txtvalor1']) : 0;
 	$txt2 = isset($_POST['txtvalor2']) ? (float) trim($_POST['txtvalor2']) : 0;
 	$txt3 = isset($_POST['txtvalor3']) ? (float) trim($_POST['txtvalor3']) : 0;
@@ -145,7 +143,6 @@
 
 			$SisRot = "S-7.2.2.1.2";
 			include "./rodape.php"; ?>
-
 	<script src="./js/ghost_click.js"></script>
 	<script>
 function imprimirERedirecionar() {
@@ -155,6 +152,12 @@ function imprimirERedirecionar() {
         + '&PC=<?php echo urlencode($PC); ?>'
         + '&VrEntrF=<?php echo urlencode($VrEntrF); ?>'
         + '&ModPag=<?php echo urlencode($ModPag); ?>'
+		+ '&fpag_1=<?php echo urlencode($FPag_1); ?>'
+		+ '&fpag_2=<?php echo urlencode($FPag_2); ?>'
+		+ '&fpag_3=<?php echo urlencode($FPag_3); ?>'
+		+ '&txt1=<?php echo urlencode($txt1); ?>'
+		+ '&txt2=<?php echo urlencode($txt2); ?>'
+		+ '&txt3=<?php echo urlencode($txt3); ?>'
         + '&data=<?php echo urlencode($dtRec); ?>'
         + '&Vendedora=<?php echo urlencode($Vendedora); ?>'
         + '&Cliente=<?php echo urlencode($Cliente); ?>'
