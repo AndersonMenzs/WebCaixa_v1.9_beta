@@ -106,7 +106,6 @@ error_reporting(E_ALL);
 			if ($regsr == 0 or $dtComp <> $dtReceb) {
 				$Reg = 0;
 			}
-			$Reg  = $Reg + 1;
 
 			if ($FPag_1 <> "00") {
 				$Reg  = $Reg + 1;
