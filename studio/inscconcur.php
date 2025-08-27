@@ -141,10 +141,10 @@
 	} 
 
 	// Consultando número de recibo
-	$sql = "SELECT numrec FROM num_recibos WHERE status = '0'ORDER BY numrec DESC LIMIT 1";
+	/*$sql = "SELECT numrec FROM num_recibos WHERE status = '0'ORDER BY numrec DESC LIMIT 1";
 	$res = mysqli_query($conec, $sql);
 	$ln  = mysqli_fetch_array($res);
-	$NumRec = $ln['numrec'];
+	$NumRec = $ln['numrec'];*/
 	
 	?>
 
@@ -172,15 +172,8 @@
 
 				<tr>
 					<td rowspan="4" align="center">
-						<?php
-						if ($NumRec != '') {
-							$readonly_disabled = 'readonly';
-
-							echo "<input type='text' name='txtdoc' size='5' maxlength='7' class='campos' value='<?php if ($NumRec != '') echo $NumRec; ?>' <?php echo $readonly_disabled; ?>>";
-						} else {
-							echo "Não há recibo disponivel";
-						}
-						?>
+						<input type='text' name='txtdoc' size='5' maxlength='7' class='campos' onKeyPress="return SomenteNumero(event)">
+						
 					</td>
 					</td>
 					<td align="center">
@@ -320,7 +313,7 @@
 				</td>
 				<td width="82%" align="center">
                <?php
-               if (isset($NumRec)) {
+               if (!isset($NumRec)) {
                   echo "<input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;";
                   echo "<input type='reset' name='btreset' value='Limpar'><br><br>";
                } ?>

@@ -214,20 +214,35 @@
          var fp2 = document.cntentr.lsPr2.value;
          var fp3 = document.cntentr.lsPr3.value;
 
-         if (fp1 === fp2 || fp1 === fp3 || (fp2 !== "" && fp2 === fp3)) {
-            var repetidos = [];
-            if (fp1 === fp2) repetidos.push(fp1);
-            if (fp1 === fp3) repetidos.push(fp1);
-            if (fp2 === fp3) repetidos.push(fp2);
+         // Verifica se há valores repetidos, ignorando valores vazios ou "Selecione"
+         var formasPreenchidas = [];
 
+         // Adiciona apenas formas de pagamento válidas (não vazias)
+         if (fp1 && fp1 !== "" && fp1 !== "Selecione") formasPreenchidas.push({
+            value: fp1,
+            select: document.cntentr.lsPr1
+         });
+         if (fp2 && fp2 !== "" && fp2 !== "Selecione" && fp2 !== fp3) formasPreenchidas.push({
+            value: fp2,
+            select: document.cntentr.lsPr2
+         });
+         if (fp3 && fp3 !== "" && fp3 !== "Selecione" && fp3 !== fp2) formasPreenchidas.push({
+            value: fp3,
+            select: document.cntentr.lsPr3
+         });
+
+         // Verifica duplicatas entre as formas preenchidas
+         var valores = formasPreenchidas.map(item => item.value);
+         var duplicatas = valores.filter((item, index) => valores.indexOf(item) !== index);
+
+         if (duplicatas.length > 0) {
             // Buscar o texto da opção repetida
             var texto = "";
-            if (repetidos.length > 0) {
-               var selects = [document.cntentr.lsPr1, document.cntentr.lsPr2, document.cntentr.lsPr3];
-               for (var i = 0; i < selects.length; i++) {
-                  for (var j = 0; j < selects[i].options.length; j++) {
-                     if (selects[i].options[j].value === repetidos[0]) {
-                        texto = selects[i].options[j].text;
+            for (var i = 0; i < formasPreenchidas.length; i++) {
+               if (formasPreenchidas[i].value === duplicatas[0]) {
+                  for (var j = 0; j < formasPreenchidas[i].select.options.length; j++) {
+                     if (formasPreenchidas[i].select.options[j].value === duplicatas[0]) {
+                        texto = formasPreenchidas[i].select.options[j].text;
                         break;
                      }
                   }
@@ -326,7 +341,7 @@
                   <font color='#FFFFFF' size='5'><b><i>Nº do Contrato</i></b></font>
                </td>
                <td align="center">
-                  <font color='#FFFFFF' size='5'><b><i>Vlr Único</i></b></font>
+                  <font color='#FFFFFF' size='5'><b><i>Valor Total</i></b></font>
                </td>
                <td align="center">
                   <font color='#FFFFFF' size='5'><b><i>Forma de Pagamento</i></b></font>
@@ -341,6 +356,7 @@
                   <input type="text" name="txtdoc" size="7" maxlength="7" class="campos" onKeyUp="validate(this)">
                </td>
                <td rowspan="3" align="center">
+                  <font size='5'><b><i>R$ </i></b></font>
                   <input type="text" name="vlr_unico" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('cntentr', 'vlr_unico', event); validate(this)">
                </td>
                <td align="center">

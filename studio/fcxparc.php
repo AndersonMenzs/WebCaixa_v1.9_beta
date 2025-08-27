@@ -457,7 +457,7 @@
 
 		// Totalizando Recebimentos
 		$Entradas    = $cashTot + $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $DepClientes + $pixQRCode + $pixCNPJ;
-		$DemaisTot = $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $cheqTotV + $cheqTotPre;
+		$DemaisTot = $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $pixQRCode + $pixCNPJ;
 		$Geral     = $Recolh + $DemaisTot;
 		$TotIn     = number_format($Entradas, 2, ",", ".");
 		$RecolTot  = number_format($Recolh, 2, ",", ".");
@@ -736,14 +736,14 @@
 							</td>
 						</tr>
 
-						<tr>
+						<!--<tr>
 							<td>
 								<font color="gold"><b><i>Cartão Crédito (Parc. Adm.): </b></i></font>
 								<b><i>R$ <?php echo $CardParcAdm; ?></i></b>
 							</td>
 						</tr>
 
-						<!--<tr>
+						<tr>
 							<td>
 								<font color="gold"><b><i>Cheques (A Vista):. . . . . . . . </b></i></font>
 								<b><i>R$ <?php echo $CheqTotal; ?></i></b>
@@ -755,14 +755,14 @@
 								<font color="gold"><b><i>Cheques (Pré-datados):. . . . </b></i></font>
 								<b><i>R$ <?php echo $CheqPre; ?></i></b>
 							</td>
-						</tr>-->
+						</tr>
 
 						<tr>
 							<td>
 								<font color="gold"><b><i>Depósito de Clientes: . . . . . </b></i></font>
 								<b><i><?php echo "R$ $DepCli"; ?></i></b>
 							</td>
-						</tr>
+						</tr>-->
 					</table><br>
 
 					<center>

@@ -518,7 +518,7 @@ ini_set('track_errors', 1);*/
 
 		// Totalizando Recebimentos
 		$Entradas    = $cashTot + $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $DepClientes + $pixQRCode + $pixCNPJ;
-		$DemaisTot   = $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm;
+		$DemaisTot   = $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $pixQRCode + $pixCNPJ;
 		$Geral       = $Recolh + $DemaisTot;
 		$TotIn     = number_format($Entradas, 2, ",", ".");
 		$RecolTot  = number_format($Recolh, 2, ",", ".");
@@ -693,7 +693,8 @@ ini_set('track_errors', 1);*/
 						<!--<tr>
 			    <td>
 			       <font color="gold"><b><i>Taxa Bebê Estrella:. . . </b></i></font>
-			       <b><i><?php //echo "$NBebe itens --> R$ $ValorBebe"; ?></i></b>
+			       <b><i><?php //echo "$NBebe itens --> R$ $ValorBebe"; 
+							?></i></b>
 			    </td>
 			 </tr>-->
 
@@ -740,7 +741,8 @@ ini_set('track_errors', 1);*/
 						<!--<tr>
 								<td>
 									<font color="gold"><b><i>Resgate de Cheques: . </b></i></font>
-									<b><i><?php //echo "$NResgate itens --> R$ $ValorResg"; ?></i></b>
+									<b><i><?php //echo "$NResgate itens --> R$ $ValorResg"; 
+											?></i></b>
 								</td>
 						</tr>-->
 
@@ -827,14 +829,14 @@ ini_set('track_errors', 1);*/
 			      <font color="gold"><b><i>Cheques (Pré-datados):. . . . </b></i></font>
 			      <b><i>R$ <?php echo $CheqPre; ?></i></b>
 			   </td>
-			</tr>-->
+			</tr>
 
 						<tr>
 							<td>
 								<font color="gold"><b><i>Depósito de Clientes: . . . . . </b></i></font>
 								<b><i><?php echo "R$ $DepCli"; ?></i></b>
 							</td>
-						</tr>
+						</tr>-->
 					</table><br>
 
 					<center>

@@ -785,14 +785,14 @@ ini_set('track_errors', 1);
 							</td>
 						</tr>
 
-						<tr>
+						<!--<tr>
 							<td>
 								<font color="gold"><b><i>Cartão Crédito (Parc. Adm.): </b></i></font>
 								<b><i>R$ <?php echo $CardParcAdm; ?></i></b>
 							</td>
 						</tr>
 
-						<!--<tr>
+						<tr>
 			    <td>
 			       <font color="gold"><b><i>Cheques (A Vista):. . . . . . . . </b></i></font>
 			       <b><i>R$ <?php echo $CheqTotal; ?></i></b>
@@ -804,14 +804,14 @@ ini_set('track_errors', 1);
 			       <font color="gold"><b><i>Cheques (Pré-datados):. . . . </b></i></font>
 			       <b><i>R$ <?php echo $CheqPre; ?></i></b>
 			    </td>
-			 </tr>-->
+			 </tr>
 
 						<tr>
 							<td>
 								<font color="gold"><b><i>Depósito de Clientes: . . . . . </b></i></font>
 								<b><i><?php echo "R$ $DepCli"; ?></i></b>
 							</td>
-						</tr>
+						</tr>-->
 					</table><br>
 
 					<center>

@@ -187,20 +187,10 @@
 						// COnexão
 						include "dbselect.php";
 
-						// Consultando número de recibo
-						$sql_rec = "SELECT numrec FROM num_recibos WHERE status = '0' ORDER BY numrec ASC LIMIT 1";
-						$res = mysqli_query($conec, $sql_rec) or die("Erro de Banco de Dados #3");
-						$ln  = mysqli_fetch_array($res);
-						$NumRec = $ln['numrec'];
-
-						if ($NumRec != '') {
-							$readonly_disabled = 'readonly';
-
-							echo "<input type='text' name='txtdoc' size='5' maxlength='7' class='campos' value='$NumRec' $readonly_disabled>";
-						} else {
-							echo "Não há recibo disponivel";
-						}
 						?>
+
+						<input type='text' name='txtdoc' size='5' maxlength='7' class='campos'>
+
 					</td>
 					<td rowspan="4" align="center">
 						<font color='lime' size='5'><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -316,11 +306,8 @@
 					<a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
 				</td>
 				<td width="82%" align="center">
-					<?php
-					if (isset($NumRec)) {
-						echo "<input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;";
-						echo "<input type='reset' name='btreset' value='Limpar'><br><br>";
-					} ?>
+					<input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
+					<input type='reset' name='btreset' value='Limpar'><br><br>
 				</td>
 				<td width="9%" align="right">
 					<a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
