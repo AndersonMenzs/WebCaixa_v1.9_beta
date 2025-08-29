@@ -20,91 +20,12 @@
 		}
 	</style>
 
-	<script type="text/javascript" src="val_contrato.js" charset="utf-8"></script>
-
-	<!-- Adicionando jQuery UI para o autocomplete -->
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-
-
 	<?php
 	// Inserindo o Cabeçalho
 	include "../cabecprs.php";
 	?>
 
 	<script>
-		$(function() {
-			function setupAutocomplete(element, tipo) {
-				$(element).autocomplete({
-					source: function(request, response) {
-						$.ajax({
-							url: "buscar_funcionarias.php",
-							dataType: "json",
-							contentType: "application/json",
-							data: {
-								term: request.term,
-								tipo: tipo
-							},
-							success: function(data) {
-								if (data && Array.isArray(data)) {
-									response(data);
-								} else if (data && data.error) {
-									console.error("Erro no servidor:", data.error);
-									response([]);
-								} else {
-									console.error("Resposta inválida do servidor");
-									response([]);
-								}
-							},
-							error: function(xhr, status, error) {
-								console.error("Erro na requisição:", status, error);
-								try {
-									// Tentar extrair mensagem de erro do HTML retornado
-									var errorHtml = xhr.responseText;
-									var errorMatch = errorHtml.match(/<title>(.*?)<\/title>/i) ||
-										errorHtml.match(/<body[^>]*>(.*?)<\/body>/is);
-									var errorMsg = errorMatch ? errorMatch[1] : "Erro desconhecido";
-									console.error("Detalhes:", errorMsg);
-								} catch (e) {
-									console.error("Não foi possível analisar o erro");
-								}
-								response([]);
-							}
-						});
-					},
-					minLength: 2,
-					delay: 300
-				});
-			}
-
-			// Aplicar aos campos
-			setupAutocomplete("#encarregada", "encarregada");
-			setupAutocomplete("#vendedora", "vendedora");
-		});
-
-		function validaCampos() {
-			var vendedora = document.getElementById('vendedora').value.trim();
-			var cliente = document.getElementById('cliente').value.trim();
-			if (vendedora.length <= 8) {
-				alert('O campo Vendedora deve ter mais que 8 letras.');
-				document.getElementById('vendedora').focus();
-				return false;
-			}
-			if (cliente.length <= 8) {
-				alert('O campo Cliente deve ter mais que 8 letras.');
-				document.getElementById('cliente').focus();
-				return false;
-			}
-
-			// Validação da soma dos valores
-			function parseValor(valor) {
-				return parseFloat(valor.replace(',', '.')) || 0;
-			}
-
-			return true;
-		}
-
 		function putFocus(formInst, elementInst) {
 			if (document.forms.length > 0) {
 				document.forms[formInst].elements[elementInst].focus();
@@ -188,30 +109,6 @@
 				}
 			}
 		}
-
-		function fPassaAlfaNumerico(tipo) {
-			return function(e) {
-				let char = String.fromCharCode(e.which);
-				if (tipo === 'an') {
-					// permite apenas letras e números
-					if (!/^[a-zA-Z0-9\s]$/.test(char)) {
-						e.preventDefault();
-					}
-				}
-			};
-		}
-
-		function validnome(input) {
-			// remove tudo que não for letra, número ou espaço
-			input.value = input.value.replace(/[^A-Z0-9\s]/g, '');
-
-			// exemplo: exige pelo menos 3 caracteres
-			if (input.value.length < 3) {
-				input.style.borderColor = "red";
-			} else {
-				input.style.borderColor = "";
-			}
-		}
 	</script>
 
 	<script src="val_prod.js" charset="utf-8"></script>
@@ -227,7 +124,6 @@
 	$lg_user = $_REQUEST['c_s'];
 	$user = substr($lg_user, 0, 8);
 	$pss  = substr($lg_user, 8, 40);
-	$DataHj = date('Y-m-d');
 
 	// Obtendo Valor Atualizado
 	include "conexao.php";
@@ -250,24 +146,6 @@
 	$VrAnt   = $lnA['vltx'];
 	$VrAntF = number_format($VrAnt, 2, ',', '.');
 
-	// Consultando o último recibo dentro das rotinas TXP, TXC, PROD e BOOK
-	$sql = "SELECT numdoc, datarec FROM registro 
-        WHERE numdoc >= 22000000 
-        AND datarec >= '2025-08-29' 
-        AND subtipo IN ('TXP', 'TXC', 'PROD', 'BOOK') 
-        ORDER BY numdoc DESC";
-	$rs  = mysqli_query($conec, $sql) or die('Erro #3!');
-	$ln  = mysqli_fetch_array($rs);
-	$NumDoc = $ln['numdoc'];
-	$DataRec = $ln['datarec'];
-
-	// Condição para usar o próximo número do recibo
-	if ($DataHj >= $DataRec) {
-		$NumDoc = $NumDoc + 1;
-	} else {
-		echo "Entre em contato com o administrador do sistema.";
-	}
-
 	include "us_sist.php";
 	if ($ch == 'no') {
 		include "us_cad.php";
@@ -283,21 +161,16 @@
 
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') {
 	?>
-		<table width="70%" border="5" cellpadding="5" cellspacing="0" align="center">
+		<table border="5" cellpadding="5" cellspacing="0" align="center">
 			<form name="taxaProd" method="post" action="confprod.php" OnSubmit="JavaScript:return checkdata()" autocomplete="off">
-				<input type="hidden" name="vlr_unico" value="<?php echo $VrProd; ?>">
 				<tr>
 					<td align="center">
 						<font size='5'><b><i>Nº Recibo</i></b></font>
 					</td>
 					<td align="center">
-						<font color='gold' size='6'>
-							<b>
-								<i>
+						<font color='gold' size='6'><b><i>
 									<blink>Amizade Premiada?</blink>
-								</i>
-							</b>
-						</font>
+								</i></b></font>
 					</td>
 					<td align="center">
 						<font size='5'><b><i>Forma de Pagamento</i></b></font>
@@ -309,11 +182,10 @@
 
 				<tr>
 					<td rowspan="4" align="center">
-						<font size='5'><b><i><?php echo $NumDoc; ?></i></b></font>
-						<input type='hidden' name='txtdoc' size='10' maxlength='8' class='campos' value="<?php echo $NumDoc; ?>">
+						<input type='text' name='txtdoc' size='5' maxlength='7' class='campos' value="">
 					</td>
 					<td rowspan="4" align="center">
-						<font color='lime' size=''><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<font color='lime' size='5'><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<font size='5'><b><i>Sim </i></b></font><input type='radio' name='rdtaxa' value='S'>
 
 						<input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">
@@ -328,12 +200,8 @@
 						<select name="lsPr1" class="campos">
 							<?php
 							// Obtendo a Relação
-							// Conectando ao Banco de Dados
-							include "dbselect.php";
-
-							// Obtendo a Relação
 							// Criando a Instrução SQL de Consulta
-							$sqlpr1 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
+							$sqlpr1 = "select * from formapag where codpag < 31 order by codpag";
 
 							// Consultando os Registros
 							$rspr1 = mysqli_query($conec, $sqlpr1) or die("Não foi possível acessar os Dados");
@@ -367,7 +235,7 @@
 							include "dbselect.php";
 
 							// Criando a Instrução SQL de Consulta
-							$sqlpr2 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
+							$sqlpr2 = "select * from formapag where codpag < 31 order by codpag";
 
 							// Consultando os Registros
 							$rspr2 = mysqli_query($conec, $sqlpr2) or die("Não foi possível acessar os Dados");
@@ -399,7 +267,7 @@
 							include "dbselect.php";
 
 							// Criando a Instrução SQL de Consulta
-							$sqlpr3 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
+							$sqlpr3 = "select * from formapag where codpag < 31 order by codpag";
 
 							// Consultando os Registros
 							$rspr3 = mysqli_query($conec, $sqlpr3) or die("Não foi possível acessar os Dados");
@@ -422,34 +290,6 @@
 					</td>
 				</tr>
 
-		</table><br>
-		<table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
-			<tr>
-				<td width="35%" align="center">
-					<font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
-				</td>
-				<td width="35%" align="center">
-					<font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
-				</td>
-				<td width="30%" align="center">
-					<font color='#FFFFFF' size='5'><b><i>Data Nasc.</i></b></font>
-				</td>
-			</tr>
-			<tr>
-				<td align="center">
-					<input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
-						onkeypress="fPassaAlfaNumerico('an')"
-						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
-				</td>
-				<td align="center">
-					<input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
-						onkeypress="fPassaAlfaNumerico('an')"
-						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
-				</td>
-				<td align="center">
-					<input type="date" id="data_nasc" name="data_nasc" class="campos" value="1940-01-01" required>
-				</td>
-			</tr>
 		</table><br>
 
 		<table width="100%" border="0" cellspacing="0">

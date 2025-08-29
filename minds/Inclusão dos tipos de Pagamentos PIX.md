@@ -37,4 +37,5 @@ INSERT INTO `formapag` (`codpag`, `modpag`, `siglapag`) VALUES ('70', 'Pix QR Co
 - fcxparc.php
 - recibo_cntentr.php
 - geracntentr.php
+- index.php
 

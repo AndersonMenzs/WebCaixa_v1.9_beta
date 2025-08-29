@@ -185,16 +185,17 @@
 									<blink>Não Autorizado</blink>
 									<font color="#FFFFFF">!!!</center>
 				</b></font><br>
-			<center><a href='JavaScript:window.history.back()'><img src='images/voltar.gif'></a></center><br><?php
-																											}
-																										}
+			<center><a href='JavaScript:window.history.back()'><img src='images/voltar.gif'></a></center><br>
+	<?php
+					}
+				}
 
-																										// Encerrando a Conexão
-																										/* mysqli_free_result($rso);
+				// Encerrando a Conexão
+				/* mysqli_free_result($rso);
 	 		mysqli_free_result($rsGr);
 	 		mysqli_free_result($rsx); */
-																										$SisRot = "S-7.2.1.1.1";
-																										include "./rodape.php"; ?>
+				$SisRot = "S-7.2.1.1.1";
+				include "./rodape.php"; ?>
 
 	<script src="./js/ghost_click.js"></script>
 

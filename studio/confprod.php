@@ -46,8 +46,8 @@
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
 	$NumDoc    = trim($_POST['txtdoc']);
-	$NumDocF = 1000000 + $NumDoc;
-	$NDoc      = substr($NumDocF, 1, 6);
+	$NumDocF = 100000000 + $NumDoc;
+	$NDoc      = substr($NumDocF, 1, 8);
 	$RdTaxa    = trim($_POST['rdtaxa']);
 	$VrAnt     = trim($_POST['txtAP']);
 	$VrAntF  = number_format($VrAntF, 2, "," . ".");
@@ -56,14 +56,22 @@
 	$FPag1     = trim($_POST['lsPr1']);
 	$FPag2     = trim($_POST['lsPr2']);
 	$FPag3     = trim($_POST['lsPr3']);
-	$FPag4     = trim($_POST['lsPr4']);
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
-	//$txt4      = trim($_POST['txt4']);
-	//$TaxaProd  = $txt1 + $txt2 + $txt3 + $txt4;
+	$Vendedora = trim($_POST['vendedora']);
+	$Cliente	= trim($_POST['cliente']);
+	$DataNasc	= trim($_POST['data_nasc']);
 	$TaxaProd  = $txt1 + $txt2 + $txt3;
 	$TaxaProdF = number_format($TaxaProd, 2, ",", ".");
+
+	// Calculando a idade da modelo
+	$DataNasc = $DataNasc;
+	$Idade = date('Y') - date('Y', strtotime($DataNasc));
+
+	if (date('md') < date('md', strtotime($DataNasc))) {
+		$Idade--;
+	}
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -82,10 +90,6 @@
 	if ($txt3 <> "") {
 		$FsPags = $FsPags + 1;
 	}
-
-	/* if ($txt4 <> "") {
-		$FsPags = $FsPags + 1;
-	} */
 
 	if ($FsPags == 1) {
 		if ($txt1 <> "") {
@@ -109,14 +113,7 @@
 			$ln  = mysqli_fetch_array($rs);
 			$ModPag = $ln['modpag'];
 			mysqli_free_result($rs);
-		}  else if ($txt4 <> "") {
-			$FPag = $FPag4;
-			$sql = "select * from formapag where codpag = '$FPag' ";
-			$rs  = mysqli_query($conec, $sql);
-			$ln  = mysqli_fetch_array($rs);
-			$ModPag = $ln['modpag'];
-			mysqli_free_result($rs);
-		} 
+		}
 	} else {
 		$ModPag = "Diversas";
 	} ?>
@@ -124,15 +121,31 @@
 	<font color="gold" size="6">
 		<br><b>
 			<center><u><i>Recebimento da Taxa de Produção</i></u></center>
+			<?php
+			// Verificando se a cliente é maior que 60 anos
+			if ($Idade >= 60) {
+			?>
+				<center>
+					<font color='lime' size='6'>
+						<b>
+							<i>Cliente Senior</i>
+						</b>
+					</font>
+				</center>
+			<?php
+			}
+			?>
 		</b>
-	</font><br><?php
+	</font>
+	<br>
+	<?php
 
-				include "us_sist.php";
-				if ($ch == 'no') {
-					include "us_cad.php";
-				}
+	include "us_sist.php";
+	if ($ch == 'no') {
+		include "us_cad.php";
+	}
 
-				if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
+	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
 		<table width="90%" border="5" cellpadding="10" cellspacing="0" align="center">
 			<form name="confentr" method="post" action="geraprod.php" OnSubmit="JavaScript:return checkdata()">
 				<tr>
@@ -178,11 +191,13 @@
 		<input type="hidden" name="lsPr1" value="<?php echo $FPag1; ?>">
 		<input type="hidden" name="lsPr2" value="<?php echo $FPag2; ?>">
 		<input type="hidden" name="lsPr3" value="<?php echo $FPag3; ?>">
-		<input type="hidden" name="lsPr4" value="<?php echo $FPag4; ?>">
 		<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
 		<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
 		<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
-		<input type="hidden" name="txt4" value="<?php echo $txt4; ?>">
+		<input type="hidden" name="data_nasc" value="<?php echo $DataNasc; ?>">
+		<input type="hidden" name="idade" value="<?php echo $Idade; ?>">
+		<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 
 		<p>
 			<center>
@@ -194,21 +209,22 @@
 			<font color='#FFFFFF' size='3'><span id="msg"></span></font>
 		</center>
 		</form><?php
-				} else { ?>
+			} else { ?>
 		<br><br><br><br><br>
 		<font size='6'><b>
 				<center>Acesso <font color='gold'>
-						<blink><u>não Autorizado</u>
+						<blink>
+							<u>não Autorizado</u>
 						</blink>
 						<font color='#FFFFFF'>!!!</center>
 			</b></font><br><br><br>
 		<center><a href='servrec.php?c_s=<?php echo $lg_user; ?>'><img src='images/voltar.gif'></a></center><br><br>
 	<?php
-				}
+			}
 
-				// Encerrando
-				$SisRot = "S-7.2.1.1";
-				include "./rodape.php";
+			// Encerrando
+			$SisRot = "S-7.2.1.1";
+			include "./rodape.php";
 	?>
 
 	<script src="./js/ghost_click.js"></script>
