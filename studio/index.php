@@ -306,58 +306,7 @@
 						<font size='4'><b><i>- Despesas &amp; Recolhimentos</i></b></font>
 					</td>
 
-					<td rowspan="6" width="30%">
-						<table border="5" cellpadding="5" cellspacing="0" align="center">
-							<?php
-							// Variáveis
-							$mes_dia = date('m-d');
-							$hoje = date('Y-m-d');
-
-							// Soma de envelopes do dia
-							$sql = "SELECT COUNT(*) AS recibos FROM num_recibos WHERE status = '0'";
-							$res = mysqli_query($conec, $sql);
-							$row = mysqli_fetch_array($res);
-							$quant_rec = $row['recibos'];
-
-							?>
-							<tr>
-								<td colspan="2">
-									<font size="4" color="gold">
-										<u><b>INFORMAÇÕES GERAIS</b></u>
-									</font>
-								</td>
-							</tr>
-							<tr>
-								<td align="center" width="50%">
-									<b>Nº RECIBOS</b>
-								</td>
-								<td align="center" width="50%">
-									<b>
-										<?php
-										// Defina o total de envelopes disponíveis
-										$total_rec = 250; // Altere este valor conforme necessário
-
-										// Calcula a porcentagem de envelopes disponíveis
-										if ($total_rec > 0) {
-											$percent_rec = round(($quant_rec / $total_rec) * 100);
-										} else {
-											$percent_rec = 0;
-										}
-
-										// Exibe a porcentagem com cores e animação
-										if ($percent_rec <= 20) {
-											echo '<span class="blink-slow" style="color: red;">' . $quant_rec . '</span>';
-										} elseif ($percent_rec <= 50) {
-											echo '<span class="blink-slow" style="color: orange;">' . $quant_rec . '</span>';
-										} else {
-											echo '<span style="color: lime;">' . $quant_rec . '</span>';
-										}
-										?>
-									</b>
-								</td>
-							</tr>
-						</table>
-					</td>
+					
 				</tr>
 			<?php
 			}
@@ -385,19 +334,6 @@
 				</tr>
 			<?php
 			}
-
-			if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $chcx == 'f' and $AtuSen == 'ok') { ?>
-				<tr>
-					<td width="35%">
-					<td width="35%">
-						<a href="fecha.php?c_s=<?php echo $lg_user . $abre; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Solicitar Número de Recibo</i></b></font>
-					</td>
-					<td width="30%"></td>
-				</tr>
-			<?php
-			}
-
 			if ($ch == 'ok-enc' and $AtuSen == 'ok') { ?>
 				<tr>
 					<td width="35%">
