@@ -67,13 +67,9 @@ function checkdata() {
 		var taxaProd = txtvrprod.value * 1;
 
 		if (rd_select == "yes" && taxaAnt != soma && taxaProd != soma) {
-            var diferenca = soma - taxaProd;
-            var msg = diferenca > 0 ?
-               "A soma dos valores está MAIOR em R$" + Math.abs(diferenca).toFixed(2) :
-               "A soma dos valores está MENOR em R$" + Math.abs(diferenca).toFixed(2);
-            alert(msg);
-			txt1.select();
-			txt1.focus();
+            alert("Valor da Amizade Premiada Incorreto!!!");
+            txt1.select();
+            txt1.focus();
             return false;
          }
 
@@ -85,11 +81,7 @@ function checkdata() {
 		}*/
 
 		if (rd_select == "no" && taxaProd > 0 && soma !== taxaProd) {
-            var diferenca = soma - taxaProd;
-            var msg = diferenca > 0 ?
-               "A soma dos valores está MAIOR em R$" + Math.abs(diferenca).toFixed(2) :
-               "A soma dos valores está MENOR em R$" + Math.abs(diferenca).toFixed(2);
-            alert(msg);
+            alert("Valor da Taxa Incorreto!!!");
 			txt1.select();
 			txt1.focus();
             return false;

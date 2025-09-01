@@ -79,7 +79,7 @@ SELECT numdoc, datarec FROM registro
 | geraprod.php |
 | via1newprod.php |
 | recibo_taxaprod.php |
-| val_prod.js |
+| val_prod.js | - Validações de campos;<br><br> |
 
 
 - Geração do número do recibo.

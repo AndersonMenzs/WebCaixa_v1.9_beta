@@ -41,7 +41,7 @@ error_reporting(E_ALL);
 	$Rot       = "S7R2.2.1.1";
 	$dtRec     = date('Y-m-d');
 	$dtComp    = date('Y-m-d');
-	$lg_user   = trim($_POST['txtuser']);	
+	$lg_user   = trim($_POST['txtuser']);
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
 	$NDoc      = trim($_POST['txtdoc']);
@@ -107,20 +107,19 @@ error_reporting(E_ALL);
 				$Reg = 0;
 			}
 
+				$Reg = $Reg + 1;
+
 			if ($FPag_1 <> "00") {
-				$Reg  = $Reg + 1;
 				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados2");
 			}
 
 			if ($FPag_2 <> "00") {
-				$Reg  = $Reg + 1;
 				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados3");
 			}
 
 			if ($FPag_3 <> "00") {
-				$Reg  = $Reg + 1;
 				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados4");
 			}

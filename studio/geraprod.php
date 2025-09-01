@@ -41,6 +41,11 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
+
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1.1";
@@ -58,6 +63,8 @@
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
+	$VrTx	 = $txt1 + $txt2 + $txt3;
+	$VrTxa	= number_format($VrTx, 2, ',', '.');
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
 	$DataNasc	= trim($_POST['data_nasc']);
@@ -72,9 +79,7 @@
 	$TipoRec   = '1';
 	$SubTipo   = 'TXP';
 
-echo $dtRec . " - " . $dtComp . " - " . $lg_user . " - " . $NDoc . " - " . $FPag1 . " - " . $FPag2 . " - " . $FPag3 . " - " . $txt1 . " - " . $txt2 . " - " . $txt3 . " - " . $Vendedora . " - " . $Cliente . " - " . $DataNasc . " - " . $Idade . " - " . $Pass . " - " . $Senha . " - " . $fps . " - " . $TaxaProd . " - " . $TaxaProdF . " - " . $TipoRec . " - " . $SubTipo . "<br>";
-
-
+	// Conexão
 	include "conexao.php";
 	include "dbselect.php";
 
@@ -110,35 +115,22 @@ echo $dtRec . " - " . $dtComp . " - " . $lg_user . " - " . $NDoc . " - " . $FPag
 						$Reg  = $Reg + 1;
 
 						if ($FPag1 <> "00") {
-							$fps = $fps + 1;
+							//$fps = $fps + 1;
 							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
 						}
 
 						if ($FPag2 <> "00") {
-							$fps = $fps + 1;
+							//$fps = $fps + 1;
 							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
 						}
 
 						if ($FPag3 <> "00") {
-							$fps = $fps + 1;
+							//$fps = $fps + 1;
 							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
 						}
-exit;
-						// Preparando a Via Cliente
-						/*if ($fps ==  1) {
-							if ($FPag1 <> "00") {
-								$FPag = $FPag1;
-							} else if ($FPag2 <> "00") {
-								$FPag = $FPag2;
-							} else if ($FPag3 <> "00") {
-								$FPag = $FPag3;
-							}
-						} else {
-							$FPag = "05";
-						}*/
 
 						// Preparando a Via Cliente 
 				?>
@@ -146,14 +138,24 @@ exit;
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
 				<input type="hidden" name="tiporec" value="<?php echo $TipoRec; ?>">
+				<input type="hidden" name="txtvalor1" value="<?php echo $txt1; ?>">
+				<input type="hidden" name="txtvalor2" value="<?php echo $txt2; ?>">
+				<input type="hidden" name="txtvalor3" value="<?php echo $txt3; ?>">
+				<input type="hidden" name="txtvalor" value="<?php echo $VrTxa; ?>">
 				<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
 				<input type="hidden" name="rdtaxa" value="<?php echo $RdTaxa; ?>">
-				<input type="hidden" name="formapag" value="<?php echo $FPag; ?>">
+				<input type="hidden" name="lsPr1" value="<?php echo $FPag1; ?>">
+				<input type="hidden" name="lsPr2" value="<?php echo $FPag2; ?>">
+				<input type="hidden" name="lsPr3" value="<?php echo $FPag3; ?>">
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">
 				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
 				<input type="hidden" name="taxaprod" value="<?php echo $TaxaProd; ?>">
 				<input type="hidden" name="taxaprodF" value="<?php echo $TaxaProdF; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
+				<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
+				<input type="hidden" name="idade" value="<?php echo $Idade; ?>">
+				<input type="hidden" name="data_nasc" value="<?php echo $DataNasc; ?>">
 				<font size='6'><b>
 						<center>Coloque a <font color='gold'>
 								<blink>Primeira Via</blink>

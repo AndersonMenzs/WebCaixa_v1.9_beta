@@ -50,9 +50,9 @@
 	$NDoc      = substr($NumDocF, 1, 8);
 	$RdTaxa    = trim($_POST['rdtaxa']);
 	$VrAnt     = trim($_POST['txtAP']);
-	$VrAntF  = number_format($VrAntF, 2, "," . ".");
+	$VrAntF  = number_format($VrAnt, 2, ",", ".");
 	$VrProd    = trim($_POST['txtvrprod']);
-	$VrProdF = number_format($VrProd, 2, "," . ".");
+	$VrProdF = number_format($VrProd, 2, ",", ".");
 	$FPag1     = trim($_POST['lsPr1']);
 	$FPag2     = trim($_POST['lsPr2']);
 	$FPag3     = trim($_POST['lsPr3']);
@@ -65,12 +65,16 @@
 	$TaxaProd  = $txt1 + $txt2 + $txt3;
 	$TaxaProdF = number_format($TaxaProd, 2, ",", ".");
 
-	// Calculando a idade da modelo
-	$DataNasc = $DataNasc;
-	$Idade = date('Y') - date('Y', strtotime($DataNasc));
+	// Converte para o formato internacional
+	$partes = explode('/', $DataNasc);
 
-	if (date('md') < date('md', strtotime($DataNasc))) {
-		$Idade--;
+	if (count($partes) == 3) {
+		$DataNasc = $partes[2] . '-' . $partes[1] . '-' . $partes[0];
+		$Idade = date('Y') - date('Y', strtotime($DataNasc));
+
+		if (date('md') < date('md', strtotime($DataNasc))) {
+			$Idade--;
+		}
 	}
 
 	include "conexao.php";
@@ -124,9 +128,13 @@
 			<?php
 			// Verificando se a cliente é maior que 60 anos
 			if ($Idade >= 60) {
+
+				// Gratuidade
+				$TaxaProd = 0.00;
+				$TaxaProdF = number_format($TaxaProd, 2, ",", ".");
 			?>
 				<center>
-					<font color='lime' size='6'>
+					<font color='lime' size='7'>
 						<b>
 							<i>Cliente Senior</i>
 						</b>
@@ -188,6 +196,7 @@
 		<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 		<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
 		<input type="hidden" name="rdtaxa" value="<?php echo $RdTaxa; ?>">
+		<input type="hidden" name="txtaxaprod" value="<?php echo $TaxaProd; ?>">
 		<input type="hidden" name="lsPr1" value="<?php echo $FPag1; ?>">
 		<input type="hidden" name="lsPr2" value="<?php echo $FPag2; ?>">
 		<input type="hidden" name="lsPr3" value="<?php echo $FPag3; ?>">
@@ -198,7 +207,6 @@
 		<input type="hidden" name="idade" value="<?php echo $Idade; ?>">
 		<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
-
 		<p>
 			<center>
 				<input id="ghost_click" type="submit" name="btenvia" value="Continuar">

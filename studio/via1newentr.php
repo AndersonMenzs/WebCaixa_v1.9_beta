@@ -29,6 +29,11 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
+	exit;
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.2.1.2";
@@ -66,6 +71,8 @@
 	// Pesquisando PC
 	include "conexao.php";
 	include "dbselect.php";
+
+	// Obtendo o código do PC
 	$sqlPC = "select pc from inicial";
 	$rsPC  = mysqli_query($conec, $sqlPC) or die("Não foi possível acessar o PC");
 	$lnPC  = mysqli_fetch_array($rsPC);
@@ -135,7 +142,7 @@
 	<center>
 		<font color='#FFFFFF' size='3'><span id="msg"></span></font>
 	</center>
-	</form><?php
+	<?php
 			// Gravando a Spool
 			include "dbselect.php";
 			$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
