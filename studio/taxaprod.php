@@ -313,7 +313,7 @@
 						<input type='hidden' name='txtdoc' size='10' maxlength='8' class='campos' value="<?php echo $NumDoc; ?>">
 					</td>
 					<td rowspan="4" align="center">
-						<font color='lime' size=''><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<font color='lime' size='5'><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<font size='5'><b><i>Sim </i></b></font><input type='radio' name='rdtaxa' value='S'>
 
 						<input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">

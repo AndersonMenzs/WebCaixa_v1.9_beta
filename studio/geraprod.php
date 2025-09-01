@@ -46,30 +46,34 @@
 	$Rot       = "S7R2.1.1.1";
 	$dtRec     = date('Y-m-d');
 	$dtComp    = date('Y-m-d');
+	$hora	  = date('H:i');
 	$lg_user   = trim($_POST['txtuser']);
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
 	$RdTaxa      = trim($_POST['rdtaxa']);
 	$NDoc      = trim($_POST['txtdoc']);
-	$NDoc_a	= trim($_POST['txtdoc']);
 	$FPag1     = trim($_POST['lsPr1']);
 	$FPag2     = trim($_POST['lsPr2']);
 	$FPag3     = trim($_POST['lsPr3']);
-	$FPag4     = trim($_POST['lsPr4']);
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
-	//$txt4      = trim($_POST['txt4']);
+	$Vendedora = trim($_POST['vendedora']);
+	$Cliente	= trim($_POST['cliente']);
+	$DataNasc	= trim($_POST['data_nasc']);
+	$Idade 		= trim($_POST['idade']);
 	$Pass      = strtolower(trim($_POST['txtsen']));
 	$Senha     = sha1($Pass);
 
 	// Criando Variáveis
 	$fps = 0;
-	//$TaxaProd  = $txt1 + $txt2 + $txt3 + $txt4;
 	$TaxaProd  = $txt1 + $txt2 + $txt3;
 	$TaxaProdF = number_format($TaxaProd, 2, ",", ".");
 	$TipoRec   = '1';
 	$SubTipo   = 'TXP';
+
+echo $dtRec . " - " . $dtComp . " - " . $lg_user . " - " . $NDoc . " - " . $FPag1 . " - " . $FPag2 . " - " . $FPag3 . " - " . $txt1 . " - " . $txt2 . " - " . $txt3 . " - " . $Vendedora . " - " . $Cliente . " - " . $DataNasc . " - " . $Idade . " - " . $Pass . " - " . $Senha . " - " . $fps . " - " . $TaxaProd . " - " . $TaxaProdF . " - " . $TipoRec . " - " . $SubTipo . "<br>";
+
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -122,31 +126,23 @@
 							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
 						}
-
-						/*if ($FPag4 <> "00") {
-							$fps = $fps + 1;
-							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag4', '0', '$dtRec', '$hora', '$txt4', '$Mat', '')";
-							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #11. Contate seu Administrador.");
-						}*/
-
+exit;
 						// Preparando a Via Cliente
-						if ($fps ==  1) {
+						/*if ($fps ==  1) {
 							if ($FPag1 <> "00") {
 								$FPag = $FPag1;
 							} else if ($FPag2 <> "00") {
 								$FPag = $FPag2;
 							} else if ($FPag3 <> "00") {
 								$FPag = $FPag3;
-							} else {
-								$FPag = $FPag4;
 							}
 						} else {
 							$FPag = "05";
-						}
+						}*/
 
 						// Preparando a Via Cliente 
 				?>
-			<form name="geraprod" method="post" action="via1prod.php">
+			<form name="geraprod" method="post" action="via1newprod.php">
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
 				<input type="hidden" name="tiporec" value="<?php echo $TipoRec; ?>">
@@ -191,9 +187,6 @@
 				}
 
 				// Encerrando a Conexão
-				/* mysqli_free_result($rso);
-	 		mysqli_free_result($rsGr);
-	 		mysqli_free_result($rsx); */
 				$SisRot = "S-7.2.1.1.1";
 				include "./rodape.php"; ?>
 

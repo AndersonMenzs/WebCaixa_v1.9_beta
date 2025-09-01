@@ -146,7 +146,7 @@
 	}
 
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
-		<table width="90%" border="5" cellpadding="10" cellspacing="0" align="center">
+		<table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
 			<form name="confentr" method="post" action="geraprod.php" OnSubmit="JavaScript:return checkdata()">
 				<tr>
 					<td width="30%" align="center">

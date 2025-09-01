@@ -131,7 +131,6 @@ error_reporting(E_ALL);
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
 				<input type="hidden" name="tiporec" value="<?php echo $TipoRec; ?>">
-				<!--<input type="hidden" name="txtvalor" value="<?php echo $EntrForm; ?>">-->
 				<input type="hidden" name="txtvalor1" value="<?php echo $txt1; ?>">
 				<input type="hidden" name="txtvalor2" value="<?php echo $txt2; ?>">
 				<input type="hidden" name="txtvalor3" value="<?php echo $txt3; ?>">
