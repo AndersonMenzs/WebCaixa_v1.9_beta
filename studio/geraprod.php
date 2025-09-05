@@ -56,10 +56,12 @@
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
 	$RdTaxa      = trim($_POST['rdtaxa']);
+	$VrProd    = trim($_POST['txtvrprod']);
+	$VrProdF = number_format($VrProd, 2, ",", ".");	
 	$NDoc      = trim($_POST['txtdoc']);
-	$FPag1     = trim($_POST['lsPr1']);
-	$FPag2     = trim($_POST['lsPr2']);
-	$FPag3     = trim($_POST['lsPr3']);
+	$FPag_1     = trim($_POST['lsPr1']);
+	$FPag_2     = trim($_POST['lsPr2']);
+	$FPag_3     = trim($_POST['lsPr3']);
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
@@ -71,6 +73,10 @@
 	$Idade 		= trim($_POST['idade']);
 	$Pass      = strtolower(trim($_POST['txtsen']));
 	$Senha     = sha1($Pass);
+
+	// Truncar o nome da vendedora com o primeiro nome completo e após o primeiro espaco, deixar somente uma letra e ponto.
+	$Vendedora = strtoupper($Vendedora);
+	$Vendedora = substr($Vendedora, 0, strpos($Vendedora, ' ') + 1) . substr($Vendedora, strpos($Vendedora, ' ') + 1, 1) . '.';
 
 	// Criando Variáveis
 	$fps = 0;
@@ -114,21 +120,21 @@
 						}
 						$Reg  = $Reg + 1;
 
-						if ($FPag1 <> "00") {
+						if ($FPag_1 <> "00") {
 							//$fps = $fps + 1;
-							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
+							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
 						}
 
-						if ($FPag2 <> "00") {
+						if ($FPag_2 <> "00") {
 							//$fps = $fps + 1;
-							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '')";
+							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
 						}
 
-						if ($FPag3 <> "00") {
+						if ($FPag_3 <> "00") {
 							//$fps = $fps + 1;
-							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
+							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
 						}
 
@@ -144,13 +150,13 @@
 				<input type="hidden" name="txtvalor" value="<?php echo $VrTxa; ?>">
 				<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
 				<input type="hidden" name="rdtaxa" value="<?php echo $RdTaxa; ?>">
-				<input type="hidden" name="lsPr1" value="<?php echo $FPag1; ?>">
-				<input type="hidden" name="lsPr2" value="<?php echo $FPag2; ?>">
-				<input type="hidden" name="lsPr3" value="<?php echo $FPag3; ?>">
+				<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
+				<input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
+				<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">
 				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
-				<input type="hidden" name="taxaprod" value="<?php echo $TaxaProd; ?>">
-				<input type="hidden" name="taxaprodF" value="<?php echo $TaxaProdF; ?>">
+				<input type="hidden" name="txtprod" value="<?php echo $VrProd; ?>">
+				<input type="hidden" name="txtprodF" value="<?php echo $VrProdF; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
 				<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">

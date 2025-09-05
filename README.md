@@ -84,3 +84,14 @@ SELECT numdoc, datarec FROM registro
 
 - Geração do número do recibo.
 
+2025-09-05
+
+### Alterar tabela amizpre
+
+Para que seja inserido a a ***AMIZADA PREMIADA*** na tabela amizpre, precisará alterar as colunas recib para char(8) e vlrec para decimal(10, 2) e todos o dois nulos.
+
+```sql
+ALTER TABLE `studio`.`amizpre` 
+CHANGE COLUMN `recib` `recib` CHAR(8) NULL DEFAULT NULL,
+CHANGE COLUMN `vlrec` `vlrec` DECIMAL(10,2) NULL DEFAULT NULL;
+```

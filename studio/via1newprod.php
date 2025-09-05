@@ -29,7 +29,11 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
-
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
+//exit;
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1.2";
@@ -42,12 +46,14 @@
 	$RdTaxa    = trim($_POST['rdtaxa']);
 	$NDoc      = trim($_POST['txtdoc']);
 	$TipoRec   = trim($_POST['tiporec']);
-	$TaxaProd  = trim($_POST['taxaprod']);
+	$VrProd	= trim($_POST['txtprod']);
+	$VrProdF = number_format($VrProd, 2, ",", ".");
+	//$TaxaProd  = trim($_POST['taxaprod']);
 	$TaxaProdF = trim($_POST['taxaprodF']);
 	$FPag      = trim($_POST['formapag']);
-	$Fpag_1    = trim($_POST['lsPr1']);
-	$Fpag_2    = trim($_POST['lsPr2']);
-	$Fpag_3    = trim($_POST['lsPr3']);
+	$FPag_1    = trim($_POST['lsPr1']);
+	$FPag_2    = trim($_POST['lsPr2']);
+	$FPag_3    = trim($_POST['lsPr3']);
 	$txt1 = isset($_POST['txtvalor1']) ? (float) trim($_POST['txtvalor1']) : 0;
 	$txt2 = isset($_POST['txtvalor2']) ? (float) trim($_POST['txtvalor2']) : 0;
 	$txt3 = isset($_POST['txtvalor3']) ? (float) trim($_POST['txtvalor3']) : 0;
@@ -66,6 +72,9 @@
 	$DataNasc  = trim($_POST['data_nasc']);
 	$Idade     = trim($_POST['idade']);
 	$vlr_ext   = valorPorExtenso($TaxaProdF);
+
+echo $VrProd . " - " . $VrProdF . " - " . $TaxaProdF;
+
 
 	// Pesquisando PC
 	include "conexao.php";
@@ -96,10 +105,6 @@
 	$lnFm  = mysqli_fetch_array($rsFm);
 	$FmRec  = $lnFm['siglapag'];
 
-	//if ($FmRec == "") {
-	//	$FmRec = "DIV";
-	//}
-
 	// Reduzindo a Matrícula
 	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
 	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
@@ -114,7 +119,6 @@
 			// Imprimindo Via Cliente
 			$Aut1 = $Reg;
 			$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut" . "R$ " . "$TaxaProdF$SgRec$FmRec$MatRec";
-			//shell_exec("echo $Aut2 > /dev/lp0");
 
 			// Remover ponto do valor
 			$TaxaProd = str_replace('.', '', $TaxaProd);
@@ -130,6 +134,8 @@
 				$ModPag = "PIX QR CODE";
 			} elseif ($FmRec == "PXC") {
 				$ModPag = "PIX CNPJ";
+			} else {
+				$ModPag = "Diversas";
 			}
 
 			// Preparando Ficha Cliente 
@@ -169,6 +175,8 @@
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&TaxaProdF=<?php echo urlencode($TaxaProdF); ?>' +
+				'&VrProd=<?php echo urlencode($VrProd); ?>' +
+				'&VrProdF=<?php echo urlencode($VrProdF); ?>' +
 				'&ModPag=<?php echo urlencode($ModPag); ?>' +
 				'&fpag_1=<?php echo urlencode($FPag_1); ?>' +
 				'&fpag_2=<?php echo urlencode($FPag_2); ?>' +
@@ -184,8 +192,9 @@
 				'&horaaut=<?php echo urlencode($horaaut); ?>' +
 				'&dtAut=<?php echo urlencode($dtAut); ?>' +
 				'&SgRec=<?php echo urlencode($SgRec); ?>' +
-				'&VrEnt=<?php echo urlencode($VrEnt); ?>' +
-				'&Mat=<?php echo urlencode($Mat); ?>';
+				'&Mat=<?php echo urlencode($Mat); ?>' + 
+				'&Idade=<?php echo urlencode($Idade); ?>' +
+				'&DataNasc=<?php echo urlencode($DataNasc); ?>';
 			window.open(url, '_blank');
 			setTimeout(function() {
 				window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';

@@ -39,6 +39,11 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
+	
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1";
@@ -49,13 +54,13 @@
 	$NumDocF = 100000000 + $NumDoc;
 	$NDoc      = substr($NumDocF, 1, 8);
 	$RdTaxa    = trim($_POST['rdtaxa']);
-	$VrAnt     = trim($_POST['txtAP']);
-	$VrAntF  = number_format($VrAnt, 2, ",", ".");
+	//$VrAnt     = trim($_POST['txtAP']);
+	//$VrAntF  = number_format($VrAnt, 2, ",", ".");
 	$VrProd    = trim($_POST['txtvrprod']);
 	$VrProdF = number_format($VrProd, 2, ",", ".");
-	$FPag1     = trim($_POST['lsPr1']);
-	$FPag2     = trim($_POST['lsPr2']);
-	$FPag3     = trim($_POST['lsPr3']);
+	$FPag_1     = trim($_POST['lsPr1']);
+	$FPag_2     = trim($_POST['lsPr2']);
+	$FPag_3     = trim($_POST['lsPr3']);
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
@@ -97,21 +102,21 @@
 
 	if ($FsPags == 1) {
 		if ($txt1 <> "") {
-			$FPag = $FPag1;
+			$FPag = $FPag_1;
 			$sql = "select * from formapag where codpag = '$FPag' ";
 			$rs  = mysqli_query($conec, $sql);
 			$ln  = mysqli_fetch_array($rs);
 			$ModPag = $ln['modpag'];
 			mysqli_free_result($rs);
 		} else if ($txt2 <> "") {
-			$FPag = $FPag2;
+			$FPag = $FPag_2;
 			$sql = "select * from formapag where codpag = '$FPag' ";
 			$rs  = mysqli_query($conec, $sql);
 			$ln  = mysqli_fetch_array($rs);
 			$ModPag = $ln['modpag'];
 			mysqli_free_result($rs);
 		} else if ($txt3 <> "") {
-			$FPag = $FPag3;
+			$FPag = $FPag_3;
 			$sql = "select * from formapag where codpag = '$FPag' ";
 			$rs  = mysqli_query($conec, $sql);
 			$ln  = mysqli_fetch_array($rs);
@@ -196,10 +201,12 @@
 		<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 		<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
 		<input type="hidden" name="rdtaxa" value="<?php echo $RdTaxa; ?>">
-		<input type="hidden" name="txtaxaprod" value="<?php echo $TaxaProd; ?>">
-		<input type="hidden" name="lsPr1" value="<?php echo $FPag1; ?>">
-		<input type="hidden" name="lsPr2" value="<?php echo $FPag2; ?>">
-		<input type="hidden" name="lsPr3" value="<?php echo $FPag3; ?>">
+		<input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">
+		<input type="hidden" name="txtvrprodF" value="<?php echo $VrProdF; ?>">
+		<input type="hidden" name="txttaxa" value="<?php echo $TaxaProdF; ?>">
+		<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
+		<input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
+		<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
 		<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
 		<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
 		<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">

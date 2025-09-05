@@ -63,7 +63,6 @@ error_reporting(E_ALL);
 	$VrEnt	 = $txt1 + $txt2 + $txt3;
 	$VrEntr    = number_format($VrEnt, 2, ',', '.');
 
-
 	// Truncar o nome da vendedora com o primeiro nome completo e após o primeiro espaco, deixar somente uma letra e ponto.
 	$Vendedora = strtoupper($Vendedora);
 	$Vendedora = substr($Vendedora, 0, strpos($Vendedora, ' ') + 1) . substr($Vendedora, strpos($Vendedora, ' ') + 1, 1) . '.';
