@@ -88,7 +88,7 @@ SELECT numdoc, datarec FROM registro
 
 ### Alterar tabela amizpre
 
-Para que seja inserido a a ***AMIZADA PREMIADA*** na tabela amizpre, precisará alterar as colunas recib para char(8) e vlrec para decimal(10, 2) e todos o dois nulos.
+Para que seja inserido a ***AMIZADA PREMIADA*** na tabela amizpre, precisará alterar as colunas recib para char(8) e vlrec para decimal(10, 2) e todos o dois nulos.
 
 ```sql
 ALTER TABLE `studio`.`amizpre` 
