@@ -18,7 +18,7 @@ $txt3      = $_GET['txt3'];
 $VrProd    = $_GET['VrProd'];
 $VrProdF   = number_format($VrProd, 2, ",", ".");
 $VrProdA = number_format($VrProd, 2, "", ".");
-$TaxaProdF = $_GET['TaxaProdF'];
+$TaxaProdF = $_GET['TaxaProd'];
 
 $FPags = [$FPag_1, $FPag_2, $FPag_3];
 $Vlrs = [$txt1, $txt2, $txt3];

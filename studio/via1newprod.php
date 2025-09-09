@@ -33,7 +33,6 @@
 	echo "<pre>";
 	print_r($dados);
 	echo "</pre>";
-//exit;
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1.2";
@@ -48,8 +47,8 @@
 	$TipoRec   = trim($_POST['tiporec']);
 	$VrProd	= trim($_POST['txtprod']);
 	$VrProdF = number_format($VrProd, 2, ",", ".");
-	//$TaxaProd  = trim($_POST['taxaprod']);
-	$TaxaProdF = trim($_POST['taxaprodF']);
+	$TaxaProd  = trim($_POST['txprod']);
+	$TaxaProdF = trim($_POST['txprodF']);
 	$FPag      = trim($_POST['formapag']);
 	$FPag_1    = trim($_POST['lsPr1']);
 	$FPag_2    = trim($_POST['lsPr2']);
@@ -71,10 +70,10 @@
 	$Cliente   = trim($_POST['cliente']);
 	$DataNasc  = trim($_POST['data_nasc']);
 	$Idade     = trim($_POST['idade']);
-	$vlr_ext   = valorPorExtenso($TaxaProdF);
+	$vlr_ext   = valorPorExtenso($TaxaProd);
 
-echo $VrProd . " - " . $VrProdF . " - " . $TaxaProdF;
-
+	echo $vlr_ext;
+	//exit;
 
 	// Pesquisando PC
 	include "conexao.php";
@@ -174,7 +173,7 @@ echo $VrProd . " - " . $VrProdF . " - " . $TaxaProdF;
 			var url = './recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); ?>' +
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
-				'&TaxaProdF=<?php echo urlencode($TaxaProdF); ?>' +
+				'&TaxaProd=<?php echo urlencode($TaxaProd); ?>' +
 				'&VrProd=<?php echo urlencode($VrProd); ?>' +
 				'&VrProdF=<?php echo urlencode($VrProdF); ?>' +
 				'&ModPag=<?php echo urlencode($ModPag); ?>' +

@@ -43,7 +43,6 @@
 	echo "<pre>";
 	print_r($dados);
 	echo "</pre>";
-	
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1";
@@ -54,8 +53,6 @@
 	$NumDocF = 100000000 + $NumDoc;
 	$NDoc      = substr($NumDocF, 1, 8);
 	$RdTaxa    = trim($_POST['rdtaxa']);
-	//$VrAnt     = trim($_POST['txtAP']);
-	//$VrAntF  = number_format($VrAnt, 2, ",", ".");
 	$VrProd    = trim($_POST['txtvrprod']);
 	$VrProdF = number_format($VrProd, 2, ",", ".");
 	$FPag_1     = trim($_POST['lsPr1']);
@@ -135,8 +132,18 @@
 			if ($Idade >= 60) {
 
 				// Gratuidade
-				$TaxaProd = 0.00;
-				$TaxaProdF = number_format($TaxaProd, 2, ",", ".");
+				$RdTaxa		= 0.00;
+				$VrProd 	= 0.00;
+				$VrProdF 	= number_format($VrProd, 2, ",", ".");
+				$FPag_1		= 0.00;
+				$FPag_2		= 0.00;
+				$FPag_3		= 0.00;
+				$txt1 		= 0.00;
+				$txt2 		= 0.00;
+				$txt3 		= 0.00;
+				$TaxaProd 	= 0.00;
+				$TaxaProdF 	= number_format($TaxaProd, 2, ",", ".");
+
 			?>
 				<center>
 					<font color='lime' size='7'>

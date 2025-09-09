@@ -45,7 +45,7 @@
 	echo "<pre>";
 	print_r($dados);
 	echo "</pre>";
-
+	//exit;
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1.1";
@@ -56,8 +56,8 @@
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
 	$RdTaxa      = trim($_POST['rdtaxa']);
-	$VrProd    = trim($_POST['txtvrprod']);
-	$VrProdF = number_format($VrProd, 2, ",", ".");	
+	$VrProd    = trim($_POST['txttaxa']);
+	$VrProdF = number_format($VrProd, 2, ",", ".");
 	$NDoc      = trim($_POST['txtdoc']);
 	$FPag_1     = trim($_POST['lsPr1']);
 	$FPag_2     = trim($_POST['lsPr2']);
@@ -121,7 +121,8 @@
 						$Reg  = $Reg + 1;
 
 						if ($FPag_1 <> "00") {
-							//$fps = $fps + 1;
+							//$fps = $fps + 1; 
+							echo "Aqui1";
 							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
 						}

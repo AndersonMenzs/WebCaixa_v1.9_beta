@@ -18,6 +18,11 @@
             font: 16px sans-serif;
             color: #000000;
         }
+
+        #tb1,
+        #tb2 {
+            display: none;
+        }
     </style>
 
     <script type="text/javascript" src="val_contrato.js" charset="utf-8"></script>
@@ -242,6 +247,49 @@
             }
         }
 
+        function calcularIdade(dataNasc) {
+            if (!dataNasc) return 0;
+            var partes = dataNasc.split('/');
+            if (partes.length !== 3) return 0;
+            var dia = parseInt(partes[0], 10);
+            var mes = parseInt(partes[1], 10) - 1; // meses começam do 0
+            var ano = parseInt(partes[2], 10);
+            var hoje = new Date();
+            var nascimento = new Date(ano, mes, dia);
+            var idade = hoje.getFullYear() - nascimento.getFullYear();
+            var m = hoje.getMonth() - nascimento.getMonth();
+            if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
+                idade--;
+            }
+            return idade;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var dataNascInput = document.getElementById('data_nasc');
+            var tb1 = document.getElementById('tb1');
+            var tb2 = document.getElementById('tb2');
+
+            function verificaIdade() {
+                var valor = dataNascInput.value.trim();
+                if (!valor || valor.length < 10) {
+                    if (tb1) tb1.style.display = 'none';
+                    if (tb2) tb2.style.display = 'none';
+                    return;
+                }
+                var idade = calcularIdade(valor);
+                if (idade < 60) {
+                    if (tb1) tb1.style.display = 'none';
+                    if (tb2) tb2.style.display = 'none';
+                } else {
+                    if (tb1) tb1.style.display = '';
+                    if (tb2) tb2.style.display = '';
+                }
+            }
+
+            dataNascInput.addEventListener('change', verificaIdade);
+            dataNascInput.addEventListener('keyup', verificaIdade);
+        });
+
         function validaCampos() {
             var vendedora = document.getElementById('vendedora').value.trim();
             var cliente = document.getElementById('cliente').value.trim();
@@ -358,172 +406,172 @@
 
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') {
     ?>
-        <table width="70%" border="5" cellpadding="5" cellspacing="0" align="center">
-            <form name="taxaProd" method="post" action="confprod.php" OnSubmit="JavaScript:return checkdata()" autocomplete="off">
-                <input type="hidden" name="vlr_unico" value="<?php echo $VrProd; ?>">
-                <tr>
-                    <td align="center">
-                        <font size='5'><b><i>Nº Recibo</i></b></font>
-                    </td>
-                    <td align="center">
-                        <font color='gold' size='6'>
-                            <b>
-                                <i>
-                                    <blink>Amizade Premiada?</blink>
-                                </i>
-                            </b>
-                        </font>
-                    </td>
-                    <td align="center">
-                        <font size='5'><b><i>Forma de Pagamento</i></b></font>
-                    </td>
-                    <td align="center">
-                        <font size='5'><b><i>Valor</i></b></font>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td rowspan="4" align="center">
-                        <font size='5'><b><i><?php echo $NumDoc; ?></i></b></font>
-                        <input type='hidden' name='txtdoc' size='10' maxlength='8' class='campos' value="<?php echo $NumDoc; ?>">
-                    </td>
-                    <td rowspan="4" align="center">
-                        <font color='lime' size='5'><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <font size='5'><b><i>Sim </i></b></font><input type='radio' name='rdtaxa' value='S'>
-
-                        <input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">
-                        <input type="hidden" name="txtvrprodf" value="<?php echo $VrProdF; ?>">
-
-                        <input type="hidden" name="txtAP" value="<?php echo $VrAnt; ?>">
-                        <input type="hidden" name="txtAPf" value="<?php echo $VrAntF; ?>">
-
-                        <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-                    </td>
-                    <td align="center">
-                        <select name="lsPr1" class="campos">
-                            <?php
-                            // Obtendo a Relação
-                            // Conectando ao Banco de Dados
-                            include "dbselect.php";
-
-                            // Obtendo a Relação
-                            // Criando a Instrução SQL de Consulta
-                            $sqlpr1 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
-
-                            // Consultando os Registros
-                            $rspr1 = mysqli_query($conec, $sqlpr1) or die("Não foi possível acessar os Dados");
-
-                            // Criando o Array para o campo PC
-                            while ($lnpr1 = mysqli_fetch_array($rspr1)) {
-                                $CodPag1  = $lnpr1['codpag'];
-                                $ModPag1  = $lnpr1['modpag'];
-                            ?>
-                                <option value="<?php echo $CodPag1; ?>" class="campos"><?php echo "$ModPag1"; ?></option>
-                            <?php
-                            }
-                            mysqli_free_result($rspr1);
-                            ?>
-                        </select>
-                    </td>
-                    <td align="center">
-                        <font size="5"><b><i>R$ </i></b></font>
-                        <input type="text" name="txt1" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt1', event); validvalor(this)">
-                        <input type="hidden" name="txtvrconc" value="<?php echo $VrConc; ?>">
-                        <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td align="center">
-                        <select name="lsPr2" class="campos">
-                            <?php
-                            // Obtendo a Relação
-                            // Conectando ao Banco de Dados
-                            include "dbselect.php";
-
-                            // Criando a Instrução SQL de Consulta
-                            $sqlpr2 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
-
-                            // Consultando os Registros
-                            $rspr2 = mysqli_query($conec, $sqlpr2) or die("Não foi possível acessar os Dados");
-
-                            // Criando o Array para o campo PC
-                            while ($lnpr2 = mysqli_fetch_array($rspr2)) {
-                                $CodPag2  = $lnpr2['codpag'];
-                                $ModPag2  = $lnpr2['modpag'];
-                            ?>
-                                <option value="<?php echo $CodPag2; ?>" class="campos"><?php echo "$ModPag2"; ?></option>
-                            <?php
-                            }
-                            mysqli_free_result($rspr2);
-                            ?>
-                        </select>
-                    </td>
-                    <td align="center">
-                        <font size="5"><b><i>R$ </i></b></font>
-                        <input type="text" name="txt2" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt2', event); validvalor(this)">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td align="center">
-                        <select name="lsPr3" class="campos">
-                            <?php
-                            // Obtendo a Relação
-                            // Conectando ao Banco de Dados
-                            include "dbselect.php";
-
-                            // Criando a Instrução SQL de Consulta
-                            $sqlpr3 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
-
-                            // Consultando os Registros
-                            $rspr3 = mysqli_query($conec, $sqlpr3) or die("Não foi possível acessar os Dados");
-
-                            // Criando o Array para o campo PC
-                            while ($lnpr3 = mysqli_fetch_array($rspr3)) {
-                                $CodPag3  = $lnpr3['codpag'];
-                                $ModPag3  = $lnpr3['modpag'];
-                            ?>
-                                <option value="<?php echo $CodPag3; ?>" class="campos"><?php echo "$ModPag3"; ?></option>
-                            <?php
-                            }
-                            mysqli_free_result($rspr3);
-                            ?>
-                        </select>
-                    </td>
-                    <td align="center">
-                        <font size="5"><b><i>R$ </i></b></font>
-                        <input type="text" name="txt3" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt3', event); validvalor(this)">
-                    </td>
-                </tr>
-
-        </table><br>
         <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
+            <form name="taxaProd" method="post" action="confprod.php" OnSubmit="JavaScript:return checkdata()" autocomplete="off">
+                <tr>
+                    <td width="45%" align="center">
+                        <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
+                    </td>
+                    <td width="45%" align="center">
+                        <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
+                    </td>
+                    <td width="10%" align="center">
+                        <font color='#FFFFFF' size='5'><b><i>Data Nasc.</i></b></font>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos" onkeypress="fPassaAlfaNumerico('an')" onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
+                    </td>
+                    <td align="center">
+                        <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos" onkeypress="fPassaAlfaNumerico('an')" onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
+                    </td>
+                    <td align="center">
+                        <input type="text" id="data_nasc" name="data_nasc" size='12' maxlength='10' class="campos" placeholder="01/01/1940" class='campos' OnKeyUp="FormataData('taxaProd', 'data_nasc', event)" required>
+                    </td>
+                </tr>
+        </table><br>
+        <table name="tb1" id="tb1" width="70%" border="5" cellpadding="5" cellspacing="0" align="center">
+            <input type="hidden" name="vlr_unico" value="<?php echo $VrProd; ?>">
             <tr>
-                <td width="45%" align="center">
-                    <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
+                <td align="center">
+                    <font size='5'><b><i>Nº Recibo</i></b></font>
                 </td>
-                <td width="45%" align="center">
-                    <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
+                <td align="center">
+                    <font color='gold' size='6'>
+                        <b>
+                            <i>
+                                <blink>Amizade Premiada?</blink>
+                            </i>
+                        </b>
+                    </font>
                 </td>
-                <td width="10%" align="center">
-                    <font color='#FFFFFF' size='5'><b><i>Data Nasc.</i></b></font>
+                <td align="center">
+                    <font size='5'><b><i>Forma de Pagamento</i></b></font>
+                </td>
+                <td align="center">
+                    <font size='5'><b><i>Valor</i></b></font>
                 </td>
             </tr>
+
             <tr>
-                <td align="center">
-                    <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos" onkeypress="fPassaAlfaNumerico('an')" onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
+                <td rowspan="4" align="center">
+                    <font size='5'><b><i><?php echo $NumDoc; ?></i></b></font>
+                    <input type='hidden' name='txtdoc' size='10' maxlength='8' class='campos' value="<?php echo $NumDoc; ?>">
+                </td>
+                <td rowspan="4" align="center">
+                    <font color='lime' size='5'><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <font size='5'><b><i>Sim </i></b></font><input type='radio' name='rdtaxa' value='S'>
+
+                    <input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">
+                    <input type="hidden" name="txtvrprodf" value="<?php echo $VrProdF; ?>">
+
+                    <input type="hidden" name="txtAP" value="<?php echo $VrAnt; ?>">
+                    <input type="hidden" name="txtAPf" value="<?php echo $VrAntF; ?>">
+
+                    <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
                 </td>
                 <td align="center">
-                    <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos" onkeypress="fPassaAlfaNumerico('an')" onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
+                    <select name="lsPr1" class="campos">
+                        <?php
+                        // Obtendo a Relação
+                        // Conectando ao Banco de Dados
+                        include "dbselect.php";
+
+                        // Obtendo a Relação
+                        // Criando a Instrução SQL de Consulta
+                        $sqlpr1 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
+
+                        // Consultando os Registros
+                        $rspr1 = mysqli_query($conec, $sqlpr1) or die("Não foi possível acessar os Dados");
+
+                        // Criando o Array para o campo PC
+                        while ($lnpr1 = mysqli_fetch_array($rspr1)) {
+                            $CodPag1  = $lnpr1['codpag'];
+                            $ModPag1  = $lnpr1['modpag'];
+                        ?>
+                            <option value="<?php echo $CodPag1; ?>" class="campos"><?php echo "$ModPag1"; ?></option>
+                        <?php
+                        }
+                        mysqli_free_result($rspr1);
+                        ?>
+                    </select>
                 </td>
                 <td align="center">
-                    <input type="text" id="data_nasc" name="data_nasc" size='12' maxlength='10' class="campos" placeholder="01/01/1940" class='campos' OnKeyUp="FormataData('taxaProd', 'data_nasc', event)" required>
+                    <font size="5"><b><i>R$ </i></b></font>
+                    <input type="text" name="txt1" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt1', event); validvalor(this)">
+                    <input type="hidden" name="txtvrconc" value="<?php echo $VrConc; ?>">
+                    <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
                 </td>
             </tr>
+
+            <tr>
+                <td align="center">
+                    <select name="lsPr2" class="campos">
+                        <?php
+                        // Obtendo a Relação
+                        // Conectando ao Banco de Dados
+                        include "dbselect.php";
+
+                        // Criando a Instrução SQL de Consulta
+                        $sqlpr2 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
+
+                        // Consultando os Registros
+                        $rspr2 = mysqli_query($conec, $sqlpr2) or die("Não foi possível acessar os Dados");
+
+                        // Criando o Array para o campo PC
+                        while ($lnpr2 = mysqli_fetch_array($rspr2)) {
+                            $CodPag2  = $lnpr2['codpag'];
+                            $ModPag2  = $lnpr2['modpag'];
+                        ?>
+                            <option value="<?php echo $CodPag2; ?>" class="campos"><?php echo "$ModPag2"; ?></option>
+                        <?php
+                        }
+                        mysqli_free_result($rspr2);
+                        ?>
+                    </select>
+                </td>
+                <td align="center">
+                    <font size="5"><b><i>R$ </i></b></font>
+                    <input type="text" name="txt2" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt2', event); validvalor(this)">
+                </td>
+            </tr>
+
+            <tr>
+                <td align="center">
+                    <select name="lsPr3" class="campos">
+                        <?php
+                        // Obtendo a Relação
+                        // Conectando ao Banco de Dados
+                        include "dbselect.php";
+
+                        // Criando a Instrução SQL de Consulta
+                        $sqlpr3 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
+
+                        // Consultando os Registros
+                        $rspr3 = mysqli_query($conec, $sqlpr3) or die("Não foi possível acessar os Dados");
+
+                        // Criando o Array para o campo PC
+                        while ($lnpr3 = mysqli_fetch_array($rspr3)) {
+                            $CodPag3  = $lnpr3['codpag'];
+                            $ModPag3  = $lnpr3['modpag'];
+                        ?>
+                            <option value="<?php echo $CodPag3; ?>" class="campos"><?php echo "$ModPag3"; ?></option>
+                        <?php
+                        }
+                        mysqli_free_result($rspr3);
+                        ?>
+                    </select>
+                </td>
+                <td align="center">
+                    <font size="5"><b><i>R$ </i></b></font>
+                    <input type="text" name="txt3" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt3', event); validvalor(this)">
+                </td>
+            </tr>
+
         </table><br>
 
-        <table width="100%" border="0" cellspacing="0">
+        <table name="tb2" id="tb2" width="100%" border="0" cellspacing="0">
             <tr>
                 <td width="9%">
                     <a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
