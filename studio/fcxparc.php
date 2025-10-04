@@ -919,12 +919,12 @@
 			shell_exec("echo 'POR FORMA DE RECEBIMENTO' > /dev/lp0");
 			shell_exec("echo '------------------------' > /dev/lp0");
 			shell_exec("echo 'Dinheiro:. . . . . . . . . . . . R$ $Dinheiro' > /dev/lp0");
-			shell_exec("echo 'Pix QR Code:. . . . . . . . . .  R$ $PixQRCode' > /dev/lp0");
-			shell_exec("echo 'Pix CNPJ:. . . . . . . . . . . . R$ $PixCNPJ' > /dev/lp0");
 			shell_exec("echo 'Cartao de Debito:. . . . . . . . R$ $CardDeb' > /dev/lp0");
 			shell_exec("echo 'Cartao Credito (a Vista):. . . . R$ $CardVista' > /dev/lp0");
 			shell_exec("echo 'Cartao Credito (Parcelado Loja): R$ $CardParcLj' > /dev/lp0");
 			shell_exec("echo 'Cartao Credito (Parc. Admnist.): R$ $CardParcAdm' > /dev/lp0");
+			shell_exec("echo 'Pix QR Code:. . . . . . . . . .  R$ $PixQRCode' > /dev/lp0");
+			shell_exec("echo 'Pix CNPJ:. . . . . . . . . . . . R$ $PixCNPJ' > /dev/lp0");
 			//shell_exec("echo 'Cheques (A Vista): . . . . . . . R$ $CheqTotal' > /dev/lp0");
 			//shell_exec("echo 'Cheques (Pre-datados): . . . . . R$ $CheqPre' > /dev/lp0");
 			shell_exec("echo 'Deposito de Clientes:. . . . . . R$ $DepCli' > /dev/lp0");
