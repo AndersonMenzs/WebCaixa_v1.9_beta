@@ -19,7 +19,11 @@ $user = substr($lg_user, 0, 8);
 $pss = substr($lg_user, 8, 40);
 
 // Incluir verificação de usuário
+
 include "us_sist.php";
+if ($ch == 'no') {
+    include "us_cad.php";
+}
 
 // Definir permissões baseadas no resultado da verificação
 $permitido = ($ch == 'ok-enc' || $ch == 'ok-cai' || $ch == 'ok');
@@ -28,7 +32,8 @@ $permitido = ($ch == 'ok-enc' || $ch == 'ok-cai' || $ch == 'ok');
 $contadorImpressoes = 'contador_impressoes.txt';
 
 // Função para formatar nome do arquivo (APENAS PARA EXIBIÇÃO)
-function formatarNomeArquivo($nomeArquivo) {
+function formatarNomeArquivo($nomeArquivo)
+{
     // Remover extensão
     $nomeSemExtensao = pathinfo($nomeArquivo, PATHINFO_FILENAME);
     // Substituir underscores por espaços
@@ -38,25 +43,27 @@ function formatarNomeArquivo($nomeArquivo) {
 }
 
 // Função para registrar impressão
-function registrarImpressao($arquivo, $quantidade, $contadorFile) {
+function registrarImpressao($arquivo, $quantidade, $contadorFile)
+{
     $contador = [];
-    
+
     if (file_exists($contadorFile)) {
         $contador = json_decode(file_get_contents($contadorFile), true) ?: [];
     }
-    
+
     if (!isset($contador[$arquivo])) {
         $contador[$arquivo] = 0;
     }
-    
+
     $contador[$arquivo] += intval($quantidade);
     file_put_contents($contadorFile, json_encode($contador));
-    
+
     return $contador[$arquivo];
 }
 
 // Função para obter contagem de impressões
-function obterContagemImpressoes($arquivo, $contadorFile) {
+function obterContagemImpressoes($arquivo, $contadorFile)
+{
     if (file_exists($contadorFile)) {
         $contador = json_decode(file_get_contents($contadorFile), true) ?: [];
         return isset($contador[$arquivo]) ? $contador[$arquivo] : 0;
@@ -69,15 +76,15 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
     $arquivoSelecionado = basename($_POST['arquivo_selecionado']);
     $quantidade = 1; // Sempre 1 impressão
     $caminhoCompleto = "./impressos/" . $arquivoSelecionado;
-    
+
     // Validar segurança
     $extensoesPermitidas = ['pdf', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png'];
     $ext = strtolower(pathinfo($arquivoSelecionado, PATHINFO_EXTENSION));
-    
+
     if (in_array($ext, $extensoesPermitidas) && file_exists($caminhoCompleto)) {
         // Registrar impressão
         $totalImpressoes = registrarImpressao($arquivoSelecionado, $quantidade, $contadorImpressoes);
-        
+
         // Determinar o tipo de conteúdo
         $tiposConteudo = [
             'pdf' => 'application/pdf',
@@ -90,9 +97,9 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
             'jpeg' => 'image/jpeg',
             'png' => 'image/png'
         ];
-        
+
         $contentType = isset($tiposConteudo[$ext]) ? $tiposConteudo[$ext] : 'application/octet-stream';
-        
+
         // Enviar arquivo para impressão
         header('Content-Type: ' . $contentType);
         header('Content-Disposition: inline; filename="' . $arquivoSelecionado . '"');
@@ -114,7 +121,7 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
     <title>WebCaixa v1.19_beta - Impressões</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <style type="text/css">
         body {
             margin: 5% 3% 0 3%;
@@ -124,11 +131,11 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
             background-image: url('../images/bg1.jpg');
             color: #FFFFFF;
         }
-        
+
         .container {
             text-align: center;
         }
-        
+
         .document-list {
             margin: 20px auto;
             padding: 30px;
@@ -136,20 +143,21 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
             border-radius: 5px;
             max-width: 600px;
         }
-        
+
         .form-group {
             margin: 20px 0;
             text-align: left;
         }
-        
+
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
             color: gold;
         }
-        
-        select, input[type="number"] {
+
+        select,
+        input[type="number"] {
             width: 100%;
             padding: 12px;
             border: 2px solid #ccc;
@@ -158,12 +166,13 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
             background-color: white;
             color: #333;
         }
-        
-        select:focus, input[type="number"]:focus {
+
+        select:focus,
+        input[type="number"]:focus {
             border-color: #007bff;
             outline: none;
         }
-        
+
         .btn-imprimir {
             padding: 15px 40px;
             background-color: #28a745;
@@ -175,40 +184,48 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
             margin-top: 20px;
             font-weight: bold;
         }
-        
+
         .btn-imprimir:disabled {
             background-color: #6c757d;
             cursor: not-allowed;
         }
-        
+
         .btn-imprimir:hover:not(:disabled) {
             background-color: #218838;
             transform: scale(1.05);
             transition: transform 0.2s;
         }
-        
+
         .error-message {
             color: #ff6b6b;
             font-size: 1.2em;
             margin: 20px 0;
         }
-        
+
         .success-message {
             color: #28a745;
             font-size: 1.2em;
             margin: 20px 0;
         }
-        
+
         .blink {
             animation: blink 1s infinite;
         }
-        
+
         @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
-        
+
         .instrucoes {
             margin: 15px 0;
             color: #ccc;
@@ -216,18 +233,18 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
             text-align: center;
             font-weight: bold;
         }
-        
+
         .quantidade-group {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
+
         .quantidade-group input {
             width: 120px;
             flex-shrink: 0;
         }
-        
+
         .arquivo-info {
             font-size: 0.9em;
             color: #ccc;
@@ -243,12 +260,14 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
             if (is_dir("./impressos/") && $handle = opendir("./impressos/")) {
                 $infoArray = [];
                 while (($file = readdir($handle)) !== false) {
-                    if ($file != "." && $file != ".." && 
-                        $file != "index.php" && $file != "index.html" && $file != "index.htm") {
-                        
+                    if (
+                        $file != "." && $file != ".." &&
+                        $file != "index.php" && $file != "index.html" && $file != "index.htm"
+                    ) {
+
                         $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
                         $extensoesPermitidas = ['pdf', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png'];
-                        
+
                         if (in_array($ext, $extensoesPermitidas)) {
                             $quantidadeImpressoes = obterContagemImpressoes($file, $contadorImpressoes);
                             $infoArray[] = "'" . $file . "': {total: " . $quantidadeImpressoes . ", nomeReal: '" . $file . "'}";
@@ -267,7 +286,7 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
             const infoBox = document.getElementById('info-impressoes');
 
             const btnImprimir = document.getElementById('btnImprimir');
-            
+
             if (arquivoReal && arquivosInfo[arquivoReal]) {
                 btnImprimir.disabled = false;
                 infoBox.innerHTML = ""; // Remove as informações
@@ -277,7 +296,7 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
                 infoBox.style.display = 'none';
             }
         }
-        
+
         // Ajuste a função imprimirDocumento para não usar quantidade
         function imprimirDocumento() {
             const select = document.getElementById('arquivo_selecionado');
@@ -307,7 +326,7 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
                 };
             }
         }
-        
+
         // Prevenir F5
         document.addEventListener('keydown', function(event) {
             if (event.key === 'F5' || event.keyCode === 116) {
@@ -315,11 +334,11 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
                 return false;
             }
         });
-        
+
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
             atualizarInfo();
-            
+
             <?php if (isset($_GET['erro']) && $_GET['erro'] == 'arquivo_nao_encontrado'): ?>
                 alert('Erro: Arquivo não encontrado. Verifique se o arquivo existe na pasta de impressões.');
             <?php endif; ?>
@@ -334,7 +353,7 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
                 <center><u><i>DOCUMENTOS PARA IMPRESSÕES</i></u></center>
             </b>
         </font>
-        
+
         <br><br>
 
         <?php if (isset($_GET['sucesso'])): ?>
@@ -343,15 +362,15 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
             </div>
         <?php endif; ?>
 
-        <?php if ($permitido): ?>
+        <?php if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
             <form id="formImpressao" method="post" action="">
                 <input type="hidden" name="imprimir" value="1">
-                
+
                 <div class="document-list">
                     <div class="instrucoes">
                         Selecione o documento para impressão
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="arquivo_selecionado">Selecione o Documento:</label>
                         <select name="arquivo_selecionado" id="arquivo_selecionado" onchange="atualizarInfo()">
@@ -360,15 +379,17 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
                             // Ler documentos na pasta para impressão com validação
                             $dir = "./impressos/";
                             $arquivos = [];
-                            
+
                             if (is_dir($dir) && is_readable($dir)) {
                                 $arquivosPermitidos = ['pdf', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png'];
-                                
+
                                 if ($handle = opendir($dir)) {
                                     while (($file = readdir($handle)) !== false) {
-                                        if ($file != "." && $file != ".." && 
-                                            $file != "index.php" && $file != "index.html" && $file != "index.htm") {
-                                            
+                                        if (
+                                            $file != "." && $file != ".." &&
+                                            $file != "index.php" && $file != "index.html" && $file != "index.htm"
+                                        ) {
+
                                             $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
                                             if (in_array($ext, $arquivosPermitidos)) {
                                                 $arquivos[] = $file;
@@ -376,20 +397,20 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
                                         }
                                     }
                                     closedir($handle);
-                                    
+
                                     // Ordenar arquivos alfabeticamente pelo nome formatado
-                                    usort($arquivos, function($a, $b) {
+                                    usort($arquivos, function ($a, $b) {
                                         return strcmp(formatarNomeArquivo($a), formatarNomeArquivo($b));
                                     });
-                                    
+
                                     if (!empty($arquivos)) {
                                         foreach ($arquivos as $arquivo) {
                                             $nomeFormatado = formatarNomeArquivo($arquivo);
                                             $quantidadeImpressoes = obterContagemImpressoes($arquivo, $contadorImpressoes);
-                                            
+
                                             echo '<option value="' . htmlspecialchars($arquivo, ENT_QUOTES, 'UTF-8') . '" 
-                                                    data-total="' . $quantidadeImpressoes . '">' . 
-                                                    htmlspecialchars($nomeFormatado, ENT_QUOTES, 'UTF-8') . '</option>';
+                                                    data-total="' . $quantidadeImpressoes . '">' .
+                                                htmlspecialchars($nomeFormatado, ENT_QUOTES, 'UTF-8') . '</option>';
                                         }
                                     } else {
                                         echo '<option value="">-- Nenhum documento encontrado --</option>';
@@ -401,7 +422,7 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
                             ?>
                         </select>
                     </div>
-                    
+
                     <button type="button" id="btnImprimir" class="btn-imprimir" onclick="imprimirDocumento()" disabled>
                         🖨️ IMPRIMIR DOCUMENTO
                     </button>
@@ -417,30 +438,30 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
                 </a>
             </center>
 
-        <?php else: ?>
+        <?php } else { ?>
             <div class="error-message">
                 <br><br><br><br><br>
                 <font size='6'><b>
-                    <center>Acesso <font color='gold'>
-                        <span class="blink"><u>não Autorizado</u></span>
-                        <font color='#FFFFFF'>!!!</font>
-                    </center>
-                </b></font>
+                        <center>Acesso <font color='gold'>
+                                <span class="blink"><u>não Autorizado</u></span>
+                                <font color='#FFFFFF'>!!!</font>
+                        </center>
+                    </b></font>
                 <br><br><br>
-                
+
                 <center>
                     <a href='index.php?c_s=<?php echo urlencode($lg_user); ?>'>
                         <img src='images/voltar.gif' alt='Voltar'>
                     </a>
                 </center>
             </div>
-        <?php endif; ?>
+        <?php } ?>
 
         <?php
         // Incluir rodapé
         $SisRot = "S-7.3";
         include "rodape.php";
-        
+
         // Encerrar conexões se existirem
         if (isset($conec) && $conec) {
             mysqli_close($conec);

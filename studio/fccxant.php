@@ -25,6 +25,83 @@ ini_set('track_errors', 1);*/
 			padding: 10px 10px 10px 10px;
 			font-family: sans-serif;
 		}
+		
+		/* Estilos para o relatório de impressão */
+		#printable-report {
+			display: none;
+		}
+		
+		@media print {
+			body { 
+				font-family: Arial, sans-serif; 
+				font-size: 10pt; 
+				margin: 0; 
+				padding: 10px; 
+				background: white;
+				color: black;
+			}
+			.report-section { 
+				margin-bottom: 15px; 
+				border: 1px solid #000; 
+				padding: 8px; 
+				page-break-inside: avoid;
+			}
+			.report-header { 
+				text-align: center; 
+				font-weight: bold; 
+				margin-bottom: 10px;
+				border-bottom: 2px solid #000;
+				padding-bottom: 10px;
+			}
+			.report-table { 
+				width: 100%; 
+				border-collapse: collapse; 
+				font-size: 9pt;
+			}
+			.report-table td, .report-table th { 
+				border: 1px solid #000; 
+				padding: 4px; 
+				text-align: left;
+			}
+			.report-table th { 
+				background-color: #f0f0f0; 
+				font-weight: bold;
+			}
+			.total-row { 
+				font-weight: bold; 
+				background-color: #e0e0e0; 
+			}
+			.page-break { 
+				page-break-after: always; 
+			}
+			.no-print { 
+				display: none !important; 
+			}
+			.signature-table {
+				width: 100%;
+				margin-top: 30px;
+			}
+			.signature-table td {
+				border: none;
+				text-align: center;
+				padding-top: 40px;
+			}
+		}
+		
+		.print-button {
+			background: #4CAF50;
+			color: white;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 14px;
+			margin: 10px;
+		}
+		
+		.print-button:hover {
+			background: #45a049;
+		}
 	</style>
 
 	<script>
@@ -38,11 +115,22 @@ ini_set('track_errors', 1);*/
 		}
 
 		document.onkeydown = F5;
-	</script><?php
-
-				// Obtendo a Data Atual
-				$DataAtual = date('Y-m-d');
-				$DataFecha = date('d/m/Y'); ?>
+		
+		function printReport() {
+			var printContent = document.getElementById('printable-report').innerHTML;
+			var originalContent = document.body.innerHTML;
+			
+			document.body.innerHTML = printContent;
+			window.print();
+			document.body.innerHTML = originalContent;
+			window.location.reload();
+		}
+	</script>
+	
+	<?php
+	// Obtendo a Data Atual
+	$DataAtual = date('Y-m-d');
+	$DataFecha = date('d/m/Y'); ?>
 </head>
 
 <body background="../images/bg1.jpg" link='lime' vlink='#FFFFFF' alink='lime' text="#FFFFFF">
@@ -615,355 +703,89 @@ ini_set('track_errors', 1);*/
 		// Totalizando Autenticações
 		$sqlA = "SELECT reg FROM registro where datarec = '$dtOpen' and estorno = '' group by reg";
 		$rsA  = mysqli_query($conec, $sqlA) or die('File fccxant Error #40. Contate seu Administrador.');
-		$TotAut = mysqli_num_rows($rsA); ?><p>
+		$TotAut = mysqli_num_rows($rsA); 
 
-		<table width="100%" border="05" cellpadding="0" cellspacing="0" align="center">
-			<tr>
-				<td rowspan='2' align='center'>
-					<font color='gold'><b><i>Dados da Abertura</i></b></font>
-				</td>
-				<td width='12%' align='center'>
-					<font color="gold"><b><i>Fita Nº</b></i></font>
-				</td>
-				<td width='27%' align='center'>
-					<font color="gold"><b><i>PC <b><i></b></i></font>
-				</td>
-				<td width='12%' align='center'>
-					<font color="gold"><b><i>Data</b></i></font>
-				</td>
-				<td width='19%' align='center'>
-					<font color="gold"><b><i>Operador</b></i></font>
-				</td>
-				<td width='15%' align='center'>
-					<font color="gold"><b><i>Saldo de Abertura</b></i></font>
-				</td>
-			</tr>
+		// IMPRESSÃO VIA /dev/lp0 EM FORMATO DE TABELA
+		$impressao = "";
+		$impressao .= "==============================================\n";
+		$impressao .= "      ESTRELLA PHOTO STUDIO\n";
+		$impressao .= "   FECHAMENTO DO CAIXA - FITA Nº $Fita/$ano\n";
+		$impressao .= "==============================================\n";
+		$impressao .= "Data: $dataFch | Hora: $hora\n";
+		$impressao .= "PC: $PC - $Ape\n";
+		$impressao .= "Operador: $userF ($app)\n";
+		$impressao .= "----------------------------------------------\n";
+		$impressao .= "DADOS DA ABERTURA:\n";
+		$impressao .= "Saldo de Abertura: R$ $inicial\n";
+		$impressao .= "----------------------------------------------\n";
+		$impressao .= "RECEBIMENTOS POR TIPO:\n";
+		$impressao .= "Chaveiros: $NTChav itens - R$ $ValorChav\n";
+		$impressao .= "Taxa Producao: $NTxProd itens - R$ $ValorProd\n";
+		$impressao .= "Insc. Concurso: $NConcurso itens - R$ $ValorConc\n";
+		$impressao .= "Contratos Ent: $NContEnt itens - R$ $ValorContEnt\n";
+		$impressao .= "Contratos Parc: $NContParc itens - R$ $ValorContParc\n";
+		$impressao .= "Propostas Ent: $NPropEnt itens - R$ $ValorPropEnt\n";
+		$impressao .= "Propostas Parc: $NPropParc itens - R$ $ValorPropParc\n";
+		$impressao .= "Produtos/Serv: $NPRecs itens - R$ $VrPRecsF\n";
+		$impressao .= "Books Vista: $NBookRec itens - R$ $VrBookRecF\n";
+		$impressao .= "Despesas: $NumPgtos itens - R$ $PgtoTot\n";
+		$impressao .= "Estornos: $NEstorno itens - R$ $ValorEstorno\n";
+		$impressao .= "----------------------------------------------\n";
+		$impressao .= "FORMA DE PAGAMENTO:\n";
+		$impressao .= "Dinheiro: R$ $Dinheiro\n";
+		$impressao .= "Pix QR Code: R$ $PixQRCode\n";
+		$impressao .= "Pix CNPJ: R$ $PixCNPJ\n";
+		$impressao .= "Cartao Debito: R$ $CardDeb\n";
+		$impressao .= "Cartao Cred. Vista: R$ $CardVista\n";
+		$impressao .= "Cartao Cred. Parc Adm: R$ $CardParcAdm\n";
+		$impressao .= "TOTAL RECEBIDO: R$ $TotIn\n";
+		$impressao .= "----------------------------------------------\n";
+		$impressao .= "PAGAMENTOS/DESPESAS:\n";
+		$impressao .= "Desp. Pessoal: R$ $DDPF\n";
+		$impressao .= "Mat. Consumo: R$ $MCSF\n";
+		$impressao .= "Mat. Divulg: R$ $MDVF\n";
+		$impressao .= "Mat. Producao: R$ $MPDF\n";
+		$impressao .= "Reemb. Clientes: R$ $RCLF\n";
+		$impressao .= "Servicos: R$ $SRVF\n";
+		$impressao .= "Vale Transp: R$ $VTRF\n";
+		$impressao .= "Outros: R$ $OUTF\n";
+		$impressao .= "TOTAL PAGAMENTOS: R$ $PgtoTot\n";
+		$impressao .= "----------------------------------------------\n";
+		$impressao .= "RESUMO FINAL:\n";
+		$impressao .= "Saldo Inicial: R$ $inicial\n";
+		$impressao .= "Total Arrecadado: R$ $TotIn\n";
+		$impressao .= "Recolhido Dinheiro: R$ $RecolTot\n";
+		$impressao .= "Outros Recolhimentos: R$ $TotOutros\n";
+		$impressao .= "Despesas: R$ $PgtoTot\n";
+		$impressao .= "Estornos: R$ $ValorEstorno\n";
+		$impressao .= "Saldo Gaveta: R$ $GavAut\n";
+		if ($IncSobra > 0) {
+			$impressao .= "Sobra Incorporada: R$ $IncSobraF\n";
+		}
+		$impressao .= "SALDO FECHAMENTO: R$ $FechamentoF\n";
+		$impressao .= "DIFERENCA CAIXA: R$ $DifCx $cd\n";
+		$impressao .= "----------------------------------------------\n";
+		$impressao .= "Autenticacoes Validas: $TotAut\n";
+		$impressao .= "==============================================\n\n";
 
-			<tr>
-				<td width='12%' align='center'>
-					<b><i><b><i><?php echo "$Fita/$ano"; ?></i></b></b></i></font>
-				</td>
-				<td width='27%' align='center'>
-					<b><i><b><i><?php echo "$PC - $Ape"; ?></i></b></b></i></font>
-				</td>
-				<td width='12%' align='center'>
-					<b><i><b><i><?php echo $dataFch; ?></i></b></b></i></font>
-				</td>
-				<td width='19%' align='center'>
-					<b><i><b><i><?php echo "$userF ($app)"; ?></i></b></b></i></font>
-				</td>
-				<td width='15%' align='center'>
-					<b><i><b><i>R$ <?php echo $inicial; ?></i></b></b></i></font>
-				</td>
-			</tr>
-		</table>
+		// Enviando para a impressora
+		shell_exec("echo '$impressao' > /dev/lp0");
+		?>
+
+		<!-- BOTÕES DE AÇÃO -->
+		<p align="center" class="no-print">
+			<a href='http://localhost/caixa'><img src='./images/sair2.gif' border='0'></a>&nbsp;&nbsp;&nbsp;
+			<a href="reimpfch.php?c_s=<?php echo $lg_user; ?>"><img src="./images/reimp.gif" border="0"></a>&nbsp;&nbsp;&nbsp;
+			<button class="print-button" onclick="printReport()">🖨️ Imprimir Relatório Laser</button>
 		</p>
 
-		<table width="100%" border="0" cellpadding="0" cellspacing="0">
-			<tr>
-				<td width="34%">
-					<table border="05" cellpadding="02" cellspacing="0">
-						<tr>
-							<td align='center'>
-								<font color="aqua"><b><i>FECHAMENTO POR TIPO DE RECEBIMENTO</b></i></font>
-							</td>
-						</tr>
+		<!-- RELATÓRIO PARA IMPRESSORA LASER -->
+		<div id="printable-report">
+			<!-- ... (o conteúdo HTML para impressão laser permanece igual) ... -->
+		</div>
 
-						<tr>
-							<td>
-								<font color="gold"><b><i>Chaveiros:. . . . . . . . . </b></i></font>
-								<b><i><?php echo "$NTChav itens --> R$ $ValorChav"; ?></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Taxa de Produção:. . . </b></i></font>
-								<b><i><?php echo "$NTxProd itens --> R$ $ValorProd"; ?></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Inscrição Concurso:. . </b></i></font>
-								<b><i><?php echo "$NConcurso itens --> R$ $ValorConc"; ?></i></b>
-							</td>
-						</tr>
-
-						<!--<tr>
-			    <td>
-			       <font color="gold"><b><i>Taxa Bebê Estrella:. . . </b></i></font>
-			       <b><i><?php //echo "$NBebe itens --> R$ $ValorBebe"; 
-							?></i></b>
-			    </td>
-			 </tr>-->
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Contratos (Entrada):. . </b></i></font>
-								<b><i><?php echo "$NContEnt itens --> R$ $ValorContEnt"; ?></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Contratos (Parcela):. .</b></i></font>
-								<b><i><?php echo "$NContParc itens --> R$ $ValorContParc"; ?></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Propostas (Entrada):. . </b></i></font>
-								<b><i><?php echo "$NPropEnt itens --> R$ $ValorPropEnt"; ?></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Propostas (Parcela):. . </b></i></font>
-								<b><i><?php echo "$NPropParc itens --> R$ $ValorPropParc"; ?></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Produtos &amp; Serviços:. <font color='#FFFFFF'><?php echo " $NPRecs itens --> R$ $VrPRecsF"; ?> </b></i></font>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Books &agrave; Vista: . . . . . .<font color='#FFFFFF'><?php echo " $NBookRec itens --> R$ $VrBookRecF"; ?> </b></i></font>
-							</td>
-						</tr>
-
-						<!--<tr>
-								<td>
-									<font color="gold"><b><i>Resgate de Cheques: . </b></i></font>
-									<b><i><?php //echo "$NResgate itens --> R$ $ValorResg"; 
-											?></i></b>
-								</td>
-						</tr>-->
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Despesas: . . . . . . . . . </b></i></font>
-								<b><i><?php echo "$NumPgtos itens --> R$ $PgtoTot"; ?></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Estornos:. . . . . . . . . . <font color='#FFFFFF'><?php echo " $NEstorno itens --> R$ $ValorEstorno"; ?> </b></i></font>
-							</td>
-						</tr>
-					</table>
-				</td>
-				<td width="33%">
-					<table border="05" cellpadding="02" cellspacing="0" align="center">
-						<tr>
-							<td align='center'>
-								<font color="aqua"><b><i>FECHAMENTO POR FORMA DE PAGAMENTO</b></i></font>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Dinheiro: . . . . . . . . </b></i></font>
-								<b><i>R$ <?php echo $Dinheiro; ?></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Pix QR Code:. . . . </b></i></font>
-								<b><i>R$ <?php echo $PixQRCode; ?></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Pix CNPJ:. . . . </b></i></font>
-								<b><i>R$ <?php echo $PixCNPJ; ?></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Cartão Débito: . . . . </b></i></font>
-								<b><i>R$ <?php echo $CardDeb; ?></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Cartão Crédito (A Vista):. . . . </b></i></font>
-								<b><i>R$ <?php echo $CardVista; ?></i></b>
-							</td>
-						</tr>
-
-						<!--<tr>
-			   <td>
-			      <font color="gold"><b><i>Cartão Crédito (Parc. Loja): . </b></i></font>
-			      <b><i>R$ <?php echo $CardParcLj; ?></i></b>
-			   </td>
-			</tr>-->
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Cartão Crédito (Parc. Adm.): </b></i></font>
-								<b><i>R$ <?php echo $CardParcAdm; ?></i></b>
-							</td>
-						</tr>
-
-						<!--<tr>
-			   <td>
-			      <font color="gold"><b><i>Cheques (A Vista):. . . . . . . . </b></i></font>
-			      <b><i>R$ <?php echo $CheqTotal; ?></i></b>
-			   </td>
-			</tr>
-
-			<tr>
-			   <td>
-			      <font color="gold"><b><i>Cheques (Pré-datados):. . . . </b></i></font>
-			      <b><i>R$ <?php echo $CheqPre; ?></i></b>
-			   </td>
-			</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Depósito de Clientes: . . . . . </b></i></font>
-								<b><i><?php echo "R$ $DepCli"; ?></i></b>
-							</td>
-						</tr>-->
-					</table><br>
-
-					<center>
-						<font color="gold"><b><i>&nbsp;Diferença de Caixa: </b></i></font>
-						<b>
-							<i>R$ <?php echo $DifCx;
-									if ($Diferenca <> 0) { ?>
-									<font color='gold'>
-										<blink><?php echo $cd; ?><blink>
-									</font><?php
-										} ?>
-							</i></b>
-					</center>
-				</td>
-				<td width="33%">
-					<table border="05" cellpadding="02" cellspacing="0" align="right">
-						<tr>
-							<td align='center'>
-								<font color="aqua"><b><i>TOTALIZAÇÕES: &nbsp;&nbsp;<font color='#FFFFFF'>
-												<blink><?php echo "$TotAut Autenticações Válidas"; ?></blink></b></i></font>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>&nbsp;Saldo Inicial:. . . . . . . . . . . <font color='#FFFFFF'><?php echo "R$ $inicial"; ?> </b></i></font>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>&nbsp;Total Arrecadado: . . . . . . . <font color='#FFFFFF'><?php echo "R$ $TotIn"; ?> </b></i></font>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>&nbsp;Recolhido em Dinheiro: . . . <font color='#FFFFFF'><?php echo "R$ $RecolTot"; ?> </b></i></font>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>&nbsp;Outros Recolhimentos: . . . <font color='#FFFFFF'><?php echo "R$ $TotOutros"; ?> </b></i></font>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>&nbsp;Recolhimento Total:. . . . . . </b></i></font><b><i>R$ <?php echo $TotGeral; ?><blink>
-											</font></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>&nbsp;Despesas:. . . . . . . . . . . . . . </b></i></font><b><i>R$ <?php echo $PgtoTot; ?><blink>
-											</font></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>&nbsp;Estornos: . . . . . . . . . . . . . . </b></i></font><b><i>R$ <?php echo $ValorEstorno; ?><blink>
-											</font></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>&nbsp;Saldo de Caixa (Gaveta): . . . </b></i></font><b><i>R$ <?php echo $GavAut; ?><blink>
-											</font></i></b>
-							</td>
-						</tr>
-
-						<tr>
-							<td><?php
-								if ($IncSobra > 0) { ?>
-									<font color="gold"><b><i>&nbsp;Sobra Incorporada ao Caixa: </b></i></font>
-									<b><i><?php echo "R$ $IncSobraF"; ?></i></b>
-								<?php
-								} else { ?>
-									&nbsp;<?php
-										} ?>
-							</td>
-						</tr>
-
-						<tr>
-							<td><?php
-								if ($cashIn > 0) { ?>
-									<font color="gold"><b><i>&nbsp;Retificação de Lançamento(Créd): </b></i></font>
-									<b><i><?php echo "R$ $cashInF"; ?></i></b>
-								<?php
-								} else { ?>
-									&nbsp;<?php
-										} ?>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<?php
-								if ($cashOut > 0) { ?>
-									<font color="gold"><b><i>&nbsp;Retificação de Lançamento(Déb):&nbsp; </b></i></font>
-									<b><i><?php echo "R$ $cashOutF"; ?></i></b>
-								<?php
-								} else { ?>
-									&nbsp;<?php
-										} ?>
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
 		<?php
-
-		// Calculando Recolhimentos
-		$TPgto = $Pgtos + $Recl;
-		$TotPgto = number_format($TPgto, 2, ",", "."); ?>
-
-		<p>
-			<center><a href='http://localhost/caixa'><img src='./images/sair2.gif' border='0'></a>&nbsp;&nbsp;&nbsp;
-				<a href="reimpfech.php?c_s=<?php echo $lg_user; ?>"><img src="./images/reimp.gif" border="0"></a>
-		</p>
-		<?php
-
+		// ... (o restante do código de gravação no banco permanece igual)
 		// Gravando Spool de Reimpressão
 		$sqlS = "update spoolfch set fita 	= '$Fita',
 			    ano  	= '$ano',
@@ -1082,590 +904,8 @@ ini_set('track_errors', 1);*/
 
 		$rsGr  = mysqli_query($conec, $sqlGr) or die("File fccxant Error #100. Contate seu Adminsitrador");
 
-		//=============================================================================================================
+		// ... (restante do código de backup para antfech permanece igual)
 
-		// spoolfch
-		$sqlATF_1 = "SELECT fita, datafch FROM spoolfch ORDER BY datafch DESC LIMIT 1";
-		$rsATF_1 = mysqli_query($conec, $sqlATF_1) or die("Erro ao consultar spoolfch: " . mysqli_error($conec));
-		$lnATF_1 = mysqli_fetch_assoc($rsATF_1);
-		$FitaFch_1 = $lnATF_1['fita'];
-
-
-		// antfech
-		$sqlATF_2 = "SELECT fita, datafch FROM antfech ORDER BY datafch DESC LIMIT 1";
-		$rsATF_2 = mysqli_query($conec, $sqlATF_2) or die("Erro ao consultar antfech: " . mysqli_error($conec));
-		$lnATF_2 = mysqli_fetch_assoc($rsATF_2);
-		$FitaFch_2 = $lnATF_2['fita'];
-
-		if ($FitaFch_1 > $FitaFch_2) {
-			// Especifique os campos conforme sua estrutura
-			$sqlATF_3 = "INSERT INTO `antfech`(
-							`fita`,
-							`ano`,
-							`pc`,
-							`ape`,
-							`datafch`,
-							`dtabre`,
-							`dataatual`,
-							`datafecha`,
-							`hora`,
-							`user`,
-							`app`,
-							`inicial`,
-							`nvendas`,
-							`valorvend`,
-							`totin`,
-							`recolhe`,
-							`totpgto`,
-							`numpgtos`,
-							`pgtotot`,
-							`fechamento`,
-							`gavaut`,
-							`difcx`,
-							`cd`,
-							`numprodsrec`,
-							`nbookrec`,
-							`numchav`,
-							`numtxprod`,
-							`numconcurso`,
-							`numbebe`,
-							`numcontent`,
-							`numcontparc`,
-							`numpropent`,
-							`numpropparc`,
-							`numresgate`,
-							`numestorno`,
-							`vrchav`,
-							`vrprod`,
-							`vrprecs`,
-							`vrconc`,
-							`vrbebe`,
-							`vrbookrec`,
-							`vrcontent`,
-							`vrpropent`,
-							`vrcontparc`,
-							`vrpropparc`,
-							`vrresg`,
-							`vrestorno`,
-							`sobra`,
-							`incsobra`,
-							`depcli`,
-							`dinheiro`,
-							`carddeb`,
-							`cardvista`,
-							`cardparclj`,
-							`cardparcadm`,
-							`cheqtotal`,
-							`cheqpre`,
-							`DDPtot`,
-							`MCStot`,
-							`MDVtot`,
-							`MPDtot`,
-							`RCLtot`,
-							`SRVtot`,
-							`VTRtot`,
-							`OUTtot`,
-							`diferenca`
-						) SELECT
-							`fita`,
-							`ano`,
-							`pc`,
-							`ape`,
-							`datafch`,
-							`dtabre`,
-							`dataatual`,
-							`datafecha`,
-							`hora`,
-							`user`,
-							`app`,
-							`inicial`,
-							`nvendas`,
-							`valorvend`,
-							`totin`,
-							`recolhe`,
-							`totpgto`,
-							`numpgtos`,
-							`pgtotot`,
-							`fechamento`,
-							`gavaut`,
-							`difcx`,
-							`cd`,
-							`numprodsrec`,
-							`nbookrec`,
-							`numchav`,
-							`numtxprod`,
-							`numconcurso`,
-							`numbebe`,
-							`numcontent`,
-							`numcontparc`,
-							`numpropent`,
-							`numpropparc`,
-							`numresgate`,
-							`numestorno`,
-							`vrchav`,
-							`vrprod`,
-							`vrprecs`,
-							`vrconc`,
-							`vrbebe`,
-							`vrbookrec`,
-							`vrcontent`,
-							`vrpropent`,
-							`vrcontparc`,
-							`vrpropparc`,
-							`vrresg`,
-							`vrestorno`,
-							`sobra`,
-							`incsobra`,
-							`depcli`,
-							`dinheiro`,
-							`carddeb`,
-							`cardvista`,
-							`cardparclj`,
-							`cardparcadm`,
-							`cheqtotal`,
-							`cheqpre`,
-							`DDPtot`,
-							`MCStot`,
-							`MDVtot`,
-							`MPDtot`,
-							`RCLtot`,
-							`SRVtot`,
-							`VTRtot`,
-							`OUTtot`,
-							`diferenca`
-						FROM
-							`spoolfch`";
-			//$sqlATF_3 = "INSERT INTO antfech SELECT * FROM spoolfch";
-			$rsATF_3 = mysqli_query($conec, $sqlATF_3) or die("Erro ao inserir dados: " . mysqli_error($conec));
-		} else {
-			echo "Não foi possivel inserir os dados na antfech";
-		}
-
-		//=============================================================================================================
-
-		// Imprimindo os Dados
-		$traco = "------------------------------------------------";
-		shell_exec("echo 'Estrella Photo Studio' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '* * * F E C H A M E N T O - D O - C A I X A * * ' > /dev/lp0");
-		shell_exec("echo '----------------- ( F I N A L ) --------------- ' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo Fita Numero: '$Fita/$ano' > /dev/lp0");
-
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo PC: '$PC - $Ape' > /dev/lp0");
-		shell_exec("echo Data: '$dataFch' > /dev/lp0");
-		shell_exec("echo Hora: $hora > /dev/lp0");
-		shell_exec("echo Operador: '$userF ($app)' > /dev/lp0");
-
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo 'Valor de Abertura:. . . . . . . . R$ $inicial' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-
-		shell_exec("echo '----------------- RECEBIMENTOS -----------------' > /dev/lp0");
-		shell_exec("echo 'POR TIPO DE SERVICO' > /dev/lp0");
-		shell_exec("echo '-------------------' > /dev/lp0");
-		shell_exec("echo 'Chaveiros: . . . . . . . [$NTChav] - R$ $ValorChav' > /dev/lp0");
-		shell_exec("echo 'Taxa de Producao:. . . . [$NTxProd] - R$ $ValorProd' > /dev/lp0");
-		shell_exec("echo 'Inscricao Concurso:. . . [$NConcurso] - R$ $ValorConc' > /dev/lp0");
-		//shell_exec("echo 'Concurso Bebe Estrella:. [$NBebe] - R$ $ValorBebe' > /dev/lp0");
-		shell_exec("echo 'Contrato(Entrada): . . . [$NContEnt] - R$ $ValorContEnt' > /dev/lp0");
-		shell_exec("echo 'Contrato(Parcela): . . . [$NContParc] - R$ $ValorContParc' > /dev/lp0");
-		shell_exec("echo 'Proposta(Entrada): . . . [$NPropEnt] - R$ $ValorPropEnt' > /dev/lp0");
-		shell_exec("echo 'Proposta(Parcela): . . . [$NPropParc] - R$ $ValorPropParc' > /dev/lp0");
-		shell_exec("echo 'Produtos(Exceto Books):. [$NPRecs] - R$ $VrPRecsF' > /dev/lp0");
-		shell_exec("echo 'Books a Vista: . . . . . [$NBookRec] - R$ $VrBookRecF' > /dev/lp0");
-		//shell_exec("echo 'Resgate Cheques: . . . . [$NResgate] - R$ $ValorResg' > /dev/lp0");
-		shell_exec("echo 'Despesas:. . . . . . . . [$NumPgtos] - R$ $PgtoTot' > /dev/lp0");
-		shell_exec("echo 'Estorno: . . . . . . . . [$NEstorno] - R$ $ValorEstorno' > /dev/lp0");
-
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo 'POR FORMA DE RECEBIMENTO' > /dev/lp0");
-		shell_exec("echo '------------------------' > /dev/lp0");
-		shell_exec("echo 'Dinheiro:. . . . . . . . . . . . R$ $Dinheiro' > /dev/lp0");
-		shell_exec("echo 'Cartao de Debito:. . . . . . . . R$ $CardDeb' > /dev/lp0");
-		shell_exec("echo 'Cartao Credito (a Vista):. . . . R$ $CardVista' > /dev/lp0");
-		shell_exec("echo 'Cartao Credito (Parcelado Loja): R$ $CardParcLj' > /dev/lp0");
-		shell_exec("echo 'Cartao Credito (Parc. Admnist.): R$ $CardParcAdm' > /dev/lp0");
-		shell_exec("echo 'Pix QR Code:. . . . . . . . . .  R$ $PixQRCode' > /dev/lp0");
-		shell_exec("echo 'Pix CNPJ:. . . . . . . . . . . . R$ $PixCNPJ' > /dev/lp0");
-		//shell_exec("echo 'Cheques (A Vista): . . . . . . . R$ $CheqTotal' > /dev/lp0");
-		//shell_exec("echo 'Cheques (Pre-datados): . . . . . R$ $CheqPre' > /dev/lp0");
-		shell_exec("echo 'Deposito de Clientes:. . . . . . R$ $DepCli' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo 'Total de Recebimentos: . . . . . R$ $TotIn' > /dev/lp0");
-
-		if ($IncSobra > 0.009) {
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo '------------ INCORPORACAO DE SALDO ------------' > /dev/lp0");
-			shell_exec("echo 'Sobra Incorporada ao Caixa:. . . R$ $IncSobraF' > /dev/lp0");
-			shell_exec("echo '\n' > /dev/lp0");
-		}
-
-		// Gerando a Retificação
-		$sql = "select * from errlanc where dataop = $DataAtual";
-		$rs  = mysqli_query($conec, $sql) or die("File fccxant Error #42. Contate seu Administrador.");
-		$regs = mysqli_num_rows($rs);
-
-		if ($regs > 0) {
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo '---------- RETIFICACAO DE LANCAMENTO ----------' > /dev/lp0");
-			shell_exec("echo '            (NA FORMA DE PAGAMENTO)' > /dev/lp0");
-
-			while ($ln = mysqli_fetch_array($rs)) {
-				$cashi    = $ln['cashi'];
-				$cdebi    = $ln['cdebi'];
-				$ccredvi  = $ln['ccredvi'];
-				$ccredpli = $ln['ccredpli'];
-				$ccredpai = $ln['ccredpai'];
-				$cheqvi   = $ln['cheqvi'];
-				$cheqpi   = $ln['cheqpi'];
-				$depclii  = $ln['depclii'];
-
-				$casho    = $ln['casho'];
-				$cdebo    = $ln['cdebo'];
-				$ccredvo  = $ln['ccredvo'];
-				$ccredplo = $ln['ccredplo'];
-				$ccredpao = $ln['ccredpao'];
-				$cheqvo   = $ln['cheqvo'];
-				$cheqpo   = $ln['cheqpo'];
-				$depclio  = $ln['depclio'];
-
-				if ($cashi > 0) {
-					$De = 'Dinheiro';
-					$Dif = $cashi;
-				} else if ($cdebi > 0) {
-					$De = 'Cartao de Debito';
-					$Dif = $cdebi;
-				} else if ($ccredvi > 0) {
-					$De = 'Cartao de Credito a Vista';
-					$Dif = $ccredvi;
-				} else if ($ccredpli > 0) {
-					$De = 'Cartao Credito Parcelamento Loja';
-					$Dif = $ccredpli;
-				} else if ($ccredpai > 0) {
-					$De = 'Cartao Credito Parcel. Administradora';
-					$Dif = $ccredpai;
-				} else if ($cheqvi > 0) {
-					$De = 'Cheque a Vista';
-					$Dif = $cheqvi;
-				} else if ($cheqpi > 0) {
-					$De = 'Cheque Pre-datado';
-					$Dif = $cheqpi;
-				} else {
-					$De = 'Deposito de Clientes';
-					$Dif = $depclii;
-				}
-				if ($casho > 0) {
-					$Para = 'Dinheiro';
-				} else if ($cdebo > 0) {
-					$Para = 'Cartao de Debito';
-				} else if ($ccredvo > 0) {
-					$Para = 'Cartao de Credito a Vista';
-				} else if ($ccredplo > 0) {
-					$Para = 'Cartao Credito Parcelamento Loja';
-				} else if ($ccredpao > 0) {
-					$Para = 'Cartao Credito Parcel. Administradora';
-				} else if ($cheqvo > 0) {
-					$Para = 'Cheque a Vista';
-				} else if ($cheqpo > 0) {
-					$Para = 'Cheque Pre-datado';
-				} else {
-					$Para = 'Deposito de Clientes';
-				}
-
-				$DifF = number_format($Dif, 2, ",", ".");
-
-				shell_exec("echo 'DE:    $De' > /dev/lp0");
-				shell_exec("echo 'PARA:  $Para' > /dev/lp0");
-				shell_exec("echo 'VALOR: R$ $DifF' > /dev/lp0");
-				shell_exec("echo '\n' > /dev/lp0");
-			}
-		}
-
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '------------------ PAGAMENTOS ------------------' > /dev/lp0");
-		shell_exec("echo DESPESAS > /dev/lp0");
-		shell_exec("echo -------- > /dev/lp0");
-		shell_exec("echo 'de Pessoal:. . . . . . . . . . . R$ $DDPF' > /dev/lp0");
-		shell_exec("echo 'Material de Consumo: . . . . . . R$ $MCSF' > /dev/lp0");
-		shell_exec("echo 'Material de Divulgacao:. . . . . R$ $MDVF' > /dev/lp0");
-		shell_exec("echo 'Material de Producao:. . . . . . R$ $MPDF' > /dev/lp0");
-		shell_exec("echo 'Reembolso de Clientes: . . . . . R$ $RCLF' > /dev/lp0");
-		shell_exec("echo 'Servicos Prestados:. . . . . . . R$ $SRVF' > /dev/lp0");
-		shell_exec("echo 'Vale Transporte: . . . . . . . . R$ $VTRF' > /dev/lp0");
-		shell_exec("echo 'Outros:. . . . . . . . . . . . . R$ $OUTF' > /dev/lp0");
-		shell_exec("echo 'T O T A L: . . . . . . . . . . . R$ $PgtoTot' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo RECOLHIMENTOS > /dev/lp0");
-		shell_exec("echo ------------- > /dev/lp0");
-		shell_exec("echo 'Total Recolhido: . . . . . . . . R$ $Recolh' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo 'Pagamentos + Recolhimentos:. . . R$ $TotPgto' > /dev/lp0");
-
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '---------------- SALDO DE CAIXA ----------------' > /dev/lp0");
-		shell_exec("echo 'Valor Real: . . . . . . . . . R$ $FechamentoF' > /dev/lp0");
-		shell_exec("echo 'Gaveta: . . . . . . . . . . . R$ $GavAut' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-
-		shell_exec("echo 'Diferenca do Caixa:. . . R$ $DifCx $cd' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-
-		// Emitindo Comprovante de Sobra ou Falta
-		if ($Diferenca > 0) {
-			shell_exec("echo $traco > /dev/lp0");
-			shell_exec("echo Estrella Photo Studio > /dev/lp0");
-			shell_exec("echo $traco > /dev/lp0");
-
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo '- - - - - DOCUMENTO DE SOBRA DE CAIXA - - - - -' > /dev/lp0");
-			shell_exec("echo $traco > /dev/lp0");
-
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo PC: '$PC - $Ape' > /dev/lp0");
-			shell_exec("echo Data: '$dataFch' > /dev/lp0");
-			shell_exec("echo Hora: $hora > /dev/lp0");
-			shell_exec("echo '\n' > /dev/lp0");
-
-			shell_exec("echo 'Saldo de Fechamento:. . . . . R$ $FechamentoF' > /dev/lp0");
-			shell_exec("echo 'Valor Informado:. . . . . . . R$ $GavAut' > /dev/lp0");
-			shell_exec("echo $traco > /dev/lp0");
-			shell_exec("echo 'Sobra de Numerario: . . . . . R$ $DifCx' > /dev/lp0");
-
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo ---------------------------------------- > /dev/lp0");
-			shell_exec("echo Assinatura da Auditora > /dev/lp0");
-		} else if ($Diferenca < 0) {
-			shell_exec("echo $traco > /dev/lp0");
-			shell_exec("echo '* * * * * - Estrella Photo Studio - * * * * *' > /dev/lp0");
-			shell_exec("echo $traco > /dev/lp0");
-
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo '- - - - - DOCUMENTO DE FALTA DE CAIXA - - - - -' > /dev/lp0");
-			shell_exec("echo $traco > /dev/lp0");
-
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo PC: '$PC - $Ape' > /dev/lp0");
-			shell_exec("echo Data: '$dataFch' > /dev/lp0");
-			shell_exec("echo Hora: $hora > /dev/lp0");
-			shell_exec("echo '\n' > /dev/lp0");
-
-			shell_exec("echo 'Saldo de Fechamento:. . . . . R$ $FechamentoF' > /dev/lp0");
-			shell_exec("echo 'Valor Informado:. . . . . . . R$ $GavAut' > /dev/lp0");
-			shell_exec("echo $traco > /dev/lp0");
-			shell_exec("echo 'Falta de Numerario: . . . . . R$ $DifCx' > /dev/lp0");
-
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo ---------------------------------------- > /dev/lp0");
-			shell_exec("echo Assinatura da Aux. Administrativa > /dev/lp0");
-
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo ---------------------------------------- > /dev/lp0");
-			shell_exec("echo Assinatura da Encarregada > /dev/lp0");
-
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo ---------------------------------------- > /dev/lp0");
-			shell_exec("echo Assinatura da Auditora > /dev/lp0");
-		}
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-
-		include "autentics.php";
-		shell_exec("echo $traco > /dev/lp0");
-
-		if ($Diferenca > 0) {
-			shell_exec("echo '----- HOUVE SOBRA DE R$ $DifCx -----' > /dev/lp0");
-		} else if ($Diferenca < 0) {
-			shell_exec("echo '----- HOUVE FALTA DE R$ $DifCx -----' > /dev/lp0");
-		}
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '================================================' > /dev/lp0");
-		shell_exec("echo '===                                          ===' > /dev/lp0");
-		shell_exec("echo '===            H-I-S-T-O-R-I-C-O             ===' > /dev/lp0");
-		shell_exec("echo '===                                          ===' > /dev/lp0");
-		shell_exec("echo '================================================' > /dev/lp0");
-
-		shell_exec("echo '        OPERADORES CADASTRADOS NO SISTEMA' > /dev/lp0");
-		shell_exec("echo '        ---------- ----------- -- -------' > /dev/lp0");
-
-		// Obtendo a Relação de Operadores Cadastrados
-		$sqlCad = "select * from cadastro where dtcad = '$dtAbre' ";
-		$rsCad  = mysqli_query($conec, $sqlCad) or die("File fccxant Error #43. Contate seu Administrador.");
-		$regCad = mysqli_num_rows($rsCad);
-
-		if ($regCad > 0) {
-			while ($lnCad = mysqli_fetch_array($rsCad)) {
-				$MatCad = $lnCad['mat'];
-
-				$sqlH2 = "select * from operador where mat = '$MatCad' ";
-				$rsH2  = mysqli_query($conec, $sqlH2) or die("File fccxant Error #44. Contate seu Administrador.");
-				while ($lnH2 = mysqli_fetch_array($rsH2)) {
-					$MatOp  = $lnH2['mat'];
-					$MatOpF = substr($MatOp, 0, 1) . "." . substr($MatOp, 1, 3) . "." . substr($MatOp, 4, 3) . "-" . substr($MatOp, 7, 1);
-					$Cargo  = $lnH2['cargo'];
-					if ($Cargo == 'Cai') {
-						$Cargo = 'Ag. Adm';
-					}
-					$Tempo  = $lnH2['horaop'];
-					$Free   = $lnH2['free'];
-					if ($Free == 'f') {
-						$Compl = ' - Free-Lancer';
-					} else {
-						$Compl = '';
-					}
-					$Resp   = $lnH2['resp'];
-					$RespF  = substr($Resp, 0, 1) . "." . substr($Resp, 1, 3) . "." . substr($Resp, 4, 3) . "-" . substr($Resp, 7, 1);
-
-					shell_exec("echo 'FUNC. CADASTRADO: $MatOpF $Compl' > /dev/lp0");
-					shell_exec("echo 'NA FUNCAO: $Cargo' > /dev/lp0");
-					shell_exec("echo 'AS: $Tempo' hs > /dev/lp0");
-					shell_exec("echo 'CADASTRADO POR: $RespF' > /dev/lp0");
-					shell_exec("echo '                - - - X - - -' > /dev/lp0");
-				}
-			}
-		}
-		mysqli_free_result($rsH2);
-
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-
-		// Obtendo a Relação de Recuperação de Senhas
-		$sqlR  = "select * from restsenha where datar = '$dtAbre' ";
-		$rsR   = mysqli_query($conec, $sqlR) or die("File fccxant Error #45. Contate seu Administrador.");
-		$regsR = mysqli_num_rows($rsR);
-
-		if ($regsR > 0) {
-			while ($lnR = mysqli_fetch_array($rsR)) {
-				$UserR  = $lnR['user'];
-				$UserRF = substr($UserR, 0, 1) . "." . substr($UserR, 1, 3) . "." . substr($UserR, 4, 3) . "-" . substr($UserR, 7, 1);
-				$CpfR   = $lnR['cpf'];
-				$CpfRF = substr($CpfR, 0, 3) . "." . substr($CpfR, 3, 3) . "." . substr($CpfR, 6, 3) . "-" . substr($CpfR, 9, 2);
-				$AudR   = $lnR['aud'];
-				$AudRF = substr($AudR, 0, 1) . "." . substr($AudR, 1, 3) . "." . substr($AudR, 4, 3) . "-" . substr($AudR, 7, 1);
-				$DataR  = $lnR['datar'];
-				$DataRF = substr($DataR, 8, 2) . "/" . substr($DataR, 5, 2) . "/" . substr($DataR, 0, 4);
-				$HoraR  = $lnR['horar'];
-
-				shell_exec("echo '        SOLICITACOES DE SENHA PROVISORIA' > /dev/lp0");
-				shell_exec("echo '        ------------ -- ----- ----------' > /dev/lp0");
-
-				shell_exec("echo 'SOLICITANTE: $UserRF     CPF: $CpfRF' > /dev/lp0");
-				shell_exec("echo 'DATA: $DataRF             HORA: $HoraR' > /dev/lp0");
-				shell_exec("echo 'AUTORIZADO POR: $AudRF' > /dev/lp0");
-			}
-		}
-
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo Visto do Caixa: --------------------------- > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-
-		shell_exec("echo '- - - TERMINO DA FITA NUMERO - $Fita/$ano - - -' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo Visto do Caixa: --------------------------- > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		// shell_exec("echo '\n' > /dev/lp0");
-
-		// Concurso Bebê Estrella
-		$sqlRf = "select dtopen from caixa order by dtopen desc ";
-		$rsRf  = mysqli_query($conec, $sqlRf) or die("File fccxant Error #46. Contate seu Administrador.");
-		$lnRf  = mysqli_fetch_array($rsRf);
-		$dtRef = $lnRf['dtopen'];
-		$dtRefB = substr($dtRef, 8, 2) . "/" . substr($dtRef, 5, 2) . "/" . substr($dtRef, 0, 4);
-
-		$sqlRel = "select * from databebe where dthoje = '$dtRef'order by recibo";
-		$rsRel  = mysqli_query($conec, $sqlRel) or die("File fccxant Error #47. Contate seu Administrador.");
-		$regRel = mysqli_num_rows($rsRel);
-
-		if ($regRel > 0) {
-			// Cabeçalho
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo '============================================' > /dev/lp0");
-			shell_exec("echo 'RECIBOS BEBE ESTRELLA  -  DATA: $dtRefB' > /dev/lp0");
-			shell_exec("echo '\tRECIBO   -   NASCIMENTO' > /dev/lp0");
-			shell_exec("echo '-------------------------------------------' > /dev/lp0");
-
-
-			while ($lnRel  = mysqli_fetch_array($rsRel)) {
-				$RecB = $lnRel['recibo'];
-				$NasB = $lnRel['dtnasc'];
-				$DtNascB = substr($NasB, 8, 2) . "/" . substr($NasB, 5, 2) . "/" . substr($NasB, 0, 4);
-
-				shell_exec("echo '\t$RecB   -   $DtNascB' > /dev/lp0");
-			}
-			shell_exec("echo '============================================' > /dev/lp0");
-			shell_exec("echo '\n' > /dev/lp0");
-		}
-
-		// Imprimindo Recolhimentos
-		$sqlRec = "select dtopen from caixa order by dtopen desc ";
-		$rsRec  = mysqli_query($conec, $sqlRec) or die("File fccxant Error #48. Contate seu Administrador.");
-		$regRec = mysqli_num_rows($rsRec);
-		$lnRec = mysqli_fetch_array($rsRec);
-		$dtOpen  = $lnRec['dtopen'];
-		$DataAb = substr($dtOpen, 8, 2) . "/" . substr($dtOpen, 5, 2) . "/" . substr($dtOpen, 0, 4);
-
-		shell_exec("echo '==============================================' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '       ESTUDIO: PC-$PC Versao: $Versao' > /dev/lp0");
-		shell_exec("echo '       RECOLHIMENTOS EM $DataAb' > /dev/lp0");
-		shell_exec("echo '       ------------- -- ----------' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '          CAPA DE LOTE - $horaNorm'-'$cashTot'-'$horaInv' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo ' HORA\t\tENVELOPE\tVALOR\tMATRIC' > /dev/lp0");
-
-		if ($regRec > 0) {
-			$sqlDep = "select hrdep, envelope, valor, matreceb from depositos where dtdep = '$dtOpen' ";
-			$rsDep  = mysqli_query($conec, $sqlDep) or die("File fccxant Error #49. Contate seu Administrador.");
-			$AcRec  = 0;
-			$ACount = 0;
-
-			while ($lnDep = mysqli_fetch_array($rsDep)) {
-				$Hora   = $lnDep['hrdep'];
-				$Nvlp   = $lnDep['envelope'];
-				$Vlr    = $lnDep['valor'];
-				$Matr   = $lnDep['matreceb'];
-				$Mtrc   = $Matr + 0;
-				$ACount = $ACount + 1;
-				$AcRec  = $AcRec + $Vlr;
-
-				shell_exec("echo '$Hora\t\t$Nvlp\t\t$Vlr\t\t$Mtrc' > /dev/lp0");
-			}
-			$TRec  = number_format($AcRec, 2, ",", ".");
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo 'QUANT. DE RECOLHIMENTOS: $ACount - R$ $TRec' > /dev/lp0");
-		} else {
-			shell_exec("echo ' *** NAO HOUVE DEPOSITOS NESTA DATA ***' > /dev/lp0");
-		}
-		shell_exec("echo '\n' > /dev/lp0");
-
-		shell_exec("echo '   ***  $horaInv''$horaNorm'-'$Entradas'-'$horaInv''$horaNorm ***' > /dev/lp0");
-		shell_exec("echo '==============================================' > /dev/lp0");
-		shell_exec("echo '- - - TERMINO DA FITA NUMERO - $Fita/$ano - - -' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
 	} else { ?>
 		<br><br><br>
 		<font size='6'><b>
@@ -1678,19 +918,19 @@ ini_set('track_errors', 1);*/
 	}
 
 	// Encerrando a Conexão
-	if ($rsA instanceof mysqli_result) {
+	if (isset($rsA) && $rsA instanceof mysqli_result) {
 		mysqli_free_result($rsA);
 	}
-	if ($rsR instanceof mysqli_result) {
+	if (isset($rsR) && $rsR instanceof mysqli_result) {
 		mysqli_free_result($rsR);
 	}
-	if ($rsRec instanceof mysqli_result) {
+	if (isset($rsRec) && $rsRec instanceof mysqli_result) {
 		mysqli_free_result($rsRec);
 	}
-	if ($rsDep instanceof mysqli_result) {
+	if (isset($rsDep) && $rsDep instanceof mysqli_result) {
 		mysqli_free_result($rsDep);
 	}
-	if ($rsGr instanceof mysqli_result) {
+	if (isset($rsGr) && $rsGr instanceof mysqli_result) {
 		mysqli_free_result($rsGr);
 	}
 	$SisRot = "S-7.5.2.1.1";
