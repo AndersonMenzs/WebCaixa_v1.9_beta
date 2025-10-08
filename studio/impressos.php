@@ -312,19 +312,8 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
                 return;
             }
 
-            // Abrir o arquivo em uma nova janela e acionar a impressão
-            const win = window.open('./impressos/' + encodeURIComponent(select.value));
-            if (win) {
-                // Tenta imprimir e fechar a janela do documento após a impressão
-                win.onload = function() {
-                    win.print();
-                    win.onafterprint = function() {
-                        win.close();
-                        // Atualiza a página principal após fechar a janela de impressão
-                        window.location.reload();
-                    };
-                };
-            }
+            // Abrir o arquivo em uma nova janela para visualização
+            window.open('./impressos/' + encodeURIComponent(select.value), '_blank');
         }
 
         // Prevenir F5
