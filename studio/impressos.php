@@ -278,7 +278,7 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
                 echo implode(", ", $infoArray);
             }
             ?>
-        };
+        }
 
         function atualizarInfo() {
             const select = document.getElementById('arquivo_selecionado');
