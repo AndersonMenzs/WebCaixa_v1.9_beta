@@ -73,26 +73,12 @@ function checkdata() {
             return false;
          }
 
-		/*if (rd_select == "yes" && taxaAnt != soma && taxaProd != soma) {
-			alert("Valor da Amizade Premiada Incorreto!!!");
-			txt1.select();
-			txt1.focus();
-			return false;
-		}*/
-
 		if (rd_select == "no" && taxaProd > 0 && soma !== taxaProd) {
             alert("Valor da Taxa Incorreto!!!");
 			txt1.select();
 			txt1.focus();
             return false;
          }
-
-		/*if (rd_select == "no" && taxaProd != soma) {
-			alert("Valor da Taxa Incorreto!!!");
-			txt1.select();
-			txt1.focus();
-			return false;
-		}*/
 			
 		submit();
 	}
