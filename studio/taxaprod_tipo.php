@@ -340,7 +340,7 @@
     <table width='100%' border='0' cellpadding='0' cellspacing='0'>
         <tr>
             <td width='9%'>
-                <a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
+                <a href="taxaprod.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
             </td>
             <td width='82%' align='center'>
                 <font color="gold" size="6"><b>
@@ -351,7 +351,7 @@
                     </b></font><br>
             </td>
             <td width='9%'>
-                <a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+                <a href="taxaprod.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
             </td>
         </tr>
 
@@ -381,7 +381,7 @@
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') {
     ?>
         <form name="taxaProd" method="post" action="confprod.php" OnSubmit="JavaScript:return checkdata()" autocomplete="off">
-            <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
+            <table width="80%" border="5" cellpadding="10" cellspacing="0" align="center">
                 <tr>
                     <td width="40%" align="center">
                         <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
@@ -404,12 +404,12 @@
                     </td>
                     <td align="center">
                         <font color='gold' size='4'><b><i><?php echo $DataNasc; ?></i></b></font>
-                        <input type="hidden" name="datanasc" value="<?php echo $DataNasc; ?>">
+                        <input type="hidden" name="data_nasc" value="<?php echo $DataNasc; ?>">
                     </td>
                 </tr>
             </table><br>
 
-            <table width="78%" border="5" cellpadding="10" cellspacing="0" align="center">
+            <table width="80%" border="5" cellpadding="10" cellspacing="0" align="center">
                 <input type="hidden" name="vlr_unico" value="<?php echo $VrProd; ?>">
                 <tr>
                     <td align="center">

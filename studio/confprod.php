@@ -39,10 +39,10 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	print_r($dados);
-	echo "</pre>";
+	echo "</pre>";*/
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1";
@@ -59,9 +59,9 @@
 	$FPag_2     = trim($_POST['lsPr2']);
 	$FPag_3     = trim($_POST['lsPr3']);
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
-	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
-	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
-	$Vendedora = trim($_POST['vendedora']);
+	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : '';
+	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : '';
+	$Vendedora = trim($_POST['vendedora']);	
 	$Cliente	= trim($_POST['cliente']);
 	$DataNasc	= trim($_POST['data_nasc']);
 	$TaxaProd  = $txt1 + $txt2 + $txt3;
@@ -85,7 +85,7 @@
 	// Contando Formas de Pagamento
 	$FsPags = 0;
 
-	if ($txt1 <> "") {
+	if ($txt1 <> "" or $txt1 == 0) {
 		$FsPags = $FsPags + 1;
 	}
 
@@ -96,9 +96,9 @@
 	if ($txt3 <> "") {
 		$FsPags = $FsPags + 1;
 	}
-
+	
 	if ($FsPags == 1) {
-		if ($txt1 <> "") {
+		if ($txt1 <> "" or $txt1 == 0) {
 			$FPag = $FPag_1;
 			$sql = "select * from formapag where codpag = '$FPag' ";
 			$rs  = mysqli_query($conec, $sql);
@@ -130,24 +130,10 @@
 			<?php
 			// Verificando se a cliente é maior que 60 anos
 			if ($Idade >= 60) {
-
-				// Gratuidade
-				$RdTaxa		= 0.00;
-				$VrProd 	= 0.00;
-				$VrProdF 	= number_format($VrProd, 2, ",", ".");
-				$FPag_1		= 0.00;
-				$FPag_2		= 0.00;
-				$FPag_3		= 0.00;
-				$txt1 		= 0.00;
-				$txt2 		= 0.00;
-				$txt3 		= 0.00;
-				$TaxaProd 	= 0.00;
-				$TaxaProdF 	= number_format($TaxaProd, 2, ",", ".");
-
 			?>
-				<center>
-					<font color='lime' size='7'>
-						<b>
+			<center>
+				<font color='lime' size='7'>
+					<b>
 							<i>Cliente Senior</i>
 						</b>
 					</font>

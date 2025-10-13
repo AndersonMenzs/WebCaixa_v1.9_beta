@@ -303,10 +303,7 @@
             <td width='82%' align='center'>
                 <font color="gold" size="6"><b>
                         <center><u><i>TAXA DE PRODUÇÃO</i></u></center>
-                    </b></font>
-                <font size="5" color="#FFFFFF"><b>
-                        <center><u><i>Valor Atual - <font color="aqua">R$ <?php echo "$VrProdF"; ?></i></u></center>
-                    </b></font><br>
+                    </b></font><br><br><br>
             </td>
             <td width='9%'>
                 <a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>

@@ -95,3 +95,13 @@ ALTER TABLE `studio`.`amizpre`
 CHANGE COLUMN `recib` `recib` CHAR(8) NULL DEFAULT NULL,
 CHANGE COLUMN `vlrec` `vlrec` DECIMAL(10,2) NULL DEFAULT NULL;
 ```
+
+2025-10-11
+
+### Inserir uma linha na tabela formapag para incluir Gratuidade
+
+```sql
+INSERT INTO formapag (codpag, modpag, siglapag) VALUES (99, 'Gratuidade', 'GRT');  
+```
+
+

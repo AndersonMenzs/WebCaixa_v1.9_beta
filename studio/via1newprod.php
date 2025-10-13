@@ -72,9 +72,6 @@
 	$Idade     = trim($_POST['idade']);
 	$vlr_ext   = valorPorExtenso($TaxaProd);
 
-	echo $vlr_ext;
-	//exit;
-
 	// Pesquisando PC
 	include "conexao.php";
 	include "dbselect.php";
@@ -133,6 +130,8 @@
 				$ModPag = "PIX QR CODE";
 			} elseif ($FmRec == "PXC") {
 				$ModPag = "PIX CNPJ";
+			} elseif ($FmRec == "GRT") {
+				$ModPag = "GRATUIDADE";
 			} else {
 				$ModPag = "Diversas";
 			}
@@ -141,14 +140,15 @@
 			?>
 	<br><br><br><br>
 	<font size='6'><b>
-			<center>Coloque a <font color='gold'>
-					<blink>Segunda Via</blink>
-					<font color='#FFFFFF'> na Autenticadora
-						e <br>
-						<p>Clique no <font color='gold'>
-								<blink>botão Abaixo</blink>
-								<font color='#FFFFFF'>.</center>
+			<center>Verifique se a impressora <font color='gold'>
+					<blink>do Caixa</blink>
+					<font color='#FFFFFF'> está ligada e com papel</center>
 		</b></font>
+	e <br>
+	<p>Clique no <font color='gold'>
+			<blink>botão Abaixo</blink>
+			<font color='#FFFFFF'>.</center>
+				</b></font>
 	</p><br>
 	<center>
 		<input id="ghost_click" type="submit" name="btimprime" value="Autenticar">
@@ -170,7 +170,7 @@
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
-			var url = './recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); ?>' +
+			var url = './<?php if ($Idade >= 60) { ?>recibo_taxaprod_grt.php?tipo=<?php echo urlencode($tipo); } else { ?>recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); } ?>' +
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&TaxaProd=<?php echo urlencode($TaxaProd); ?>' +
@@ -191,7 +191,7 @@
 				'&horaaut=<?php echo urlencode($horaaut); ?>' +
 				'&dtAut=<?php echo urlencode($dtAut); ?>' +
 				'&SgRec=<?php echo urlencode($SgRec); ?>' +
-				'&Mat=<?php echo urlencode($Mat); ?>' + 
+				'&Mat=<?php echo urlencode($Mat); ?>' +
 				'&Idade=<?php echo urlencode($Idade); ?>' +
 				'&DataNasc=<?php echo urlencode($DataNasc); ?>';
 			window.open(url, '_blank');

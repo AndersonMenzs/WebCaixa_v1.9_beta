@@ -41,11 +41,6 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	print_r($dados);
-	echo "</pre>";
-	//exit;
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1.1";
@@ -119,21 +114,21 @@
 							$Reg = 0;
 						}
 						$Reg  = $Reg + 1;
+						echo $FPag_1 . "\n";
 
-						if ($FPag_1 <> "00") {
-							//$fps = $fps + 1; 
-							echo "Aqui1";
+						if ($FPag_1 <> "00" or $FPag_2 == "99") {
+							//$fps = $fps + 1;
 							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
 						}
 
-						if ($FPag_2 <> "00") {
+						if ($FPag_2 <> "00" and $FPag_1 <> "99") {
 							//$fps = $fps + 1;
 							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
 						}
 
-						if ($FPag_3 <> "00") {
+						if ($FPag_3 <> "00" and $FPag_1 <> "99") {
 							//$fps = $fps + 1;
 							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
