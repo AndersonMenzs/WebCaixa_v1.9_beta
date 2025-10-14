@@ -39,10 +39,10 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
-	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	print_r($dados);
-	echo "</pre>";*/
+	echo "</pre>";
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1";
@@ -61,11 +61,13 @@
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : '';
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : '';
-	$Vendedora = trim($_POST['vendedora']);	
+	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
 	$DataNasc	= trim($_POST['data_nasc']);
 	$TaxaProd  = $txt1 + $txt2 + $txt3;
 	$TaxaProdF = number_format($TaxaProd, 2, ",", ".");
+
+	echo $TaxaProd . " - " . $TaxaProdF;
 
 	// Converte para o formato internacional
 	$partes = explode('/', $DataNasc);
@@ -96,7 +98,7 @@
 	if ($txt3 <> "") {
 		$FsPags = $FsPags + 1;
 	}
-	
+
 	if ($FsPags == 1) {
 		if ($txt1 <> "" or $txt1 == 0) {
 			$FPag = $FPag_1;
@@ -131,9 +133,9 @@
 			// Verificando se a cliente é maior que 60 anos
 			if ($Idade >= 60) {
 			?>
-			<center>
-				<font color='lime' size='7'>
-					<b>
+				<center>
+					<font color='lime' size='7'>
+						<b>
 							<i>Cliente Senior</i>
 						</b>
 					</font>

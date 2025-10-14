@@ -234,8 +234,73 @@
         }
 
         function validaCampos() {
+            var vendedora = document.getElementById('vendedora').value.trim();
+            var cliente = document.getElementById('cliente').value.trim();
+            if (vendedora.length <= 8) {
+                alert('O campo Vendedora deve ter mais que 8 letras.');
+                document.getElementById('vendedora').focus();
+                return false;
+            }
+            if (cliente.length <= 8) {
+                alert('O campo Cliente deve ter mais que 8 letras.');
+                document.getElementById('cliente').focus();
+                return false;
+            }
 
             // Validação da soma dos valores
+            function parseValor(valor) {
+                return parseFloat(valor.replace(',', '.')) || 0;
+            }
+
+            // Validação das formas de pagamento únicas
+            var fp1 = document.taxaProd.lsPr1.value;
+            var fp2 = document.taxaProd.lsPr2.value;
+            var fp3 = document.taxaProd.lsPr3.value;
+
+            // Verifica se há valores repetidos, ignorando valores vazios ou "Selecione"
+            var formasPreenchidas = [];
+
+            // Adiciona apenas formas de pagamento válidas (não vazias)
+            if (fp1 && fp1 !== "" && fp1 !== "Selecione") formasPreenchidas.push({
+                value: fp1,
+                select: document.taxaProd.lsPr1
+            });
+            if (fp2 && fp2 !== "" && fp2 !== "Selecione" && fp2 !== fp3) formasPreenchidas.push({
+                value: fp2,
+                select: document.taxaProd.lsPr2
+            });
+            if (fp3 && fp3 !== "" && fp3 !== "Selecione" && fp3 !== fp2) formasPreenchidas.push({
+                value: fp3,
+                select: document.taxaProd.lsPr3
+            });
+
+            // Verifica duplicatas entre as formas preenchidas
+            var valores = formasPreenchidas.map(item => item.value);
+            var duplicatas = valores.filter((item, index) => valores.indexOf(item) !== index);
+
+            if (duplicatas.length > 0) {
+                // Buscar o texto da opção repetida
+                var texto = "";
+                for (var i = 0; i < formasPreenchidas.length; i++) {
+                    if (formasPreenchidas[i].value === duplicatas[0]) {
+                        for (var j = 0; j < formasPreenchidas[i].select.options.length; j++) {
+                            if (formasPreenchidas[i].select.options[j].value === duplicatas[0]) {
+                                texto = formasPreenchidas[i].select.options[j].text;
+                                break;
+                            }
+                        }
+                        if (texto) break;
+                    }
+                }
+                alert("A forma de pagamento '" + texto + "' foi repetida. Selecione formas diferentes.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function validarSomaValores() {
+            // Pega o valor total do produto do campo hidden
             var vlrUnico = parseFloat(document.taxaProd.vlr_unico.value.replace('.', '').replace(',', '.')) || 0;
             var v1 = parseFloat(document.taxaProd.txt1.value.replace('.', '').replace(',', '.')) || 0;
             var v2 = parseFloat(document.taxaProd.txt2.value.replace('.', '').replace(',', '.')) || 0;
@@ -252,11 +317,16 @@
                     "A soma dos valores está MAIOR em R$ " + Math.abs(diferenca).toFixed(2) :
                     "A soma dos valores está MENOR em R$ " + Math.abs(diferenca).toFixed(2);
                 alert(msg);
-                return false; // Impede a continuidade
             }
-
-            return true;
         }
+
+        // Adiciona o evento de validação nos campos
+        window.onload = function() {
+            document.taxaProd.vlr_unico.onblur = validarSomaValores;
+            document.taxaProd.txt1.onblur = validarSomaValores;
+            document.taxaProd.txt2.onblur = validarSomaValores;
+            document.taxaProd.txt3.onblur = validarSomaValores;
+        };
     </script>
 
     <script src="val_prod.js" charset="utf-8"></script>
@@ -275,9 +345,9 @@
     $DataHj = date('Y-m-d');
 
     // Recebendo valores
-	$Vendedora = trim($_POST['vendedora']);
-	$Cliente	= trim($_POST['cliente']);
-	$DataNasc	= trim($_POST['data_nasc']);
+    $Vendedora = trim($_POST['vendedora']);
+    $Cliente    = trim($_POST['cliente']);
+    $DataNasc    = trim($_POST['data_nasc']);
 
     // Calculando quantos anos tem
     $partes = explode('/', $DataNasc);
@@ -285,7 +355,7 @@
     $idade = date('Y') - $ano;
     if (date('md') < date('md', strtotime($DataNasc))) {
         $idade--;
-    }    
+    }
 
     // Obtendo Valor Atualizado
     include "conexao.php";
@@ -347,7 +417,7 @@
                         <center><u><i>TAXA DE PRODUÇÃO</i></u></center>
                     </b></font>
                 <font size="5" color="#FFFFFF"><b>
-                        <center><u><i>Valor Atual - <font color="aqua">R$ <?php echo "$VrProdF"; ?></i></u></center>
+                        <center><u><i>Valor Atual - <font color="aqua">R$ <?php echo $VrProdF; ?></i></u></center>
                     </b></font><br>
             </td>
             <td width='9%'>
@@ -358,20 +428,20 @@
         <tr>
             <td></td>
             <td>
-			<?php
-			// Verificando se a cliente é maior que 60 anos
-			if ($idade >= 60) {
-			?>
-				<center>
-					<font color='lime' size='7'>
-						<b>
-							<i>Cliente Sênior</i>
-						</b>
-					</font>
-				</center>
-			<?php
-			}
-			?>
+                <?php
+                // Verificando se a cliente é maior que 60 anos
+                if ($idade >= 60) {
+                ?>
+                    <center>
+                        <font color='lime' size='7'>
+                            <b>
+                                <i>Cliente Sênior</i>
+                            </b>
+                        </font>
+                    </center>
+                <?php
+                }
+                ?>
             </td>
             <td></td>
         </tr>
@@ -380,7 +450,7 @@
 
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') {
     ?>
-        <form name="taxaProd" method="post" action="confprod.php" OnSubmit="JavaScript:return checkdata()" autocomplete="off">
+        <form name="taxaProd" method="post" action="confprod.php" onsubmit="return validarSomaValores();" autocomplete="off">
             <table width="80%" border="5" cellpadding="10" cellspacing="0" align="center">
                 <tr>
                     <td width="40%" align="center">
@@ -399,7 +469,7 @@
                         <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
                     </td>
                     <td align="center">
-                        <font color='lime' size='4'><b><i><?php echo $Cliente; ?></i></b></font>    
+                        <font color='lime' size='4'><b><i><?php echo $Cliente; ?></i></b></font>
                         <input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
                     </td>
                     <td align="center">
@@ -431,7 +501,7 @@
                         <font size='5'><b><i>Valor</i></b></font>
                     </td>
                 </tr>
-                
+
                 <tr>
                     <td rowspan="4" align="center">
                         <font size='5'><b><i><?php echo $NumDoc; ?></i></b></font>
@@ -442,35 +512,35 @@
                         <font size='5'><b><i>Sim </i></b></font><input type='radio' name='rdtaxa' value='S'>
                         <input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">
                         <input type="hidden" name="txtvrprodf" value="<?php echo $VrProdF; ?>">
-                        <input type="hidden" name="txtAP" value="<?php echo $VrAnt; ?>">
-                        <input type="hidden" name="txtAPf" value="<?php echo $VrAntF; ?>">
+                        <!--<input type="hidden" name="txtAP" value="<?php echo $VrAnt; ?>">
+                        <input type="hidden" name="txtAPf" value="<?php echo $VrAntF; ?>">-->
                         <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
                     </td>
                     <td align="center">
                         <?php
                         // Verificando se é maior de 60 anos
                         if ($idade >= 60) {
-                            ?>
+                        ?>
                             <font color='lime' size='5'><b><i>GRATUIDADE</i></b></font>
                             <input type="hidden" name="lsPr1" value="99">
                             <input type="hidden" name="txt1" value="0.00">
-                            <?php
+                        <?php
                         } else {
-                            ?>
-                        <select name="lsPr1" class="campos">
-                            <?php
-                            // Obtendo a Relação
-                            include "dbselect.php";
-                            $sqlpr1 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
-                            $rspr1 = mysqli_query($conec, $sqlpr1) or die("Não foi possível acessar os Dados");
-                            while ($lnpr1 = mysqli_fetch_array($rspr1)) {
-                                $CodPag1  = $lnpr1['codpag'];
-                                $ModPag1  = $lnpr1['modpag'];
-                                echo "<option value='$CodPag1' class='campos'>$ModPag1</option>";
-                            }
-                            mysqli_free_result($rspr1);
-                            ?>
-                        </select>
+                        ?>
+                            <select name="lsPr1" class="campos">
+                                <?php
+                                // Obtendo a Relação
+                                include "dbselect.php";
+                                $sqlpr1 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
+                                $rspr1 = mysqli_query($conec, $sqlpr1) or die("Não foi possível acessar os Dados");
+                                while ($lnpr1 = mysqli_fetch_array($rspr1)) {
+                                    $CodPag1  = $lnpr1['codpag'];
+                                    $ModPag1  = $lnpr1['modpag'];
+                                    echo "<option value='$CodPag1' class='campos'>$ModPag1</option>";
+                                }
+                                mysqli_free_result($rspr1);
+                                ?>
+                            </select>
                         <?php
                         }
                         ?>
@@ -482,13 +552,13 @@
                         <?php
                         // Verificando se é maior de 60 anos
                         if ($idade >= 60) {
-                            ?>
-                        <font size='5'><b><i>0,00</i></b></font>
-                        <input type="hidden" name="txt1" value="0.00">
+                        ?>
+                            <font size='5'><b><i>0,00</i></b></font>
+                            <input type="hidden" name="txt1" value="0.00">
                         <?php
                         } else {
-                            ?>
-                        <input type="text" name="txt1" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt1', event); validvalor(this)">
+                        ?>
+                            <input type="text" name="txt1" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt1', event); validvalor(this)">
                         <?php
                         }
                         ?>
@@ -498,58 +568,58 @@
                 <?php
                 // Verifica se é menor de 60 anos para liberar os outros campos
                 if ($idade < 60) {
-                    ?>
-                <tr>
-                    <td align="center">
-                        <select name="lsPr2" class="campos">
-                            <?php
-                            include "dbselect.php";
-                            $sqlpr2 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
-                            $rspr2 = mysqli_query($conec, $sqlpr2) or die("Não foi possível acessar os Dados");
+                ?>
+                    <tr>
+                        <td align="center">
+                            <select name="lsPr2" class="campos">
+                                <?php
+                                include "dbselect.php";
+                                $sqlpr2 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
+                                $rspr2 = mysqli_query($conec, $sqlpr2) or die("Não foi possível acessar os Dados");
 
-                            // Criando o Array para o campo PC
-                            while ($lnpr2 = mysqli_fetch_array($rspr2)) {
-                                $CodPag2  = $lnpr2['codpag'];
-                                $ModPag2  = $lnpr2['modpag'];
-                            ?>
-                                <option value="<?php echo $CodPag2; ?>" class="campos"><?php echo "$ModPag2"; ?></option>
-                            <?php
-                            }
-                            mysqli_free_result($rspr2);
-                            ?>
-                        </select>
-                    </td>
-                    <td align="center">
-                        <font size="5"><b><i>R$ </i></b></font>
-                        <input type="text" name="txt2" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt2', event); validvalor(this)">
-                    </td>
-                </tr>
+                                // Criando o Array para o campo PC
+                                while ($lnpr2 = mysqli_fetch_array($rspr2)) {
+                                    $CodPag2  = $lnpr2['codpag'];
+                                    $ModPag2  = $lnpr2['modpag'];
+                                ?>
+                                    <option value="<?php echo $CodPag2; ?>" class="campos"><?php echo "$ModPag2"; ?></option>
+                                <?php
+                                }
+                                mysqli_free_result($rspr2);
+                                ?>
+                            </select>
+                        </td>
+                        <td align="center">
+                            <font size="5"><b><i>R$ </i></b></font>
+                            <input type="text" name="txt2" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt2', event); validvalor(this)">
+                        </td>
+                    </tr>
 
-                <tr>
-                    <td align="center">
-                        <select name="lsPr3" class="campos">
-                            <?php
-                            include "dbselect.php";
-                            $sqlpr3 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
-                            $rspr3 = mysqli_query($conec, $sqlpr3) or die("Não foi possível acessar os Dados");
+                    <tr>
+                        <td align="center">
+                            <select name="lsPr3" class="campos">
+                                <?php
+                                include "dbselect.php";
+                                $sqlpr3 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
+                                $rspr3 = mysqli_query($conec, $sqlpr3) or die("Não foi possível acessar os Dados");
 
-                            // Criando o Array para o campo PC
-                            while ($lnpr3 = mysqli_fetch_array($rspr3)) {
-                                $CodPag3  = $lnpr3['codpag'];
-                                $ModPag3  = $lnpr3['modpag'];
-                            ?>
-                                <option value="<?php echo $CodPag3; ?>" class="campos"><?php echo "$ModPag3"; ?></option>
-                            <?php
-                            }
-                            mysqli_free_result($rspr3);
-                            ?>
-                        </select>
-                    </td>
-                    <td align="center">
-                        <font size="5"><b><i>R$ </i></b></font>
-                        <input type="text" name="txt3" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt3', event); validvalor(this)">
-                    </td>
-                </tr>
+                                // Criando o Array para o campo PC
+                                while ($lnpr3 = mysqli_fetch_array($rspr3)) {
+                                    $CodPag3  = $lnpr3['codpag'];
+                                    $ModPag3  = $lnpr3['modpag'];
+                                ?>
+                                    <option value="<?php echo $CodPag3; ?>" class="campos"><?php echo "$ModPag3"; ?></option>
+                                <?php
+                                }
+                                mysqli_free_result($rspr3);
+                                ?>
+                            </select>
+                        </td>
+                        <td align="center">
+                            <font size="5"><b><i>R$ </i></b></font>
+                            <input type="text" name="txt3" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt3', event); validvalor(this)">
+                        </td>
+                    </tr>
                 <?php
                 }
                 ?>
@@ -560,8 +630,14 @@
                     <td width="9%"></td>
                     <td width="82%" align="center">
                         <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-                        <input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
-                        <input type='reset' name='btreset' value='Limpar'><br><br>
+                        <input type='submit' name='btenviar' value='Continuar'>
+                        <?php
+                        // Verificando se é maior de 60 anos
+                        if ($idade < 60) {
+                        ?> &nbsp;&nbsp;
+                            <input type='reset' name='btreset' value='Limpar'><br><br>
+                        <?php
+                        } ?>
                     </td>
                     <td width="9%" align="right"></td>
                 </tr>

@@ -47,8 +47,8 @@
 	$TipoRec   = trim($_POST['tiporec']);
 	$VrProd	= trim($_POST['txtprod']);
 	$VrProdF = number_format($VrProd, 2, ",", ".");
-	$TaxaProd  = trim($_POST['txprod']);
-	$TaxaProdF = trim($_POST['txprodF']);
+	$TaxaProd  = trim($_POST['txtprod']);
+	$TaxaProdF = trim($_POST['txtprodF']);
 	$FPag      = trim($_POST['formapag']);
 	$FPag_1    = trim($_POST['lsPr1']);
 	$FPag_2    = trim($_POST['lsPr2']);
@@ -133,7 +133,7 @@
 			} elseif ($FmRec == "GRT") {
 				$ModPag = "GRATUIDADE";
 			} else {
-				$ModPag = "Diversas";
+				$ModPag = "DIVERSAS";
 			}
 
 			// Preparando Ficha Cliente 
@@ -170,7 +170,8 @@
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
-			var url = './<?php if ($Idade >= 60) { ?>recibo_taxaprod_grt.php?tipo=<?php echo urlencode($tipo); } else { ?>recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); } ?>' +
+			//var url = './<?php if ($Idade >= 60) { ?>recibo_taxaprod_grt.php?tipo=<?php echo urlencode($tipo); } else { ?>recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); } ?>' +
+			var url = './recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); ?>' +
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&TaxaProd=<?php echo urlencode($TaxaProd); ?>' +

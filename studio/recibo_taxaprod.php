@@ -15,7 +15,8 @@ $FPag_3    = $_GET['fpag_3'];
 $txt1      = $_GET['txt1'];
 $txt2      = $_GET['txt2'];
 $txt3      = $_GET['txt3'];
-$VrProd    = $_GET['VrProd'];
+$VrProd    = $_GET['VrProdF'];
+echo $VrProd;
 $VrProdF   = number_format($VrProd, 2, ",", ".");
 $VrProdA = number_format($VrProd, 2, "", ".");
 $TaxaProdF = $_GET['TaxaProd'];
@@ -226,8 +227,9 @@ $idade     = $_GET['Idade'];
         }
     </style>
 </head>
+<!--<body onload="window.print()">-->
 
-<body onload="window.print()">
+<body>
     <div class="container">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
@@ -300,7 +302,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
+                    <font size=1><?php echo "R$ " . $VrProd; ?></font>
                 </td>
             </tr>
             <tr>
@@ -371,6 +373,8 @@ $idade     = $_GET['Idade'];
                         $ModPag = "PIX QR CODE";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
+                    } elseif ($FPag == 99) {
+                        $ModPag = "GRATUIDADE";
                     }
 
                 ?>

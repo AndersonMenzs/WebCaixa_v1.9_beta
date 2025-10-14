@@ -41,6 +41,10 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1.1";
@@ -114,9 +118,8 @@
 							$Reg = 0;
 						}
 						$Reg  = $Reg + 1;
-						echo $FPag_1 . "\n";
 
-						if ($FPag_1 <> "00" or $FPag_2 == "99") {
+						if ($FPag_1 <> "00" or $FPag_1 == "99") {
 							//$fps = $fps + 1;
 							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
@@ -158,15 +161,15 @@
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 				<input type="hidden" name="idade" value="<?php echo $Idade; ?>">
 				<input type="hidden" name="data_nasc" value="<?php echo $DataNasc; ?>">
-				<font size='6'><b>
-						<center>Coloque a <font color='gold'>
-								<blink>Primeira Via</blink>
-								<font color='#FFFFFF'> na Autenticadora
-									e <br>
-									<p>Clique no <font color='gold'>
-											<blink>botão Abaixo</blink>
-											<font color='#FFFFFF'>.</center>
-					</b></font>
+				<p>
+					<font size='6'><b>
+							<center>Verifique se a impressora do <font color='gold'>
+									<blink>Caixa</blink>
+									<font color='#FFFFFF'> está ligada e com papel.
+										<p>Logo após clique no <font color='gold'>
+												<blink>botão abaixo</blink>
+												<font color='#FFFFFF'>.</center>
+						</b></font>
 				</p><br>
 				<center>
 					<input id="ghost_click" type="submit" name="btimprime" value="Autenticar">
