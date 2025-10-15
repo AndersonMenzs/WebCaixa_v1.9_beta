@@ -31,7 +31,7 @@
 	<?php
 	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
-	print_r($dados);
+	var_dump($dados);
 	echo "</pre>";
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -45,7 +45,7 @@
 	$RdTaxa    = trim($_POST['rdtaxa']);
 	$NDoc      = trim($_POST['txtdoc']);
 	$TipoRec   = trim($_POST['tiporec']);
-	$VrProd	= trim($_POST['txtprod']);
+	$VrProd	= trim($_POST['txtvrprod']);
 	$VrProdF = number_format($VrProd, 2, ",", ".");
 	$TaxaProd  = trim($_POST['txtprod']);
 	$TaxaProdF = trim($_POST['txtprodF']);
@@ -53,9 +53,9 @@
 	$FPag_1    = trim($_POST['lsPr1']);
 	$FPag_2    = trim($_POST['lsPr2']);
 	$FPag_3    = trim($_POST['lsPr3']);
-	$txt1 = isset($_POST['txtvalor1']) ? (float) trim($_POST['txtvalor1']) : 0;
-	$txt2 = isset($_POST['txtvalor2']) ? (float) trim($_POST['txtvalor2']) : 0;
-	$txt3 = isset($_POST['txtvalor3']) ? (float) trim($_POST['txtvalor3']) : 0;
+	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
+	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
+	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
 	$mRec    = substr($dtRec, 5, 2);
@@ -170,8 +170,8 @@
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
-			//var url = './<?php if ($Idade >= 60) { ?>recibo_taxaprod_grt.php?tipo=<?php echo urlencode($tipo); } else { ?>recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); } ?>' +
-			var url = './recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); ?>' +
+			var url = './<?php if ($Idade >= 60) { ?>recibo_taxaprod_grt.php?tipo=<?php echo urlencode($tipo); } else { ?>recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); } ?>' +
+			//var url = './recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); ?>' +
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&TaxaProd=<?php echo urlencode($TaxaProd); ?>' +

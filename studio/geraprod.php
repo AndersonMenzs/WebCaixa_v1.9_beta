@@ -43,7 +43,7 @@
 	<?php
 	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
-	print_r($dados);
+	var_dump($dados);
 	echo "</pre>";
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -55,7 +55,7 @@
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
 	$RdTaxa      = trim($_POST['rdtaxa']);
-	$VrProd    = trim($_POST['txttaxa']);
+	$VrProd    = trim($_POST['txtvrprod']);
 	$VrProdF = number_format($VrProd, 2, ",", ".");
 	$NDoc      = trim($_POST['txtdoc']);
 	$FPag_1     = trim($_POST['lsPr1']);
@@ -143,9 +143,9 @@
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
 				<input type="hidden" name="tiporec" value="<?php echo $TipoRec; ?>">
-				<input type="hidden" name="txtvalor1" value="<?php echo $txt1; ?>">
-				<input type="hidden" name="txtvalor2" value="<?php echo $txt2; ?>">
-				<input type="hidden" name="txtvalor3" value="<?php echo $txt3; ?>">
+				<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
+				<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
+				<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
 				<input type="hidden" name="txtvalor" value="<?php echo $VrTxa; ?>">
 				<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
 				<input type="hidden" name="rdtaxa" value="<?php echo $RdTaxa; ?>">
@@ -154,8 +154,8 @@
 				<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">
 				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
-				<input type="hidden" name="txtprod" value="<?php echo $VrProd; ?>">
-				<input type="hidden" name="txtprodF" value="<?php echo $VrProdF; ?>">
+				<input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">
+				<input type="hidden" name="txtvrprodF" value="<?php echo $VrProdF; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
 				<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">

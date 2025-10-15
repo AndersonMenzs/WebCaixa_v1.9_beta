@@ -7,13 +7,6 @@ function checkdata() {
 			return false;
 		}
 
-		var rd_select = "no";
-		for (var loop = 0; loop < rdtaxa.length; loop++) {
-			if (rdtaxa[1].checked == true) {
-				rd_select = "yes";
-			}
-		}
-
 		if (lsPr1.value == "00" && lsPr2.value == "00" && lsPr3.value == "00") {
 			alert("Nenhuma Forma de Pagamento Selecionada!!!");
 			txt1.select();
@@ -59,27 +52,20 @@ function checkdata() {
 		var valor1 = txt1.value * 1;
 		var valor2 = txt2.value * 1;
 		var valor3 = txt3.value * 1;
-		var soma = valor1 + valor2 + valor3;
+		var soma = valor1 + valor2 + valor3
 		var somaFx = soma.toFixed(2);
 		soma = parseFloat(somaFx);
 
-		var taxaAnt = txtAP.value * 1;
-		var taxaProd = txtvrprod.value * 1;
+		var taxa = vlr_unico.value * 1;
 
-		if (rd_select == "yes" && taxaAnt != soma && taxaProd != soma) {
-            alert("Valor da Amizade Premiada Incorreto!!!");
-            txt1.select();
-            txt1.focus();
-            return false;
-         }
-
-		if (rd_select == "no" && taxaProd > 0 && soma !== taxaProd) {
-            alert("Valor da Taxa Incorreto!!!");
-			txt1.select();
-			txt1.focus();
-            return false;
-         }
-			
+		if (taxa !== soma) {
+			var diferenca = soma - taxa;
+			var msg = diferenca > 0 ?
+				"A soma dos valores está MAIOR em R$ " + Math.abs(diferenca).toFixed(2) :
+				"A soma dos valores está MENOR em R$ " + Math.abs(diferenca).toFixed(2);
+			alert(msg);
+			return false;
+		}
 		submit();
 	}
 }

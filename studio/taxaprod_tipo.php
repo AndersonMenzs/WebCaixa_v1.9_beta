@@ -37,7 +37,7 @@
         }
     </style>
 
-    <script type="text/javascript" src="val_taxaprod.js" charset="utf-8"></script>
+    <!--<script type="text/javascript" src="val_taxaprod.js" charset="utf-8"></script>-->
 
     <!-- Adicionando jQuery UI para o autocomplete -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -117,8 +117,8 @@
                 field.select();
             }
         }
-        
-        function validaCampos() {
+
+        /*function validaCampos() {
             // Validação da soma dos valores
             function parseValor(valor) {
                 return parseFloat(valor.replace(',', '.')) || 0;
@@ -139,50 +139,6 @@
                     "A soma dos valores está MAIOR em R$" + Math.abs(diferenca).toFixed(2) :
                     "A soma dos valores está MENOR em R$" + Math.abs(diferenca).toFixed(2);
                 alert(msg);
-                return false;
-            }
-
-            // Validação das formas de pagamento únicas
-            var fp1 = document.taxaProd.lsPr1.value;
-            var fp2 = document.taxaProd.lsPr2.value;
-            var fp3 = document.taxaProd.lsPr3.value;
-
-            // Verifica se há valores repetidos, ignorando valores vazios ou "Selecione"
-            var formasPreenchidas = [];
-
-            // Adiciona apenas formas de pagamento válidas (não vazias)
-            if (fp1 && fp1 !== "" && fp1 !== "Selecione") formasPreenchidas.push({
-                value: fp1,
-                select: document.taxaProd.lsPr1
-            });
-            if (fp2 && fp2 !== "" && fp2 !== "Selecione" && fp2 !== fp3) formasPreenchidas.push({
-                value: fp2,
-                select: document.taxaProd.lsPr2
-            });
-            if (fp3 && fp3 !== "" && fp3 !== "Selecione" && fp3 !== fp2) formasPreenchidas.push({
-                value: fp3,
-                select: document.taxaProd.lsPr3
-            });
-            
-            // Verifica duplicatas entre as formas preenchidas
-            var valores = formasPreenchidas.map(item => item.value);
-            var duplicatas = valores.filter((item, index) => valores.indexOf(item) !== index);
-
-            if (duplicatas.length > 0) {
-                // Buscar o texto da opção repetida
-                var texto = "";
-                for (var i = 0; i < formasPreenchidas.length; i++) {
-                    if (formasPreenchidas[i].value === duplicatas[0]) {
-                        for (var j = 0; j < formasPreenchidas[i].select.options.length; j++) {
-                            if (formasPreenchidas[i].select.options[j].value === duplicatas[0]) {
-                                texto = formasPreenchidas[i].select.options[j].text;
-                                break;
-                            }
-                        }
-                        if (texto) break;
-                    }
-                }
-                alert("A forma de pagamento '" + texto + "' foi repetida.\nSelecione formas diferentes.");
                 return false;
             }
 
@@ -239,7 +195,7 @@
             } else {
                 input.style.borderColor = "";
             }
-        }
+        }*/
     </script>
 
     <script src="val_prod.js" charset="utf-8"></script>
@@ -284,7 +240,7 @@
 
     // Condição para gratuidade para maiores de 60 anos
     if ($idade >= 60) {
-        $VrProd = 0;
+        $VrProd = 0.00;
         $VrProdF = number_format($VrProd, 2, ',', '.');
     }
 
@@ -299,7 +255,7 @@
 
     // Consultando o último recibo dentro das rotinas TXP, TXC, PROD e BOOK
     $sql = "SELECT numdoc, datarec FROM registro 
-        WHERE numdoc >= 21700000 
+        WHERE numdoc >= 22100000 
         AND datarec >= '2025-08-29' 
         AND subtipo IN ('TXP', 'TXC', 'PROD', 'BOOK') 
         ORDER BY numdoc DESC";
@@ -363,7 +319,8 @@
 
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') {
     ?>
-        <form name="taxaProd" method="post" action="confprod.php" onsubmit="return validaCampos() && validarSomaValores();" autocomplete="off">
+        <!--<form name="taxaProd" method="post" action="confprod.php" onsubmit="return validaCampos() && validarSomaValores(); return checkdata();" autocomplete="off">-->
+        <form name="taxaProd" method="post" action="confprod.php" onsubmit="return checkdata();" autocomplete="off">
             <table width="80%" border="5" cellpadding="10" cellspacing="0" align="center">
                 <tr>
                     <td width="40%" align="center">
@@ -398,21 +355,28 @@
                     <td align="center">
                         <font size='5'><b><i>Nº Recibo</i></b></font>
                     </td>
-                    <td align="center">
-                        <font color='gold' size='5'>
-                            <b>
-                                <i>
-                                    <blink>Amizade Premiada?</blink>
-                                </i>
-                            </b>
-                        </font>
-                    </td>
-                    <td align="center">
-                        <font size='5'><b><i>Forma de Pagamento</i></b></font>
-                    </td>
-                    <td align="center">
-                        <font size='5'><b><i>Valor</i></b></font>
-                    </td>
+                    <?php
+                    // Verificando se é menor de 60 anos
+                    if ($idade < 60) {
+                    ?>
+                        <td align="center">
+                            <font color='gold' size='5'>
+                                <b>
+                                    <i>
+                                        <blink>Amizade Premiada?</blink>
+                                    </i>
+                                </b>
+                            </font>
+                        </td>
+                        <?php
+                    }
+                        ?>
+                        <td align="center">
+                            <font size='5'><b><i>Forma de Pagamento</i></b></font>
+                        </td>
+                        <td align="center">
+                            <font size='5'><b><i>Valor</i></b></font>
+                        </td>
                 </tr>
 
                 <tr>
@@ -420,15 +384,26 @@
                         <font size='5'><b><i><?php echo $NumDoc; ?></i></b></font>
                         <input type='hidden' name='txtdoc' size='10' maxlength='8' class='campos' value="<?php echo $NumDoc; ?>">
                     </td>
+                    <?php
+                    // Verificando se é menor de 60 anos
+                    if ($idade < 60) {
+                    ?>
                     <td rowspan="4" align="center">
                         <font color='lime' size='5'><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <font size='5'><b><i>Sim </i></b></font><input type='radio' name='rdtaxa' value='S'>
+                    </td>
+                    <?php
+                    } else {
+                        echo "<input type='hidden' name='rdtaxa' value='N'>";
+                    }
+                    ?>
+
                         <input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">
                         <input type="hidden" name="txtvrprodf" value="<?php echo $VrProdF; ?>">
                         <!--<input type="hidden" name="txtAP" value="<?php echo $VrAnt; ?>">
                         <input type="hidden" name="txtAPf" value="<?php echo $VrAntF; ?>">-->
                         <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-                    </td>
+
                     <td align="center">
                         <?php
                         // Verificando se é maior de 60 anos
@@ -444,7 +419,7 @@
                                 <?php
                                 // Obtendo a Relação
                                 include "dbselect.php";
-                                $sqlpr1 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
+                                $sqlpr1 = "select * from formapag where codpag <= 30 or codpag >= 70 and codpag <> 99 order by codpag";
                                 $rspr1 = mysqli_query($conec, $sqlpr1) or die("Não foi possível acessar os Dados");
                                 while ($lnpr1 = mysqli_fetch_array($rspr1)) {
                                     $CodPag1  = $lnpr1['codpag'];
@@ -487,7 +462,7 @@
                             <select name="lsPr2" class="campos">
                                 <?php
                                 include "dbselect.php";
-                                $sqlpr2 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
+                                $sqlpr2 = "select * from formapag where codpag <= 30 or codpag >= 70 and codpag <> 99 order by codpag";
                                 $rspr2 = mysqli_query($conec, $sqlpr2) or die("Não foi possível acessar os Dados");
 
                                 // Criando o Array para o campo PC
@@ -513,7 +488,7 @@
                             <select name="lsPr3" class="campos">
                                 <?php
                                 include "dbselect.php";
-                                $sqlpr3 = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
+                                $sqlpr3 = "select * from formapag where codpag <= 30 or codpag >= 70 and codpag <> 99 order by codpag";
                                 $rspr3 = mysqli_query($conec, $sqlpr3) or die("Não foi possível acessar os Dados");
 
                                 // Criando o Array para o campo PC

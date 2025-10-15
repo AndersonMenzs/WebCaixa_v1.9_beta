@@ -236,88 +236,79 @@ $idade     = $_GET['Idade'];
         <img src="./images/logo.png" alt="Imagem" class="imagem_via3">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via4">
         <table align="left" cellspacing="0" border="0">
-            <colgroup width="59"></colgroup>
-            <colgroup width="85"></colgroup>
+            <colgroup width="100"></colgroup>
+            <colgroup width="100"></colgroup>
             <colgroup width="8"></colgroup>
             <colgroup width="85"></colgroup>
-            <colgroup width="62"></colgroup>
+            <colgroup width="2"></colgroup>
             <colgroup width="8"></colgroup>
-            <colgroup span="2" width="62"></colgroup>
+            <colgroup span="2" width="100"></colgroup>
             <colgroup width="8"></colgroup>
-            <colgroup span="2" width="62"></colgroup>
+            <colgroup span="2" width="100"></colgroup>
             <colgroup width="8"></colgroup>
-            <colgroup span="2" width="62"></colgroup>
+            <colgroup span="2" width="100"></colgroup>
 
-            <!-- Primeira Via -->
+            <!-- Primeira via -->
             <tr>
-                <td rowspan=5 height="66" align="left" valign=bottom><br></td>
+                <td rowspan="3" height="17" align="left" valign=bottom><br></td>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 rowspan=2 align="center" valign=middle>
                     <b>
                         <font size=5><?php echo $tipo; ?></font>
-                    </b>
-                </td>
+                    </b></td>
                 <td align="left" valign=bottom><br></td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <b>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>RECIBO</font>
-                    </b>
-                </td>
+                    </b></td>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
                 </td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <b>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>PC</font>
-                    </b>
-                </td>
+                    </b></td>
                 <td align="center" valign=middle>
                     <font size=1><br></font>
                 </td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <b>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>VALOR PAGO</font>
-                    </b>
-                </td>
+                    </b></td>
             </tr>
             <tr>
                 <td align="left" valign=bottom><br></td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdnum="1046;0;@">
-                    <font size=1><?php echo $NDoc; ?></font>
+                    <font size=1>22000001</font>
                 </td>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="222" sdnum="1046;">
-                    <font size=1><?php echo $PC; ?></font>
+                    <font size=1>222</font>
                 </td>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="0" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
-                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
+                    <font size=1>R$ 0,00</font>
                 </td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-                    colspan=4 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1">
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 rowspan=5 height="60" align="center" valign=middle>
+                    <font size=1>
+                        <br><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1">
                     </font>
                 </td>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
                 </td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-                    colspan=2 align="center" valign=middle><b>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>DATA</font>
                     </b></td>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
                 </td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-                    colspan=2 align="center" valign=middle><b>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>VENDEDORA</font>
                     </b></td>
                 <td align="left" valign=bottom>
@@ -344,49 +335,16 @@ $idade     = $_GET['Idade'];
                 <td align="left" valign=bottom><br></td>
             </tr>
             <tr>
-                <td height="4" align="left" valign=bottom></td>
+                <td height="4" align="left" valign=bottom></td><td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td align="left" valign=bottom>
-                    <font size=4><br></font>
+                <td height="4" align="left" valign=bottom></td><td height="4" align="left" valign=bottom></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=2 align="center" valign=middle>
+                    <b>GRATUIDADE</b>
                 </td>
-
-                <?php
-
-                // Conexão
-                include "./conexao.php";
-                include "./dbselect.php";
-
-                // Forma de pagamento 1 - verifica se não está vazio e pega o primeiro valor e diferente de 00
-                if (!empty($FPags[0]) && $FPags[0] !== "00") {
-                    $FPag = $FPags[0];
-
-                    // Nome  na forma de pagamento por extenso
-                    if ($FPag == 10) {
-                        $ModPag = "DINHEIRO";
-                    } elseif ($FPag == 20) {
-                        $ModPag = "CARTÃO DÉBITO";
-                    } elseif ($FPag == 30) {
-                        $ModPag = "CARTÃO CRÉDITO";
-                    } elseif ($FPag == 70) {
-                        $ModPag = "PIX QR CODE";
-                    } elseif ($FPag == 71) {
-                        $ModPag = "PIX CNPJ";
-                    } elseif ($FPag == 99) {
-                        $ModPag = "GRATUIDADE";
-                    }
-                ?>
-                    <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=2 align="center" valign=middle>
-                        <b>
-                            <font size=1><?php echo $ModPag; ?>
-                        </b>
-                    </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
-                    </td>
-                <?php
-                }
-                ?>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
                 <td colspan=2 align="center" valign=middle><b>
                         <font size=1><br></font>
                     </b></td>
@@ -415,43 +373,17 @@ $idade     = $_GET['Idade'];
                 </td>
             </tr>
             <tr>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
+                <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="11" align="left" valign=middle><b>
-                        <font size=1>NASCIMENTO</font>
+                        <font size=1>NASC.</font>
                     </b></td>
                 <td align="left" valign=middle><b>
                         <font size=1><br></font>
                     </b></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=middle><b>
-                        <font size=1>ASSINATURA CLIENTE</font>
+                        <font size=1>ASSINATURA</font>
                     </b></td>
             </tr>
             <tr>
@@ -461,53 +393,12 @@ $idade     = $_GET['Idade'];
                 <td align="center" valign=middle>
                     <font size=1><br></font>
                 </td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=middle>
-                    <font size=1><br></font>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="center" valign=middle>
+                    <font size=1>ISABELE GOMES PEREIRA</font>
                 </td>
             </tr>
             <tr>
-                <td height="4" align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
+                <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="11" align="left" valign=middle><b>
@@ -520,48 +411,7 @@ $idade     = $_GET['Idade'];
                 </td>
             </tr>
             <tr>
-                <td height="4" align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
+                <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="11" align="center" valign=middle><b>
@@ -569,48 +419,7 @@ $idade     = $_GET['Idade'];
                     </b></td>
             </tr>
             <tr>
-                <td height="4" align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
+                <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="26" align="center" valign=middle>
@@ -618,48 +427,7 @@ $idade     = $_GET['Idade'];
                 </td>
             </tr>
             <tr>
-                <td height="4" align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
+                <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 rowspan=2 height="40" align="center" valign=middle><b>
@@ -2041,8 +1809,8 @@ $idade     = $_GET['Idade'];
                 </td>
             </tr>
         </table>
-    </div>
-    </div>
+        <br clear=left>
+        <!-- ************************************************************************** -->
 </body>
 
 </html>
