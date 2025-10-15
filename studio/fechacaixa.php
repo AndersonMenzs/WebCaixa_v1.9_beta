@@ -34,14 +34,11 @@
     </script>
 
     <SCRIPT LANGUAGE="JavaScript">
-    <!-- Begin
     function putFocus(formInst, elementInst) {
         if (document.forms.length > 0) {
             document.forms[formInst].elements[elementInst].focus();
         }
     }
-    //  End 
-    -->
     </script>
 
     <script>
@@ -117,8 +114,7 @@
        $pss     = substr($lg_user,8,40);
        $dtAbre  = trim($_POST['dtabre']);
        $ch        = '';
-       $erro = 'n';
-       echo $dtAbre;
+       $erro = 'n';;
 
        include "us_sist.php";
        if ($ch == 'no')

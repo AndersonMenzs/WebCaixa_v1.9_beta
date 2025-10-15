@@ -17,13 +17,27 @@
             color: #000000;
         }
 
-        #tb1,
-        #tb2 {
-            display: none;
+        /* Estilo para o autocomplete */
+        .ui-autocomplete {
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #ccc;
+        }
+
+        .ui-menu-item {
+            padding: 5px;
+        }
+
+        .ui-menu-item:hover {
+            background-color: #f0f0f0;
+            cursor: pointer;
         }
     </style>
 
-    <script type="text/javascript" src="val_contrato.js" charset="utf-8"></script>
+    <script type="text/javascript" src="val_taxaprod.js" charset="utf-8"></script>
 
     <!-- Adicionando jQuery UI para o autocomplete -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -37,150 +51,12 @@
     ?>
 
     <script>
-        $(function() {
-            function setupAutocomplete(element, tipo) {
-                $(element).autocomplete({
-                    source: function(request, response) {
-                        $.ajax({
-                            url: "buscar_funcionarias.php",
-                            dataType: "json",
-                            contentType: "application/json",
-                            data: {
-                                term: request.term,
-                                tipo: tipo
-                            },
-                            success: function(data) {
-                                if (data && Array.isArray(data)) {
-                                    response(data);
-                                } else if (data && data.error) {
-                                    console.error("Erro no servidor:", data.error);
-                                    response([]);
-                                } else {
-                                    console.error("Resposta inválida do servidor");
-                                    response([]);
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                console.error("Erro na requisição:", status, error);
-                                try {
-                                    // Tentar extrair mensagem de erro do HTML retornado
-                                    var errorHtml = xhr.responseText;
-                                    var errorMatch = errorHtml.match(/<title>(.*?)<\/title>/i) ||
-                                        errorHtml.match(/<body[^>]*>(.*?)<\/body>/is);
-                                    var errorMsg = errorMatch ? errorMatch[1] : "Erro desconhecido";
-                                    console.error("Detalhes:", errorMsg);
-                                } catch (e) {
-                                    console.error("Não foi possível analisar o erro");
-                                }
-                                response([]);
-                            }
-                        });
-                    },
-                    minLength: 2,
-                    delay: 300
-                });
-            }
-
-            // Aplicar aos campos
-            setupAutocomplete("#encarregada", "encarregada");
-            setupAutocomplete("#vendedora", "vendedora");
-        });
-
-        function putFocus(formInst, elementInst) {
-            if (document.forms.length > 0) {
-                document.forms[formInst].elements[elementInst].focus();
-            }
-        }
-
-        function validata(field) {
-            var valid = "/0123456789"
-            var ok = "yes";
-            var temp;
-            for (var i = 0; i < field.value.length; i++) {
-                temp = "" + field.value.substring(i, i + 1);
-                if (valid.indexOf(temp) == "-1") ok = "no";
-            }
-            if (ok == "no") {
-                alert("Entrada Incorreta!\nDigite apenas algarismos!");
-                field.value = "";
-                field.focus();
-                field.select();
-            }
-        }
-
-        function FormataData(Formulario, Campo, TeclaPres) {
-            var tecla = TeclaPres.keyCode;
-            var strCampo;
-            var vr;
-            var tam;
-            var TamanhoMaximo = 10;
-
-            eval("strCampo = document." + Formulario + "." + Campo);
-
-            vr = strCampo.value;
-            vr = vr.replace("/", "");
-            vr = vr.replace("/", "");
-            vr = vr.replace("/", "");
-            vr = vr.replace(",", "");
-            vr = vr.replace(".", "");
-            vr = vr.replace(".", "");
-            vr = vr.replace(".", "");
-            vr = vr.replace(".", "");
-            vr = vr.replace(".", "");
-            vr = vr.replace(".", "");
-            vr = vr.replace(".", "");
-            vr = vr.replace("-", "");
-            vr = vr.replace("-", "");
-            vr = vr.replace("-", "");
-            vr = vr.replace("-", "");
-            vr = vr.replace("-", "");
-            tam = vr.length;
-
-
-            if (tam < TamanhoMaximo && tecla != 8) {
-                tam = vr.length + 1;
-            }
-
-            if (tecla == 8) {
-                tam = tam - 1;
-            }
-
-            if (tecla == 8 || tecla >= 48 && tecla <= 57 || tecla >= 96 && tecla <= 105) {
-                if (tam <= 4) {
-                    strCampo.value = vr;
-                }
-                if ((tam > 4) && (tam <= 7)) {
-                    strCampo.value = vr.substr(0, tam - 2) + '/' + vr.substr(tam - 2, tam);
-                }
-                if ((tam > 7) && (tam <= 10)) {
-                    strCampo.value = vr.substr(0, tam - 7) + '/' + vr.substr(tam - 7, 2) + '/' + vr.substr(tam - 5, tam);
-                    //         strCampo.value = vr.substr(0, tam - 8) + '/' + vr.substr(tam - 7, 2) + '/' + vr.substr(tam - 4, tam); 
-                }
-            }
-        }
-
-        function validvalor(field) {
-            var valid = ".0123456789"
-            var ok = "yes";
-            var temp;
-            for (var i = 0; i < field.value.length; i++) {
-                temp = "" + field.value.substring(i, i + 1);
-                if (valid.indexOf(temp) == "-1") ok = "no";
-            }
-            if (ok == "no") {
-                alert("Entrada Incorreta! \n  Digite apenas algarismos!");
-                field.value = "";
-                field.focus();
-                field.select();
-            }
-        }
-
         function FormataValor(Formulario, Campo, TeclaPres) {
             var tecla = TeclaPres.keyCode;
             var strCampo;
             var vr;
             var tam;
-            var TamanhoMaximo = 6;
+            var TamanhoMaximo = 10;
 
             eval("strCampo = document." + Formulario + "." + Campo);
 
@@ -215,41 +91,55 @@
                 if (tam <= 3) {
                     strCampo.value = vr;
                 }
-                if ((tam > 3) && (tam <= 6)) {
+                if ((tam > 3) && (tam <= 10)) {
                     strCampo.value = vr.substr(0, tam - 3) + '.' + vr.substr(tam - 3, tam);
                 }
             }
         }
 
-        function fPassaAlfaNumerico(tipo) {
-            return function(e) {
-                let char = String.fromCharCode(e.which);
-                if (tipo === 'an') {
-                    // permite apenas letras e números
-                    if (!/^[a-zA-Z0-9\s]$/.test(char)) {
-                        e.preventDefault();
-                    }
-                }
-            };
+        function putFocus(formInst, elementInst) {
+            if (document.forms.length > 0) {
+                document.forms[formInst].elements[elementInst].focus();
+            }
         }
 
+        function validate(field) {
+            var valid = ".0123456789"
+            var ok = "yes";
+            var temp;
+            for (var i = 0; i < field.value.length; i++) {
+                temp = "" + field.value.substring(i, i + 1);
+                if (valid.indexOf(temp) == "-1") ok = "no";
+            }
+            if (ok == "no") {
+                alert("Entrada Incorreta! \n  Digite apenas algarismos!");
+                field.focus();
+                field.select();
+            }
+        }
+        
         function validaCampos() {
-            var vendedora = document.getElementById('vendedora').value.trim();
-            var cliente = document.getElementById('cliente').value.trim();
-            if (vendedora.length <= 8) {
-                alert('O campo Vendedora deve ter mais que 8 letras.');
-                document.getElementById('vendedora').focus();
-                return false;
-            }
-            if (cliente.length <= 8) {
-                alert('O campo Cliente deve ter mais que 8 letras.');
-                document.getElementById('cliente').focus();
-                return false;
-            }
-
             // Validação da soma dos valores
             function parseValor(valor) {
                 return parseFloat(valor.replace(',', '.')) || 0;
+            }
+
+            var vlrUnico = parseValor(document.taxaProd.vlr_unico.value);
+            var v1 = parseValor(document.taxaProd.txt1.value);
+            var v2 = parseValor(document.taxaProd.txt2.value);
+            var v3 = parseValor(document.taxaProd.txt3.value);
+            var soma = v1 + v2 + v3;
+
+            vlrUnico = Math.round(vlrUnico * 100) / 100;
+            soma = Math.round(soma * 100) / 100;
+
+            if (vlrUnico > 0 && soma !== vlrUnico) {
+                var diferenca = soma - vlrUnico;
+                var msg = diferenca > 0 ?
+                    "A soma dos valores está MAIOR em R$" + Math.abs(diferenca).toFixed(2) :
+                    "A soma dos valores está MENOR em R$" + Math.abs(diferenca).toFixed(2);
+                alert(msg);
+                return false;
             }
 
             // Validação das formas de pagamento únicas
@@ -273,7 +163,7 @@
                 value: fp3,
                 select: document.taxaProd.lsPr3
             });
-
+            
             // Verifica duplicatas entre as formas preenchidas
             var valores = formasPreenchidas.map(item => item.value);
             var duplicatas = valores.filter((item, index) => valores.indexOf(item) !== index);
@@ -292,7 +182,7 @@
                         if (texto) break;
                     }
                 }
-                alert("A forma de pagamento '" + texto + "' foi repetida. Selecione formas diferentes.");
+                alert("A forma de pagamento '" + texto + "' foi repetida.\nSelecione formas diferentes.");
                 return false;
             }
 
@@ -300,7 +190,6 @@
         }
 
         function validarSomaValores() {
-            // Pega o valor total do produto do campo hidden
             var vlrUnico = parseFloat(document.taxaProd.vlr_unico.value.replace('.', '').replace(',', '.')) || 0;
             var v1 = parseFloat(document.taxaProd.txt1.value.replace('.', '').replace(',', '.')) || 0;
             var v2 = parseFloat(document.taxaProd.txt2.value.replace('.', '').replace(',', '.')) || 0;
@@ -327,6 +216,30 @@
             document.taxaProd.txt2.onblur = validarSomaValores;
             document.taxaProd.txt3.onblur = validarSomaValores;
         };
+
+        function fPassaAlfaNumerico(tipo) {
+            return function(e) {
+                let char = String.fromCharCode(e.which);
+                if (tipo === 'an') {
+                    // permite apenas letras e números
+                    if (!/^[a-zA-Z0-9\s]$/.test(char)) {
+                        e.preventDefault();
+                    }
+                }
+            };
+        }
+
+        function validnome(input) {
+            // remove tudo que não for letra, número ou espaço
+            input.value = input.value.replace(/[^A-Z0-9\s]/g, '');
+
+            // exemplo: exige pelo menos 3 caracteres
+            if (input.value.length < 3) {
+                input.style.borderColor = "red";
+            } else {
+                input.style.borderColor = "";
+            }
+        }
     </script>
 
     <script src="val_prod.js" charset="utf-8"></script>
@@ -386,7 +299,7 @@
 
     // Consultando o último recibo dentro das rotinas TXP, TXC, PROD e BOOK
     $sql = "SELECT numdoc, datarec FROM registro 
-        WHERE numdoc >= 22000000 
+        WHERE numdoc >= 21700000 
         AND datarec >= '2025-08-29' 
         AND subtipo IN ('TXP', 'TXC', 'PROD', 'BOOK') 
         ORDER BY numdoc DESC";
@@ -450,7 +363,7 @@
 
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') {
     ?>
-        <form name="taxaProd" method="post" action="confprod.php" onsubmit="return validarSomaValores();" autocomplete="off">
+        <form name="taxaProd" method="post" action="confprod.php" onsubmit="return validaCampos() && validarSomaValores();" autocomplete="off">
             <table width="80%" border="5" cellpadding="10" cellspacing="0" align="center">
                 <tr>
                     <td width="40%" align="center">
@@ -558,7 +471,7 @@
                         <?php
                         } else {
                         ?>
-                            <input type="text" name="txt1" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt1', event); validvalor(this)">
+                            <input type="text" name="txt1" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt1', event); ">
                         <?php
                         }
                         ?>
@@ -591,7 +504,7 @@
                         </td>
                         <td align="center">
                             <font size="5"><b><i>R$ </i></b></font>
-                            <input type="text" name="txt2" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt2', event); validvalor(this)">
+                            <input type="text" name="txt2" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt2', event); ">
                         </td>
                     </tr>
 
@@ -617,7 +530,7 @@
                         </td>
                         <td align="center">
                             <font size="5"><b><i>R$ </i></b></font>
-                            <input type="text" name="txt3" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt3', event); validvalor(this)">
+                            <input type="text" name="txt3" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('taxaProd', 'txt3', event); ">
                         </td>
                     </tr>
                 <?php

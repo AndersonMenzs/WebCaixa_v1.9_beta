@@ -53,12 +53,28 @@ ALTER TABLE `studio`.`registro`
 CHANGE COLUMN `numdoc` `numdoc` CHAR(8) NULL;
 ``` 
 
-- Inserir uma linha na tabela registro para gerar o número do recibo após este alteração.
+- Inserir uma linha na tabela registro para gerar o número do recibo após este alteração. Lembrando que o número do recibo precisa ser iniciado do código da empresa seguidos por 5 zeros.
 
 ```sql
 INSERT INTO registro (reg, numdoc, tiporec, subtipo, modpgto, parcela, datarec, horarec, vlrec, operador, estorno) 
             VALUES (1, '22000000', '1', 'TXP', '20', 0, '2025-08-29', '00:00', 0.00, '00000359', '');
 ```
+
+Abaixo está a tabela dos números de recibos iniciais.
+
+| STD | NÚMERO DO RECIBO |
+| --- | --- |
+|206|20600000|
+|211|21100000|
+|215|21500000|
+|217|21700000|
+|218|21800000|
+|219|21900000|
+|220|22000000|
+|221|22100000|
+|222|22200000|
+|223|22300000|
+
 
 E para que o número do recibo seja gerado precisa verificar o último recibo no banco de dados studio e as rotinas **INSCRIÇÃO CONCURSO**, **PAGAMENTOS À VISTA**.
 
@@ -103,5 +119,3 @@ CHANGE COLUMN `vlrec` `vlrec` DECIMAL(10,2) NULL DEFAULT NULL;
 ```sql
 INSERT INTO formapag (codpag, modpag, siglapag) VALUES (99, 'Gratuidade', 'GRT');  
 ```
-
-
