@@ -29,10 +29,6 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	var_dump($dados);
-	echo "</pre>";
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1.2";
@@ -71,7 +67,7 @@
 	$DataNasc  = trim($_POST['data_nasc']);
 	$Idade     = trim($_POST['idade']);
 	$vlr_ext   = valorPorExtenso($TaxaProd);
-
+	
 	// Pesquisando PC
 	include "conexao.php";
 	include "dbselect.php";
@@ -171,7 +167,6 @@
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
 			var url = './<?php if ($Idade >= 60) { ?>recibo_taxaprod_grt.php?tipo=<?php echo urlencode($tipo); } else { ?>recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); } ?>' +
-			//var url = './recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); ?>' +
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&TaxaProd=<?php echo urlencode($TaxaProd); ?>' +

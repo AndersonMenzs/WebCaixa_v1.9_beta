@@ -28,6 +28,11 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	 echo "<pre>";
+	 var_dump($dados);
+	 echo "</pre>";
+	 exit;
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.5.1.1";
@@ -132,7 +137,7 @@
 
 			// Preparando a Via Cliente 
 	?>
-			<form name="geraconc" method="post" action="via1conc.php">
+			<form name="geraconc" method="post" action="via1newconc.php">
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
 				<input type="hidden" name="tiporec" value="<?php echo $TipoRec; ?>">
@@ -142,24 +147,26 @@
 				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
 				<input type="hidden" name="taxaconc" value="<?php echo $TaxaConcF; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
-				<font size='6'><b>
-						<center>Coloque a <font color='gold'>
-								<blink>Primeira Via</blink>
-								<font color='#FFFFFF'> na Autenticadora
-									e <br>
-									<p>Clique no <font color='gold'>
-											<blink>botão Abaixo</blink>
-											<font color='#FFFFFF'>.</center>
-					</b></font>
+				<p>
+					<font size='6'><b>
+							<center>Verifique se a impressora do <font color='gold'>
+									<blink>Caixa</blink>
+									<font color='#FFFFFF'> está ligada e com papel.
+										<p>Logo após clique no <font color='gold'>
+												<blink>botão abaixo</blink>
+												<font color='#FFFFFF'>.</center>
+						</b></font>
 				</p><br>
 				<center>
-					<input id="ghost_click" type="submit" name="btimprime" value="Autenticar"></center><br>
+					<input id="ghost_click" type="submit" name="btimprime" value="Autenticar">
+				</center><br>
 				<center>
 					<font color='#FFFFFF' size='3'><span id="msg"></span></font>
 				</center>
-			</form><?php
+			</form>
+		<?php
 
-				} else { ?>
+		} else { ?>
 			<font size='6'><b>
 					<center>Senha <font color='gold'>
 							<blink>Incorreta</blink><br>
@@ -170,17 +177,17 @@
 				</b></font><br>
 			<center><a href='JavaScript:window.history.back()'><img src='images/voltar.gif'></a></center><br>
 	<?php
-				}
-			}
+		}
+	}
 
-			// Encerrando a Conexão
-			/* mysqli_free_result($rso);
+	// Encerrando a Conexão
+	/* mysqli_free_result($rso);
 			mysqli_free_result($rsGr);
 			mysqli_free_result($rsx); */
-			$SisRot = "S-7.5.1.1.1";
-			include "rodape.php"; ?>
+	$SisRot = "S-7.5.1.1.1";
+	include "rodape.php"; ?>
 
-			<script src="./js/ghost_click.js"></script>
+	<script src="./js/ghost_click.js"></script>
 
 </body>
 

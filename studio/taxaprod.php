@@ -367,7 +367,7 @@
 
     // Encerrando as Conexões
     $SisRot = "S-7.2.1";
-    include "../rodape.php";
+    include "rodape.php";
     mysqli_close($conec);
     ?>
 

@@ -115,8 +115,6 @@
    include "../cabecprs.php";
    ?>
 
-   <script type="text/javascript" src="val_contrato.js" charset="utf-8"></script>
-
    <!-- Adicionando jQuery UI para o autocomplete -->
    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -185,116 +183,20 @@
             document.getElementById('cliente').focus();
             return false;
          }
-
-         // Validação da soma dos valores
-         function parseValor(valor) {
-            return parseFloat(valor.replace(',', '.')) || 0;
-         }
-
-         var vlrUnico = parseValor(document.cntentr.vlr_unico.value);
-         var v1 = parseValor(document.cntentr.txtvalor1.value);
-         var v2 = parseValor(document.cntentr.txtvalor2.value);
-         var v3 = parseValor(document.cntentr.txtvalor3.value);
-         var soma = v1 + v2 + v3;
-
-         vlrUnico = Math.round(vlrUnico * 100) / 100;
-         soma = Math.round(soma * 100) / 100;
-
-         if (vlrUnico > 0 && soma !== vlrUnico) {
-            var diferenca = soma - vlrUnico;
-            var msg = diferenca > 0 ?
-               "A soma dos valores está MAIOR em R$" + Math.abs(diferenca).toFixed(2) :
-               "A soma dos valores está MENOR em R$" + Math.abs(diferenca).toFixed(2);
-            alert(msg);
-            return false;
-         }
-
-         // Validação das formas de pagamento únicas
-         var fp1 = document.cntentr.lsPr1.value;
-         var fp2 = document.cntentr.lsPr2.value;
-         var fp3 = document.cntentr.lsPr3.value;
-
-         // Verifica se há valores repetidos, ignorando valores vazios ou "Selecione"
-         var formasPreenchidas = [];
-
-         // Adiciona apenas formas de pagamento válidas (não vazias)
-         if (fp1 && fp1 !== "" && fp1 !== "Selecione") formasPreenchidas.push({
-            value: fp1,
-            select: document.cntentr.lsPr1
-         });
-         if (fp2 && fp2 !== "" && fp2 !== "Selecione" && fp2 !== fp3) formasPreenchidas.push({
-            value: fp2,
-            select: document.cntentr.lsPr2
-         });
-         if (fp3 && fp3 !== "" && fp3 !== "Selecione" && fp3 !== fp2) formasPreenchidas.push({
-            value: fp3,
-            select: document.cntentr.lsPr3
-         });
-
-         // Verifica duplicatas entre as formas preenchidas
-         var valores = formasPreenchidas.map(item => item.value);
-         var duplicatas = valores.filter((item, index) => valores.indexOf(item) !== index);
-
-         if (duplicatas.length > 0) {
-            // Buscar o texto da opção repetida
-            var texto = "";
-            for (var i = 0; i < formasPreenchidas.length; i++) {
-               if (formasPreenchidas[i].value === duplicatas[0]) {
-                  for (var j = 0; j < formasPreenchidas[i].select.options.length; j++) {
-                     if (formasPreenchidas[i].select.options[j].value === duplicatas[0]) {
-                        texto = formasPreenchidas[i].select.options[j].text;
-                        break;
-                     }
-                  }
-                  if (texto) break;
-               }
-            }
-            alert("A forma de pagamento '" + texto + "' foi repetida. Selecione formas diferentes.");
-            return false;
-         }
-
          return true;
       }
 
-      function validarSomaValores() {
-         var vlrUnico = parseFloat(document.cntentr.vlr_unico.value.replace('.', '').replace(',', '.')) || 0;
-         var v1 = parseFloat(document.cntentr.txtvalor1.value.replace('.', '').replace(',', '.')) || 0;
-         var v2 = parseFloat(document.cntentr.txtvalor2.value.replace('.', '').replace(',', '.')) || 0;
-         var v3 = parseFloat(document.cntentr.txtvalor3.value.replace('.', '').replace(',', '.')) || 0;
-         var soma = v1 + v2 + v3;
-
-         // Arredonda para duas casas decimais
-         vlrUnico = Math.round(vlrUnico * 100) / 100;
-         soma = Math.round(soma * 100) / 100;
-
-         if (vlrUnico > 0 && soma !== vlrUnico) {
-            var diferenca = soma - vlrUnico;
-            var msg = diferenca > 0 ?
-               "A soma dos valores está MAIOR em R$ " + Math.abs(diferenca).toFixed(2) :
-               "A soma dos valores está MENOR em R$ " + Math.abs(diferenca).toFixed(2);
-            alert(msg);
-         }
-      }
-
-      // Adiciona o evento de validação nos campos
-      window.onload = function() {
-         document.cntentr.vlr_unico.onblur = validarSomaValores;
-         document.cntentr.txtvalor1.onblur = validarSomaValores;
-         document.cntentr.txtvalor2.onblur = validarSomaValores;
-         document.cntentr.txtvalor3.onblur = validarSomaValores;
-      };
-
-      function fPassaAlfaNumerico(tipo) {
-         return function(e) {
-            let char = String.fromCharCode(e.which);
-            if (tipo === 'an') {
-               // permite apenas letras e números
-               if (!/^[a-zA-Z0-9\s]$/.test(char)) {
-                  e.preventDefault();
-               }
-            }
-         };
-      }
+        function fPassaAlfaNumerico(tipo) {
+            return function(e) {
+                let char = String.fromCharCode(e.which);
+                if (tipo === 'an') {
+                    // permite apenas letras e números
+                    if (!/^[a-zA-Z0-9\s]$/.test(char)) {
+                        e.preventDefault();
+                    }
+                }
+            };
+        }
 
       function validnome(input) {
          // remove tudo que não for letra, número ou espaço
@@ -326,140 +228,27 @@
       include "us_cad.php";
    } ?>
 
-   <font color="gold" size="6"><br>
-      <b>
-         <center><u><i>Contrato - Entrada</i></u></center>
-      </b>
-   </font><br><br><br>
+    <table width='100%' border='0' cellpadding='0' cellspacing='0'>
+        <tr>
+            <td width='9%'>
+                <a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
+            </td>
+            <td width='82%' align='center'>
+                <font color="gold" size="6"><b>
+                        <center><u><i>CONTRATO - ENTRADA</i></u></center>
+                    </b></font><br><br><br>
+            </td>
+            <td width='9%'>
+                <a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+            </td>
+        </tr>
+    </table>
    <?php
 
    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
       <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
-         <form name="cntentr" method="post" action="confcntentr.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos()" autocomplete="off">
-            <tr>
-               <td align="center">
-                  <font color='#FFFFFF' size='5'><b><i>Nº do Contrato</i></b></font>
-               </td>
-               <td align="center">
-                  <font color='#FFFFFF' size='5'><b><i>Valor Total</i></b></font>
-               </td>
-               <td align="center">
-                  <font color='#FFFFFF' size='5'><b><i>Forma de Pagamento</i></b></font>
-               </td>
-               <td align="center">
-                  <font color='#FFFFFF' size='5'><b><i>Valor</i></b></font>
-               </td>
-            </tr>
-
-            <tr>
-               <td rowspan="3" align="center">
-                  <input type="text" name="txtdoc" size="7" maxlength="7" class="campos" onKeyUp="validate(this)">
-               </td>
-               <td rowspan="3" align="center">
-                  <font size='5'><b><i>R$ </i></b></font>
-                  <input type="text" name="vlr_unico" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('cntentr', 'vlr_unico', event); validate(this)">
-               </td>
-               <td align="center">
-                  <select name="lsPr1" class="campos">
-                     <?php
-                     // Obtendo a Relação
-                     // Conectando ao Banco de Dados
-                     include "dbselect.php";
-
-                     // Criando a Instrução SQL de Consulta
-                     $sqlpr = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
-
-                     // Consultando os Registros
-                     $rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
-
-                     // Criando o Array para o campo PC
-                     while ($lnpr = mysqli_fetch_array($rspr)) {
-                        $CodPag  = $lnpr['codpag'];
-                        $ModPag  = $lnpr['modpag'];
-                     ?>
-                        <option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
-                     <?php
-                     }
-                     mysqli_free_result($rspr);
-                     ?>
-                  </select>
-               </td>
-               <td align="center">
-                  <font size='5'><b><i>R$ </i></b></font>
-                  <input type="text" name="txtvalor1" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('cntentr', 'txtvalor1', event); validate(this)" required>
-                  <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-               </td>
-            </tr>
-
-            <tr>
-               <td align="center">
-                  <select name="lsPr2" class="campos">
-                     <?php
-                     // Obtendo a Relação
-                     // Conectando ao Banco de Dados
-                     include "dbselect.php";
-
-                     // Criando a Instrução SQL de Consulta
-                     $sqlpr = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
-
-                     // Consultando os Registros
-                     $rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
-
-                     // Criando o Array para o campo PC
-                     while ($lnpr = mysqli_fetch_array($rspr)) {
-                        $CodPag  = $lnpr['codpag'];
-                        $ModPag  = $lnpr['modpag'];
-                     ?>
-                        <option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
-                     <?php
-                     }
-                     mysqli_free_result($rspr);
-                     ?>
-                  </select>
-               </td>
-               <td align="center">
-                  <font size='5'><b><i>R$ </i></b></font>
-                  <input type="text" name="txtvalor2" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('cntentr', 'txtvalor2', event); validate(this)">
-                  <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-               </td>
-            </tr>
-
-            <tr>
-               <td align="center">
-                  <select name="lsPr3" class="campos">
-                     <?php
-                     // Obtendo a Relação
-                     // Conectando ao Banco de Dados
-                     include "dbselect.php";
-
-                     // Criando a Instrução SQL de Consulta
-                     $sqlpr = "select * from formapag where codpag <= 30 or codpag >= 70 order by codpag";
-
-                     // Consultando os Registros
-                     $rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
-
-                     // Criando o Array para o campo PC
-                     while ($lnpr = mysqli_fetch_array($rspr)) {
-                        $CodPag  = $lnpr['codpag'];
-                        $ModPag  = $lnpr['modpag'];
-                     ?>
-                        <option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
-                     <?php
-                     }
-                     mysqli_free_result($rspr);
-                     ?>
-                  </select>
-               </td>
-               <td align="center">
-                  <font size='5'><b><i>R$ </i></b></font>
-                  <input type="text" name="txtvalor3" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('cntentr', 'txtvalor3', event); validate(this)">
-                  <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-               </td>
-            </tr>
-      </table>
-      <br>
-      <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
-         <tr>
+         <form name="cntentr" method="post" action="contrentr_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos()" autocomplete="off">
+                  <tr>
             <td width="50%" align="center">
                <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
             </td>
@@ -484,19 +273,13 @@
 
       <table width="100%" border="0" cellspacing="0">
          <tr>
-            <td width="9%">
-               <a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
-            </td>
             <td width="82%" align="center">
                <input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
                <input type='reset' name='btreset' value='Limpar'><br><br>
                <span id="msg"></span>
             </td>
-            <td width="9%" align="right">
-               <a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
-            </td>
          </tr>
-      </table>
+      </table><br>
       </form>
    <?php
    } else { ?>

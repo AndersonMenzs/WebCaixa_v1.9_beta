@@ -45,7 +45,7 @@ $idade     = $_GET['Idade'];
 <head>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title></title>
+    <title>Recibo - Tx. Produção</title>
     <meta name="generator" content="LibreOffice 7.4.7.2 (Linux)" />
     <meta name="created" content="2025-06-16T12:56:54" />
     <meta name="changed" content="2025-08-20T17:55:04.895764472" />
@@ -204,14 +204,24 @@ $idade     = $_GET['Idade'];
 
         @media print {
 
+            html,
+            body {
+                height: 297mm;
+                width: 210mm;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                /* evita quebra */
+            }
+
             /* Remove margens padrão */
             @page {
-                margin: 0;
+                margin: 2mm;
             }
 
             body {
-                margin: 6mm;
-                padding: 0;
+                margin: 2mm;
+                padding: 2mm;
             }
 
             /* Se quiser esconder elementos que não devem aparecer */
@@ -221,14 +231,10 @@ $idade     = $_GET['Idade'];
             .sem-imprimir {
                 display: none !important;
             }
-
-
         }
     </style>
 </head>
-<!--<body onload="window.print()">-->
-
-<body>
+<body onload="window.print()">
     <div class="container">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
@@ -301,7 +307,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProd; ?></font>
+                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
                 </td>
             </tr>
             <tr>

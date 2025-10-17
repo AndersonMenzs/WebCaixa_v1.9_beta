@@ -37,8 +37,6 @@
         }
     </style>
 
-    <!--<script type="text/javascript" src="val_taxaprod.js" charset="utf-8"></script>-->
-
     <!-- Adicionando jQuery UI para o autocomplete -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -117,85 +115,6 @@
                 field.select();
             }
         }
-
-        /*function validaCampos() {
-            // Validação da soma dos valores
-            function parseValor(valor) {
-                return parseFloat(valor.replace(',', '.')) || 0;
-            }
-
-            var vlrUnico = parseValor(document.taxaProd.vlr_unico.value);
-            var v1 = parseValor(document.taxaProd.txt1.value);
-            var v2 = parseValor(document.taxaProd.txt2.value);
-            var v3 = parseValor(document.taxaProd.txt3.value);
-            var soma = v1 + v2 + v3;
-
-            vlrUnico = Math.round(vlrUnico * 100) / 100;
-            soma = Math.round(soma * 100) / 100;
-
-            if (vlrUnico > 0 && soma !== vlrUnico) {
-                var diferenca = soma - vlrUnico;
-                var msg = diferenca > 0 ?
-                    "A soma dos valores está MAIOR em R$" + Math.abs(diferenca).toFixed(2) :
-                    "A soma dos valores está MENOR em R$" + Math.abs(diferenca).toFixed(2);
-                alert(msg);
-                return false;
-            }
-
-            return true;
-        }
-
-        function validarSomaValores() {
-            var vlrUnico = parseFloat(document.taxaProd.vlr_unico.value.replace('.', '').replace(',', '.')) || 0;
-            var v1 = parseFloat(document.taxaProd.txt1.value.replace('.', '').replace(',', '.')) || 0;
-            var v2 = parseFloat(document.taxaProd.txt2.value.replace('.', '').replace(',', '.')) || 0;
-            var v3 = parseFloat(document.taxaProd.txt3.value.replace('.', '').replace(',', '.')) || 0;
-            var soma = v1 + v2 + v3;
-
-            // Arredonda para duas casas decimais
-            vlrUnico = Math.round(vlrUnico * 100) / 100;
-            soma = Math.round(soma * 100) / 100;
-
-            if (vlrUnico > 0 && soma !== vlrUnico) {
-                var diferenca = soma - vlrUnico;
-                var msg = diferenca > 0 ?
-                    "A soma dos valores está MAIOR em R$ " + Math.abs(diferenca).toFixed(2) :
-                    "A soma dos valores está MENOR em R$ " + Math.abs(diferenca).toFixed(2);
-                alert(msg);
-            }
-        }
-
-        // Adiciona o evento de validação nos campos
-        window.onload = function() {
-            document.taxaProd.vlr_unico.onblur = validarSomaValores;
-            document.taxaProd.txt1.onblur = validarSomaValores;
-            document.taxaProd.txt2.onblur = validarSomaValores;
-            document.taxaProd.txt3.onblur = validarSomaValores;
-        };
-
-        function fPassaAlfaNumerico(tipo) {
-            return function(e) {
-                let char = String.fromCharCode(e.which);
-                if (tipo === 'an') {
-                    // permite apenas letras e números
-                    if (!/^[a-zA-Z0-9\s]$/.test(char)) {
-                        e.preventDefault();
-                    }
-                }
-            };
-        }
-
-        function validnome(input) {
-            // remove tudo que não for letra, número ou espaço
-            input.value = input.value.replace(/[^A-Z0-9\s]/g, '');
-
-            // exemplo: exige pelo menos 3 caracteres
-            if (input.value.length < 3) {
-                input.style.borderColor = "red";
-            } else {
-                input.style.borderColor = "";
-            }
-        }*/
     </script>
 
     <script src="val_prod.js" charset="utf-8"></script>
@@ -546,7 +465,7 @@
 
     // Encerrando as Conexões
     $SisRot = "S-7.2.1";
-    include "../rodape.php";
+    include "rodape.php";
     mysqli_close($conec);
     ?>
 

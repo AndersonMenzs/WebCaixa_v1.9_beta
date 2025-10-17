@@ -28,8 +28,6 @@
 		}
 	</script>
 
-	<!--<script src="val_pgtotx.js" charset="utf-8"></script>-->
-
 	<?php
 	// Inserindo Cabeçalho
 	include "../cabecprs.php";
@@ -39,10 +37,6 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	var_dump($dados);
-	echo "</pre>";
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1";
@@ -66,8 +60,6 @@
 	$DataNasc	= trim($_POST['data_nasc']);
 	$TaxaProd  = $txt1 + $txt2 + $txt3;
 	$TaxaProdF = number_format($TaxaProd, 2, ",", ".");
-
-	echo $VrProd . " - " . $VrProdF . "<br>";
 
 	// Converte para o formato internacional
 	$partes = explode('/', $DataNasc);

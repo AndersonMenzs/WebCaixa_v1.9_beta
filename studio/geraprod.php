@@ -41,10 +41,6 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	var_dump($dados);
-	echo "</pre>";
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1.1";
@@ -81,8 +77,15 @@
 	$fps = 0;
 	$TaxaProd  = $txt1 + $txt2 + $txt3;
 	$TaxaProdF = number_format($TaxaProd, 2, ",", ".");
-	$TipoRec   = '1';
-	$SubTipo   = 'TXP';
+
+	// Verifica o Tipo de Recibo pela idade do cliente
+	if ($Idade >= 60) {
+		$TipoRec   = '10';
+		$SubTipo   = 'TXPG';
+	} else {
+		$TipoRec   = '1';
+		$SubTipo   = 'TXP';
+	}
 
 	// Conexão
 	include "conexao.php";
@@ -97,48 +100,49 @@
 		<br><b>
 			<center><u><i>Sistema de Autenticação</i></u></center>
 		</b>
-	</font><br><?php
+	</font><br>
+	<?php
 
-				include "us_cad.php";
+	include "us_cad.php";
 
-				if ($ch == 'ok' or $ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm') {
-					if ($regso > 0) {
-						$lno  = mysqli_fetch_array($rso);
-						$Mat = $lno['mat'];
+	if ($ch == 'ok' or $ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm') {
+		if ($regso > 0) {
+			$lno  = mysqli_fetch_array($rso);
+			$Mat = $lno['mat'];
 
-						// Gravando os Registros
-						$sqlr = "select * from registro order by datarec desc, reg desc";
-						$rsr  = mysqli_query($conec, $sqlr) or die("Erro de Banco de Dados #1. Contate seu Administrador.");
-						$regsr = mysqli_num_rows($rsr);
-						$lnr = mysqli_fetch_array($rsr);
-						$Reg     = $lnr['reg'];
-						$dtReceb = $lnr['datarec'];
+			// Gravando os Registros
+			$sqlr = "select * from registro order by datarec desc, reg desc";
+			$rsr  = mysqli_query($conec, $sqlr) or die("Erro de Banco de Dados #1. Contate seu Administrador.");
+			$regsr = mysqli_num_rows($rsr);
+			$lnr = mysqli_fetch_array($rsr);
+			$Reg     = $lnr['reg'];
+			$dtReceb = $lnr['datarec'];
 
-						if ($regsr == 0 or $dtComp <> $dtReceb) {
-							$Reg = 0;
-						}
-						$Reg  = $Reg + 1;
+			if ($regsr == 0 or $dtComp <> $dtReceb) {
+				$Reg = 0;
+			}
+			$Reg  = $Reg + 1;
 
-						if ($FPag_1 <> "00" or $FPag_1 == "99") {
-							//$fps = $fps + 1;
-							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
-							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
-						}
+			if ($FPag_1 <> "00" or $FPag_1 == "99") {
+				//$fps = $fps + 1;
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
+				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
+			}
 
-						if ($FPag_2 <> "00" and $FPag_1 <> "99") {
-							//$fps = $fps + 1;
-							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '')";
-							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
-						}
+			if ($FPag_2 <> "00" and $FPag_1 <> "99") {
+				//$fps = $fps + 1;
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '')";
+				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
+			}
 
-						if ($FPag_3 <> "00" and $FPag_1 <> "99") {
-							//$fps = $fps + 1;
-							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
-							$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
-						}
+			if ($FPag_3 <> "00" and $FPag_1 <> "99") {
+				//$fps = $fps + 1;
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
+				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
+			}
 
-						// Preparando a Via Cliente 
-				?>
+			// Preparando a Via Cliente 
+	?>
 			<form name="geraprod" method="post" action="via1newprod.php">
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
@@ -179,7 +183,7 @@
 				</center>
 			</form><?php
 
-					} else { ?>
+				} else { ?>
 			<font size='6'><b>
 					<center>Senha <font color='gold'>
 							<blink>Incorreta</blink><br>
@@ -190,12 +194,12 @@
 				</b></font><br>
 			<center><a href='JavaScript:window.history.back()'><img src='images/voltar.gif'></a></center><br>
 	<?php
-					}
 				}
+			}
 
-				// Encerrando a Conexão
-				$SisRot = "S-7.2.1.1.1";
-				include "./rodape.php"; ?>
+			// Encerrando a Conexão
+			$SisRot = "S-7.2.1.1.1";
+			include "./rodape.php"; ?>
 
 	<script src="./js/ghost_click.js"></script>
 

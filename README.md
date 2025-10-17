@@ -44,6 +44,34 @@ INSERT INTO `formapag` (`codpag`, `modpag`, `siglapag`)
 
 # TAXA DE PRODUÇÃO
 
+Alterar a quantidade de posições das colunas codrec e siglarec na tabela tiporec do banco de dados studio para 4.
+
+```sql
+ALTER TABLE `studio`.`tiporec` 
+CHANGE COLUMN `codrec` `codrec` CHAR(2) NULL DEFAULT NULL,
+CHANGE COLUMN `siglarec` `siglarec` CHAR(4) NULL DEFAULT NULL;  
+```
+
+Alterar a quantidade de posições da coluna nomerec na tabela tiporec do banco de dados studio para 30.
+
+```sql
+ALTER TABLE `studio`.`tiporec`
+CHANGE COLUMN `nomerec` `nomerec` VARCHAR(30) NULL DEFAULT NULL;
+```
+
+Inserir uma linha na tabela tiporec para a coluna nomerec para Gratuidade.
+
+```sql
+INSERT INTO tiporec (codrec, nomerec, siglarec) VALUES (10,'Taxa de Produção Gratuidade', 'TXPG');
+```
+
+Alterar a quantidade de posições da coluna tiporec na tabela registro do banco de dados studio para 2.
+
+```sql
+ALTER TABLE `studio`.`registro` 
+CHANGE COLUMN `tiporec` `tiporec` CHAR(2) NULL DEFAULT NULL;
+```
+
 2025-08-29
 
  Alterar a quantidade de posiçẽs da coluna numdoc na tabela registro do banco de dados studio para 8.
