@@ -15,10 +15,9 @@ $FPag_3    = $_GET['fpag_3'];
 $txt1      = $_GET['txt1'];
 $txt2      = $_GET['txt2'];
 $txt3      = $_GET['txt3'];
-//$VrProd    = $_GET['VrProd'];
-$VrProd    = 0.00;
-$VrProdF   = number_format($VrProd, 2, ",", ".");
-$VrProdA = number_format($VrProd, 2, "", ".");
+$VrProdF    = $_GET['VrProd'];
+//$VrProdF   = number_format($VrProd, 2, ",", ".");
+//$VrProdA = number_format($VrProd, 2, "", ".");
 $TaxaProdF = $_GET['TaxaProd'];
 
 $FPags = [$FPag_1, $FPag_2, $FPag_3];
@@ -35,7 +34,6 @@ $dtAut     = $_GET['dtAut'];
 $SgRec     = $_GET['SgRec'];
 $Mat       = $_GET['Mat'];
 $Nasc      = $_GET['DataNasc'];
-$Nasc      = date('d/m/Y', strtotime($Nasc));
 $idade     = $_GET['Idade'];
 
 ?>
@@ -78,7 +76,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_via2 {
             position: absolute;
-            top: 288px;
+            top: 265px;
             /* ajuste para a posição desejada */
             left: 5px;
             /* ajuste para a posição desejada */
@@ -90,7 +88,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_via3 {
             position: absolute;
-            top: 539px;
+            top: 529px;
             /* ajuste para a posição desejada */
             left: 5px;
             /* ajuste para a posição desejada */
@@ -102,7 +100,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_via4 {
             position: absolute;
-            top: 792px;
+            top: 793px;
             /* ajuste para a posição desejada */
             left: 5px;
             /* ajuste para a posição desejada */
@@ -115,7 +113,7 @@ $idade     = $_GET['Idade'];
         .imagem_end_1 {
             position: absolute;
             top: 38px;
-            left: 7px;
+            left: 10px;
             width: 285px;
             /* Largura original */
             height: 65px;
@@ -126,8 +124,8 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_2 {
             position: absolute;
-            top: 100px;
-            left: 7px;
+            top: 76px;
+            left: 10px;
             width: 285px;
             /* Largura original */
             height: 520px;
@@ -138,8 +136,8 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_3 {
             position: absolute;
-            top: 127px;
-            left: 7px;
+            top: 114px;
+            left: 10px;
             width: 285px;
             /* Largura original */
             height: 972px;
@@ -151,7 +149,7 @@ $idade     = $_GET['Idade'];
         .imagem_end_4 {
             position: absolute;
             top: 416px;
-            left: 7px;
+            left: 10px;
             width: 285px;
             /* Largura original */
             height: 900px;
@@ -226,23 +224,6 @@ $idade     = $_GET['Idade'];
 
 
         }
-
-        .via-title {
-            font-size: 5em;
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        .table-cell {
-            font-size: 1.2em;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .divider {
-            font-size: 1.2em;
-            text-align: center;
-        }
     </style>
 </head>
 
@@ -250,34 +231,16 @@ $idade     = $_GET['Idade'];
 
 <body>
     <div class="container">
-        <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
+        <!--<img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via3">
-        <img src="./images/logo.png" alt="Imagem" class="imagem_via4">
-
-        <?php
-        $vias = ['VIA TESOURARIA', 'VIA CLIENTE', 'VIA ARQUIVO'];
-        foreach ($vias as $via) {
-            echo "
-    <tr>
-        <td colspan='14' class='via-title'>$via</td>
-    </tr>
-    <tr>
-        <td colspan='14' class='table-cell'>Conteúdo do recibo aqui...</td>
-    </tr>
-    <tr>
-        <td colspan='14' class='divider'>------------------------------------------------------------------------------------------------------------------------------------------------------------------</td>
-    </tr>
-    ";
-        }
-        ?>
-
+        <img src="./images/logo.png" alt="Imagem" class="imagem_via4">-->
         <table align="left" cellspacing="0" border="0">
-            <colgroup width="60"></colgroup>
+            <colgroup width="50"></colgroup>
             <colgroup width="100"></colgroup>
             <colgroup width="5"></colgroup>
-            <colgroup width="100"></colgroup>
-            <colgroup width="8"></colgroup>
+            <colgroup width="85"></colgroup>
+            <colgroup width="2"></colgroup>
             <colgroup width="4"></colgroup>
             <colgroup span="2" width="100"></colgroup>
             <colgroup width="5"></colgroup>
@@ -287,45 +250,45 @@ $idade     = $_GET['Idade'];
 
             <!-- Primeira via -->
             <tr>
-                <td rowspan="3" align="left" valign=bottom></td>
+                <td rowspan="3" align="left" valign=bottom><br></td>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 rowspan=2 align="center" valign=middle>
                     <b>
-                        <font size=4><?php echo $tipo; ?></font>
+                        <font size=5><?php echo $tipo; ?></font>
                     </b>
                 </td>
-                <td align="left" valign=bottom></td>
+                <td align="left" valign=bottom><br></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>RECIBO</font>
                     </b></td>
                 <td align="left" valign=bottom>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>PC</font>
                     </b></td>
                 <td align="center" valign=middle>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>VALOR PAGO</font>
                     </b></td>
             </tr>
             <tr>
-                <td height="5" align="left" valign=bottom></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $NDoc; ?></font>
+                <td height="5" align="left" valign=bottom><br></td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdnum="1046;0;@">
+                    <font size=1>22000001</font>
                 </td>
                 <td align="left" valign=bottom>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $PC; ?></font>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="222" sdnum="1046;">
+                    <font size=1>222</font>
                 </td>
                 <td align="left" valign=bottom>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProd; ?></font>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="0" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
+                    <font size=1>R$ 0,00</font>
                 </td>
             </tr>
             <tr>
@@ -333,23 +296,21 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=5 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_<font size=3><b>GRATUIDADE</b></font>"></font>
+                    <font size=1><br><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1"></font>
                 </td>
                 <td align="left" valign=bottom></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>DATA</font>
                     </b></td>
                 <td height="4" align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <b>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>VENDEDORA</font>
-                    </b>
-                </td>
+                    </b></td>
                 <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="45898" sdnum="1046;0;DD/MM/AA">
                     <font size=1><?php echo $data; ?></font>
                 </td>
                 <td align="left" valign=bottom></td>
@@ -362,186 +323,30 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=2 align="center" valign=middle>
-                    <font size=3><b>GRATUIDADE</b></font>
-                </td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=2 align="center" valign=middle><b>GRATUIDADE</b></td>
                 <td height="4" align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
-                <td align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
-            </tr>
-            <tr>
-                <td height="4" align="left" valign=bottom></td>
-                <td height="4" align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
-                <td align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
-            </tr>
-            <tr>
-                <td height="4" align="left" valign=bottom></td>
-            </tr>
-            <tr>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="11" align="left" valign=middle>
-                    <b>
-                        <font size=1>NASC.</font>
-                    </b>
-                </td>
-                <td align="left" valign=middle></td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=middle>
-                    <b>
-                        <font size=1>ASSINATURA</font>
-                    </b>
-                </td>
-            </tr>
-            <tr>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="17" align="center" valign=middle>
-                    <font size=1><?php echo  $Nasc; ?></font>
-                </td>
-                <td align="center" valign=middle></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="center" valign=middle></td>
-            </tr>
-            <tr>
-                <td height="4" align="left" valign=bottom></td>
-            </tr>
-            <tr>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="11" align="left" valign=middle>
-                    <b>
-                        <font size=1>A IMPORTÂNCIA TOTAL DE</font>
-                    </b>
-                </td>
-            </tr>
-            <tr>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="17" align="center" valign=middle>
-                    <font size=1>ZERO REAIS</font>
-                </td>
-            </tr>
-            <tr>
-                <td height="4" align="left" valign=bottom></td>
-            </tr>
-            <tr>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="11" align="center" valign=middle>
-                    <b>
-                        <font size=1>AUTENTICAÇÃO</font>
-                    </b>
-                </td>
-            </tr>
-            <tr>
-                <td height="4" align="left" valign=bottom></td>
-            </tr>
-            <tr>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="20" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $VrProdA . $Mat; ?></font>
-                </td>
-            </tr>
-            <tr>
-                <td height="4" align="left" valign=bottom></td>
-            </tr>
-            <tr>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 rowspan=2 height="30" align="center" valign=middle>
-                    <b>
-                        <font size=5>(VIA TESOURARIA)</font>
-                    </b>
-                </td>
-            </tr>
-            <tr>
-                <td height="4" align="left" valign=bottom></td>
-            </tr>
-            <tr>
-                <td colspan=14 height="15" align="center" valign=middle>
-                    <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>
-                </td>
-            </tr>
-            <!-- Segunda via -->
-            <tr>
-                <td rowspan="3" align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 rowspan=2 align="center" valign=middle>
-                    <b>
-                        <font size=4><?php echo $tipo; ?></font>
-                    </b>
-                </td>
-                <td align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <b>
-                        <font size=1>RECIBO</font>
-                    </b>
-                </td>
-                <td align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <b>
-                        <font size=1>PC</font>
-                    </b>
-                </td>
-                <td align="center" valign=middle></td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <b>
-                        <font size=1>VALOR PAGO</font>
-                    </b>
-                </td>
-            </tr>
-            <tr>
-                <td height="5" align="left" valign=bottom></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $NDoc; ?></font>
-                </td>
-                <td align="left" valign=bottom></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $PC; ?></font>
-                </td>
-                <td align="left" valign=bottom></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProd; ?></font>
-                </td>
-            </tr>
-            <tr>
-                <td height="4" align="left" valign=bottom></td>
-            </tr>
-            <tr>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=5 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_2"></font>
-                </td>
-                <td align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <b>
-                        <font size=1>DATA</font>
-                    </b>
-                </td>
-                <td height="4" align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <b>
-                        <font size=1>VENDEDORA</font>
-                    </b>
-                </td>
-                <td height="4" align="left" valign=bottom></td>
-            </tr>
-            <tr>
-                <td height="4" align="left" valign=bottom></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $data; ?></font>
-                </td>
-                <td align="left" valign=bottom></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $Vendedora; ?></font>
-                </td>
-            </tr>
-            <tr>
-                <td height="4" align="left" valign=bottom></td>
-            </tr>
-            <tr>
-                <td align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=2 align="center" valign=middle>
-                    <font size=3><b>GRATUIDADE</b></font>
-                </td>
-                <td height="4" align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
-                <td align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
+                <td colspan=2 align="center" valign=middle><b>
+                        <font size=1><br></font>
+                    </b></td>
+                <td align="left" valign=bottom><b>
+                        <font size=1><br></font>
+                    </b></td>
+                <td colspan=2 align="center" valign=middle><b>
+                        <font size=1><br></font>
+                    </b></td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
                 <td height="4" align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
-                <td align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
+                <td colspan=2 align="center" valign=middle>
+                    <font size=1><br></font>
+                </td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td colspan=2 align="center" valign=middle sdnum="1046;0;0,00%">
+                    <font size=1><br></font>
+                </td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
@@ -551,21 +356,21 @@ $idade     = $_GET['Idade'];
                         <font size=1>NASC.</font>
                     </b></td>
                 <td align="left" valign=middle><b>
-                        <font size=1></font>
+                        <font size=1><br></font>
                     </b></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=middle><b>
                         <font size=1>ASSINATURA</font>
                     </b></td>
             </tr>
             <tr>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="17" align="center" valign=middle>
-                    <font size=1><?php echo  $Nasc; ?></font>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="17" align="center" valign=middle sdval="23640" sdnum="1046;0;DD/MM/AA">
+                    <font size=1>20/09/64</font>
                 </td>
                 <td align="center" valign=middle>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="center" valign=middle>
-                    <font size=1><?php echo $Cliente; ?></font>
+                    <font size=1>ISABELE GOMES PEREIRA</font>
                 </td>
             </tr>
             <tr>
@@ -593,59 +398,66 @@ $idade     = $_GET['Idade'];
                 <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="20" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $VrProdA . $Mat; ?></font>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="26" align="center" valign=middle>
+                    <font size=1>000122212322000001290825TXPG0000000035-9</font>
                 </td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td colspan=14 height="15" align="center" valign=middle>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 rowspan=2 height="40" align="center" valign=middle><b>
+                        <font size=4>(VIA TESOURARIA)</font>
+                    </b></td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td colspan=14 height="26" align="center" valign=middle>
                     <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>
                 </td>
             </tr>
-            <!-- Terceira via -->
             <tr>
-                <td rowspan="3" align="left" valign=bottom></td>
+                <td rowspan="3" align="left" valign=bottom><br></td>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 rowspan=2 align="center" valign=middle>
                     <b>
-                        <font size=4><?php echo $tipo; ?></font>
+                        <font size=5><?php echo $tipo; ?></font>
                     </b>
                 </td>
-                <td align="left" valign=bottom></td>
+                <td align="left" valign=bottom><br></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>RECIBO</font>
                     </b></td>
                 <td align="left" valign=bottom>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>PC</font>
                     </b></td>
                 <td align="center" valign=middle>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>VALOR PAGO</font>
                     </b></td>
             </tr>
             <tr>
-                <td height="5" align="left" valign=bottom></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $NDoc; ?></font>
+                <td height="5" align="left" valign=bottom><br></td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdnum="1046;0;@">
+                    <font size=1>22000001</font>
                 </td>
                 <td align="left" valign=bottom>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $PC; ?></font>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="222" sdnum="1046;">
+                    <font size=1>222</font>
                 </td>
                 <td align="left" valign=bottom>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProd; ?></font>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="0" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
+                    <font size=1>R$ 0,00</font>
                 </td>
             </tr>
             <tr>
@@ -653,7 +465,7 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=5 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_3"></font>
+                    <font size=1><br><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1"></font>
                 </td>
                 <td align="left" valign=bottom></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
@@ -667,7 +479,7 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="45898" sdnum="1046;0;DD/MM/AA">
                     <font size=1><?php echo $data; ?></font>
                 </td>
                 <td align="left" valign=bottom></td>
@@ -680,20 +492,30 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=2 align="center" valign=middle>
-                    <font size=3><b>GRATUIDADE</b></font>
-                </td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=2 align="center" valign=middle><b>GRATUIDADE</b></td>
                 <td height="4" align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
-                <td align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
+                <td colspan=2 align="center" valign=middle><b>
+                        <font size=1><br></font>
+                    </b></td>
+                <td align="left" valign=bottom><b>
+                        <font size=1><br></font>
+                    </b></td>
+                <td colspan=2 align="center" valign=middle><b>
+                        <font size=1><br></font>
+                    </b></td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
                 <td height="4" align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
-                <td align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
+                <td colspan=2 align="center" valign=middle>
+                    <font size=1><br></font>
+                </td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td colspan=2 align="center" valign=middle sdnum="1046;0;0,00%">
+                    <font size=1><br></font>
+                </td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
@@ -703,21 +525,21 @@ $idade     = $_GET['Idade'];
                         <font size=1>NASC.</font>
                     </b></td>
                 <td align="left" valign=middle><b>
-                        <font size=1></font>
+                        <font size=1><br></font>
                     </b></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=middle><b>
                         <font size=1>ASSINATURA</font>
                     </b></td>
             </tr>
             <tr>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="17" align="center" valign=middle>
-                    <font size=1><?php echo  $Nasc; ?></font>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="17" align="center" valign=middle sdval="23640" sdnum="1046;0;DD/MM/AA">
+                    <font size=1>20/09/64</font>
                 </td>
                 <td align="center" valign=middle>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="center" valign=middle>
-                    <font size=1><?php echo $Cliente; ?></font>
+                    <font size=1>ISABELE GOMES PEREIRA</font>
                 </td>
             </tr>
             <tr>
@@ -745,63 +567,66 @@ $idade     = $_GET['Idade'];
                 <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="20" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $VrProdA . $Mat; ?></font>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="26" align="center" valign=middle>
+                    <font size=1>000122212322000001290825TXPG0000000035-9</font>
                 </td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td colspan=14 height="15" align="center" valign=middle>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 rowspan=2 height="40" align="center" valign=middle><b>
+                        <font size=4>(VIA TESOURARIA)</font>
+                    </b></td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td colspan=14 height="26" align="center" valign=middle>
                     <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>
                 </td>
             </tr>
-            <!-- Quarta via -->
             <tr>
-                <td rowspan="3" align="left" valign=bottom></td>
+                <td rowspan="3" align="left" valign=bottom><br></td>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 rowspan=2 align="center" valign=middle>
                     <b>
-                        <font size=4><?php echo $tipo; ?></font>
+                        <font size=5><?php echo $tipo; ?></font>
                     </b>
                 </td>
-                <td align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <b>
+                <td align="left" valign=bottom><br></td>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>RECIBO</font>
-                    </b>
+                    </b></td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
                 </td>
-                <td align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <b>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>PC</font>
-                    </b>
-                </td>
+                    </b></td>
                 <td align="center" valign=middle>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <b>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>VALOR PAGO</font>
-                    </b>
-                </td>
+                    </b></td>
             </tr>
             <tr>
-                <td height="5" align="left" valign=bottom></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $NDoc; ?></font>
+                <td height="5" align="left" valign=bottom><br></td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdnum="1046;0;@">
+                    <font size=1>22000001</font>
                 </td>
                 <td align="left" valign=bottom>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $PC; ?></font>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="222" sdnum="1046;">
+                    <font size=1>222</font>
                 </td>
                 <td align="left" valign=bottom>
-                    <font size=1></font>
+                    <font size=1><br></font>
                 </td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProd; ?></font>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="0" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
+                    <font size=1>R$ 0,00</font>
                 </td>
             </tr>
             <tr>
@@ -809,7 +634,177 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=5 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_4"></font>
+                    <font size=1><br><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1"></font>
+                </td>
+                <td align="left" valign=bottom></td>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
+                        <font size=1>DATA</font>
+                    </b></td>
+                <td height="4" align="left" valign=bottom></td>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
+                        <font size=1>VENDEDORA</font>
+                    </b></td>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="45898" sdnum="1046;0;DD/MM/AA">
+                    <font size=1><?php echo $data; ?></font>
+                </td>
+                <td align="left" valign=bottom></td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
+                    <font size=1><?php echo $Vendedora; ?></font>
+                </td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td align="left" valign=bottom></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=2 align="center" valign=middle><b>GRATUIDADE</b></td>
+                <td height="4" align="left" valign=bottom></td>
+                <td colspan=2 align="center" valign=middle><b>
+                        <font size=1><br></font>
+                    </b></td>
+                <td align="left" valign=bottom><b>
+                        <font size=1><br></font>
+                    </b></td>
+                <td colspan=2 align="center" valign=middle><b>
+                        <font size=1><br></font>
+                    </b></td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+                <td height="4" align="left" valign=bottom></td>
+                <td colspan=2 align="center" valign=middle>
+                    <font size=1><br></font>
+                </td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td colspan=2 align="center" valign=middle sdnum="1046;0;0,00%">
+                    <font size=1><br></font>
+                </td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="11" align="left" valign=middle><b>
+                        <font size=1>NASC.</font>
+                    </b></td>
+                <td align="left" valign=middle><b>
+                        <font size=1><br></font>
+                    </b></td>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=middle><b>
+                        <font size=1>ASSINATURA</font>
+                    </b></td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="17" align="center" valign=middle sdval="23640" sdnum="1046;0;DD/MM/AA">
+                    <font size=1>20/09/64</font>
+                </td>
+                <td align="center" valign=middle>
+                    <font size=1><br></font>
+                </td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="center" valign=middle>
+                    <font size=1>ISABELE GOMES PEREIRA</font>
+                </td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="11" align="left" valign=middle><b>
+                        <font size=1>A IMPORTÂNCIA TOTAL DE</font>
+                    </b></td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="17" align="center" valign=middle>
+                    <font size=1>ZERO REAIS</font>
+                </td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="11" align="center" valign=middle><b>
+                        <font size=1>AUTENTICAÇÃO</font>
+                    </b></td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="26" align="center" valign=middle>
+                    <font size=1>000122212322000001290825TXPG0000000035-9</font>
+                </td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 rowspan=2 height="40" align="center" valign=middle><b>
+                        <font size=4>(VIA TESOURARIA)</font>
+                    </b></td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td colspan=14 height="26" align="center" valign=middle>
+                    <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="3" align="left" valign=bottom><br></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 rowspan=2 align="center" valign=middle>
+                    <b>
+                        <font size=5><?php echo $tipo; ?></font>
+                    </b>
+                </td>
+                <td align="left" valign=bottom><br></td>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
+                        <font size=1>RECIBO</font>
+                    </b></td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
+                        <font size=1>PC</font>
+                    </b></td>
+                <td align="center" valign=middle>
+                    <font size=1><br></font>
+                </td>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
+                        <font size=1>VALOR PAGO</font>
+                    </b></td>
+            </tr>
+            <tr>
+                <td height="5" align="left" valign=bottom><br></td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdnum="1046;0;@">
+                    <font size=1>22000001</font>
+                </td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="222" sdnum="1046;">
+                    <font size=1>222</font>
+                </td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="0" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
+                    <font size=1>R$ 0,00</font>
+                </td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=5 rowspan=5 height="60" align="center" valign=middle>
+                    <font size=1><br><img src="Recibo1(TX.%20PRODU%C3%87%C3%83O%20-%20GRATUIDADE)_html_8aa753e3a89a9d2a.png" width=284 height=55 hspace=10 vspace=5>
+                    </font>
                 </td>
                 <td align="left" valign=bottom></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
@@ -819,65 +814,86 @@ $idade     = $_GET['Idade'];
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
                         <font size=1>VENDEDORA</font>
                     </b></td>
-                <td align="left" valign=bottom></td>
-                <td align="left" valign=bottom></td>
-                <td align="left" valign=bottom></td>
+                <td align="left" valign=bottom><br></td>
+                <td align="left" valign=bottom><br></td>
+                <td align="left" valign=bottom><br></td>
             </tr>
             <tr>
-                <td align="left" valign=bottom></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="45898" sdnum="1046;0;DD/MM/AA">
                     <font size=1>29/08/25</font>
                 </td>
-                <td align="left" valign=bottom></td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $Vendedora; ?></font>
+                    <font size=1>Rafaella B.</font>
                 </td>
-                <td align="left" valign=bottom></td>
-                <td align="left" valign=bottom></td>
-                <td align="left" valign=bottom></td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td align="left" valign=bottom><br></td>
+                <td align="left" valign=bottom><br></td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=2 align="center" valign=middle>
-                    <font size=3><b>GRATUIDADE</b></font>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
                 </td>
-                <td align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
-                <td align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 rowspan=2 align="center" valign=middle><b>GRATUIDADE</b></td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td colspan=2 align="center" valign=middle><b>
+                        <font size=1><br></font>
+                    </b></td>
+                <td align="left" valign=bottom><b>
+                        <font size=1><br></font>
+                    </b></td>
+                <td colspan=2 align="center" valign=middle><b>
+                        <font size=1><br></font>
+                    </b></td>
             </tr>
             <tr>
-                <td align="left" valign=bottom></td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
             </tr>
             <tr>
-                <td height="4" align="left" valign=bottom></td>
+                <td height="4" align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
             </tr>
             <tr>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="11" align="left" valign=middle>
-                    <b>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="11" align="left" valign=middle><b>
                         <font size=1>NASC.</font>
                     </b></td>
-                <td align="left" valign=middle></td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=middle>
-                    <b>
+                <td align="left" valign=middle><b>
+                        <font size=1><br></font>
+                    </b></td>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="left" valign=middle><b>
                         <font size=1>ASSINATURA</font>
-                    </b>
-                </td>
+                    </b></td>
             </tr>
             <tr>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="17" align="center" valign=middle>
-                    <font size=1><?php echo  $Nasc; ?></font>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 height="17" align="center" valign=middle sdval="23640" sdnum="1046;0;DD/MM/AA">
+                    <font size=1>20/09/64</font>
                 </td>
-                <td align="center" valign=middle></td>
+                <td align="center" valign=middle>
+                    <font size=1><br></font>
+                </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=11 align="center" valign=middle>
-                    <font size=1><?php echo $Cliente; ?></font>
+                    <font size=1>ISABELE GOMES PEREIRA</font>
                 </td>
             </tr>
             <tr>
-                <td height="4" align="left" valign=bottom></td>
+                <td height="4" align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="11" align="left" valign=middle><b>
@@ -890,7 +906,9 @@ $idade     = $_GET['Idade'];
                 </td>
             </tr>
             <tr>
-                <td height="4" align="left" valign=bottom></td>
+                <td height="4" align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="11" align="center" valign=middle><b>
@@ -898,18 +916,22 @@ $idade     = $_GET['Idade'];
                     </b></td>
             </tr>
             <tr>
-                <td height="4" align="left" valign=bottom></td>
-            </tr>
-            <tr>
-                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="20" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $VrProdA . $Mat; ?></font>
+                <td height="4" align="left" valign=bottom>
+                    <font size=1><br></font>
                 </td>
             </tr>
             <tr>
-                <td height="4" align="left" valign=bottom></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="26" align="center" valign=middle>
+                    <font size=1>0001222163500000000180825TXPG0000000035-9</font>
+                </td>
             </tr>
             <tr>
-                <td colspan=14 height="15" align="center" valign=middle>
+                <td height="4" align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=14 height="26" align="center" valign=middle>
                     <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>
                 </td>
             </tr>

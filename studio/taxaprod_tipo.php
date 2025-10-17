@@ -255,7 +255,7 @@
 
     // Consultando o último recibo dentro das rotinas TXP, TXC, PROD e BOOK
     $sql = "SELECT numdoc, datarec FROM registro 
-        WHERE numdoc >= 22100000 
+        WHERE numdoc >= 21700000 
         AND datarec >= '2025-08-29' 
         AND subtipo IN ('TXP', 'TXC', 'PROD', 'BOOK') 
         ORDER BY numdoc DESC";
