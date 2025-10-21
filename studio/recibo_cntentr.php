@@ -13,6 +13,7 @@ $ModPag    = $_GET['ModPag'];
 $FPag_1    = $_GET['fpag_1'];
 $FPag_2    = $_GET['fpag_2'];
 $FPag_3    = $_GET['fpag_3'];
+$FmRec     = $_GET['fmrec'];
 $txt1      = $_GET['txt1'];
 $txt2      = $_GET['txt2'];
 $txt3      = $_GET['txt3'];
@@ -487,7 +488,7 @@ $Mat       = $_GET['Mat'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $VrEnt . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrEnt . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
@@ -795,7 +796,7 @@ $Mat       = $_GET['Mat'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $VrEnt . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrEnt . $Mat; ?></font>
                 </td>
             </tr>
             <tr>

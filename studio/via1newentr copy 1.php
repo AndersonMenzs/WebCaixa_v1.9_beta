@@ -40,12 +40,9 @@
 	$Reg       = substr($AutFull, 1, 4);
 	$NDoc      = trim($_POST['txtdoc']);
 	$TipoRec   = trim($_POST['tiporec']);
-	$FPag_1      = isset($_POST['lsPr1']) ? (trim($_POST['lsPr1']) == '00' ? '' : trim($_POST['lsPr1'])) : '';
-	$FPag_2      = isset($_POST['lsPr2']) ? (trim($_POST['lsPr2']) == '00' ? '' : trim($_POST['lsPr2'])) : '';
-	$FPag_3      = isset($_POST['lsPr3']) ? (trim($_POST['lsPr3']) == '00' ? '' : trim($_POST['lsPr3'])) : '';
-	/*$FPag_1 = '20';
-	$FPag_2 = '10';
-	$FPag_3 = '70';*/
+	$FPag_1      = trim($_POST['lsPr1']);
+	$FPag_2      = trim($_POST['lsPr2']);
+	$FPag_3      = trim($_POST['lsPr3']);
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
 	$mRec    = substr($dtRec, 5, 2);
@@ -82,44 +79,17 @@
 	$lnRec = mysqli_fetch_array($rsRec);
 	$SgRec  = $lnRec['siglarec'];
 	$tipo = "ENTRADA";
-	
-	// Consulta SQL corrigida com parênteses
-	$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag_1' OR codpag = '$FPag_2' OR codpag = '$FPag_3') AND codpag <> '---'";
-	$rsFm = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
 
-	$FmRec = [];
+	// Obtendo a Forma de Recebimento
+	$sqlFm = "select siglapag from formapag where codpag = '$FPag' ";
+	$rsFm  = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
+	$lnFm  = mysqli_fetch_array($rsFm);
+	$FmRec  = $lnFm['siglapag'];
 
-	while ($lnFm = mysqli_fetch_assoc($rsFm)) {
-		$FmRec[] = $lnFm['siglapag'];
+	if ($FmRec == "") {
+		$FmRec = "DIV";
 	}
 
-	// Remove duplicatas, caso existam
-	$FmRec = array_unique($FmRec);
-
-	// Define o modo de pagamento
-	$ModPag = '';
-	$FmRec_a = '';
-
-	// Se houver mais de uma forma diferente
-	if (count($FmRec) > 1) {
-		$FmRec_a = 'DIV';
-	} elseif (in_array("DIN", $FmRec)) {
-		$ModPag = "DINHEIRO";
-		$FmRec_a = "DIN";
-	} elseif (in_array("CTD", $FmRec)) {
-		$ModPag = "CARTÃO DÉBITO";
-		$FmRec_a = "CTD";
-	} elseif (in_array("CTV", $FmRec)) {
-		$ModPag = "CARTÃO CRÉDITO";
-		$FmRec_a = "CTV";
-	} elseif (in_array("PXQ", $FmRec)) {
-		$ModPag = "PIX QR CODE";
-		$FmRec_a = "PXQ";
-	} elseif (in_array("PXC", $FmRec)) {
-		$ModPag = "PIX CNPJ";
-		$FmRec_a = "PXC";
-	}
-	
 	// Reduzindo a Matrícula
 	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
 	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
@@ -133,10 +103,23 @@
 
 			// Imprimindo Via Cliente
 			$Aut1 = $Reg;
-			$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$VrEntrF$SgRec$FmRec_a$MatRec";
+			$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$VrEntrF$SgRec$FmRec$MatRec";
 
 			// Remover ponto do valor
 			$VrEnt = str_replace('.', '', $VrEnt);
+
+			// Condição para forma de pagamento
+			if ($FmRec == "DIN") {
+				$ModPag = "DINHEIRO";
+			} elseif ($FmRec == "CTD") {
+				$ModPag = "CARTÃO DÉBITO";
+			} elseif ($FmRec == "CTV") {
+				$ModPag = "CARTÃO CRÉDITO";
+			} elseif ($FmRec == "PXQ") {
+				$ModPag = "PIX QR CODE";
+			} elseif ($FmRec == "PXC") {
+				$ModPag = "PIX CNPJ";
+			}
 	?>
 	<br><br>
 	<font size='6'><b>
@@ -174,7 +157,6 @@ function imprimirERedirecionar() {
 		+ '&fpag_1=<?php echo urlencode($FPag_1); ?>'
 		+ '&fpag_2=<?php echo urlencode($FPag_2); ?>'
 		+ '&fpag_3=<?php echo urlencode($FPag_3); ?>'
-		+ '&fmrec=<?php echo urlencode($FmRec_a); ?>'
 		+ '&txt1=<?php echo urlencode($txt1); ?>'
 		+ '&txt2=<?php echo urlencode($txt2); ?>'
 		+ '&txt3=<?php echo urlencode($txt3); ?>'
