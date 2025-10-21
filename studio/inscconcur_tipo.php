@@ -130,6 +130,9 @@
 	include "conexao.php";
 	include "dbselect.php";
 
+    // Obtendo o código do estúdio e inserindo o número inicial do recibo
+    $NumDocInicial = intval($std . "00000");
+
 	$sql = "select * from taxas where codigo = 'TXC' order by datalt desc";
 	$rs  = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #1");
 	$ln  = mysqli_fetch_array($rs);
@@ -138,16 +141,16 @@
 	$VrConc  = $ln['vltx'];
 	$VrConcF = number_format($VrConc, 2, ',', '.');
 
-	// Consultando o último recibo dentro das rotinas TXP, TXC, PROD e BOOK
-	$sql = "SELECT numdoc, datarec FROM registro 
-        WHERE numdoc >= 21700000 
+    // Consultando o último recibo dentro das rotinas TXP, TXC, PROD e BOOK
+    $sql = "SELECT numdoc, datarec FROM registro 
+        WHERE numdoc >= $NumDocInicial
         AND datarec >= '2025-08-29' 
-        AND subtipo IN ('TXP', 'TXC', 'PROD', 'BOOK') 
+        AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK') 
         ORDER BY numdoc DESC";
-	$rs  = mysqli_query($conec, $sql) or die('Erro #3!');
-	$ln  = mysqli_fetch_array($rs);
-	$NumDoc = $ln['numdoc'];
-	$DataRec = $ln['datarec'];
+    $rs  = mysqli_query($conec, $sql) or die('Erro #3!');
+    $ln  = mysqli_fetch_array($rs);
+    $NumDoc = $ln['numdoc'];
+    $DataRec = $ln['datarec'];
 
 	// Condição para usar o próximo número do recibo
 	if ($DataHj >= $DataRec) {
@@ -227,7 +230,7 @@
 						<input type="hidden" name="vlr_unico" value="<?php echo $VrConc; ?>">
 					</td>
 					<td align="center">
-						<select name="lsPr1" class="campos">
+						<select name="lsPr1" class="campos" autofocus>
 							<?php
 							// Obtendo a Relação
 							// Conectando ao Banco de Dados

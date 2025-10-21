@@ -56,7 +56,7 @@
 	$horaaut   = $h1 . $h2;
 	$TaxaConcF = trim($_POST['taxaconc']);
 	$Mat       = trim($_POST['txtmat']);
-
+exit;
 	// Pesquisando PC
 	include "conexao.php";
 	include "dbselect.php";

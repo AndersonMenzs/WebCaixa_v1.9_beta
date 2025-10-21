@@ -155,7 +155,7 @@ error_reporting(E_ALL);
 						</b></font>
 				</p><br>
 				<center>
-					<input id="ghost_click" type="submit" name="btimprime" value="Autenticar"><br><br>
+					<input id="ghost_click" type="submit" name="btimprime" value="Autenticar" autofocus><br><br>
 					<font color='#FFFFFF' size='3'><span id="msg"></span></font>
 				</center>
 			</form>

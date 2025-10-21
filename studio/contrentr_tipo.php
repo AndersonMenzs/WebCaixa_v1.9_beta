@@ -114,7 +114,7 @@
    // Inserindo o Cabeçalho
    include "../cabecprs.php";
    ?>
-   
+
    <!-- Adicionando jQuery UI para o autocomplete -->
    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -142,26 +142,25 @@
       include "us_cad.php";
    } ?>
 
-    <table width='100%' border='0' cellpadding='0' cellspacing='0'>
-        <tr>
-            <td width='9%'>
-                <a href="contrentr.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
-            </td>
-            <td width='82%' align='center'>
-                <font color="gold" size="6"><b>
-                        <center><u><i>CONTRATO - ENTRADA</i></u></center>
-                    </b></font><br><br><br>
-            </td>
-            <td width='9%'>
-                <a href="contentr.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
-            </td>
-        </tr>
-    </table>
+   <table width='100%' border='0' cellpadding='0' cellspacing='0'>
+      <tr>
+         <td width='9%'>
+            <a href="contrentr.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+         </td>
+         <td width='82%' align='center'>
+            <font color="gold" size="6"><b>
+                  <center><u><i>CONTRATO - ENTRADA</i></u></center>
+               </b></font><br><br><br>
+         </td>
+         <td width='9%'>
+            <a href="contentr.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+         </td>
+      </tr>
+   </table>
    <?php
 
    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
-      <!--<form name="cntentr" method="post" action="confcntentr.php?c_s=<?php echo $lg_user; ?>" onsubmit="return checkdata();" autocomplete="off">-->
-        <form name="cntentr" method="post" action="confcntentr.php" onsubmit="return checkdata();" autocomplete="off">
+      <form name="cntentr" method="post" action="confcntentr.php" onsubmit="return checkdata();" autocomplete="off">
          <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
             <tr>
                <td width="50%" align="center">
@@ -202,11 +201,11 @@
 
             <tr>
                <td rowspan="3" align="center">
-                  <input type="text" name="txtdoc" size="7" maxlength="7" class="campos" onKeyUp="validate(this)">
+                  <input type="text" name="txtdoc" size="7" maxlength="7" class="campos" onKeyUp="validate(this)" autofocus>
                </td>
                <td rowspan="3" align="center">
                   <font size='5'><b><i>R$ </i></b></font>
-                  <input type="text" name="vlr_unico" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('cntentr', 'vlr_unico', event); validate(this)" >
+                  <input type="text" name="vlr_unico" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('cntentr', 'vlr_unico', event); validate(this)">
                </td>
                <td align="center">
                   <select name="lsPr1" class="campos">
@@ -235,7 +234,7 @@
                </td>
                <td align="center">
                   <font size='5'><b><i>R$ </i></b></font>
-                  <input type="text" name="txtvalor1" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('cntentr', 'txtvalor1', event); validate(this)" >
+                  <input type="text" name="txtvalor1" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('cntentr', 'txtvalor1', event); validate(this)">
                   <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
                </td>
             </tr>

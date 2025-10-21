@@ -1,6 +1,24 @@
 # WebCaixa_v1.9_beta
 Versão com inserções de Pix QR Code, Pix CNPJ e impressão de recibo em impressora laser
 
+2025-10-21
+
+# CONEXÃO COM O BANCO DE DADOS
+
+Antes de tudo é necessário inserir uma linha no arquiv0 vendas/conexao.php que conecta o banco de dados do estúdio. a linha serve para identificar com uma variável o código do estúdio.
+
+```php
+// Código do estúdio
+$std = '206';
+
+$conec = mysqli_connect ('localhost', 'root', 'cpd@cloud');
+    IF (!$conec) { ?>
+		  <br><br><br><font size='5' color='red'><center>Você não conseguiu conectar-se ao Servidor de Banco de Dados<br><br>
+		      Por favor, contate seu Administrador Web.</center></font><?php
+		 }
+
+```
+
 # FECHAMENTO DO CAIXA
 
 2025-08-27

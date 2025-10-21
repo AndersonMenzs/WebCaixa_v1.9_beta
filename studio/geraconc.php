@@ -32,7 +32,7 @@
 	 echo "<pre>";
 	 var_dump($dados);
 	 echo "</pre>";
-	 exit;
+	
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.5.1.1";
@@ -53,6 +53,8 @@
 	$txt4 = isset($_POST['txt4']) ? (float) trim($_POST['txt4']) : 0;
 	$Pass      = strtolower(trim($_POST['txtsen']));
 	$Senha     = sha1($Pass);
+	$Vendedora = trim($_POST['vendedora']);
+	$Cliente   = trim($_POST['cliente']);
 
 	// Criando Variáveis
 	$fps = 0;
@@ -114,26 +116,18 @@
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
 			}
 
-			if ($FPag4 <> "00") {
-				$fps = $fps + 1;
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag4', '0', '$dtRec', '$hora', '$txt4', '$Mat', '')";
-				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #10. Contate seu Administrador.");
-			}
-
 			// Preparando a Via Cliente
-			if ($fps ==  1) {
+			/*if ($fps ==  1) {
 				if ($FPag1 <> "00") {
 					$FPag = $FPag1;
 				} else if ($FPag2 <> "00") {
 					$FPag = $FPag2;
 				} else if ($FPag3 <> "00") {
 					$FPag = $FPag3;
-				} else {
-					$FPag = $FPag4;
 				}
 			} else {
 				$FPag = "05";
-			}
+			}*/
 
 			// Preparando a Via Cliente 
 	?>
@@ -141,12 +135,21 @@
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
 				<input type="hidden" name="tiporec" value="<?php echo $TipoRec; ?>">
+				<input type="hidden" name="txtvalor1" value="<?php echo $txt1; ?>">
+				<input type="hidden" name="txtvalor2" value="<?php echo $txt2; ?>">
+				<input type="hidden" name="txtvalor3" value="<?php echo $txt3; ?>">
 				<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
 				<input type="hidden" name="formapag" value="<?php echo $FPag; ?>">
+				<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
+				<input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
+				<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
+				<input type="hidden" name="modpag" value="<?php echo $ModPag; ?>">
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">
 				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
 				<input type="hidden" name="taxaconc" value="<?php echo $TaxaConcF; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
+				<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 				<p>
 					<font size='6'><b>
 							<center>Verifique se a impressora do <font color='gold'>
@@ -158,7 +161,7 @@
 						</b></font>
 				</p><br>
 				<center>
-					<input id="ghost_click" type="submit" name="btimprime" value="Autenticar">
+					<input id="ghost_click" type="submit" name="btimprime" value="Autenticar" autofocus>
 				</center><br>
 				<center>
 					<font color='#FFFFFF' size='3'><span id="msg"></span></font>

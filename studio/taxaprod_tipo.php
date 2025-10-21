@@ -149,6 +149,9 @@
     include "conexao.php";
     include "dbselect.php";
 
+    // Obtendo o código do estúdio e inserindo o número inicial do recibo
+    $NumDocInicial = intval($std . "00000");
+
     $sql = "select * from taxas where codigo = 'TXP' order by datalt desc";
     $rs  = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #1");
     $ln  = mysqli_fetch_array($rs);
@@ -174,7 +177,7 @@
 
     // Consultando o último recibo dentro das rotinas TXP, TXC, PROD e BOOK
     $sql = "SELECT numdoc, datarec FROM registro 
-        WHERE numdoc >= 21700000 
+        WHERE numdoc >= $NumDocInicial
         AND datarec >= '2025-08-29' 
         AND subtipo IN ('TXP', 'TXC', 'PROD', 'BOOK') 
         ORDER BY numdoc DESC";
@@ -334,7 +337,7 @@
                         <?php
                         } else {
                         ?>
-                            <select name="lsPr1" class="campos">
+                            <select name="lsPr1" class="campos" autofocus>
                                 <?php
                                 // Obtendo a Relação
                                 include "dbselect.php";

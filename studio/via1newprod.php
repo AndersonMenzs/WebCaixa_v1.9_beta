@@ -29,6 +29,7 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
+
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1.2";
@@ -43,12 +44,12 @@
 	$TipoRec   = trim($_POST['tiporec']);
 	$VrProd	= trim($_POST['txtvrprod']);
 	$VrProdF = number_format($VrProd, 2, ",", ".");
-	$TaxaProd  = trim($_POST['txtprod']);
-	$TaxaProdF = trim($_POST['txtprodF']);
+	$TaxaProd  = trim($_POST['txtvrprod']);
+	$TaxaProdF = trim($_POST['txtvrprodF']);
 	$FPag      = trim($_POST['formapag']);
-	$FPag_1    = trim($_POST['lsPr1']);
-	$FPag_2    = trim($_POST['lsPr2']);
-	$FPag_3    = trim($_POST['lsPr3']);
+	$FPag_1      = isset($_POST['lsPr1']) ? (trim($_POST['lsPr1']) == '00' ? '' : trim($_POST['lsPr1'])) : '';
+	$FPag_2      = isset($_POST['lsPr2']) ? (trim($_POST['lsPr2']) == '00' ? '' : trim($_POST['lsPr2'])) : '';
+	$FPag_3      = isset($_POST['lsPr3']) ? (trim($_POST['lsPr3']) == '00' ? '' : trim($_POST['lsPr3'])) : '';
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
@@ -66,8 +67,8 @@
 	$Cliente   = trim($_POST['cliente']);
 	$DataNasc  = trim($_POST['data_nasc']);
 	$Idade     = trim($_POST['idade']);
-	$vlr_ext   = valorPorExtenso($TaxaProd);
-	
+	$vlr_ext   = valorPorExtenso($TaxaProdF);
+
 	// Pesquisando PC
 	include "conexao.php";
 	include "dbselect.php";
@@ -91,11 +92,42 @@
 	$SgRec  = $lnRec['siglarec'];
 	$tipo = "TAXA PRODUÇÃO";
 
-	// Obtendo a Forma de Recebimento
-	$sqlFm = "select siglapag from formapag where codpag = '$FPag' ";
-	$rsFm  = mysqli_query($conec, $sqlFm) or die("Erro de Banco de Dados #4. Contate seu Administrador.");
-	$lnFm  = mysqli_fetch_array($rsFm);
-	$FmRec  = $lnFm['siglapag'];
+	// Consulta SQL corrigida com parênteses
+	$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag_1' OR codpag = '$FPag_2' OR codpag = '$FPag_3') AND codpag <> '---'";
+	$rsFm = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
+
+	$FmRec = [];
+
+	while ($lnFm = mysqli_fetch_assoc($rsFm)) {
+		$FmRec[] = $lnFm['siglapag'];
+	}
+
+	// Remove duplicatas, caso existam
+	$FmRec = array_unique($FmRec);
+
+	// Define o modo de pagamento
+	$ModPag = '';
+	$FmRec_a = '';
+
+	// Se houver mais de uma forma diferente
+	if (count($FmRec) > 1) {
+		$FmRec_a = 'DIV';
+	} elseif (in_array("DIN", $FmRec)) {
+		$ModPag = "DINHEIRO";
+		$FmRec_a = "DIN";
+	} elseif (in_array("CTD", $FmRec)) {
+		$ModPag = "CARTÃO DÉBITO";
+		$FmRec_a = "CTD";
+	} elseif (in_array("CTV", $FmRec)) {
+		$ModPag = "CARTÃO CRÉDITO";
+		$FmRec_a = "CTV";
+	} elseif (in_array("PXQ", $FmRec)) {
+		$ModPag = "PIX QR CODE";
+		$FmRec_a = "PXQ";
+	} elseif (in_array("PXC", $FmRec)) {
+		$ModPag = "PIX CNPJ";
+		$FmRec_a = "PXC";
+	}
 
 	// Reduzindo a Matrícula
 	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
@@ -110,27 +142,10 @@
 
 			// Imprimindo Via Cliente
 			$Aut1 = $Reg;
-			$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut" . "R$ " . "$TaxaProdF$SgRec$FmRec$MatRec";
+			$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut" . "R$ " . "$TaxaProdF$SgRec$FmRec_a$MatRec";
 
 			// Remover ponto do valor
 			$TaxaProd = str_replace('.', '', $TaxaProd);
-
-			// Condição para forma de pagamento
-			if ($FmRec == "DIN") {
-				$ModPag = "DINHEIRO";
-			} elseif ($FmRec == "CTD") {
-				$ModPag = "CARTÃO DÉBITO";
-			} elseif ($FmRec == "CTV") {
-				$ModPag = "CARTÃO CRÉDITO";
-			} elseif ($FmRec == "PXQ") {
-				$ModPag = "PIX QR CODE";
-			} elseif ($FmRec == "PXC") {
-				$ModPag = "PIX CNPJ";
-			} elseif ($FmRec == "GRT") {
-				$ModPag = "GRATUIDADE";
-			} else {
-				$ModPag = "DIVERSAS";
-			}
 
 			// Preparando Ficha Cliente 
 			?>
@@ -166,7 +181,10 @@
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
-			var url = './<?php if ($Idade >= 60) { ?>recibo_taxaprod_grt.php?tipo=<?php echo urlencode($tipo); } else { ?>recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); } ?>' +
+			var url = './<?php
+							if ($Idade >= 60) { ?>recibo_taxaprod_grt.php?tipo=<?php echo urlencode($tipo);
+															} else { ?>recibo_taxaprod.php?tipo=<?php echo urlencode($tipo);
+																												} ?>' +
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&TaxaProd=<?php echo urlencode($TaxaProd); ?>' +
@@ -176,6 +194,7 @@
 				'&fpag_1=<?php echo urlencode($FPag_1); ?>' +
 				'&fpag_2=<?php echo urlencode($FPag_2); ?>' +
 				'&fpag_3=<?php echo urlencode($FPag_3); ?>' +
+				'&fmrec=<?php echo urlencode($FmRec_a); ?>' +
 				'&txt1=<?php echo urlencode($txt1); ?>' +
 				'&txt2=<?php echo urlencode($txt2); ?>' +
 				'&txt3=<?php echo urlencode($txt3); ?>' +
