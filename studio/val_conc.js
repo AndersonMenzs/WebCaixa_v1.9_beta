@@ -1,5 +1,6 @@
 function checkdata() {
 	with (document.taxaConc) {
+
 		if (lsPr1.value == "00" && lsPr2.value == "00" && lsPr3.value == "00") {
 			alert("Nenhuma Forma de Pagamento Selecionada!!!");
 			txt1.select();
@@ -22,21 +23,21 @@ function checkdata() {
 		}
 
 		if ((lsPr1.value == "00" && (txt1.value != "" || txt1.value.length > 3)) || (lsPr1.value != "00" && (txt1.value == "" || txt1.value.length < 3))) {
-			alert("Forma de Pagamento Inválida1!!!");
+			alert("Forma de Pagamento Inválida!!!");
 			txt1.select();
 			txt1.focus();
 			return false;
 		}
 
 		if ((lsPr2.value == "00" && (txt2.value != "" || txt2.value.length > 3)) || (lsPr2.value != "00" && (txt2.value == "" || txt2.value.length < 3))) {
-			alert("Forma de Pagamento Inválida2!!!");
+			alert("Forma de Pagamento Inválida!!!");
 			txt2.select();
 			txt2.focus();
 			return false;
 		}
 
 		if ((lsPr3.value == "00" && (txt3.value != "" || txt3.value.length > 3)) || (lsPr3.value != "00" && (txt3.value == "" || txt3.value.length < 3))) {
-			alert("Forma de Pagamento Inválida3!!!");
+			alert("Forma de Pagamento Inválida!!!");
 			txt3.select();
 			txt3.focus();
 			return false;

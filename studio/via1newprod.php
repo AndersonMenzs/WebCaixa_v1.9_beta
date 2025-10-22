@@ -162,7 +162,7 @@
 				</b></font>
 	</p><br>
 	<center>
-		<input id="ghost_click" type="submit" name="btimprime" value="Autenticar">
+		<input id="ghost_click" type="submit" name="btimprime" value="Autenticar" autofocus>
 	</center><br>
 	<center>
 		<font color='#FFFFFF' size='3'><span id="msg"></span></font>

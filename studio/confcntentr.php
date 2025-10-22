@@ -74,9 +74,6 @@
 	$VrEntr_3   = trim($_POST['txtvalor3']);
 	$EntrForm = $VrEntr_1 + $VrEntr_2 + $VrEntr_3;
 	$EntrForm = number_format($EntrForm, 2, ',', '.');
-	$EntrForm_1  = number_format($VrEntr_1, 2, ',', '.');
-	$EntrForm_2  = number_format($VrEntr_2, 2, ',', '.');
-	$EntrForm_3  = number_format($VrEntr_3, 2, ',', '.');
 	$FPag_1      = trim($_POST['lsPr1']);
 	$FPag_2      = trim($_POST['lsPr2']);
 	$FPag_3      = trim($_POST['lsPr3']);

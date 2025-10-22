@@ -28,10 +28,6 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	 echo "<pre>";
-	 var_dump($dados);
-	 echo "</pre>";
 	
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -43,21 +39,22 @@
 	$pss     = substr($lg_user, 8, 40);
 	$NDoc      = trim($_POST['txtdoc']);
 	$NDoc_a	= trim($_POST['txtdoc']);
-	$FPag1     = trim($_POST['lsPr1']);
-	$FPag2     = trim($_POST['lsPr2']);
-	$FPag3     = trim($_POST['lsPr3']);
-	$FPag4     = trim($_POST['lsPr4']);
+	$FPag_1     = trim($_POST['lsPr1']);
+	$FPag_2     = trim($_POST['lsPr2']);
+	$FPag_3     = trim($_POST['lsPr3']);
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
-	$txt4 = isset($_POST['txt4']) ? (float) trim($_POST['txt4']) : 0;
 	$Pass      = strtolower(trim($_POST['txtsen']));
 	$Senha     = sha1($Pass);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente   = trim($_POST['cliente']);
 
+	// Truncar o nome da vendedora com o primeiro nome completo e após o primeiro espaco, deixar somente uma letra e ponto.
+	$Vendedora = strtoupper($Vendedora);
+	$Vendedora = substr($Vendedora, 0, strpos($Vendedora, ' ') + 1) . substr($Vendedora, strpos($Vendedora, ' ') + 1, 1) . '.';
+
 	// Criando Variáveis
-	$fps = 0;
 	$TaxaConc  = $txt1 + $txt2 + $txt3 + $txt4;
 	$TaxaConcF = number_format($TaxaConc, 2, ",", ".");
 	$TipoRec   = '2';
@@ -96,48 +93,32 @@
 			if ($regsr == 0 or $dtComp <> $dtReceb) {
 				$Reg = 0;
 			}
-			$Reg  = $Reg + 1;
 
-			if ($FPag1 <> "00") {
-				$fps = $fps + 1;
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
+				$Reg = $Reg + 1;
+
+			if ($FPag_1 <> "00") {
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
 			}
 
-			if ($FPag2 <> "00") {
-				$fps = $fps + 1;
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '')";
+			if ($FPag_2 <> "00") {
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
 			}
 
-			if ($FPag3 <> "00") {
-				$fps = $fps + 1;
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
+			if ($FPag_3 <> "00") {
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
 			}
-
-			// Preparando a Via Cliente
-			/*if ($fps ==  1) {
-				if ($FPag1 <> "00") {
-					$FPag = $FPag1;
-				} else if ($FPag2 <> "00") {
-					$FPag = $FPag2;
-				} else if ($FPag3 <> "00") {
-					$FPag = $FPag3;
-				}
-			} else {
-				$FPag = "05";
-			}*/
-
-			// Preparando a Via Cliente 
+			
 	?>
 			<form name="geraconc" method="post" action="via1newconc.php">
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
 				<input type="hidden" name="tiporec" value="<?php echo $TipoRec; ?>">
-				<input type="hidden" name="txtvalor1" value="<?php echo $txt1; ?>">
-				<input type="hidden" name="txtvalor2" value="<?php echo $txt2; ?>">
-				<input type="hidden" name="txtvalor3" value="<?php echo $txt3; ?>">
+				<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
+				<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
+				<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
 				<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
 				<input type="hidden" name="formapag" value="<?php echo $FPag; ?>">
 				<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
@@ -146,7 +127,8 @@
 				<input type="hidden" name="modpag" value="<?php echo $ModPag; ?>">
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">
 				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
-				<input type="hidden" name="taxaconc" value="<?php echo $TaxaConcF; ?>">
+				<input type="hidden" name="taxaconc" value="<?php echo $TaxaConc; ?>">
+				<input type="hidden" name="taxaconcf" value="<?php echo $TaxaConcF; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
 				<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
@@ -184,9 +166,6 @@
 	}
 
 	// Encerrando a Conexão
-	/* mysqli_free_result($rso);
-			mysqli_free_result($rsGr);
-			mysqli_free_result($rsx); */
 	$SisRot = "S-7.5.1.1.1";
 	include "rodape.php"; ?>
 

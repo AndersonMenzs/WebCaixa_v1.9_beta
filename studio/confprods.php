@@ -58,6 +58,7 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
+
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.8.1";
@@ -65,26 +66,84 @@
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
 	$NumDoc    = trim($_POST['txtdoc']);
-	$NumDocF = 1000000 + $NumDoc;
-	$NDoc      = substr($NumDocF, 1, 6);
-	$Valor     = trim($_POST['txtvalor']);
+	$NumDocF = 100000000 + $NumDoc;
+	$NDoc      = substr($NumDocF, 1, 8);
+	$FPag_1      = trim($_POST['lsPr1']);
+	$FPag_2      = trim($_POST['lsPr2']);
+	$FPag_3      = trim($_POST['lsPr3']);
+	$Vendedora = trim($_POST['vendedora']);
+	$Cliente	= trim($_POST['cliente']);
+	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
+	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
+	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
+	$Valor     = $txt1 + $txt2 + $txt3;
 	$ValorF    = number_format($Valor, 2, ",", ".");
-	$FPag      = trim($_POST['lsPr']);
 	$Book      = trim($_POST['rdbook']);
 
 	include "conexao.php";
 	include "dbselect.php";
 
-	// Obtendo Dados
-	$sql = "select * from formapag where codpag = '$FPag' ";
-	$rs  = mysqli_query($conec, $sql);
-	$ln  = mysqli_fetch_array($rs);
-	$ModPag = $ln['modpag'];
-	mysqli_free_result($rs); ?>
+	// Contando as formas de pagamentos
+	$Fspags = 0;
+
+	if ($txt1 <> "") {
+		$Fspags = $Fspags + 1;
+	}
+	if ($txt2 <> "") {
+		$Fspags = $Fspags + 1;
+	}
+
+	if ($txt3 <> "") {
+		$Fspags = $Fspags + 1;
+	}
+
+	if ($Fspags == 1) {
+		if ($txt1 <> "") {
+			$FPag = $FPag_1;
+			$sql = "select * from formapag where codpag = '$FPag' ";
+			$rs  = mysqli_query($conec, $sql);
+			$ln  = mysqli_fetch_array($rs);
+			$ModPag = $ln['modpag'];
+			$FmRec  = $ln['siglapag'];
+			mysqli_free_result($rs);
+		} elseif ($txt2 <> "") {
+			$FPag = $FPag_2;
+			$sql = "select * from formapag where codpag = '$FPag' ";
+			$rs  = mysqli_query($conec, $sql);
+			$ln  = mysqli_fetch_array($rs);
+			$ModPag = $ln['modpag'];
+			$FmRec  = $ln['siglapag'];
+			mysqli_free_result($rs);
+		} elseif ($txt3 <> "") {
+			$FPag = $FPag_3;
+			$sql = "select * from formapag where codpag = '$FPag' ";
+			$rs  = mysqli_query($conec, $sql);
+			$ln  = mysqli_fetch_array($rs);
+			$ModPag = $ln['modpag'];
+			$FmRec  = $ln['siglapag'];
+			mysqli_free_result($rs);
+		}
+	} else {
+		$ModPag = "Diversas";
+	}
+
+	// Condição para nome em extensão para forma de pagamento
+	if ($FmRec == "DIN") {
+		$ModPag = "Dinheiro";
+	} elseif ($FmRec == "CTD") {
+		$ModPag = "Cartão Débito";
+	} elseif ($FmRec == "CTV") {
+		$ModPag = "Cartão Crédito";
+	} elseif ($FmRec == "PXQ") {
+		$ModPag = "Pix QR Code";
+	} elseif ($FmRec == "PXC") {
+		$ModPag = "Pix Cnpj";
+	}
+	?>
 
 	<font color="gold" size="6">
 		<br><b>
-			<center><u><i>VENDAS A VISTA</i></u></center>
+			<center><u><i>VENDAS À VISTA</i></u></center>
 		</b>
 	</font><br>
 	<?php
@@ -120,12 +179,13 @@
 						<font color='gold' size='5'><b><i>Forma de Pagamento</i></b></font>
 					</td>
 					<td width="70%" align="center">
-						<font size='6'><b><i>Pagamento em <font color='gold'>
-										<blink>Dinheiro</blink>&nbsp;
-										<font size="5">
-											<font color="#FFFFFF">(<font color="lime">S&nbsp;/&nbsp;<font color="red">N<font color="gold">
-															<font color="#FFFFFF">)<font size="6">?</i></b></font>&nbsp;&nbsp;
-						<input type="text" name="txtconfirm" size="2" maxlength="1" class="campos" onKeyPress="fPassaAlfaNumerico('an')" onKeyUp="this.value=this.value.toUpperCase(); validpag(this); autotab(this, txtsen)">
+						<font size='6' color='#FFFFFF'>
+							<b>
+								<i>
+									<?php echo $ModPag; ?>
+								</i>
+							</b>
+						</font>
 					</td>
 				</tr>
 
@@ -151,9 +211,17 @@
 		</table>
 
 		<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+		<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
+		<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
+		<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
 		<input type="hidden" name="txtvalor" value="<?php echo $Valor; ?>">
 		<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
-		<input type="hidden" name="txtmodpag" value="<?php echo $FPag; ?>">
+		<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
+		<input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
+		<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
+		<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">
+		<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 		<input type="hidden" name="rdbook" value="<?php echo $Book; ?>">
 		<p>
 			<center>

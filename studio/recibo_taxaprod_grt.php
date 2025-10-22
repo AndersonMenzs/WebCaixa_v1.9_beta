@@ -740,7 +740,7 @@ $idade     = $_GET['Idade'];
                 </td>
             </tr>
             <!-- Quarta via -->
-            <tr>
+            <!--<tr>
                 <td rowspan="3" align="left" valign=bottom></td>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 rowspan=2 align="center" valign=middle>
                     <b>
@@ -893,7 +893,7 @@ $idade     = $_GET['Idade'];
                 <td colspan=14 height="26" align="center" valign=middle>
                     <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>
                 </td>
-            </tr>
+            </tr>-->
         </table>
     </div>
 </body>

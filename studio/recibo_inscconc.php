@@ -16,10 +16,9 @@ $FmRec     = $_GET['fmrec'];
 $txt1      = $_GET['txt1'];
 $txt2      = $_GET['txt2'];
 $txt3      = $_GET['txt3'];
-$VrProd    = $_GET['VrProd'];
-$VrProdF   = number_format($VrProd, 2, ",", ".");
-$VrProdA = number_format($VrProd, 2, "", ".");
-$TaxaProdF = $_GET['TaxaProd'];
+$TaxaConc  = $_GET['TaxaConc'];
+$TaxaConcF = $_GET['TaxaConcF'];
+$VrConcA = number_format($TaxaConc, 2, "", ".");
 
 $FPags = [$FPag_1, $FPag_2, $FPag_3];
 $Vlrs = [$txt1, $txt2, $txt3];
@@ -77,7 +76,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_via2 {
             position: absolute;
-            top: 265px;
+            top: 310px;
             /* ajuste para a posição desejada */
             left: 5px;
             /* ajuste para a posição desejada */
@@ -89,7 +88,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_via3 {
             position: absolute;
-            top: 529px;
+            top: 575px;
             /* ajuste para a posição desejada */
             left: 5px;
             /* ajuste para a posição desejada */
@@ -101,7 +100,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_via4 {
             position: absolute;
-            top: 793px;
+            top: 840px;
             /* ajuste para a posição desejada */
             left: 5px;
             /* ajuste para a posição desejada */
@@ -125,7 +124,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_2 {
             position: absolute;
-            top: 76px;
+            top: 130px;
             left: 10px;
             width: 285px;
             /* Largura original */
@@ -137,7 +136,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_3 {
             position: absolute;
-            top: 114px;
+            top: 173px;
             left: 10px;
             width: 285px;
             /* Largura original */
@@ -149,7 +148,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_4 {
             position: absolute;
-            top: 416px;
+            top: 470px;
             left: 10px;
             width: 285px;
             /* Largura original */
@@ -235,6 +234,7 @@ $idade     = $_GET['Idade'];
         }
     </style>
 </head>
+
 <body onload="window.print()">
     <div class="container">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
@@ -308,7 +308,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
+                    <font size=1><?php echo "R$ " . $TaxaConcF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -379,8 +379,6 @@ $idade     = $_GET['Idade'];
                         $ModPag = "PIX QR CODE";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
-                    } elseif ($FPag == 99) {
-                        $ModPag = "GRATUIDADE";
                     }
 
                 ?>
@@ -541,14 +539,24 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrProdA . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrConcA . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td colspan=13 height="15" align="center" valign=middle>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 rowspan=2 height="30" align="center" valign=middle>
+                    <b>
+                        <font size=5>(VIA TESOURARIA)</font>
+                    </b>
+                </td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td colspan=14 height="26" align="center" valign=middle>
                     <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>
                 </td>
             </tr>
@@ -608,7 +616,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
+                    <font size=1><?php echo "R$ " . $TaxaConcF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -839,7 +847,7 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrProdA . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrConcA . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
@@ -906,7 +914,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
+                    <font size=1><?php echo "R$ " . $TaxaConcF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -1137,7 +1145,7 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrProdA . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrConcA . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
@@ -1204,7 +1212,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
+                    <font size=1><?php echo "R$ " . $TaxaConcF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -1435,7 +1443,7 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrProdA . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrConcA . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
