@@ -76,9 +76,9 @@ document.onkeydown = F5;
     // Imprimindo o Recibo
        $Aut1 = $Reg;
        $Aut2 = "$Reg$PC$NDoc$dtAut$VrEntrF$SlgPag$MatRec$Opt";
-
-       shell_exec("echo $Aut2 > /dev/lp0");
-
+	   echo $Aut2;
+	   exit;
+	   
     // Gravando a Spool
        include "dbselect.php";
        $sql = "insert into spool2 values ('$Aut1', '$Aut2')";

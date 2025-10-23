@@ -37,6 +37,11 @@ document.onkeydown = F5;
 
   <body background="../images/bg1.jpg" text="#FFFFFF">
     <?php
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	var_dump($dados);
+	echo "</pre>";
+
       // Importando os Dados do Formulário
 	 $Sis       = "S7";
 	 $Rot       = "S7R1.1.1";
@@ -53,6 +58,12 @@ document.onkeydown = F5;
 	 $Opt       = $_POST['rdopt'];
 	 $Pass      = strtolower(trim($_POST['txtsen']));
 	 $Senha     = sha1($Pass);
+
+	 echo $SlgPag;
+	 echo "<br>";
+	 exit;
+
+	  // Pesquisando PC
 
 	 include "conexao.php";
 	 include "dbselect.php";
@@ -102,9 +113,6 @@ document.onkeydown = F5;
     }
 
     // Encerrando a Conexão
-       /* mysqli_free_result($rso);
-       mysqli_free_result($rsGr);
-       mysqli_free_result($rsx); */
        $SisRot = "S-7.1.1.1";
        include "./rodape.php"; ?>
 

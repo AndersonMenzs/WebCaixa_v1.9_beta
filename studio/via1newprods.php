@@ -28,12 +28,8 @@
 </head>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
-	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	var_dump($dados);
-	echo "</pre>";
 
+	<?php
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.8.1.2";
@@ -65,7 +61,7 @@
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente   = trim($_POST['cliente']);
 	$VrPag     = trim($_POST['txtvalor']);
-	$VrPagF    = number_format($VrPag, 2, ',', '');
+	$VrPagF    = number_format($VrPag, 2, '', '');
 	$vlr_ext   = valorPorExtenso($VrPag);
 
 	// Pesquisando PC
@@ -82,7 +78,11 @@
 	$rsRec = mysqli_query($conec, $sqlRec) or die("Não foi possível acessar o Tipo de Recebimento");
 	$lnRec = mysqli_fetch_array($rsRec);
 	$SgRec  = $lnRec['siglarec'];
-	$tipo = "INSCRIÇÃO CONCURSO";
+	if ($TipoRec == '6') {
+	    $tipo = "PRODUTOS";
+	} else {
+	    $tipo = "BOOK";
+	} 	
 
 	// Consulta SQL corrigida com parênteses
 	$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag_1' OR codpag = '$FPag_2' OR codpag = '$FPag_3') AND codpag <> '---'";
@@ -122,17 +122,21 @@
 	}
 
 	// Reduzindo a Matrícula
-	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1); ?>
+	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
+	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
+
+	?>
 
 	<font color="gold" size="6">
 		<br><b>
 			<center><u><i>Sistema de Autenticação</i></u></center>
 		</b>
-	</font><?php
+	</font>
+	<?php
 
 			// Imprimindo Via Cliente
 			$Aut1 = $Reg;
-			$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$VrPagrF$SgRec$FmRec_a$MatRec";
+			$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$VrPagF$SgRec$FmRec_a$MatRec";
 
 			// Preparando Ficha Cliente 
 			?>
@@ -188,7 +192,7 @@
 				'&horaaut=<?php echo urlencode($horaaut); ?>' +
 				'&dtAut=<?php echo urlencode($dtAut); ?>' +
 				'&SgRec=<?php echo urlencode($SgRec); ?>' +
-				'&Mat=<?php echo urlencode($Mat); ?>' +
+				'&Mat=<?php echo urlencode($Mat); ?>'; 
 			window.open(url, '_blank');
 			setTimeout(function() {
 				window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';

@@ -42,7 +42,7 @@ $Mat       = $_GET['Mat'];
 <head>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title></title>
+    <title>Recibo - <?php echo $Cliente . " - " . $tipo; ?></title>
     <meta name="generator" content="LibreOffice 7.4.7.2 (Linux)" />
     <meta name="created" content="2025-06-16T12:56:54" />
     <meta name="changed" content="2025-08-20T17:55:04.895764472" />

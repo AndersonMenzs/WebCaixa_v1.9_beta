@@ -16,10 +16,9 @@ $FmRec     = $_GET['fmrec'];
 $txt1      = $_GET['txt1'];
 $txt2      = $_GET['txt2'];
 $txt3      = $_GET['txt3'];
-$VrProd    = $_GET['VrProd'];
-$VrProdF   = number_format($VrProd, 2, ",", ".");
-$VrProdA = number_format($VrProd, 2, "", ".");
-$TaxaProdF = $_GET['TaxaProd'];
+$VrPag    = $_GET['TaxaConc'];
+$VrPagF   = number_format($VrPag, 2, ",", ".");
+$VrPagA = number_format($VrPag, 2, "", "");
 
 $FPags = [$FPag_1, $FPag_2, $FPag_3];
 $Vlrs = [$txt1, $txt2, $txt3];
@@ -34,8 +33,6 @@ $horaaut   = $_GET['horaaut'];
 $dtAut     = $_GET['dtAut'];
 $SgRec     = $_GET['SgRec'];
 $Mat       = $_GET['Mat'];
-$Nasc      = $_GET['DataNasc'];
-$idade     = $_GET['Idade'];
 
 ?>
 
@@ -46,7 +43,7 @@ $idade     = $_GET['Idade'];
 <head>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>Recibo - Tx. Produção</title>
+    <title>Recibo - <?php echo $Cliente . " - " . $tipo; ?></title>
     <meta name="generator" content="LibreOffice 7.4.7.2 (Linux)" />
     <meta name="created" content="2025-06-16T12:56:54" />
     <meta name="changed" content="2025-08-20T17:55:04.895764472" />
@@ -137,7 +134,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_3 {
             position: absolute;
-            top: 114px;
+            top: 118px;
             left: 10px;
             width: 285px;
             /* Largura original */
@@ -149,7 +146,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_4 {
             position: absolute;
-            top: 416px;
+            top: 422px;
             left: 10px;
             width: 285px;
             /* Largura original */
@@ -235,12 +232,13 @@ $idade     = $_GET['Idade'];
         }
     </style>
 </head>
-<body onload="window.print()">
+<body>
+<!--<body onload="window.print()">-->
     <div class="container">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via3">
-        <img src="./images/logo.png" alt="Imagem" class="imagem_via4">
+        <!--<img src="./images/logo.png" alt="Imagem" class="imagem_via4">-->
         <table align="left" cellspacing="0" border="0">
             <colgroup width="100"></colgroup>
             <colgroup span="2" width="100"></colgroup>
@@ -258,7 +256,7 @@ $idade     = $_GET['Idade'];
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=3 rowspan=2 align="center" valign=middle>
                     <b>
-                        <font size=5><?php echo $tipo; ?></font>
+                        <font size=4><?php echo $tipo; ?></font>
                     </b>
                 </td>
                 <td align="left" valign=bottom><br></td>
@@ -308,7 +306,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
+                    <font size=1><?php echo "R$ " . $VrPagF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -541,7 +539,7 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrProdA . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrPagA . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
@@ -558,7 +556,7 @@ $idade     = $_GET['Idade'];
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=3 rowspan=2 align="center" valign=middle>
                     <b>
-                        <font size=5><?php echo $tipo; ?></font>
+                        <font size=4><?php echo $tipo; ?></font>
                     </b>
                 </td>
                 <td align="left" valign=bottom><br></td>
@@ -608,7 +606,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
+                    <font size=1><?php echo "R$ " . $VrPagF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -839,7 +837,7 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrProdA . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrPagA . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
@@ -856,7 +854,7 @@ $idade     = $_GET['Idade'];
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=3 rowspan=2 align="center" valign=middle>
                     <b>
-                        <font size=5><?php echo $tipo; ?></font>
+                        <font size=4><?php echo $tipo; ?></font>
                     </b>
                 </td>
                 <td align="left" valign=bottom><br></td>
@@ -906,7 +904,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
+                    <font size=1><?php echo "R$ " . $VrPagF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -1137,7 +1135,7 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrProdA . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrPagA . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
@@ -1154,7 +1152,7 @@ $idade     = $_GET['Idade'];
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=3 rowspan=2 align="center" valign=middle>
                     <b>
-                        <font size=5><?php echo $tipo; ?></font>
+                        <font size=4><?php echo $tipo; ?></font>
                     </b>
                 </td>
                 <td align="left" valign=bottom><br></td>
@@ -1204,7 +1202,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
+                    <font size=1><?php echo "R$ " . $VrPagF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -1435,7 +1433,7 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrProdA . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrPagA . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
