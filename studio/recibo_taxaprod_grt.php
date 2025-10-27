@@ -77,7 +77,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_via2 {
             position: absolute;
-            top: 295px;
+            top: 300px;
             /* ajuste para a posição desejada */
             left: 5px;
             /* ajuste para a posição desejada */
@@ -89,7 +89,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_via3 {
             position: absolute;
-            top: 560px;
+            top: 562px;
             /* ajuste para a posição desejada */
             left: 5px;
             /* ajuste para a posição desejada */
@@ -101,7 +101,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_via4 {
             position: absolute;
-            top: 821px;
+            top: 826px;
             /* ajuste para a posição desejada */
             left: 5px;
             /* ajuste para a posição desejada */
@@ -125,7 +125,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_2 {
             position: absolute;
-            top: 90px;
+            top: 99px;
             left: 30px;
             width: 285px;
             /* Largura original */
@@ -137,7 +137,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_3 {
             position: absolute;
-            top: 118px;
+            top: 128px;
             left: 30px;
             width: 285px;
             /* Largura original */
@@ -149,7 +149,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_4 {
             position: absolute;
-            top: 405px;
+            top: 415px;
             left: 30px;
             width: 285px;
             /* Largura original */
@@ -235,7 +235,6 @@ $idade     = $_GET['Idade'];
         }
     </style>
 </head>
-
 <body onload="window.print()">
     <div class="container">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
@@ -740,7 +739,7 @@ $idade     = $_GET['Idade'];
                 </td>
             </tr>
             <!-- Quarta via -->
-            <!--<tr>
+            <tr>
                 <td rowspan="3" align="left" valign=bottom></td>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 rowspan=2 align="center" valign=middle>
                     <b>
@@ -893,7 +892,7 @@ $idade     = $_GET['Idade'];
                 <td colspan=14 height="26" align="center" valign=middle>
                     <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>
                 </td>
-            </tr>-->
+            </tr>
         </table>
     </div>
 </body>

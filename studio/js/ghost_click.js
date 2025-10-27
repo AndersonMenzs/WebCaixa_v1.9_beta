@@ -7,7 +7,7 @@ document.getElementById("ghost_click").addEventListener("click", function(event)
     const form = botao.form;
 
     // Define o tempo de espera em segundos
-    let countdown = 2; 
+    let countdown = 0; 
 
     // Exibe a contagem regressiva
     const msgElement = document.getElementById("msg");

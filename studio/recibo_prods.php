@@ -238,7 +238,7 @@ $Mat       = $_GET['Mat'];
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via3">
-        <!--<img src="./images/logo.png" alt="Imagem" class="imagem_via4">-->
+        <img src="./images/logo.png" alt="Imagem" class="imagem_via4">
         <table align="left" cellspacing="0" border="0">
             <colgroup width="100"></colgroup>
             <colgroup span="2" width="100"></colgroup>
@@ -1147,7 +1147,7 @@ $Mat       = $_GET['Mat'];
                 </td>
             </tr>
             <!-- Quarta via -->
-            <!--<tr>
+            <tr>
                 <td height="17" align="left" valign=bottom><br></td>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=3 rowspan=2 align="center" valign=middle>
@@ -1443,7 +1443,7 @@ $Mat       = $_GET['Mat'];
                 <td colspan=13 height="15" align="center" valign=middle>
                     <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>
                 </td>
-            </tr>-->
+            </tr>
         </table>
     </div>
 </body>

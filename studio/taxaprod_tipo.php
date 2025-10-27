@@ -133,6 +133,7 @@
     $DataHj = date('Y-m-d');
 
     // Recebendo valores
+	$Mat_Vend = trim($_POST['mat_vend']);
     $Vendedora = trim($_POST['vendedora']);
     $Cliente    = trim($_POST['cliente']);
     $DataNasc    = trim($_POST['data_nasc']);
@@ -179,7 +180,7 @@
     $sql = "SELECT numdoc, datarec FROM registro 
         WHERE numdoc >= $NumDocInicial
         AND datarec >= '2025-08-29' 
-        AND subtipo IN ('TXP', 'TXC', 'PROD', 'BOOK') 
+        AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK') 
         ORDER BY numdoc DESC";
     $rs  = mysqli_query($conec, $sql) or die('Erro #3!');
     $ln  = mysqli_fetch_array($rs);
@@ -259,6 +260,7 @@
                     <td align="center">
                         <font color='gold' size='4'><b><i><?php echo $Vendedora; ?></i></b></font>
                         <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+                        <input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
                     </td>
                     <td align="center">
                         <font color='lime' size='4'><b><i><?php echo $Cliente; ?></i></b></font>
@@ -290,15 +292,15 @@
                                 </b>
                             </font>
                         </td>
-                        <?php
+                    <?php
                     }
-                        ?>
-                        <td align="center">
-                            <font size='5'><b><i>Forma de Pagamento</i></b></font>
-                        </td>
-                        <td align="center">
-                            <font size='5'><b><i>Valor</i></b></font>
-                        </td>
+                    ?>
+                    <td align="center">
+                        <font size='5'><b><i>Forma de Pagamento</i></b></font>
+                    </td>
+                    <td align="center">
+                        <font size='5'><b><i>Valor</i></b></font>
+                    </td>
                 </tr>
 
                 <tr>
@@ -310,21 +312,21 @@
                     // Verificando se é menor de 60 anos
                     if ($idade < 60) {
                     ?>
-                    <td rowspan="4" align="center">
-                        <font color='lime' size='5'><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <font size='5'><b><i>Sim </i></b></font><input type='radio' name='rdtaxa' value='S'>
-                    </td>
+                        <td rowspan="4" align="center">
+                            <font color='lime' size='5'><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <font size='5'><b><i>Sim </i></b></font><input type='radio' name='rdtaxa' value='S'>
+                        </td>
                     <?php
                     } else {
                         echo "<input type='hidden' name='rdtaxa' value='N'>";
                     }
                     ?>
 
-                        <input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">
-                        <input type="hidden" name="txtvrprodf" value="<?php echo $VrProdF; ?>">
-                        <!--<input type="hidden" name="txtAP" value="<?php echo $VrAnt; ?>">
+                    <input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">
+                    <input type="hidden" name="txtvrprodf" value="<?php echo $VrProdF; ?>">
+                    <!--<input type="hidden" name="txtAP" value="<?php echo $VrAnt; ?>">
                         <input type="hidden" name="txtAPf" value="<?php echo $VrAntF; ?>">-->
-                        <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+                    <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 
                     <td align="center">
                         <?php

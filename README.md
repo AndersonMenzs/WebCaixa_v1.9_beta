@@ -103,7 +103,7 @@ CHANGE COLUMN `numdoc` `numdoc` CHAR(8) NULL;
 
 ```sql
 INSERT INTO registro (reg, numdoc, tiporec, subtipo, modpgto, parcela, datarec, horarec, vlrec, operador, estorno) 
-            VALUES (1, '22000000', '1', 'TXP', '20', 0, '2025-08-29', '00:00', 0.00, '00000359', '');
+            VALUES (1, '20600000', '1', 'TXP', '20', 0, '2025-08-29', '00:00', 0.00, '00000359', '');
 ```
 
 Abaixo está a tabela dos números de recibos iniciais.
@@ -165,3 +165,16 @@ CHANGE COLUMN `vlrec` `vlrec` DECIMAL(10,2) NULL DEFAULT NULL;
 ```sql
 INSERT INTO formapag (codpag, modpag, siglapag) VALUES (99, 'Gratuidade', 'GRT');  
 ```
+
+2025-10-27
+
+### Adicionar colunas na tabela registro
+
+```sql
+ALTER TABLE registro ADD COLUMN mat_vend VARCHAR(8);
+ALTER TABLE registro ADD COLUMN vendedora VARCHAR(100);
+ALTER TABLE registro ADD COLUMN cliente VARCHAR(100);
+ALTER TABLE registro ADD COLUMN data_nasc VARCHAR(10);
+``` 
+
+Estas adcções irão servir futuramente para impressão da solicitação de books

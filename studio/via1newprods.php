@@ -60,9 +60,11 @@
 	$Mat       = trim($_POST['txtmat']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente   = trim($_POST['cliente']);
-	$VrPag     = trim($_POST['txtvalor']);
-	$VrPagF    = number_format($VrPag, 2, '', '');
-	$vlr_ext   = valorPorExtenso($VrPag);
+	//$VrPag     = trim($_POST['txtvalor']);
+	$VrPag     = $txt1 + $txt2 + $txt3;
+	//$VrPagF    = number_format($VrPag, 2, '', '');
+	$VrPagF    = number_format($VrPag, 2, ',', '.');
+	$vlr_ext   = valorPorExtenso($VrPagF);
 
 	// Pesquisando PC
 	include "conexao.php";

@@ -55,6 +55,7 @@
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : '';
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : '';
+	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
 	$DataNasc	= trim($_POST['data_nasc']);
@@ -199,6 +200,7 @@
 		<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
 		<input type="hidden" name="data_nasc" value="<?php echo $DataNasc; ?>">
 		<input type="hidden" name="idade" value="<?php echo $Idade; ?>">
+		<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 		<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 		<p>

@@ -112,7 +112,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_1 {
             position: absolute;
-            top: 38px;
+            top: 40px;
             left: 10px;
             width: 285px;
             /* Largura original */
@@ -124,7 +124,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_2 {
             position: absolute;
-            top: 130px;
+            top: 125px;
             left: 10px;
             width: 285px;
             /* Largura original */
@@ -136,7 +136,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_3 {
             position: absolute;
-            top: 173px;
+            top: 165px;
             left: 10px;
             width: 285px;
             /* Largura original */
@@ -148,7 +148,7 @@ $idade     = $_GET['Idade'];
 
         .imagem_end_4 {
             position: absolute;
-            top: 470px;
+            top: 465px;
             left: 10px;
             width: 285px;
             /* Largura original */
@@ -1157,7 +1157,7 @@ $idade     = $_GET['Idade'];
                 </td>
             </tr>
             <!-- Quarta via -->
-            <!--<tr>
+            <tr>
                 <td height="17" align="left" valign=bottom><br></td>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=3 rowspan=2 align="center" valign=middle>
@@ -1453,7 +1453,7 @@ $idade     = $_GET['Idade'];
                 <td colspan=13 height="15" align="center" valign=middle>
                     <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>
                 </td>
-            </tr>-->
+            </tr>
         </table>
     </div>
 </body>

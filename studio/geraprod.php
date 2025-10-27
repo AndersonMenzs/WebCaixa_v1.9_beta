@@ -62,6 +62,7 @@
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
 	$VrTx	 = $txt1 + $txt2 + $txt3;
 	$VrTxa	= number_format($VrTx, 2, ',', '.');
+	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
 	$DataNasc	= trim($_POST['data_nasc']);
@@ -125,19 +126,19 @@
 
 			if ($FPag_1 <> "00" or $FPag_1 == "99") {
 				//$fps = $fps + 1;
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
 			}
 
 			if ($FPag_2 <> "00" and $FPag_1 <> "99") {
 				//$fps = $fps + 1;
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
 			}
 
 			if ($FPag_3 <> "00" and $FPag_1 <> "99") {
 				//$fps = $fps + 1;
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
 			}
 
@@ -161,6 +162,7 @@
 				<input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">
 				<input type="hidden" name="txtvrprodF" value="<?php echo $VrProdF; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
+				<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 				<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 				<input type="hidden" name="idade" value="<?php echo $Idade; ?>">

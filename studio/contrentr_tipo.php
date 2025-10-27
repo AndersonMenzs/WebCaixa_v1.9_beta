@@ -134,6 +134,7 @@
    $lg_user = $_REQUEST['c_s'];
    $user = substr($lg_user, 0, 8);
    $pss  = substr($lg_user, 8, 40);
+	$Mat_Vend = trim($_POST['mat_vend']);
    $Vendedora = $_REQUEST['vendedora'];
    $Cliente   = $_REQUEST['cliente'];
 
@@ -174,6 +175,7 @@
                <td align="center">
                   <font color='gold' size='4'><b><i><?php echo $Vendedora; ?></i></b></font>
                   <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+                  <input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
                </td>
                <td align="center">
                   <font color='lime' size='4'><b><i><?php echo $Cliente; ?></i></b></font>

@@ -62,7 +62,9 @@
 	$Mat       = trim($_POST['txtmat']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente   = trim($_POST['cliente']);
-	$vlr_ext   = valorPorExtenso($TaxaConcF);
+	$vlr_ext   = valorPorExtenso($TaxaConc);
+
+
 
 	// Pesquisando PC
 	include "conexao.php";
@@ -116,9 +118,12 @@
 		$ModPag = "PIX CNPJ";
 		$FmRec_a = "PXC";
 	}
-
+	
 	// Reduzindo a Matrícula
-	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1); ?>
+	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
+	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
+	
+	?>
 
 	<font color="gold" size="6">
 		<br><b>

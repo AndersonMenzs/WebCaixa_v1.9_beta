@@ -39,7 +39,7 @@ if (strlen($term) < 2) {
 
 try {
     // 8. Preparar consulta SQL segura
-    $sql = "SELECT nome FROM pessoal WHERE nome LIKE CONCAT('%', ?, '%') ORDER BY nome LIMIT 10";
+    $sql = "SELECT mat, nome FROM pessoal WHERE nome LIKE CONCAT('%', ?, '%') ORDER BY nome LIMIT 10";
     
     $stmt = $conec->prepare($sql);
     if (!$stmt) {
@@ -55,16 +55,18 @@ try {
     // 10. Obter resultados
     $result = $stmt->get_result();
     $nomes = [];
+    $mat_vend = [];
     
     while ($row = $result->fetch_assoc()) {
         $nomes[] = $row['nome'];
+        $mat_vend[] = $row['mat'];
     }
     
     // 11. Fechar statement
     $stmt->close();
     
     // 12. Retornar resultados
-    die(json_encode($nomes));
+    die(json_encode(['nomes' => $nomes, 'mat_vend' => $mat_vend]));
     
 } catch (Exception $e) {
     // 13. Log do erro
@@ -74,6 +76,6 @@ try {
     die(json_encode(['error' => 'Erro ao processar requisição']));
 }
 
-// 15. Garantir que nenhum código adicional seja executado
+
 exit;
 ?>

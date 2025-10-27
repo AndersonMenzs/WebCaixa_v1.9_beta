@@ -51,6 +51,7 @@ error_reporting(E_ALL);
 	$FPag_2    = trim($_POST['lsPr2']);
 	$FPag_3    = trim($_POST['lsPr3']);
 	$ModPag    = trim($_POST['txtmodpag_ext']);
+	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente   = trim($_POST['cliente']);
 	$Pass      = strtolower(trim($_POST['txtsen']));
@@ -109,17 +110,17 @@ error_reporting(E_ALL);
 				$Reg = $Reg + 1;
 
 			if ($FPag_1 <> "00") {
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados2");
 			}
 
 			if ($FPag_2 <> "00") {
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados3");
 			}
 
 			if ($FPag_3 <> "00") {
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados4");
 			}
 
@@ -142,6 +143,7 @@ error_reporting(E_ALL);
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">
 				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
+				<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 				<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 				<p>

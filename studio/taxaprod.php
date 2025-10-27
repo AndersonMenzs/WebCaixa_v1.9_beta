@@ -41,50 +41,72 @@
     <script>
         $(function() {
             function setupAutocomplete(element, tipo) {
-                $(element).autocomplete({
+                var $el = $(element);
+                $el.autocomplete({
                     source: function(request, response) {
                         $.ajax({
                             url: "buscar_funcionarias.php",
                             dataType: "json",
-                            contentType: "application/json",
                             data: {
                                 term: request.term,
                                 tipo: tipo
                             },
                             success: function(data) {
-                                if (data && Array.isArray(data)) {
-                                    response(data);
-                                } else if (data && data.error) {
-                                    console.error("Erro no servidor:", data.error);
-                                    response([]);
-                                } else {
-                                    console.error("Resposta inválida do servidor");
-                                    response([]);
+                                var items = [];
+
+                                // já é um array de items {label,value,mat}
+                                if (Array.isArray(data)) {
+                                    items = data;
                                 }
+                                // formato retornado pelo servidor: { nomes: [...], mat_vend: [...] }
+                                else if (data && Array.isArray(data.nomes)) {
+                                    for (var i = 0; i < data.nomes.length; i++) {
+                                        items.push({
+                                            label: data.nomes[i],
+                                            value: data.nomes[i],
+                                            mat: data.mat_vend && data.mat_vend[i] ? data.mat_vend[i] : ''
+                                        });
+                                    }
+                                }
+                                // fallback vazio
+                                response(items);
                             },
-                            error: function(xhr, status, error) {
-                                console.error("Erro na requisição:", status, error);
-                                try {
-                                    // Tentar extrair mensagem de erro do HTML retornado
-                                    var errorHtml = xhr.responseText;
-                                    var errorMatch = errorHtml.match(/<title>(.*?)<\/title>/i) ||
-                                        errorHtml.match(/<body[^>]*>(.*?)<\/body>/is);
-                                    var errorMsg = errorMatch ? errorMatch[1] : "Erro desconhecido";
-                                    console.error("Detalhes:", errorMsg);
-                                } catch (e) {
-                                    console.error("Não foi possível analisar o erro");
-                                }
+                            error: function(xhr, status, err) {
+                                console.error("Erro na requisição:", status, err);
                                 response([]);
                             }
                         });
                     },
                     minLength: 2,
-                    delay: 300
+                    delay: 300,
+                    select: function(event, ui) {
+                        if (ui.item && ui.item.mat) {
+                            $('#mat_vend').val(ui.item.mat);
+                        }
+                        $(this).val(ui.item ? ui.item.value : '');
+                        return false;
+                    },
+                    focus: function(event, ui) {
+                        $(this).val(ui.item ? ui.item.value : '');
+                        return false;
+                    }
                 });
+
+                // compatível com várias versões do jQuery UI: tenta obter a instância do widget
+                var inst = $el.autocomplete("instance") || $el.data("ui-autocomplete") || $el.data("autocomplete");
+                if (inst) {
+                    inst._renderItem = function(ul, item) {
+                        return $("<li>")
+                            .append("<div>" + (item.label || item.value || "") + "</div>")
+                            .appendTo(ul);
+                    };
+                } else {
+                    // fallback seguro: não quebrar se instância não for encontrada
+                    console.warn("Autocomplete instance não disponível para", element);
+                }
             }
 
             // Aplicar aos campos
-            setupAutocomplete("#encarregada", "encarregada");
             setupAutocomplete("#vendedora", "vendedora");
         });
 
@@ -344,6 +366,7 @@
                 <tr>
                     <td width="9%"></td>
                     <td width="82%" align="center">
+                        <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
                         <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
                         <input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
                         <input type='reset' name='btreset' value='Limpar'><br><br>

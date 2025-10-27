@@ -62,8 +62,9 @@
 	$AutFull = 10000 + $Aut;
 	$AutF      = substr($AutFull, 1, 4);
 	$Opt       = $_POST['rdopt'];
-
-	echo $Opt;
+	$Mat_Vend  = $_POST['mat_vend'];
+	$Vendedora = $_POST['vendedora'];
+	$Cliente   = $_POST['cliente'];
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -91,6 +92,9 @@
 		$VlRec     = $VlRec + $VlPago;
 		$VlRecF    = number_format($VlRec, 2, ',', '.');
 		$OperadorE = $lnE['operador'];
+		$Mat_Vend = $lnE['mat_vend'];
+		$Vendedora = $lnE['vendedora'];
+		$Cliente = $lnE['cliente'];
 	}
 
 	// Remove duplicatas e prepara a exibição das formas de pagamento
@@ -100,6 +104,7 @@
 	if (count($ModPgtoE_unique) > 1) {
 		$ModPgtoE_display = 'Diversos';
 		$SlgPag = 'Diversos';
+		$SlgPag_a = 'DIV';
 	} else {
 		// Caso contrário, busca os dados da única forma de pagamento
 		$ModPgtoE = $ModPgtoE_unique[0];
@@ -110,18 +115,16 @@
 		$SlgPag  = $lnM['siglapag'];
 
 		// Verificando cada forma de pagamento
-		if ($ModPgtoE_display == '10') {
+		if ($ModPgtoE == '10') {
 			$SlgPag_a = 'DIN';
-		} elseif ($ModPgtoE_display == '20') {
+		} elseif ($ModPgtoE == '20') {
 			$SlgPag_a = 'CTD';
-		} elseif ($ModPgtoE_display == '30') {
+		} elseif ($ModPgtoE == '30') {
 			$SlgPag_a = 'CTV';
-		} elseif ($ModPgtoE_display == '70') {
+		} elseif ($ModPgtoE == '70') {
 			$SlgPag_a = 'PXQ';
-		} elseif ($ModPgtoE_display == '71') {
+		} elseif ($ModPgtoE == '71') {
 			$SlgPag_a = 'PXC';
-		} else {
-			$SlgPag_a = 'DIV';
 		}
 	}
 
@@ -216,14 +219,16 @@
 						</td>
 					</tr>
 			</table>
-<?php echo $SlgPag_a; 
-exit; ?>
+
 			<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 			<input type="hidden" name="txtaut" value="<?php echo $Aut; ?>">
 			<input type="hidden" name="txtdoc" value="<?php echo $NumDocE; ?>">
 			<input type="hidden" name="txtfpag" value="<?php echo $SlgPag_a; ?>">
 			<input type="hidden" name="txtvlrec" value="<?php echo $VlRec; ?>">
 			<input type="hidden" name="rdopt" value="<?php echo $Opt; ?>">
+			<input type="hidden" name="txtmatvend" value="<?php echo $Mat_Vend; ?>">
+			<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+			<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 			<p>
 				<center><input id="ghost_click" type="submit" name="btenvia" value="Continuar">
 					<input type="button" name="btret" value="Retornar" OnClick="JavaScript:window.history.back()">

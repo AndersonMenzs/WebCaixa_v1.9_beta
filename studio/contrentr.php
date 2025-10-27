@@ -123,50 +123,72 @@
    <script>
       $(function() {
          function setupAutocomplete(element, tipo) {
-            $(element).autocomplete({
+            var $el = $(element);
+            $el.autocomplete({
                source: function(request, response) {
                   $.ajax({
                      url: "buscar_funcionarias.php",
                      dataType: "json",
-                     contentType: "application/json",
                      data: {
                         term: request.term,
                         tipo: tipo
                      },
                      success: function(data) {
-                        if (data && Array.isArray(data)) {
-                           response(data);
-                        } else if (data && data.error) {
-                           console.error("Erro no servidor:", data.error);
-                           response([]);
-                        } else {
-                           console.error("Resposta inválida do servidor");
-                           response([]);
+                        var items = [];
+
+                        // já é um array de items {label,value,mat}
+                        if (Array.isArray(data)) {
+                           items = data;
                         }
+                        // formato retornado pelo servidor: { nomes: [...], mat_vend: [...] }
+                        else if (data && Array.isArray(data.nomes)) {
+                           for (var i = 0; i < data.nomes.length; i++) {
+                              items.push({
+                                 label: data.nomes[i],
+                                 value: data.nomes[i],
+                                 mat: data.mat_vend && data.mat_vend[i] ? data.mat_vend[i] : ''
+                              });
+                           }
+                        }
+                        // fallback vazio
+                        response(items);
                      },
-                     error: function(xhr, status, error) {
-                        console.error("Erro na requisição:", status, error);
-                        try {
-                           // Tentar extrair mensagem de erro do HTML retornado
-                           var errorHtml = xhr.responseText;
-                           var errorMatch = errorHtml.match(/<title>(.*?)<\/title>/i) ||
-                              errorHtml.match(/<body[^>]*>(.*?)<\/body>/is);
-                           var errorMsg = errorMatch ? errorMatch[1] : "Erro desconhecido";
-                           console.error("Detalhes:", errorMsg);
-                        } catch (e) {
-                           console.error("Não foi possível analisar o erro");
-                        }
+                     error: function(xhr, status, err) {
+                        console.error("Erro na requisição:", status, err);
                         response([]);
                      }
                   });
                },
                minLength: 2,
-               delay: 300
+               delay: 300,
+               select: function(event, ui) {
+                  if (ui.item && ui.item.mat) {
+                     $('#mat_vend').val(ui.item.mat);
+                  }
+                  $(this).val(ui.item ? ui.item.value : '');
+                  return false;
+               },
+               focus: function(event, ui) {
+                  $(this).val(ui.item ? ui.item.value : '');
+                  return false;
+               }
             });
+
+            // compatível com várias versões do jQuery UI: tenta obter a instância do widget
+            var inst = $el.autocomplete("instance") || $el.data("ui-autocomplete") || $el.data("autocomplete");
+            if (inst) {
+               inst._renderItem = function(ul, item) {
+                  return $("<li>")
+                     .append("<div>" + (item.label || item.value || "") + "</div>")
+                     .appendTo(ul);
+               };
+            } else {
+               // fallback seguro: não quebrar se instância não for encontrada
+               console.warn("Autocomplete instance não disponível para", element);
+            }
          }
 
          // Aplicar aos campos
-         setupAutocomplete("#encarregada", "encarregada");
          setupAutocomplete("#vendedora", "vendedora");
       });
 
@@ -186,17 +208,17 @@
          return true;
       }
 
-        function fPassaAlfaNumerico(tipo) {
-            return function(e) {
-                let char = String.fromCharCode(e.which);
-                if (tipo === 'an') {
-                    // permite apenas letras e números
-                    if (!/^[a-zA-Z0-9\s]$/.test(char)) {
-                        e.preventDefault();
-                    }
-                }
-            };
-        }
+      function fPassaAlfaNumerico(tipo) {
+         return function(e) {
+            let char = String.fromCharCode(e.which);
+            if (tipo === 'an') {
+               // permite apenas letras e números
+               if (!/^[a-zA-Z0-9\s]$/.test(char)) {
+                  e.preventDefault();
+               }
+            }
+         };
+      }
 
       function validnome(input) {
          // remove tudo que não for letra, número ou espaço
@@ -228,46 +250,47 @@
       include "us_cad.php";
    } ?>
 
-    <table width='100%' border='0' cellpadding='0' cellspacing='0'>
-        <tr>
-            <td width='9%'>
-                <a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
-            </td>
-            <td width='82%' align='center'>
-                <font color="gold" size="6"><b>
-                        <center><u><i>CONTRATO - ENTRADA</i></u></center>
-                    </b></font><br><br><br>
-            </td>
-            <td width='9%'>
-                <a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
-            </td>
-        </tr>
-    </table>
+   <table width='100%' border='0' cellpadding='0' cellspacing='0'>
+      <tr>
+         <td width='9%'>
+            <a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
+         </td>
+         <td width='82%' align='center'>
+            <font color="gold" size="6"><b>
+                  <center><u><i>CONTRATO - ENTRADA</i></u></center>
+               </b></font><br><br><br>
+         </td>
+         <td width='9%'>
+            <a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+         </td>
+      </tr>
+   </table>
    <?php
 
    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
       <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
          <form name="cntentr" method="post" action="contrentr_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos()" autocomplete="off">
-                  <tr>
-            <td width="50%" align="center">
-               <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
-            </td>
-            <td width="50%" align="center">
-               <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
-            </td>
-         </tr>
-         <tr>
-            <td width="50%" align="center">
-               <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
-                  onkeypress="fPassaAlfaNumerico('an')"
-                  onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
-            </td>
-            <td width="50%" align="center">
-               <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
-                  onkeypress="fPassaAlfaNumerico('an')"
-                  onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
-            </td>
-         </tr>
+            <tr>
+               <td width="50%" align="center">
+                  <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
+               </td>
+               <td width="50%" align="center">
+                  <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
+               </td>
+            </tr>
+            <tr>
+               <td width="50%" align="center">
+                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
+                  <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
+                     onkeypress="fPassaAlfaNumerico('an')"
+                     onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
+               </td>
+               <td width="50%" align="center">
+                  <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
+                     onkeypress="fPassaAlfaNumerico('an')"
+                     onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
+               </td>
+            </tr>
       </table>
       <br>
 
