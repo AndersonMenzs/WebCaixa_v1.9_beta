@@ -38,6 +38,10 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	var_dump($dados);
+	echo "</pre>";
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.5.1";
@@ -45,16 +49,20 @@
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
 	$NumDoc    = trim($_POST['txtdoc']);
-	$NumDocF = 1000000 + $NumDoc;
-	$NDoc      = substr($NumDocF, 1, 6);
+	$NumDocF = 100000000 + $NumDoc;
+	$NDoc      = substr($NumDocF, 1, 8);
 	$Qtde	   = trim($_POST['qtde']);
+	$TaxaConc  = trim($_POST['txtvrconc']);
+	$TaxaConcF = number_format($TaxaConc, 2, ",", ".");
 	$FPag1     = trim($_POST['lsPr1']);
 	$FPag2     = trim($_POST['lsPr2']);
 	$FPag3     = trim($_POST['lsPr3']);
-	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
-	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
-	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
-	//$Pgto	   = $txt1 + $txt2 + $txt4;
+	$txt1      = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
+	$txt2      = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
+	$txt3      = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
+	$Mat_Vend = trim($_POST['mat_vend']);
+	$Vendedora = trim($_POST['vendedora']);
+	$Cliente	= trim($_POST['cliente']);
 	$Pgto	   = $txt1 + $txt2 + $txt3;
 	$PgtoF	   = number_format($Pgto, 2, ",", ".");
 

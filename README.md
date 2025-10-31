@@ -5,7 +5,7 @@ Versão com inserções de Pix QR Code, Pix CNPJ e impressão de recibo em impre
 
 # CONEXÃO COM O BANCO DE DADOS
 
-Antes de tudo é necessário inserir uma linha no arquiv0 vendas/conexao.php que conecta o banco de dados do estúdio. a linha serve para identificar com uma variável o código do estúdio.
+Antes de tudo é necessário inserir uma linha no arquivo vendas/conexao.php que conecta o banco de dados do estúdio. a linha serve para identificar com uma variável o código do estúdio.
 
 ```php
 // Código do estúdio

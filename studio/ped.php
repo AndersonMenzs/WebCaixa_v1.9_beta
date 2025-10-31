@@ -6,8 +6,8 @@
    <style type="text/css">
       body {
          margin-top: 5%;
-         margin-left: 3%;
-         margin-right: 3%;
+         margin-left: 5%;
+         margin-right: 5%;
          border: 3px solid gray;
          padding: 10px 10px 10px 10px;
          font-family: sans-serif;
@@ -18,36 +18,40 @@
          font: 16px sans-serif;
          color: #000000;
       }
-
-      /* Estilo para o autocomplete */
-      .ui-autocomplete {
-         max-height: 200px;
-         overflow-y: auto;
-         overflow-x: hidden;
-         background-color: #fff;
-         color: #000;
-         border: 1px solid #ccc;
-      }
-
-      .ui-menu-item {
-         padding: 5px;
-      }
-
-      .ui-menu-item:hover {
-         background-color: #f0f0f0;
-         cursor: pointer;
-      }
    </style>
 
    <script>
+      function F5(event) {
+         var tecla = document.all ? window.event.keyCode : event.which;
+         if (document.all) {
+            window.event.keyCode = 0;
+            window.event.returnValue = false;
+         }
+         if (tecla == 116) return false;
+      }
+
+      document.onkeydown = F5;
+   </script>
+
+   <?php
+   // Inserindo o Cabeçalho
+   include "../cabecprs.php";
+   ?>
+
+   <SCRIPT LANGUAGE="JavaScript">
+      <!-- Begin
       function putFocus(formInst, elementInst) {
          if (document.forms.length > 0) {
             document.forms[formInst].elements[elementInst].focus();
          }
       }
+      //  End 
+      -->
+   </script>
 
+   <Script>
       function validate(field) {
-         var valid = ".0123456789"
+         var valid = "0123456789"
          var ok = "yes";
          var temp;
          for (var i = 0; i < field.value.length; i++) {
@@ -60,179 +64,10 @@
             field.select();
          }
       }
+      //  End -->
    </script>
 
-   <script>
-      function FormataValor(Formulario, Campo, TeclaPres) {
-         var tecla = TeclaPres.keyCode;
-         var strCampo;
-         var vr;
-         var tam;
-         var TamanhoMaximo = 10;
-
-         eval("strCampo = document." + Formulario + "." + Campo);
-
-         vr = strCampo.value;
-         vr = vr.replace("/", "");
-         vr = vr.replace("/", "");
-         vr = vr.replace("/", "");
-         vr = vr.replace(",", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace("-", "");
-         vr = vr.replace("-", "");
-         vr = vr.replace("-", "");
-         vr = vr.replace("-", "");
-         vr = vr.replace("-", "");
-         tam = vr.length;
-
-         if (tam < TamanhoMaximo && tecla != 8) {
-            tam = vr.length + 1;
-         }
-
-         if (tecla == 8) {
-            tam = tam - 1;
-         }
-
-         if (tecla == 8 || tecla >= 48 && tecla <= 57 || tecla >= 96 && tecla <= 105) {
-            if (tam <= 3) {
-               strCampo.value = vr;
-            }
-            if ((tam > 3) && (tam <= 10)) {
-               strCampo.value = vr.substr(0, tam - 3) + '.' + vr.substr(tam - 3, tam);
-            }
-         }
-      }
-   </script>
-
-   <?php
-   // Inserindo o Cabeçalho
-   include "../cabecprs.php";
-   ?>
-
-   <!-- Adicionando jQuery UI para o autocomplete -->
-   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-
-   <script>
-      $(function() {
-         function setupAutocomplete(element, tipo) {
-            var $el = $(element);
-            $el.autocomplete({
-               source: function(request, response) {
-                  $.ajax({
-                     url: "buscar_funcionarias.php",
-                     dataType: "json",
-                     data: {
-                        term: request.term,
-                        tipo: tipo
-                     },
-                     success: function(data) {
-                        var items = [];
-
-                        // já é um array de items {label,value,mat}
-                        if (Array.isArray(data)) {
-                           items = data;
-                        }
-                        // formato retornado pelo servidor: { nomes: [...], mat_vend: [...] }
-                        else if (data && Array.isArray(data.nomes)) {
-                           for (var i = 0; i < data.nomes.length; i++) {
-                              items.push({
-                                 label: data.nomes[i],
-                                 value: data.nomes[i],
-                                 mat: data.mat_vend && data.mat_vend[i] ? data.mat_vend[i] : ''
-                              });
-                           }
-                        }
-                        // fallback vazio
-                        response(items);
-                     },
-                     error: function(xhr, status, err) {
-                        console.error("Erro na requisição:", status, err);
-                        response([]);
-                     }
-                  });
-               },
-               minLength: 2,
-               delay: 300,
-               select: function(event, ui) {
-                  if (ui.item && ui.item.mat) {
-                     $('#mat_vend').val(ui.item.mat);
-                  }
-                  $(this).val(ui.item ? ui.item.value : '');
-                  return false;
-               },
-               focus: function(event, ui) {
-                  $(this).val(ui.item ? ui.item.value : '');
-                  return false;
-               }
-            });
-
-            // compatível com várias versões do jQuery UI: tenta obter a instância do widget
-            var inst = $el.autocomplete("instance") || $el.data("ui-autocomplete") || $el.data("autocomplete");
-            if (inst) {
-               inst._renderItem = function(ul, item) {
-                  return $("<li>")
-                     .append("<div>" + (item.label || item.value || "") + "</div>")
-                     .appendTo(ul);
-               };
-            } else {
-               // fallback seguro: não quebrar se instância não for encontrada
-               console.warn("Autocomplete instance não disponível para", element);
-            }
-         }
-
-         // Aplicar aos campos
-         setupAutocomplete("#vendedora", "vendedora");
-      });
-   </script>
-
-   <script>
-      function validaCampos() {
-         var vendedora = document.getElementById('vendedora').value.trim();
-         var cliente = document.getElementById('cliente').value.trim();
-         if (vendedora.length <= 8) {
-            alert('O campo Vendedora deve ter mais que 8 letras.');
-            document.getElementById('vendedora').focus();
-            return false;
-         }
-         if (cliente.length <= 8) {
-            alert('O campo Cliente deve ter mais que 8 letras.');
-            document.getElementById('cliente').focus();
-            return false;
-         }
-         return true;
-      }
-
-      function fPassaAlfaNumerico(tipo) {
-         return function(e) {
-            let char = String.fromCharCode(e.which);
-            if (tipo === 'an') {
-               // permite apenas letras e números
-               if (!/^[a-zA-Z0-9\s]$/.test(char)) {
-                  e.preventDefault();
-               }
-            }
-         };
-      }
-
-      function validnome(input) {
-         // remove tudo que não for letra, número ou espaço
-         input.value = input.value.replace(/[^A-Z0-9\s]/g, '');
-
-         // exemplo: exige pelo menos 3 caracteres
-         if (input.value.length < 3) {
-            input.style.borderColor = "red";
-         } else {
-            input.style.borderColor = "";
-         }
-      }
+   <script type="text/javascript" src="val_ped.js" charset="utf-8">
    </script>
 
 </head>
@@ -242,15 +77,16 @@
    <?php
    // Obtendo o Login
    $Sis     = "S7";
-   $Rot     = "S7R2.2";
+   $Rot     = "S7R1";
    $lg_user = $_REQUEST['c_s'];
    $user = substr($lg_user, 0, 8);
    $pss  = substr($lg_user, 8, 40);
+   $Mat_Vend = trim($_POST['mat_vend']);
 
    include "us_sist.php";
    if ($ch == 'no') {
       include "us_cad.php";
-   } ?><br>
+   } ?>
 
    <table width='100%' border='0' cellpadding='0' cellspacing='0'>
       <tr>
@@ -266,48 +102,68 @@
             <a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
          </td>
       </tr>
-   </table><br>
+   </table>
+
    <?php
 
    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
-      <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
-         <form name="cntentr" method="post" action="ped_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos()" autocomplete="off">
+      <form name="frmest" method="post" action="estped.php" onsubmit="return checkdata()" autocomplete="off">
+         <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
             <tr>
-               <td width="50%" align="center">
-                  <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
-               </td>
-               <td width="50%" align="center">
-                  <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
+               <td colspan="2" align="center">
+                  <font color='gold' size='5'><b><i>Autenticação Nº: &nbsp;</i></b></font>
+                  <input type="text" id="txtaut" name="txtaut" size="4" maxlength="4" class="campos" onKeyUp="validate(this)">
+                  <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
                </td>
             </tr>
-            <tr>
-               <td width="50%" align="center">
-                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
-                  <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
-                     onkeypress="fPassaAlfaNumerico('an')"
-                     onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
-               </td>
-               <td width="50%" align="center">
-                  <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
-                     onkeypress="fPassaAlfaNumerico('an')"
-                     onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
-               </td>
-            </tr>
-      </table>
-      <br>
 
-      <table width="100%" border="0" cellspacing="0">
-         <tr>
-            <td width="82%" align="center">
-               <input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
-               <input type='reset' name='btreset' value='Limpar'><br><br>
-               <span id="msg"></span>
-            </td>
-         </tr>
-      </table><br>
-      </form>
-   <?php
-   } else { ?>
+            <tr>
+               <td width="50%" align="center">
+                  <font color='gold' size='5'><b><i>Book:</i></b></font>
+                  <input id="rdopt" type="radio" name="rdopt" class="campos" value="BOOK">
+               </td>
+               <td width="50%" align="center">
+                  <font color='gold' size='5'><b><i>Poster:</i></b></font>
+                  <input id="rdopt" type="radio" name="rdopt" class="campos" value="POSTER">
+               </td>
+            </tr>
+         </table><br>
+
+         <table id="tab_ped" name="tab_ped" width="70%" border="5" cellpadding="10" cellspacing="0" align="center" style="display:none;">
+            <thead>
+               <tr>
+                  <td width="25%" align="center">
+                     <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
+                  </td>
+                  <td width="25%" align="center">
+                     <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
+                  </td>
+               </tr>
+            </thead>
+            <tbody id="tab_ped_body">
+               <tr>
+                  <td align="center" colspan="2">
+                     <font color='gold' size='5'><b><i><?php echo $Vendedora; ?></i></b></font>
+                  </td>
+                  <td align="center">
+                     <font color='lime' size='5'><b><i><?php echo $Cliente; ?></i></b></font>
+                  </td>
+               </tr>
+            </tbody>
+         </table><br>
+
+         <table width="100%" border="0" cellspacing="0">
+            <tr>
+               <td width="9%"></td>
+               <td width="82%" align="center">  
+                  <input type="submit" name="btenviar" value="Continuar">&nbsp;&nbsp;
+                  <input type="reset" name="btreset" value="Limpar">
+               <td width="9%" align="right"></a>
+               </td>
+            </tr>
+         </table>
+      </form><?php
+            } else { ?>
       <br><br><br><br><br>
       <font size='6'><b>
             <center>Acesso <font color='gold'>
@@ -315,14 +171,127 @@
                   </blink>
                   <font color='#FFFFFF'>!!!</center>
          </b></font><br><br><br>
-      <center><a href='servrec.php?c_s=<?php echo $lg_user; ?>'><img src='images/voltar.gif'></a></center><br><br>
-   <?php            }
+      <center><a href='index.php?c_s=<?php echo $lg_user; ?>'><img src='images/voltar.gif'></a></center><br><br>
+   <?php
+            }
 
-   // Encerrando as Conexões
-   $SisRot = "S-7.2.2";
-   include "rodape.php";
-   mysqli_close($conec);
-   ?>
+            // Encerrando as Conexões
+            $SisRot = "S-7.1";
+            include "./rodape.php";
+            mysqli_close($conec); ?>
+
+   <!-- script para consultar ao digitar/confirmar autenticação -->
+   <script>
+      (function() {
+         const radios = Array.from(document.querySelectorAll('input[name="rdopt"]'));
+         const input = document.getElementById('txtaut');
+         const tb_ped = document.getElementById('tab_ped');
+         const tb_body = document.getElementById('tab_ped_body');
+         if (!radios.length || !input || !tb_ped || !tb_body) return;
+
+         function limparTabela() {
+            tb_body.innerHTML = '';
+         }
+
+         function esc(v) {
+            return String(v === null || v === undefined ? '' : v).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+         }
+
+         function montarLinha(row) {
+            return '<tr>' +
+               '<td align="center">' + esc(row.vendedora || '') + '</td>' +
+               '<td align="center">' + esc(row.cliente || '') + '</td>' +
+               '</tr>';
+         }
+
+         function mostrarMensagem(msg, colspan = 5) {
+            limparTabela();
+            tb_body.innerHTML = '<tr><td colspan="' + colspan + '" align="center" style="color:gold;"><b>' + esc(msg) + '</b></td></tr>';
+         }
+
+         async function consultar(txt, tipo) {
+            txt = (txt || '').toString().trim();
+            tipo = (tipo || '').toString().trim();
+
+            if (tipo === '') {
+               tb_ped.style.display = 'none';
+               limparTabela();
+               return;
+            }
+
+            // Se não informou txtaut, pede ao usuário e não faz a consulta
+            if (txt === '') {
+               tb_ped.style.display = 'none';
+               mostrarMensagem('Informe o número de autenticação antes de selecionar o tipo.');
+               return;
+            }
+
+            tb_ped.style.display = 'table';
+
+            try {
+               const params = new URLSearchParams({
+                  txtaut: txt,
+                  rdopt: tipo
+               });
+               const res = await fetch('buscar_pedido.php', {
+                  method: 'POST',
+                  headers: {
+                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                  },
+                  body: params.toString()
+               });
+
+               if (!res.ok) throw new Error('Erro na requisição: ' + res.status);
+               const data = await res.json();
+
+               if (!Array.isArray(data) || data.length === 0) {
+                  mostrarMensagem('Nenhum registro encontrado');
+                  return;
+               }
+
+               limparTabela();
+               tb_body.innerHTML = data.map(montarLinha).join('');
+            } catch (err) {
+               console.error(err);
+               mostrarMensagem('Erro ao consultar. Veja console.');
+            }
+         }
+
+         // Quando muda a seleção do tipo (rdopt) -> consulta usando valor de txtaut
+         radios.forEach(function(r) {
+            r.addEventListener('change', function() {
+               if (this.checked) {
+                  const tipo = this.value;
+                  const txt = input.value.trim();
+                  consultar(txt, tipo);
+               }
+            });
+         });
+
+         // Se o usuário editar o txtaut e já tiver um tipo selecionado, atualiza a tabela
+         input.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter' || e.key === 'Return') {
+               const checked = radios.find(r => r.checked);
+               if (checked) consultar(this.value.trim(), checked.value);
+            } else {
+               // se apagar tudo, oculta tabela
+               if (this.value.trim() === '') {
+                  tb_ped.style.display = 'none';
+                  limparTabela();
+               }
+            }
+         });
+
+         input.addEventListener('blur', function() {
+            const checked = radios.find(r => r.checked);
+            if (checked && this.value.trim() !== '') consultar(this.value.trim(), checked.value);
+         });
+
+         // inicialmente ocultar tabela
+         tb_ped.style.display = 'none';
+      })();
+   </script>
+
 </body>
 
 </html>

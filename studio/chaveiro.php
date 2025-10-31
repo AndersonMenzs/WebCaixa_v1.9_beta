@@ -18,12 +18,26 @@
 			font: 16px sans-serif;
 			color: #000000;
 		}
-	</style>
 
-	<?php
-	// Inserindo o Cabeçalho
-	include "../cabecprs.php";
-	?>
+		/* Estilo para o autocomplete */
+		.ui-autocomplete {
+			max-height: 200px;
+			overflow-y: auto;
+			overflow-x: hidden;
+			background-color: #fff;
+			color: #000;
+			border: 1px solid #ccc;
+		}
+
+		.ui-menu-item {
+			padding: 5px;
+		}
+
+		.ui-menu-item:hover {
+			background-color: #f0f0f0;
+			cursor: pointer;
+		}
+	</style>
 
 	<script>
 		function putFocus(formInst, elementInst) {
@@ -33,21 +47,6 @@
 		}
 
 		function validate(field) {
-			var valid = "0123456789"
-			var ok = "yes";
-			var temp;
-			for (var i = 0; i < field.value.length; i++) {
-				temp = "" + field.value.substring(i, i + 1);
-				if (valid.indexOf(temp) == "-1") ok = "no";
-			}
-			if (ok == "no") {
-				alert("Entrada Incorreta! \n  Digite apenas algarismos!");
-				field.focus();
-				field.select();
-			}
-		}
-
-		function validvalor(field) {
 			var valid = ".0123456789"
 			var ok = "yes";
 			var temp;
@@ -57,18 +56,19 @@
 			}
 			if (ok == "no") {
 				alert("Entrada Incorreta! \n  Digite apenas algarismos!");
-				field.value = "";
 				field.focus();
 				field.select();
 			}
 		}
+	</script>
 
+	<script>
 		function FormataValor(Formulario, Campo, TeclaPres) {
 			var tecla = TeclaPres.keyCode;
 			var strCampo;
 			var vr;
 			var tam;
-			var TamanhoMaximo = 6;
+			var TamanhoMaximo = 10;
 
 			eval("strCampo = document." + Formulario + "." + Campo);
 
@@ -103,14 +103,135 @@
 				if (tam <= 3) {
 					strCampo.value = vr;
 				}
-				if ((tam > 3) && (tam <= 6)) {
+				if ((tam > 3) && (tam <= 10)) {
 					strCampo.value = vr.substr(0, tam - 3) + '.' + vr.substr(tam - 3, tam);
 				}
 			}
 		}
 	</script>
 
-	<script src="val_chav.js" charset="utf-8"></script>
+	<?php
+	// Inserindo o Cabeçalho
+	include "../cabecprs.php";
+	?>
+
+	<!-- Adicionando jQuery UI para o autocomplete -->
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+	<script>
+		$(function() {
+			function setupAutocomplete(element, tipo) {
+				var $el = $(element);
+				$el.autocomplete({
+					source: function(request, response) {
+						$.ajax({
+							url: "buscar_funcionarias.php",
+							dataType: "json",
+							data: {
+								term: request.term,
+								tipo: tipo
+							},
+							success: function(data) {
+								var items = [];
+
+								// já é um array de items {label,value,mat}
+								if (Array.isArray(data)) {
+									items = data;
+								}
+								// formato retornado pelo servidor: { nomes: [...], mat_vend: [...] }
+								else if (data && Array.isArray(data.nomes)) {
+									for (var i = 0; i < data.nomes.length; i++) {
+										items.push({
+											label: data.nomes[i],
+											value: data.nomes[i],
+											mat: data.mat_vend && data.mat_vend[i] ? data.mat_vend[i] : ''
+										});
+									}
+								}
+								// fallback vazio
+								response(items);
+							},
+							error: function(xhr, status, err) {
+								console.error("Erro na requisição:", status, err);
+								response([]);
+							}
+						});
+					},
+					minLength: 2,
+					delay: 300,
+					select: function(event, ui) {
+						if (ui.item && ui.item.mat) {
+							$('#mat_vend').val(ui.item.mat);
+						}
+						$(this).val(ui.item ? ui.item.value : '');
+						return false;
+					},
+					focus: function(event, ui) {
+						$(this).val(ui.item ? ui.item.value : '');
+						return false;
+					}
+				});
+
+				// compatível com várias versões do jQuery UI: tenta obter a instância do widget
+				var inst = $el.autocomplete("instance") || $el.data("ui-autocomplete") || $el.data("autocomplete");
+				if (inst) {
+					inst._renderItem = function(ul, item) {
+						return $("<li>")
+							.append("<div>" + (item.label || item.value || "") + "</div>")
+							.appendTo(ul);
+					};
+				} else {
+					// fallback seguro: não quebrar se instância não for encontrada
+					console.warn("Autocomplete instance não disponível para", element);
+				}
+			}
+
+			// Aplicar aos campos
+			setupAutocomplete("#vendedora", "vendedora");
+		});
+
+		function validaCampos() {
+			var vendedora = document.getElementById('vendedora').value.trim();
+			var cliente = document.getElementById('cliente').value.trim();
+			if (vendedora.length <= 8) {
+				alert('O campo Vendedora deve ter mais que 8 letras.');
+				document.getElementById('vendedora').focus();
+				return false;
+			}
+			if (cliente.length <= 8) {
+				alert('O campo Cliente deve ter mais que 8 letras.');
+				document.getElementById('cliente').focus();
+				return false;
+			}
+			return true;
+		}
+
+		function fPassaAlfaNumerico(tipo) {
+			return function(e) {
+				let char = String.fromCharCode(e.which);
+				if (tipo === 'an') {
+					// permite apenas letras e números
+					if (!/^[a-zA-Z0-9\s]$/.test(char)) {
+						e.preventDefault();
+					}
+				}
+			};
+		}
+
+		function validnome(input) {
+			// remove tudo que não for letra, número ou espaço
+			input.value = input.value.replace(/[^A-Z0-9\s]/g, '');
+
+			// exemplo: exige pelo menos 3 caracteres
+			if (input.value.length < 3) {
+				input.style.borderColor = "red";
+			} else {
+				input.style.borderColor = "";
+			}
+		}
+	</script>
 
 </head>
 
@@ -119,176 +240,72 @@
 	<?php
 	// Obtendo o Login
 	$Sis     = "S7";
-	$Rot     = "S7R2.5";
+	$Rot     = "S7R2.2";
 	$lg_user = $_REQUEST['c_s'];
 	$user = substr($lg_user, 0, 8);
 	$pss  = substr($lg_user, 8, 40);
-
-	// Obtendo Valor Atualizado
-	include "conexao.php";
-	include "dbselect.php";
-
-	$sql = "select * from taxas where codigo = 'CHV' order by datalt desc";
-	$rs  = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #1");
-	$ln  = mysqli_fetch_array($rs);
-	$DataAlt = $ln['datalt'];
-	$Codigo  = $ln['codigo'];
-	$VrChav  = $ln['vltx'];
-	$VrChavF = number_format($VrChav, 2, ',', '.');
 
 	include "us_sist.php";
 	if ($ch == 'no') {
 		include "us_cad.php";
 	} ?>
 
-	<font color="gold" size="6"><b>
-			<center><u><i>AQUISIÇÃO DE CHAVEIROS</i></u></center>
-		</b></font><br>
-	<font size="5" color="#FFFFFF"><b>
-			<center><u><i>Valor Atual - <font color="aqua">R$ <?php echo "$VrChavF"; ?></i></u></center>
-		</b></font><br><?php
+	<table width='100%' border='0' cellpadding='0' cellspacing='0'>
+		<tr>
+			<td width='9%'>
+				<a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
+			</td>
+			<td width='82%' align='center'>
+				<font color="gold" size="6"><b>
+						<center><u><i>AQUISIÇÃO DE CHAVEIROS</i></u></center>
+					</b></font><br><br><br>
+			</td>
+			<td width='9%'>
+				<a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+			</td>
+		</tr>
+	</table>
+	<?php
 
-						if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
-		<table border="5" cellpadding="5" cellspacing="0" align="center">
-			<form name="chaveiro" method="post" action="confchav.php" OnSubmit="JavaScript:return checkdata()" autocomplete="off">
+	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
+		<table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
+			<form name="cntentr" method="post" action="chaveiro_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos()" autocomplete="off">
 				<tr>
-					<td align="center">
-						<font color='gold' size='5'><b><i>DOCUMENTO</i></b></font>
+					<td width="50%" align="center">
+						<font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
 					</td>
-					<td align="center">
-						<font color='gold' size='5'><b><i>FORMA DE PAGAMENTO</i></b></font>
-					</td>
-					<td align="center">
-						<font color='gold' size='5'><b><i>VALOR</i></b></font>
+					<td width="50%" align="center">
+						<font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
 					</td>
 				</tr>
-
 				<tr>
-					<td align="center">
-						<input type="text" name="txtdoc" size="6" maxlength="6" class="campos" onKeyUp="validate(this)">
+					<td width="50%" align="center">
+						<input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
+						<input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
+							onkeypress="fPassaAlfaNumerico('an')"
+							onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
 					</td>
-					<td align="center">
-						<select name="lsPr1" class="campos">
-							<?php
-							// Obtendo a Relação
-							// Conectando ao Banco de Dados
-							include "dbselect.php";
-
-							// Criando a Instrução SQL de Consulta
-							$sqlpr1 = "select * from formapag where codpag < 31 order by codpag";
-
-							// Consultando os Registros
-							$rspr1 = mysqli_query($conec, $sqlpr1) or die("Errod de Banco de Dados #1. Contate seu Administrador");
-
-							// Criando o Array para o campo PC
-							while ($lnpr1 = mysqli_fetch_array($rspr1)) {
-								$CodPag1  = $lnpr1['codpag'];
-								$ModPag1  = $lnpr1['modpag'];
-							?>
-								<option value="<?php echo $CodPag1; ?>" class="campos"><?php echo "$ModPag1"; ?></option>
-							<?php
-							}
-							mysqli_free_result($rspr1);
-							?>
-						</select>
-					</td>
-					<td align="center">
-						<font size="5"><b><i>R$ </i></b></font>
-						<input type="text" name="txt1" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('chaveiro', 'txt1', event); validvalor(this)">
-						<input type="hidden" name="txtvrchav" value="<?php echo $VrChav; ?>">
-						<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+					<td width="50%" align="center">
+						<input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
+							onkeypress="fPassaAlfaNumerico('an')"
+							onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
 					</td>
 				</tr>
-
-				<tr>
-					<td align="center">
-						<font color='gold' size='5'><b><i>QUANTIDADE</i></b></font>
-					</td>
-					<td align="center">
-						<select name="lsPr2" class="campos">
-							<?php
-							// Obtendo a Relação
-							// Conectando ao Banco de Dados
-							include "dbselect.php";
-
-							// Criando a Instrução SQL de Consulta
-							$sqlpr2 = "select * from formapag where codpag < 31 order by codpag";
-
-							// Consultando os Registros
-							$rspr2 = mysqli_query($conec, $sqlpr2) or die("Errod de Banco de Dados #2. Contate seu Administrador");
-
-							// Criando o Array para o campo PC
-							while ($lnpr2 = mysqli_fetch_array($rspr2)) {
-								$CodPag2  = $lnpr2['codpag'];
-								$ModPag2  = $lnpr2['modpag'];
-							?>
-								<option value="<?php echo $CodPag2; ?>" class="campos"><?php echo "$ModPag2"; ?></option>
-							<?php
-							}
-							mysqli_free_result($rspr2);
-							?>
-						</select>
-					</td>
-					<td align="center">
-						<font size="5"><b><i>R$ </i></b></font>
-						<input type="text" name="txt2" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('chaveiro', 'txt2', event); validvalor(this)">
-					</td>
-				</tr>
-
-				<tr>
-					<td align="center">
-						<input type="text" name="qtde" size="3" maxlength="3" class="campos" onKeyUp="validate(this)">
-					</td>
-					<td align="center">
-						<select name="lsPr3" class="campos">
-							<?php
-							// Obtendo a Relação
-							// Conectando ao Banco de Dados
-							include "dbselect.php";
-
-							// Criando a Instrução SQL de Consulta
-							$sqlpr3 = "select * from formapag where codpag < 31 order by codpag";
-
-							// Consultando os Registros
-							$rspr3 = mysqli_query($conec, $sqlpr3) or die("Errod de Banco de Dados #2. Contate seu Administrador");
-
-							// Criando o Array para o campo PC
-							while ($lnpr3 = mysqli_fetch_array($rspr3)) {
-								$CodPag3  = $lnpr3['codpag'];
-								$ModPag3  = $lnpr3['modpag'];
-							?>
-								<option value="<?php echo $CodPag3; ?>" class="campos"><?php echo "$ModPag3"; ?></option>
-							<?php
-							}
-							mysqli_free_result($rspr3);
-							?>
-						</select>
-					</td>
-					<td align="center">
-						<font size="5"><b><i>R$ </i></b></font>
-						<input type="text" name="txt3" size="6" maxlength="6" class="campos" OnKeyUp="FormataValor('chaveiro', 'txt3', event); validvalor(this)">
-					</td>
-				</tr>
-		</table><br>
+		</table>
+		<br>
 
 		<table width="100%" border="0" cellspacing="0">
 			<tr>
-				<td width="9%">
-					<a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
-				</td>
 				<td width="82%" align="center">
-					<input type="submit" name="btenviar" value="Continuar">&nbsp;&nbsp;
-					<input type="reset" name="btreset" value="Limpar">
-				</td>
-				<td width="9%" align="right">
-					<a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+					<input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
+					<input type='reset' name='btreset' value='Limpar'><br><br>
+					<span id="msg"></span>
 				</td>
 			</tr>
-		</table>
+		</table><br>
 		</form>
 	<?php
-						} else {
-	?>
+	} else { ?>
 		<br><br><br><br><br>
 		<font size='6'><b>
 				<center>Acesso <font color='gold'>
@@ -297,15 +314,13 @@
 						<font color='#FFFFFF'>!!!</center>
 			</b></font><br><br><br>
 		<center><a href='servrec.php?c_s=<?php echo $lg_user; ?>'><img src='images/voltar.gif'></a></center><br><br>
-	<?php
-						}
+	<?php            }
 
-						// Encerrando as Conexões
-						$SisRot = "S-7.2.5";
-						include "rodape.php";
-						mysqli_close($conec);
+	// Encerrando as Conexões
+	$SisRot = "S-7.2.2";
+	include "rodape.php";
+	mysqli_close($conec);
 	?>
-
 </body>
 
 </html>

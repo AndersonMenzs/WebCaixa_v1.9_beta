@@ -179,8 +179,8 @@
     // Consultando o último recibo dentro das rotinas TXP, TXC, PROD e BOOK
     $sql = "SELECT numdoc, datarec FROM registro 
         WHERE numdoc >= $NumDocInicial
-        AND datarec >= '2025-08-29' 
-        AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK') 
+        AND datarec >= '2025-08-29'  
+        AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK', 'PROD', 'CHV')
         ORDER BY numdoc DESC";
     $rs  = mysqli_query($conec, $sql) or die('Erro #3!');
     $ln  = mysqli_fetch_array($rs);
@@ -324,8 +324,6 @@
 
                     <input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">
                     <input type="hidden" name="txtvrprodf" value="<?php echo $VrProdF; ?>">
-                    <!--<input type="hidden" name="txtAP" value="<?php echo $VrAnt; ?>">
-                        <input type="hidden" name="txtAPf" value="<?php echo $VrAntF; ?>">-->
                     <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 
                     <td align="center">

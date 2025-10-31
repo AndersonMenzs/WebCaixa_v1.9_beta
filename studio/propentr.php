@@ -18,40 +18,36 @@
          font: 16px sans-serif;
          color: #000000;
       }
-   </style>
 
-   <?php
-   // Inserindo o Cabeçalho
-   include "../cabecprs.php";
-   ?>
-
-   <script>
-      function F5(event) {
-         var tecla = document.all ? window.event.keyCode : event.which;
-         if (document.all) {
-            window.event.keyCode = 0;
-            window.event.returnValue = false;
-         }
-         if (tecla == 116) return false;
+      /* Estilo para o autocomplete */
+      .ui-autocomplete {
+         max-height: 200px;
+         overflow-y: auto;
+         overflow-x: hidden;
+         background-color: #fff;
+         color: #000;
+         border: 1px solid #ccc;
       }
 
-      document.onkeydown = F5;
-   </script>
+      .ui-menu-item {
+         padding: 5px;
+      }
 
-   <SCRIPT LANGUAGE="JavaScript">
-      <!-- Begin
+      .ui-menu-item:hover {
+         background-color: #f0f0f0;
+         cursor: pointer;
+      }
+   </style>
+
+   <script>
       function putFocus(formInst, elementInst) {
          if (document.forms.length > 0) {
             document.forms[formInst].elements[elementInst].focus();
          }
       }
-      //  End 
-      -->
-   </script>
 
-   <Script>
       function validate(field) {
-         var valid = "0123456789"
+         var valid = ".0123456789"
          var ok = "yes";
          var temp;
          for (var i = 0; i < field.value.length; i++) {
@@ -64,7 +60,6 @@
             field.select();
          }
       }
-      //  End -->
    </script>
 
    <script>
@@ -115,7 +110,127 @@
       }
    </script>
 
-   <script type="text/javascript" src="val_contrato.js" charset="utf-8">
+   <?php
+   // Inserindo o Cabeçalho
+   include "../cabecprs.php";
+   ?>
+
+   <!-- Adicionando jQuery UI para o autocomplete -->
+   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+   <script>
+      $(function() {
+         function setupAutocomplete(element, tipo) {
+            var $el = $(element);
+            $el.autocomplete({
+               source: function(request, response) {
+                  $.ajax({
+                     url: "buscar_funcionarias.php",
+                     dataType: "json",
+                     data: {
+                        term: request.term,
+                        tipo: tipo
+                     },
+                     success: function(data) {
+                        var items = [];
+
+                        // já é um array de items {label,value,mat}
+                        if (Array.isArray(data)) {
+                           items = data;
+                        }
+                        // formato retornado pelo servidor: { nomes: [...], mat_vend: [...] }
+                        else if (data && Array.isArray(data.nomes)) {
+                           for (var i = 0; i < data.nomes.length; i++) {
+                              items.push({
+                                 label: data.nomes[i],
+                                 value: data.nomes[i],
+                                 mat: data.mat_vend && data.mat_vend[i] ? data.mat_vend[i] : ''
+                              });
+                           }
+                        }
+                        // fallback vazio
+                        response(items);
+                     },
+                     error: function(xhr, status, err) {
+                        console.error("Erro na requisição:", status, err);
+                        response([]);
+                     }
+                  });
+               },
+               minLength: 2,
+               delay: 300,
+               select: function(event, ui) {
+                  if (ui.item && ui.item.mat) {
+                     $('#mat_vend').val(ui.item.mat);
+                  }
+                  $(this).val(ui.item ? ui.item.value : '');
+                  return false;
+               },
+               focus: function(event, ui) {
+                  $(this).val(ui.item ? ui.item.value : '');
+                  return false;
+               }
+            });
+
+            // compatível com várias versões do jQuery UI: tenta obter a instância do widget
+            var inst = $el.autocomplete("instance") || $el.data("ui-autocomplete") || $el.data("autocomplete");
+            if (inst) {
+               inst._renderItem = function(ul, item) {
+                  return $("<li>")
+                     .append("<div>" + (item.label || item.value || "") + "</div>")
+                     .appendTo(ul);
+               };
+            } else {
+               // fallback seguro: não quebrar se instância não for encontrada
+               console.warn("Autocomplete instance não disponível para", element);
+            }
+         }
+
+         // Aplicar aos campos
+         setupAutocomplete("#vendedora", "vendedora");
+      });
+
+      function validaCampos() {
+         var vendedora = document.getElementById('vendedora').value.trim();
+         var cliente = document.getElementById('cliente').value.trim();
+         if (vendedora.length <= 8) {
+            alert('O campo Vendedora deve ter mais que 8 letras.');
+            document.getElementById('vendedora').focus();
+            return false;
+         }
+         if (cliente.length <= 8) {
+            alert('O campo Cliente deve ter mais que 8 letras.');
+            document.getElementById('cliente').focus();
+            return false;
+         }
+         return true;
+      }
+
+      function fPassaAlfaNumerico(tipo) {
+         return function(e) {
+            let char = String.fromCharCode(e.which);
+            if (tipo === 'an') {
+               // permite apenas letras e números
+               if (!/^[a-zA-Z0-9\s]$/.test(char)) {
+                  e.preventDefault();
+               }
+            }
+         };
+      }
+
+      function validnome(input) {
+         // remove tudo que não for letra, número ou espaço
+         input.value = input.value.replace(/[^A-Z0-9\s]/g, '');
+
+         // exemplo: exige pelo menos 3 caracteres
+         if (input.value.length < 3) {
+            input.style.borderColor = "red";
+         } else {
+            input.style.borderColor = "";
+         }
+      }
    </script>
 
 </head>
@@ -125,7 +240,7 @@
    <?php
    // Obtendo o Login
    $Sis     = "S7";
-   $Rot     = "S7R2.6";
+   $Rot     = "S7R2.2";
    $lg_user = $_REQUEST['c_s'];
    $user = substr($lg_user, 0, 8);
    $pss  = substr($lg_user, 8, 40);
@@ -135,95 +250,62 @@
       include "us_cad.php";
    } ?>
 
-   <font color="gold" size="6"><br>
-      <b>
-         <center><u><i>Proposta - Entrada</i></u></center>
-      </b>
-   </font><br><br><br>
+   <table width='100%' border='0' cellpadding='0' cellspacing='0'>
+      <tr>
+         <td width='9%'>
+            <a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
+         </td>
+         <td width='82%' align='center'>
+            <font color="gold" size="6"><b>
+                  <center><u><i>PROPOSTA - ENTRADA</i></u></center>
+               </b></font><br><br><br>
+         </td>
+         <td width='9%'>
+            <a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+         </td>
+      </tr>
+   </table>
    <?php
-
-   // Consultando número de recibo
-   /*$sql = "SELECT numrec FROM num_recibos WHERE status = '0'ORDER BY numrec ASC LIMIT 1";
-   $res = mysqli_query($conec, $sql);
-   $ln  = mysqli_fetch_array($res);
-   $NumRec = $ln['numrec'];*/
 
    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
       <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
-         <form name="cntentr" method="post" action="confpropentr.php" OnSubmit="JavaScript:return checkdata()">
+         <form name="cntentr" method="post" action="propentr_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos()" autocomplete="off">
             <tr>
-               <td width="30%" align="center">
-                  <font color='gold' size='5'><b><i>Nº da Proposta</i></b></font>
+               <td width="50%" align="center">
+                  <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
                </td>
-               <td width="30%" align="center">
-                  <font color='gold' size='5'><b><i>Valor</i></b></font>
-               </td>
-               <td width="40%" align="center">
-                  <font color='gold' size='5'><b><i>Forma de Pagamento</i></b></font>
+               <td width="50%" align="center">
+                  <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
                </td>
             </tr>
-
             <tr>
-               <td width="30%" align="center">
-                  <?php
-                  if ($NumRec != '') {
-                     $readonly_disabled = 'readonly';
-
-                     echo "<input type='text' name='txtdoc' size='5' maxlength='7' class='campos' value='$NumRec' $readonly_disabled>";
-                  } else {
-                     echo "Não há recibo disponivel";
-                  }
-                  ?>
+               <td width="50%" align="center">
+                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
+                  <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
+                     onkeypress="fPassaAlfaNumerico('an')"
+                     onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
                </td>
-               <td width="30%" align="center">
-                  <font size='5'>R$ </i></b></font>
-                  <input type="text" name="txtvalor" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('cntentr', 'txtvalor', event);">
-                  <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-               </td>
-               <td width="40%" align="center">
-                  <select name="lsPr" class="campos">
-                     <?php
-                     // Obtendo a Relação
-                     // Conectando ao Banco de Dados
-                     include "dbselect.php";
-
-                     // Criando a Instrução SQL de Consulta
-                     $sqlpr = "select * from formapag where codpag <= 30 order by codpag";
-
-                     // Consultando os Registros
-                     $rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
-
-                     // Criando o Array para o campo PC
-                     while ($lnpr = mysqli_fetch_array($rspr)) {
-                        $CodPag  = $lnpr['codpag'];
-                        $ModPag  = $lnpr['modpag']; ?>
-                        <option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
-                     <?php
-                     }
-                     mysqli_free_result($rspr); ?>
-                  </select>
+               <td width="50%" align="center">
+                  <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
+                     onkeypress="fPassaAlfaNumerico('an')"
+                     onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
                </td>
             </tr>
-      </table><br>
+      </table>
+      <br>
 
       <table width="100%" border="0" cellspacing="0">
          <tr>
-            <td width="9%">
-               <a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
-            </td>
             <td width="82%" align="center">
-               <?php
-               if (isset($NumRec)) {
-                  echo "<input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;";
-                  echo "<input type='reset' name='btreset' value='Limpar'><br><br>";
-               } ?>
-            <td width="9%" align="right">
-               <a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+               <input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
+               <input type='reset' name='btreset' value='Limpar'><br><br>
+               <span id="msg"></span>
             </td>
          </tr>
-      </table>
-      </form><?php
-            } else { ?>
+      </table><br>
+      </form>
+   <?php
+   } else { ?>
       <br><br><br><br><br>
       <font size='6'><b>
             <center>Acesso <font color='gold'>
@@ -232,14 +314,13 @@
                   <font color='#FFFFFF'>!!!</center>
          </b></font><br><br><br>
       <center><a href='servrec.php?c_s=<?php echo $lg_user; ?>'><img src='images/voltar.gif'></a></center><br><br>
-   <?php
-            }
-            $SisRot = "S-7.2.6";
-            include "rodape.php";
+   <?php            }
 
-            // Encerrando as Conexões
-            mysqli_close($conec); ?>
-
+   // Encerrando as Conexões
+   $SisRot = "S-7.2.2";
+   include "rodape.php";
+   mysqli_close($conec);
+   ?>
 </body>
 
 </html>

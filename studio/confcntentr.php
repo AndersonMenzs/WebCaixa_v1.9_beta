@@ -161,7 +161,7 @@
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
 	?>
 		<table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
-			<form name="confentr" method="post" action="geracntentr.php" OnSubmit="JavaScript:return checkdata()" autocomplete="off">
+			<form name="confentr" method="post" action="geracntentr.php" onsubmit="return checkdata()" autocomplete="off">
 				<tr>
 					<td width="30%" align="center">
 						<font color='gold' size='5'><b><i>Nº do Contrato</i></b></font>

@@ -43,6 +43,7 @@
 	$FPag_1      = trim($_POST['lsPr1']);
 	$FPag_2      = trim($_POST['lsPr2']);
 	$FPag_3      = trim($_POST['lsPr3']);
+	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
@@ -103,17 +104,17 @@
 			$Reg  = $Reg + 1;
 
 			if ($FPag_1 <> "00" or $FPag_1 == "99") {
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
 			}
 
 			if ($FPag_2 <> "00" and $FPag_1 <> "99") {
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
 			}
 
 			if ($FPag_3 <> "00" and $FPag_1 <> "99") {
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
 			}
 
@@ -132,6 +133,7 @@
 				<input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
 				<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
 				<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">
+				<input type="hidden" name="txtmodpag" value="<?php echo $ModPag; ?>">
 				<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">

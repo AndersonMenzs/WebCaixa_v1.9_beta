@@ -71,6 +71,7 @@
 	$FPag_1      = trim($_POST['lsPr1']);
 	$FPag_2      = trim($_POST['lsPr2']);
 	$FPag_3      = trim($_POST['lsPr3']);
+	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
@@ -220,6 +221,8 @@
 		<input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
 		<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
 		<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">
+		<input type="hidden" name="txtmodpag" value="<?php echo $ModPag; ?>">
+		<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 		<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 		<input type="hidden" name="rdbook" value="<?php echo $Book; ?>">

@@ -146,22 +146,22 @@
    <table width='100%' border='0' cellpadding='0' cellspacing='0'>
       <tr>
          <td width='9%'>
-            <a href="contrentr.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+            <a href="cntentr.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
          </td>
          <td width='82%' align='center'>
             <font color="gold" size="6"><b>
-                  <center><u><i>CONTRATO - ENTRADA</i></u></center>
+                  <center><u><i>PROPOSTA - ENTRADA</i></u></center>
                </b></font><br><br><br>
          </td>
          <td width='9%'>
-            <a href="contrentr.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+            <a href=cntentr.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
          </td>
       </tr>
    </table>
    <?php
 
    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
-      <form name="cntentr" method="post" action="confcntentr.php" onsubmit="return checkdata();" autocomplete="off">
+      <form name="cntentr" method="post" action="confpropentr.php" onsubmit="return checkdata();" autocomplete="off">
          <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
             <tr>
                <td width="50%" align="center">
@@ -188,7 +188,7 @@
          <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
             <tr>
                <td align="center">
-                  <font color='#FFFFFF' size='5'><b><i>Nº do Contrato</i></b></font>
+                  <font color='#FFFFFF' size='5'><b><i>Nº do Proposta</i></b></font>
                </td>
                <td align="center">
                   <font color='#FFFFFF' size='5'><b><i>Valor Total</i></b></font>

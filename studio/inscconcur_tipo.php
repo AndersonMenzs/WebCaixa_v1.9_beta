@@ -122,6 +122,7 @@
 	$lg_user = $_REQUEST['c_s'];
 	$user = substr($lg_user, 0, 8);
 	$pss  = substr($lg_user, 8, 40);
+	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = $_POST['vendedora'];
 	$Cliente   = $_POST['cliente'];
 	$DataHj = date('Y-m-d');
@@ -145,7 +146,7 @@
     $sql = "SELECT numdoc, datarec FROM registro 
         WHERE numdoc >= $NumDocInicial
         AND datarec >= '2025-08-29' 
-        AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK') 
+        AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK', 'PROD', 'CHV') 
         ORDER BY numdoc DESC";
     $rs  = mysqli_query($conec, $sql) or die('Erro #3!');
     $ln  = mysqli_fetch_array($rs);
@@ -201,6 +202,7 @@
 					<td align="center">
 						<font color='gold' size='4'><b><i><?php echo $Vendedora; ?></i></b></font>
 						<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+                        <input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 					</td>
 					<td align="center">
 						<font color='lime' size='4'><b><i><?php echo $Cliente; ?></i></b></font>

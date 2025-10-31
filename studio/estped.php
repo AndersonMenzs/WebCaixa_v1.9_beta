@@ -52,6 +52,10 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
+	$dados = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+	echo "<pre>";
+	var_dump($dados);
+	echo "</pre>";
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R1.1";
