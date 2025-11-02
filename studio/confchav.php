@@ -38,10 +38,6 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	var_dump($dados);
-	echo "</pre>";
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.5.1";
@@ -52,8 +48,8 @@
 	$NumDocF = 100000000 + $NumDoc;
 	$NDoc      = substr($NumDocF, 1, 8);
 	$Qtde	   = trim($_POST['qtde']);
-	$TaxaConc  = trim($_POST['txtvrconc']);
-	$TaxaConcF = number_format($TaxaConc, 2, ",", ".");
+	$TaxaChav  = trim($_POST['txtvrchav']);
+	$TaxaChavF = number_format($TaxaChav, 2, ",", ".");
 	$FPag1     = trim($_POST['lsPr1']);
 	$FPag2     = trim($_POST['lsPr2']);
 	$FPag3     = trim($_POST['lsPr3']);
@@ -84,10 +80,6 @@
 		$FsPags = $FsPags + 1;
 	}
 
-	/* if ($txt4 <> "") {
-		$FsPags = $FsPags + 1;
-	} */
-
 	if ($FsPags == 1) {
 		if ($txt1 <> "") {
 			$FPag = $FPag1;
@@ -95,6 +87,7 @@
 			$rs  = mysqli_query($conec, $sql);
 			$ln  = mysqli_fetch_array($rs);
 			$ModPag = $ln['modpag'];
+			$FmRec  = $ln['siglapag'];
 			mysqli_free_result($rs);
 		} else if ($txt2 <> "") {
 			$FPag = $FPag2;
@@ -102,6 +95,7 @@
 			$rs  = mysqli_query($conec, $sql);
 			$ln  = mysqli_fetch_array($rs);
 			$ModPag = $ln['modpag'];
+			$FmRec  = $ln['siglapag'];
 			mysqli_free_result($rs);
 		} else if ($txt3 <> "") {
 			$FPag = $FPag3;
@@ -109,18 +103,27 @@
 			$rs  = mysqli_query($conec, $sql);
 			$ln  = mysqli_fetch_array($rs);
 			$ModPag = $ln['modpag'];
+			$FmRec  = $ln['siglapag'];
 			mysqli_free_result($rs);
-		 }/* else if ($txt4 <> "") {
-			$FPag = $FPag4;
-			$sql = "select * from formapag where codpag = '$FPag' ";
-			$rs  = mysqli_query($conec, $sql);
-			$ln  = mysqli_fetch_array($rs);
-			$ModPag = $ln['modpag'];
-			mysqli_free_result($rs);
-		} */
+		}
 	} else {
 		$ModPag = "Diversas";
+		$FmRec  = "DIV";
 	}
+
+	// Condição para nome em extensão para forma de pagamento
+	if ($FmRec == "DIN") {
+		$ModPag = "Dinheiro";
+	} elseif ($FmRec == "CTD") {
+		$ModPag = "Cartão Débito";
+	} elseif ($FmRec == "CTV") {
+		$ModPag = "Cartão Crédito";
+	} elseif ($FmRec == "PXQ") {
+		$ModPag = "Pix QR Code";
+	} elseif ($FmRec == "PXC") {
+		$ModPag = "Pix Cnpj";
+	}
+
 	?>
 
 	<font color="gold" size="6">
@@ -136,22 +139,46 @@
 	}
 
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
-		<table border="5" cellpadding="10" cellspacing="0" align="center">
-			<form name="confentr" method="post" action="gerachav4.php" OnSubmit="JavaScript:return checkdata()">
+		<table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
+			<form name="confentr" method="post" action="gerachav.php" onsubmit="return checkdata()">
 				<tr>
-					<td>
-						<font color='gold' size='4'><b><i>Documento: <font color='#FFFFFF' size='5'><b><i><?php echo $NDoc; ?></i></b></font>
+					<td width="30%" align="center">
+						<font color='gold' size='5'><b><i>Documento</font>
 					</td>
-					<td align="center">
-						<font color='gold' size='4'><b><i>Quantidade: <font color='#FFFFFF' size='5'><b><i><?php echo $Qtde; ?></i></b></font>
+					<td width="70%" align="center">
+						<font color='#FFFFFF' size='5'><b><i><?php echo $NDoc; ?></i></b></font>
 					</td>
-					<td align="center">
-						<font color='gold' size='4'><b><i>Total: <font color='#FFFFFF' size='5'><b><i>R$ <?php echo $PgtoF; ?></i></b></font>
-					<td align="center">
-						<font color='gold' size='4'><b><i>Pagamento em: <font color='#FFFFFF' size='5'><b><i><?php echo $ModPag; ?></i></b></font>
+				</tr>
+				<tr>
+					<td width="30%" align="center">
+						<font color='gold' size='5'><b><i>Quantidade</font>
 					</td>
-					<td align="center">
-						<font color='gold' size='4'><b><i>Senha: <input type='password' name='txtsen' size='6' maxlength='6' class="campos">
+					<td width="70%" align="center">
+						<font color='#FFFFFF' size='5'><b><i><?php echo $Qtde; ?></i></b></font>
+					</td>
+				</tr>
+				<tr>
+					<td width="30%" align="center">
+						<font color='gold' size='5'><b><i>Total</font>
+					</td>
+					<td width="70%" align="center">
+						<font color='#FFFFFF' size='5'><b><i>R$ <?php echo $PgtoF; ?></i></b></font>
+					</td>
+				</tr>
+				<tr>
+					<td width="30%" align="center">
+						<font color='gold' size='5'><b><i>Forma de Pagamento</font>
+					</td>
+					<td width="70%" align="center">
+						<font color='#FFFFFF' size='5'><b><i><?php echo $ModPag; ?></i></b></font>
+					</td>
+				</tr>
+				<tr>
+					<td width="30%" align="center">
+						<font color='gold' size='5'><b><i>Senha</font>
+					</td>
+					<td width="70%" align="center">
+						<input type='password' name='txtsen' size='6' maxlength='6' class="campos">
 					</td>
 				</tr>
 		</table>
@@ -161,13 +188,17 @@
 		<input type="hidden" name="lsPr1" value="<?php echo $FPag1; ?>">
 		<input type="hidden" name="lsPr2" value="<?php echo $FPag2; ?>">
 		<input type="hidden" name="lsPr3" value="<?php echo $FPag3; ?>">
-		<input type="hidden" name="qtde" value="<?php echo $$Qtde; ?>">
+		<input type="hidden" name="qtde" value="<?php echo $Qtde; ?>">
 		<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
 		<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
 		<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
+		<input type="hidden" name="txtvrchav" value="<?php echo $TaxaChav; ?>">
+		<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
+		<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 		<p>
 			<center><input id="ghost_click" type="submit" name="btenvia" value="Registrar">
-				<input type="button" name="btret" value="Retornar" OnClick="JavaScript:window.history.back()">
+				<input type="button" name="btret" value="Retornar" onclick="window.history.back()">
 			</center>
 		</p>
 		<center>

@@ -1,3 +1,9 @@
+<?php
+// Debugando
+  error_reporting(E_ALL & ~E_NOTICE);
+  ini_set("display_errors", 1);
+?>
+
 <html>
 
   <head>
@@ -45,9 +51,10 @@ document.onkeydown = F5;
 	   include "conexao.php";
 	   include "dbselect.php";
 
-	   $sqlO = "update datafix set dataf = 0";
+	   $sqlO = "UPDATE datafix SET horaf = 0, minf = 0;";
 	   $rsO  = mysqli_query($conec, $sqlO) or die ("File index.php Error #1. Contate seu Administrador.");
-	   mysqli_free_result($rsO); ?>
+	   
+	   ?>
 
 	   <font color="gold" size="6">
 	   <br><b><center><u><i>CLIQUE NO BOTÃO SAIR &amp; ENTRE NOVAMENTE</i></u></center></b></font><br>
@@ -58,7 +65,7 @@ document.onkeydown = F5;
 		  <center><a href='index.php'><img src='images/Sair.gif'></a></center><br><br><?php
 		 }
     // Encerrando
-       include "./rodape.php"; ?>
+       include "./rod_index.php"; ?>
 
   </body>
 

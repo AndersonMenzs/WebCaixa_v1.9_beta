@@ -79,7 +79,7 @@
 	$lnRec = mysqli_fetch_array($rsRec);
 	$SgRec  = $lnRec['siglarec'];
 	$tipo = "ENTRADA";
-	
+
 	// Consulta SQL corrigida com parênteses
 	$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag_1' OR codpag = '$FPag_2' OR codpag = '$FPag_3') AND codpag <> '---'";
 	$rsFm = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
@@ -116,7 +116,7 @@
 		$ModPag = "PIX CNPJ";
 		$FmRec_a = "PXC";
 	}
-	
+
 	// Reduzindo a Matrícula
 	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
 	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
@@ -134,7 +134,7 @@
 
 			// Remover ponto do valor
 			$VrEnt = str_replace('.', '', $VrEnt);
-	?>
+			?>
 	<br><br>
 	<font size='6'><b>
 			<center>Verifique se a impressora <font color='gold'>
@@ -152,45 +152,47 @@
 		<font color='#FFFFFF' size='3'><span id="msg"></span></font>
 	</center>
 	<?php
-			// Gravando a Spool
-			include "dbselect.php";
-			$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
-			$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+	// Gravando a Spool
+	include "dbselect.php";
+	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
+	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
 
-			$SisRot = "S-7.2.2.1.2";
-			include "./rodape.php"; ?>
+	$SisRot = "S-7.2.2.1.2";
+	include "./rodape.php"; 
+	?>
+	
 	<script src="./js/ghost_click.js"></script>
 	<script>
-function imprimirERedirecionar() {
-    // Monta a URL com os dados
-    var url = './recibo_cntentr.php?tipo=<?php echo urlencode($tipo); ?>'
-        + '&NDoc=<?php echo urlencode($NDoc); ?>'
-        + '&PC=<?php echo urlencode($PC); ?>'
-        + '&VrEntrF=<?php echo urlencode($VrEntrF); ?>'
-        + '&ModPag=<?php echo urlencode($ModPag); ?>'
-		+ '&fpag_1=<?php echo urlencode($FPag_1); ?>'
-		+ '&fpag_2=<?php echo urlencode($FPag_2); ?>'
-		+ '&fpag_3=<?php echo urlencode($FPag_3); ?>'
-		+ '&fmrec=<?php echo urlencode($FmRec_a); ?>'
-		+ '&txt1=<?php echo urlencode($txt1); ?>'
-		+ '&txt2=<?php echo urlencode($txt2); ?>'
-		+ '&txt3=<?php echo urlencode($txt3); ?>'
-        + '&data=<?php echo urlencode($dtRec); ?>'
-        + '&Vendedora=<?php echo urlencode($Vendedora); ?>'
-        + '&Cliente=<?php echo urlencode($Cliente); ?>'
-        + '&vlr_ext=<?php echo urlencode($vlr_ext); ?>'
-        + '&Reg=<?php echo urlencode($Reg); ?>'
-        + '&horaaut=<?php echo urlencode($horaaut); ?>'
-        + '&dtAut=<?php echo urlencode($dtAut); ?>'
-        + '&SgRec=<?php echo urlencode($SgRec); ?>'
-        + '&VrEnt=<?php echo urlencode($VrEnt); ?>'
-        + '&Mat=<?php echo urlencode($Mat); ?>';
-    window.open(url, '_blank');
-    setTimeout(function() {
-        window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';
-    }, 1000);
-}
-</script>
+		function imprimirERedirecionar() {
+			// Monta a URL com os dados
+			var url = './recibo_cntentr.php?tipo=<?php echo urlencode($tipo); ?>' +
+				'&NDoc=<?php echo urlencode($NDoc); ?>' +
+				'&PC=<?php echo urlencode($PC); ?>' +
+				'&VrEntrF=<?php echo urlencode($VrEntrF); ?>' +
+				'&ModPag=<?php echo urlencode($ModPag); ?>' +
+				'&fpag_1=<?php echo urlencode($FPag_1); ?>' +
+				'&fpag_2=<?php echo urlencode($FPag_2); ?>' +
+				'&fpag_3=<?php echo urlencode($FPag_3); ?>' +
+				'&fmrec=<?php echo urlencode($FmRec_a); ?>' +
+				'&txt1=<?php echo urlencode($txt1); ?>' +
+				'&txt2=<?php echo urlencode($txt2); ?>' +
+				'&txt3=<?php echo urlencode($txt3); ?>' +
+				'&data=<?php echo urlencode($dtRec); ?>' +
+				'&Vendedora=<?php echo urlencode($Vendedora); ?>' +
+				'&Cliente=<?php echo urlencode($Cliente); ?>' +
+				'&vlr_ext=<?php echo urlencode($vlr_ext); ?>' +
+				'&Reg=<?php echo urlencode($Reg); ?>' +
+				'&horaaut=<?php echo urlencode($horaaut); ?>' +
+				'&dtAut=<?php echo urlencode($dtAut); ?>' +
+				'&SgRec=<?php echo urlencode($SgRec); ?>' +
+				'&VrEnt=<?php echo urlencode($VrEnt); ?>' +
+				'&Mat=<?php echo urlencode($Mat); ?>';
+			window.open(url, '_blank');
+			setTimeout(function() {
+				window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';
+			}, 1000);
+		}
+	</script>
 
 </body>
 

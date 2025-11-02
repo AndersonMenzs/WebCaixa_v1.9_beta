@@ -50,20 +50,20 @@ function checkdata() {
 			return false;
 		}
 
-		const valor1 = txt1.value * 1;
-		const valor2 = txt2.value * 1;
-		const valor3 = txt3.value * 1;
-		let soma = valor1 + valor2 + valor3;
-		const somaFx = soma.toFixed(2);
-		soma = parseFloat(somaFx);
-
-		const taxa = txtvrchav.value * 1 * qtde.value;
-
-		if (taxa !== soma) {
+		const valor1 = parseFloat((txt1.value || 0).replace(',', '.'));
+		const valor2 = parseFloat((txt2.value || 0).replace(',', '.'));
+		const valor3 = parseFloat((txt3.value || 0).replace(',', '.'));
+		const soma = valor1 + valor2 + valor3;
+		
+		const valorChave = parseFloat((txtvrchav.value || 0).replace(',', '.'));
+		const quantidade = parseInt(qtde.value, 10);
+		const taxa = parseFloat((valorChave * quantidade).toFixed(2));
+		
+		if (Math.abs(taxa - soma) > 0.01) {
 			const diferenca = soma - taxa;
 			const msg = diferenca > 0 ?
-				"A soma dos valores está MAIOR em R$ " + Math.abs(diferenca).toFixed(2) :
-				"A soma dos valores está MENOR em R$ " + Math.abs(diferenca).toFixed(2);
+			"A soma dos valores está MAIOR em R$ " + Math.abs(diferenca).toFixed(2) :
+			"A soma dos valores está MENOR em R$ " + Math.abs(diferenca).toFixed(2);
 			alert(msg);
 			return false;
 		}

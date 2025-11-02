@@ -138,7 +138,7 @@ document.onkeydown = F5;
 		     }
 
 	 // Preparando a Via Cliente ?>
-	    <form name="gerachav1" method="post" action="via1chav.php">
+	    <form name="gerachav1" method="post" action="via1newchav.php">
 	       <input type="hidden" name="txtuser"  value="<?php echo $lg_user; ?>">
 	       <input type="hidden" name="txtreg"   value="<?php echo $Reg; ?>">
 	       <input type="hidden" name="tiporec"  value="<?php echo $TipoRec; ?>">

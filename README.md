@@ -178,3 +178,15 @@ ALTER TABLE registro ADD COLUMN data_nasc VARCHAR(10);
 ``` 
 
 Estas adcções irão servir futuramente para impressão da solicitação de books
+
+2025-01-01
+
+### Reparado o código relog.php
+
+Foi alterado o código relog.php para que ele possa atualizar a hora corretamente.
+
+```php
+$sqlO = "UPDATE datafix SET horaf = 0, minf = 0;";
+$rsO  = mysqli_query($conec, $sqlO) or die ("File index.php Error #1. Contate seu Administrador.");
+```
+

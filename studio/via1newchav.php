@@ -1,35 +1,17 @@
-<html>
+<?php
+// Debugar
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-<head>
-	<title>WebCaixa v1.19_beta</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<style type="text/css">
-		body {
-			margin-top: 3%;
-			margin-left: 5%;
-			margin-right: 5%;
-			border: 3px solid gray;
-			padding: 10px 10px 10px 10px;
-			font-family: sans-serif;
-		}
 
-		.campos {
-			background-color: #C0C0C0;
-			font: 12px sans-serif;
-			color: #000000;
-		}
-	</style>
-
-	<?php
 	// Inserindo Cabeçalho
 	include "../cabecprs.php";
 	include "./valor_ext.php";
 	?>
-</head>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
-
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R5.1.1.2";
@@ -41,10 +23,9 @@
 	$Reg       = substr($AutFull, 1, 4);
 	$NDoc      = trim($_POST['txtdoc']);
 	$TipoRec   = trim($_POST['tiporec']);
-	$FPag      = trim($_POST['formapag']);
-	$FPag_1      = isset($_POST['lsPr1']) ? (trim($_POST['lsPr1']) == '00' ? '' : trim($_POST['lsPr1'])) : '';
-	$FPag_2      = isset($_POST['lsPr2']) ? (trim($_POST['lsPr2']) == '00' ? '' : trim($_POST['lsPr2'])) : '';
-	$FPag_3      = isset($_POST['lsPr3']) ? (trim($_POST['lsPr3']) == '00' ? '' : trim($_POST['lsPr3'])) : '';
+	$FPag1      = isset($_POST['lsPr1']) ? (trim($_POST['lsPr1']) == '00' ? '' : trim($_POST['lsPr1'])) : '';
+	$FPag2      = isset($_POST['lsPr2']) ? (trim($_POST['lsPr2']) == '00' ? '' : trim($_POST['lsPr2'])) : '';
+	$FPag3      = isset($_POST['lsPr3']) ? (trim($_POST['lsPr3']) == '00' ? '' : trim($_POST['lsPr3'])) : '';
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
@@ -57,12 +38,14 @@
 	$h1 = substr($hora, 0, 2);
 	$h2 = substr($hora, 3, 2);
 	$horaaut   = $h1 . $h2;
-	$TaxaConc  = trim($_POST['taxaconc']);
-	$TaxaConcF = trim($_POST['taxaconcf']);
+	$TaxaChav = trim($_POST['taxachav']);
+	$TaxaChavF = number_format($TaxaChav, 2, ",", ".");
+	$Qtde      = trim($_POST['qtde']);
 	$Mat       = trim($_POST['txtmat']);
-	$Vendedora = trim($_POST['vendedora']);
-	$Cliente   = trim($_POST['cliente']);
-	$vlr_ext   = valorPorExtenso($TaxaConc);
+	$Mat_Vend   = trim($_POST['mat_vend']);
+	$Vendedora  = trim($_POST['vendedora']);
+	$Cliente    = trim($_POST['cliente']);
+	$vlr_ext   = valorPorExtenso($TaxaChavF);
 
 	// Pesquisando PC
 	include "conexao.php";
@@ -78,10 +61,10 @@
 	$rsRec = mysqli_query($conec, $sqlRec) or die("Não foi possível acessar o Tipo de Recebimento");
 	$lnRec = mysqli_fetch_array($rsRec);
 	$SgRec  = $lnRec['siglarec'];
-	$tipo = "TAXA INSCRIÇÃO";
+	$tipo = "CHAVEIRO";
 
 	// Consulta SQL corrigida com parênteses
-	$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag_1' OR codpag = '$FPag_2' OR codpag = '$FPag_3') AND codpag <> '---'";
+	$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag1' OR codpag = '$FPag2' OR codpag = '$FPag3') AND codpag <> '---'";
 	$rsFm = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
 
 	$FmRec = [];
@@ -121,40 +104,9 @@
 	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
 	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 
-	?>
-
-	<font color="gold" size="6">
-		<br><b>
-			<center><u><i>Sistema de Autenticação</i></u></center>
-		</b>
-	</font>
-
-	<?php
-
 	// Imprimindo Via Cliente
 	$Aut1 = $Reg;
-	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut" . "R$ " . "$TaxaConcF$SgRec$FmRec_a$MatRec";
-
-	?>
-	
-	<br><br><br><br>
-	<font size='6'><b>
-			<center>Verifique se a impressora <font color='gold'>
-					<blink>do Caixa</blink>
-					<font color='#FFFFFF'> está ligada e com papel</center>
-		</b></font>
-	e <br>
-	<p>Clique no <font color='gold'>
-			<blink>botão Abaixo</blink>
-			<font color='#FFFFFF'>.</center>
-				</b></font>
-	</p><br>
-	<center><input id="ghost_click" type="submit" name="btimprime" value="Autenticar"><br><br></center>
-	<center>
-		<font color='#FFFFFF' size='3'><span id="msg"></span></font>
-	</center>
-
-	<?php
+	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut" . "R$ " . "$TaxaChavF$SgRec$FmRec_a$MatRec";
 
 	// Gravando a Spool
 	include "dbselect.php";
@@ -163,21 +115,23 @@
 
 	// Encerrando a Conexão
 	$SisRot = "S-7.5.1.1.2";
-	include "rodape.php"; ?>
+	include "rodape.php";
+
+	?>
 
 	<script src="./js/ghost_click.js"></script>
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
-			var url = './recibo_inscconc.php?tipo=<?php echo urlencode($tipo); ?>' +
+			var url = './recibo_chaveiro.php?tipo=<?php echo urlencode($tipo); ?>' +
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
-				'&TaxaConc=<?php echo urlencode($TaxaConc); ?>' +
-				'&TaxaConcF=<?php echo urlencode($TaxaConcF); ?>' +
-				'&ModPag=<?php echo urlencode($ModPag); ?>' +
-				'&fpag_1=<?php echo urlencode($FPag_1); ?>' +
-				'&fpag_2=<?php echo urlencode($FPag_2); ?>' +
-				'&fpag_3=<?php echo urlencode($FPag_3); ?>' +
+				'&TaxaChav=<?php echo urlencode($TaxaChav); ?>' +
+				'&TaxaChavF=<?php echo urlencode($TaxaChavF); ?>' +
+				'&qtde=<?php echo urlencode($Qtde); ?>' +
+				'&fpag_1=<?php echo urlencode($FPag1); ?>' +
+				'&fpag_2=<?php echo urlencode($FPag2); ?>' +
+				'&fpag_3=<?php echo urlencode($FPag3); ?>' +
 				'&fmrec=<?php echo urlencode($FmRec_a); ?>' +
 				'&txt1=<?php echo urlencode($txt1); ?>' +
 				'&txt2=<?php echo urlencode($txt2); ?>' +
@@ -199,6 +153,7 @@
 			}, 1000);
 		}
 	</script>
+
 </body>
 
 </html>
