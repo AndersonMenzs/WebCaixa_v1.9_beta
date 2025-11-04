@@ -137,9 +137,9 @@
 				<input type="hidden" name="lsPr2" value="<?php echo $FPag2; ?>">
 				<input type="hidden" name="lsPr3" value="<?php echo $FPag3; ?>">
 				<input type="hidden" name="qtde" value="<?php echo $Qtde; ?>">
-				<input type="hidden" name="txtvalor1" value="<?php echo $txt1; ?>">
-				<input type="hidden" name="txtvalor2" value="<?php echo $txt2; ?>">
-				<input type="hidden" name="txtvalor3" value="<?php echo $txt3; ?>">
+				<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
+				<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
+				<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">
 				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
 				<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">

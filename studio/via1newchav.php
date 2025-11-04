@@ -1,15 +1,16 @@
 <?php
-// Debugar
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
+// Pesquisando PC
+include "conexao.php";
+include "dbselect.php";
 
-	// Inserindo Cabeçalho
-	include "../cabecprs.php";
-	include "./valor_ext.php";
-	?>
+// Inserindo Cabeçalho
+include "../cabecprs.php";
+include "./valor_ext.php";
 
+?>
+
+<html>
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
 	// Importando os Dados do Formulário
@@ -47,10 +48,7 @@ error_reporting(E_ALL);
 	$Cliente    = trim($_POST['cliente']);
 	$vlr_ext   = valorPorExtenso($TaxaChavF);
 
-	// Pesquisando PC
-	include "conexao.php";
-	include "dbselect.php";
-
+	// Obtendo o PC
 	$sqlPC = "select pc from inicial";
 	$rsPC  = mysqli_query($conec, $sqlPC) or die("Não foi possível caessar o PC");
 	$lnPC  = mysqli_fetch_array($rsPC);
@@ -106,7 +104,10 @@ error_reporting(E_ALL);
 
 	// Imprimindo Via Cliente
 	$Aut1 = $Reg;
-	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut" . "R$ " . "$TaxaChavF$SgRec$FmRec_a$MatRec";
+	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$TaxaChavF$SgRec$FmRec_a$MatRec";
+
+			// Remover ponto do valor
+			$TaxaChav = str_replace('.', '', $TaxaChav);
 
 	// Gravando a Spool
 	include "dbselect.php";
@@ -118,8 +119,6 @@ error_reporting(E_ALL);
 	include "rodape.php";
 
 	?>
-
-	<script src="./js/ghost_click.js"></script>
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
@@ -144,9 +143,7 @@ error_reporting(E_ALL);
 				'&horaaut=<?php echo urlencode($horaaut); ?>' +
 				'&dtAut=<?php echo urlencode($dtAut); ?>' +
 				'&SgRec=<?php echo urlencode($SgRec); ?>' +
-				'&Mat=<?php echo urlencode($Mat); ?>' +
-				'&Idade=<?php echo urlencode($Idade); ?>' +
-				'&DataNasc=<?php echo urlencode($DataNasc); ?>';
+				'&Mat=<?php echo urlencode($Mat); ?>';
 			window.open(url, '_blank');
 			setTimeout(function() {
 				window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';

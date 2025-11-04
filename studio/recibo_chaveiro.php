@@ -1,19 +1,20 @@
 <?php
 
 // Debug
-error_reporting(E_ALL);
+/*error_reporting(E_ALL);
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_startup_errors', 1);*/
 
 $tipo      = $_GET['tipo'];
 $NDoc      = $_GET['NDoc'];
 $PC        = $_GET['PC'];
-$VrEntrF   = $_GET['VrEntrF'];
+$TaxaChavF   = $_GET['TaxaChavF'];
 $ModPag    = $_GET['ModPag'];
 $FPag_1    = $_GET['fpag_1'];
 $FPag_2    = $_GET['fpag_2'];
 $FPag_3    = $_GET['fpag_3'];
 $FmRec     = $_GET['fmrec'];
+$Qtde      = $_GET['qtde'];
 $txt1      = $_GET['txt1'];
 $txt2      = $_GET['txt2'];
 $txt3      = $_GET['txt3'];
@@ -30,7 +31,7 @@ $Reg       = $_GET['Reg'];
 $horaaut   = $_GET['horaaut'];
 $dtAut     = $_GET['dtAut'];
 $SgRec     = $_GET['SgRec'];
-$VrEnt     = $_GET['VrEnt'];
+$TaxaChav  = $_GET['TaxaChav'];
 $Mat       = $_GET['Mat'];
 
 ?>
@@ -176,8 +177,8 @@ $Mat       = $_GET['Mat'];
     </style>
 
 </head>
-
-<body onload="window.print()">
+<body>
+<!--<body onload="window.print()">-->
     <div class="container">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
@@ -248,7 +249,7 @@ $Mat       = $_GET['Mat'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrEntrF; ?></font>
+                    <font size=1><?php echo "R$ " . $TaxaChavF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -276,9 +277,10 @@ $Mat       = $_GET['Mat'];
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
                 </td>
-                <!--<td style="border-top: 1px solid #999999; border-left: 1px solid #999999; border-right: 1px solid #999999" colspan=2 align="center" valign=middle><b>
-                    <font size=1 color="#999999">CARTÃO CRÉDITO</font>
-                </b></td>-->
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                    colspan=2 align="center" valign=middle><b>
+                        <font size=1>QUANTIDADE</font>
+                    </b></td>
             </tr>
             <tr>
                 <td align="left" valign=bottom>
@@ -293,12 +295,12 @@ $Mat       = $_GET['Mat'];
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <font size=1><?php echo $Vendedora; ?></font>
                 </td>
-                <!--<td align="left" valign=bottom>
-                <font size=1><br></font>
-            </td>
-            <td style="border-bottom: 1px solid #999999; border-left: 1px solid #999999; border-right: 1px solid #999999" colspan=2 align="center" valign=middle sdval="0" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
-                <font size=1 color="#999999">R$ 0,00</font>
-            </td>-->
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
+                    <font size=1><?php echo $Qtde; ?></font>
+                </td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
@@ -488,7 +490,7 @@ $Mat       = $_GET['Mat'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrEnt . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $TaxaChav . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
@@ -556,7 +558,7 @@ $Mat       = $_GET['Mat'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrEntrF; ?></font>
+                    <font size=1><?php echo "R$ " . $TaxaChavF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -584,9 +586,10 @@ $Mat       = $_GET['Mat'];
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
                 </td>
-                <!--<td style="border-top: 1px solid #999999; border-left: 1px solid #999999; border-right: 1px solid #999999" colspan=2 align="center" valign=middle><b>
-                    <font size=1 color="#999999">CARTÃO CRÉDITO</font>
-                </b></td>-->
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                    colspan=2 align="center" valign=middle><b>
+                        <font size=1>QUANTIDADE</font>
+                    </b></td>
             </tr>
             <tr>
                 <td align="left" valign=bottom>
@@ -601,12 +604,12 @@ $Mat       = $_GET['Mat'];
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <font size=1><?php echo $Vendedora; ?></font>
                 </td>
-                <!--<td align="left" valign=bottom>
-                <font size=1><br></font>
-            </td>
-            <td style="border-bottom: 1px solid #999999; border-left: 1px solid #999999; border-right: 1px solid #999999" colspan=2 align="center" valign=middle sdval="0" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
-                <font size=1 color="#999999">R$ 0,00</font>
-            </td>-->
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
+                    <font size=1><?php echo $Qtde; ?></font>
+                </td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
@@ -796,7 +799,7 @@ $Mat       = $_GET['Mat'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrEnt . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $TaxaChav . $Mat; ?></font>
                 </td>
             </tr>
             <tr>

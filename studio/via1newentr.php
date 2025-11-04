@@ -1,31 +1,15 @@
+<?php
+
+// Pesquisando PC
+include "conexao.php";
+include "dbselect.php";
+
+// Inserindo Cabeçalho
+include "../cabecprs.php";
+include "./valor_ext.php";
+
+?>
 <html>
-
-<head>
-	<title>WebCaixa v1.19_beta</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<style type="text/css">
-		body {
-			margin-top: 5%;
-			margin-left: 5%;
-			margin-right: 5%;
-			border: 3px solid gray;
-			padding: 10px 10px 10px 10px;
-			font-family: sans-serif;
-		}
-
-		.campos {
-			background-color: #C0C0C0;
-			font: 12px sans-serif;
-			color: #000000;
-		}
-	</style>
-
-	<?php
-	// Inserindo Cabeçalho
-	include "../cabecprs.php";
-	include "./valor_ext.php";
-	?>
-</head>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
@@ -78,7 +62,7 @@
 	$rsRec = mysqli_query($conec, $sqlRec) or die("Não foi possível acessar o Tipo de Recebimento");
 	$lnRec = mysqli_fetch_array($rsRec);
 	$SgRec  = $lnRec['siglarec'];
-	$tipo = "ENTRADA";
+	$tipo = "CONTR. ENTRADA";
 
 	// Consulta SQL corrigida com parênteses
 	$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag_1' OR codpag = '$FPag_2' OR codpag = '$FPag_3') AND codpag <> '---'";
@@ -120,48 +104,23 @@
 	// Reduzindo a Matrícula
 	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
 	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
-	?>
 
-	<font color="gold" size="6">
-		<br><b>
-			<center><u><i>Sistema de Autenticação</i></u></center>
-		</b>
-	</font><?php
+	// Imprimindo Via Cliente
+	$Aut1 = $Reg;
+	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$VrEntrF$SgRec$FmRec_a$MatRec";
 
-			// Imprimindo Via Cliente
-			$Aut1 = $Reg;
-			$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$VrEntrF$SgRec$FmRec_a$MatRec";
+	// Remover ponto do valor
+	$VrEnt = str_replace('.', '', $VrEnt);
 
-			// Remover ponto do valor
-			$VrEnt = str_replace('.', '', $VrEnt);
-			?>
-	<br><br>
-	<font size='6'><b>
-			<center>Verifique se a impressora <font color='gold'>
-					<blink>do Caixa</blink>
-					<font color='#FFFFFF'> está ligada e com papel</center>
-		</b></font>
-	e <br>
-	<p>Clique no <font color='gold'>
-			<blink>botão Abaixo</blink>
-			<font color='#FFFFFF'>.</center>
-				</b></font>
-	</p><br>
-	<center><input id="ghost_click" type="submit" name="btimprime" value="Autenticar"><br><br></center>
-	<center>
-		<font color='#FFFFFF' size='3'><span id="msg"></span></font>
-	</center>
-	<?php
 	// Gravando a Spool
 	include "dbselect.php";
 	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
 	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
 
 	$SisRot = "S-7.2.2.1.2";
-	include "./rodape.php"; 
+	include "./rodape.php";
 	?>
-	
-	<script src="./js/ghost_click.js"></script>
+
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados

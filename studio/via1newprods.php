@@ -1,31 +1,20 @@
+<?php
+
+//debug
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
+// Pesquisando PC
+include "conexao.php";
+include "dbselect.php";
+
+// Inserindo Cabeçalho
+include "../cabecprs.php";
+include "./valor_ext.php";
+
+?>
 <html>
-
-<head>
-	<title>WebCaixa v1.19_beta</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<style type="text/css">
-		body {
-			margin-top: 5%;
-			margin-left: 5%;
-			margin-right: 5%;
-			border: 3px solid gray;
-			padding: 10px 10px 10px 10px;
-			font-family: sans-serif;
-		}
-
-		.campos {
-			background-color: #C0C0C0;
-			font: 12px sans-serif;
-			color: #000000;
-		}
-	</style>
-
-	<?php
-	// Inserindo Cabeçalho
-	include "../cabecprs.php";
-	include "./valor_ext.php";
-	?>
-</head>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 
@@ -60,16 +49,11 @@
 	$Mat       = trim($_POST['txtmat']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente   = trim($_POST['cliente']);
-	//$VrPag     = trim($_POST['txtvalor']);
 	$VrPag     = $txt1 + $txt2 + $txt3;
-	//$VrPagF    = number_format($VrPag, 2, '', '');
 	$VrPagF    = number_format($VrPag, 2, ',', '.');
 	$vlr_ext   = valorPorExtenso($VrPagF);
 
-	// Pesquisando PC
-	include "conexao.php";
-	include "dbselect.php";
-
+	// Obtendo o código do PC
 	$sqlPC = "select pc from inicial";
 	$rsPC  = mysqli_query($conec, $sqlPC) or die("Não foi possível acessar o PC");
 	$lnPC  = mysqli_fetch_array($rsPC);
@@ -80,6 +64,8 @@
 	$rsRec = mysqli_query($conec, $sqlRec) or die("Não foi possível acessar o Tipo de Recebimento");
 	$lnRec = mysqli_fetch_array($rsRec);
 	$SgRec  = $lnRec['siglarec'];
+
+	// Definindo o Tipo de Autenticação
 	if ($TipoRec == '6') {
 	    $tipo = "PRODUTOS";
 	} else {
@@ -127,38 +113,9 @@
 	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
 	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 
-	?>
-
-	<font color="gold" size="6">
-		<br><b>
-			<center><u><i>Sistema de Autenticação</i></u></center>
-		</b>
-	</font>
-	<?php
-
 			// Imprimindo Via Cliente
 			$Aut1 = $Reg;
 			$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$VrPagF$SgRec$FmRec_a$MatRec";
-
-			// Preparando Ficha Cliente 
-			?>
-	<font size='6'><b>
-			<center>Verifique se a impressora <font color='gold'>
-					<blink>do Caixa</blink>
-					<font color='#FFFFFF'> está ligada e com papel</center>
-		</b></font>
-	e <br>
-	<p>Clique no <font color='gold'>
-			<blink>botão Abaixo</blink>
-			<font color='#FFFFFF'>.</center>
-				</b></font>
-	</p><br>
-	<input id="ghost_click" type="submit" name="btimprime" value="Autenticar" autofocus>
-	</center><br>
-	<center>
-		<font color='#FFFFFF' size='3'><span id="msg"></span></font>
-	</center><br>
-	<?php
 
 	// Gravando a Spool
 	include "dbselect.php";
@@ -168,8 +125,7 @@
 	// Encerrando a Conexão
 	$SisRot = "S-7.2.8.1.2";
 	include "rodape.php"; ?>
-
-	<script src="./js/ghost_click.js"></script>
+	
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
