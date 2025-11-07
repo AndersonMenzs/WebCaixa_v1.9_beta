@@ -64,6 +64,7 @@
 	$VrTxa	= number_format($VrTx, 2, ',', '.');
 	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
+	$Vendedora_full = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
 	$DataNasc	= trim($_POST['data_nasc']);
 	$Idade 		= trim($_POST['idade']);
@@ -126,19 +127,19 @@
 
 			if ($FPag_1 <> "00" or $FPag_1 == "99") {
 				//$fps = $fps + 1;
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
 			}
 
 			if ($FPag_2 <> "00" and $FPag_1 <> "99") {
 				//$fps = $fps + 1;
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
 			}
 
 			if ($FPag_3 <> "00" and $FPag_1 <> "99") {
 				//$fps = $fps + 1;
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
 			}
 

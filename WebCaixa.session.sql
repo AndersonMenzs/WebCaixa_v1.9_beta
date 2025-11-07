@@ -1,4 +1,4 @@
-/*ALTER TABLE `studio`.`tiporec` 
+ALTER TABLE `studio`.`tiporec` 
 CHANGE COLUMN `codrec` `codrec` CHAR(2) NULL DEFAULT NULL,
 CHANGE COLUMN `siglarec` `siglarec` CHAR(4) NULL DEFAULT NULL;
 
@@ -20,7 +20,7 @@ ALTER TABLE `studio`.`amizpre`
 CHANGE COLUMN `recib` `recib` CHAR(8) NULL DEFAULT NULL,
 CHANGE COLUMN `vlrec` `vlrec` DECIMAL(10,2) NULL DEFAULT NULL;
 
-INSERT INTO formapag (codpag, modpag, siglapag) VALUES (99, 'Gratuidade', 'GRT'); */
+INSERT INTO formapag (codpag, modpag, siglapag) VALUES (99, 'Gratuidade', 'GRT'); 
 
 ALTER TABLE registro ADD COLUMN mat_vend VARCHAR(8);
 ALTER TABLE registro ADD COLUMN vendedora VARCHAR(100);

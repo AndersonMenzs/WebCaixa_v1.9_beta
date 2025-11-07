@@ -53,6 +53,7 @@ error_reporting(E_ALL);
 	$ModPag    = trim($_POST['txtmodpag_ext']);
 	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
+	$Vendedora_full = trim($_POST['vendedora']);
 	$Cliente   = trim($_POST['cliente']);
 	$Pass      = strtolower(trim($_POST['txtsen']));
 	$Senha     = sha1($Pass);
@@ -110,17 +111,17 @@ error_reporting(E_ALL);
 				$Reg = $Reg + 1;
 
 			if ($FPag_1 <> "00") {
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados2");
 			}
 
 			if ($FPag_2 <> "00") {
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados3");
 			}
 
 			if ($FPag_3 <> "00") {
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
+				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados4");
 			}
 

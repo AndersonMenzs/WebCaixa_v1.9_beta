@@ -44,6 +44,7 @@ include "./valor_ext.php";
 	$VrEntrF   = $VrEntr;
 	$Mat       = trim($_POST['txtmat']);
 	$Vendedora = trim($_POST['vendedora']);
+	$Vendedora_full = trim($_POST['vendedora_full']);
 	$Cliente   = trim($_POST['cliente']);
 	$vlr_ext   = valorPorExtenso($VrEntr);
 

@@ -235,12 +235,14 @@ $idade     = $_GET['Idade'];
         }
     </style>
 </head>
+
 <body onload="window.print()">
     <div class="container">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via3">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via4">
+
         <table align="left" cellspacing="0" border="0">
             <colgroup width="100"></colgroup>
             <colgroup span="2" width="100"></colgroup>

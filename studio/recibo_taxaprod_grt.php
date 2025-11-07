@@ -303,7 +303,7 @@ $idade     = $_GET['Idade'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=5 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_<font size=3><b>GRATUIDADE</b></font>"></font>
+                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1"></font>
                 </td>
                 <td align="left" valign=bottom></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
