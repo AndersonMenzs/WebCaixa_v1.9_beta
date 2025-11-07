@@ -108,6 +108,24 @@
             }
          }
       }
+
+      function verificarDocumento(input) {
+         if (input.value.length === 7) {
+            fetch('verif_numdoc.php?txtdoc=' + input.value)
+               .then(response => response.json())
+               .then(data => {
+                  if (data.existe) {
+                     alert('Este documento já existe no banco de dados!');
+                     
+                     return false;
+                  }
+               })
+               .catch(error => {
+                  console.error('Erro:', error);
+                  alert('Erro ao verificar o documento!');
+               });
+         }
+      }
    </script>
 
    <?php
@@ -134,7 +152,7 @@
    $lg_user = $_REQUEST['c_s'];
    $user = substr($lg_user, 0, 8);
    $pss  = substr($lg_user, 8, 40);
-	$Mat_Vend = trim($_POST['mat_vend']);
+   $Mat_Vend = trim($_POST['mat_vend']);
    $Vendedora = $_REQUEST['vendedora'];
    $Cliente   = $_REQUEST['cliente'];
 
@@ -203,7 +221,7 @@
 
             <tr>
                <td rowspan="3" align="center">
-                  <input type="text" name="txtdoc" size="7" maxlength="7" class="campos" onKeyUp="validate(this)" autofocus>
+                  <input type="text" name="txtdoc" size="7" maxlength="7" class="campos" onKeyUp="validate(this); verificarDocumento(this)" autofocus>
                </td>
                <td rowspan="3" align="center">
                   <font size='5'><b><i>R$ </i></b></font>
