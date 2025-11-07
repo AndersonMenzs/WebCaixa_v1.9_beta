@@ -178,7 +178,7 @@
 						<font color='gold' size='5'><b><i>Senha</font>
 					</td>
 					<td width="70%" align="center">
-						<input type='password' name='txtsen' size='6' maxlength='6' class="campos">
+						<input type='password' name='txtsen' size='6' maxlength='6' class="campos" autofocus>
 					</td>
 				</tr>
 		</table>

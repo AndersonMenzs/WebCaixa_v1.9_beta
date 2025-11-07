@@ -21,8 +21,8 @@ document.onkeydown = F5;
 	 $Rot       = "S7R5.2.1.1.1";
  
     // Imprimindo Cabeçalho da Spool de Impressão
-       shell_exec("echo '--- A U T E N T I C A C O E S - D O - D I A ---' > /dev/lp0");
-       shell_exec("echo '-----------------------------------------------' > /dev/lp0");
+       shell_exec("echo '--- A U T E N T I C A C O E S - D O - D I A ---' >> /backups/fccxant_$dtAbre.txt");
+       shell_exec("echo '-----------------------------------------------' >> /backups/fccxant_$dtAbre.txt");
 
     // Imprimindo a Spool de Impressão
        include "conexao.php";
@@ -33,7 +33,7 @@ document.onkeydown = F5;
        while ($lnSp  = mysqli_fetch_array($rsSp))
 	    {
 	     $Spo = $lnSp['spo2'];
-	     shell_exec("echo '$Spo' > /dev/lp0");
+	     shell_exec("echo '$Spo' >> /backups/fccxant_$dtAbre.txt");
 	    }
 
     // Encerrando a Conexão

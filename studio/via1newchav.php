@@ -107,7 +107,7 @@ include "./valor_ext.php";
 	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$TaxaChavF$SgRec$FmRec_a$MatRec";
 
 			// Remover ponto do valor
-			$TaxaChav = str_replace('.', '', $TaxaChav);
+			$TaxaChav = str_replace(',', '', $TaxaChavF);
 
 	// Gravando a Spool
 	include "dbselect.php";

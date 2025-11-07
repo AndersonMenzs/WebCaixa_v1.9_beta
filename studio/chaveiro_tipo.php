@@ -231,10 +231,10 @@
 				<tr>
 					<td rowspan="4" align="center">
 						<font size='5'><b><i><?php echo $NumDoc; ?></i></b></font>
-						<input type='hidden' name='txtdoc' class='campos' value="<?php echo $NumDoc; ?>">
+						<input type='hidden' id='txtdoc' name='txtdoc' class='campos' value="<?php echo $NumDoc; ?>">
 					</td>
 					<td rowspan="4" align="center">
-						<input type='text' name='qtde' size='3' maxlength='3' class='campos'>
+						<input type='text' id='qtde' name='qtde' size='3' maxlength='3' class='campos' autofocus>
 					</td>
 					<td align="center">
 						<select name="lsPr1" class="campos" autofocus>

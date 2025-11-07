@@ -99,9 +99,15 @@ ini_set('track_errors', 1);
 		shell_exec("echo '=============================================' > /dev/lp0");
 		shell_exec("echo \n > /dev/lp0"); ?>
 
-		<font size='4' color='gold'><b><u><i>
+		<font size='4' color='gold'>
+			<b>
+				<u>
+					<i>
 						<center>FECHAMENTO DO CAIXA</center>
-					</i></u></b></font>
+					</i>
+				</u>
+			</b>
+		</font>
 		<?php
 
 		// Obtendo Apelido

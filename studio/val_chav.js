@@ -48,22 +48,25 @@ function checkdata() {
 			txt3.select();
 			txt3.focus();
 			return false;
-		}
-
-		const valor1 = parseFloat((txt1.value || 0).replace(',', '.'));
-		const valor2 = parseFloat((txt2.value || 0).replace(',', '.'));
-		const valor3 = parseFloat((txt3.value || 0).replace(',', '.'));
+		}		
+		
+		const valor1 = parseFloat(txt1.value) || 0;
+		const valor2 = parseFloat(txt2.value) || 0;
+		const valor3 = parseFloat(txt3.value) || 0;
 		const soma = valor1 + valor2 + valor3;
-		
-		const valorChave = parseFloat((txtvrchav.value || 0).replace(',', '.'));
-		const quantidade = parseInt(qtde.value, 10);
-		const taxa = parseFloat((valorChave * quantidade).toFixed(2));
-		
-		if (Math.abs(taxa - soma) > 0.01) {
-			const diferenca = soma - taxa;
+
+		const valorChave = parseFloat(txtvrchav.value) || 0;
+		const quantidade = parseInt(qtde.value, 10) || 0;
+		const taxa = valorChave * quantidade;
+
+		// Usando uma tolerância para comparação de ponto flutuante
+		const diferenca = soma - taxa;
+		const tolerancia = 0.01;
+
+		if (Math.abs(diferenca) > tolerancia) {
 			const msg = diferenca > 0 ?
-			"A soma dos valores está MAIOR em R$ " + Math.abs(diferenca).toFixed(2) :
-			"A soma dos valores está MENOR em R$ " + Math.abs(diferenca).toFixed(2);
+				"A soma dos valores está MAIOR em R$ " + Math.abs(diferenca).toFixed(2) :
+				"A soma dos valores está MENOR em R$ " + Math.abs(diferenca).toFixed(2);
 			alert(msg);
 			return false;
 		}

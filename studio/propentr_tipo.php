@@ -108,6 +108,27 @@
             }
          }
       }
+
+      function verificarDocumento(input) {
+         if (input.value.length === 7) {
+            fetch('verif_numdoc.php?txtdoc=' + input.value)
+               .then(response => response.json())
+               .then(data => {
+                  if (data.existe) {
+                     alert('Este documento já existe no banco de dados!');
+                     
+                     // Limpa o campo de entrada
+                     input.value = '';
+                     
+                     return false;
+                  }
+               })
+               .catch(error => {
+                  console.error('Erro:', error);
+                  alert('Erro ao verificar o documento!');
+               });
+         }
+      }
    </script>
 
    <?php
@@ -188,7 +209,7 @@
          <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
             <tr>
                <td align="center">
-                  <font color='#FFFFFF' size='5'><b><i>Nº do Proposta</i></b></font>
+                  <font color='#FFFFFF' size='5'><b><i>Nº da Proposta</i></b></font>
                </td>
                <td align="center">
                   <font color='#FFFFFF' size='5'><b><i>Valor Total</i></b></font>
@@ -203,7 +224,7 @@
 
             <tr>
                <td rowspan="3" align="center">
-                  <input type="text" name="txtdoc" size="7" maxlength="7" class="campos" onKeyUp="validate(this)" autofocus>
+                  <input type="text" name="txtdoc" size="7" maxlength="7" class="campos" onKeyUp="validate(this); verificarDocumento(this)" autofocus>
                </td>
                <td rowspan="3" align="center">
                   <font size='5'><b><i>R$ </i></b></font>

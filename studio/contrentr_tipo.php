@@ -117,6 +117,9 @@
                   if (data.existe) {
                      alert('Este documento já existe no banco de dados!');
                      
+                     // Limpa o campo de entrada
+                     input.value = '';
+                     
                      return false;
                   }
                })
