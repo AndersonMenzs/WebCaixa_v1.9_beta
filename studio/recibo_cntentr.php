@@ -23,6 +23,8 @@ $Vlrs = [$txt1, $txt2, $txt3];
 
 $data      = $_GET['data'];
 $data = date('d/m/Y', strtotime($data));
+$Mat_Vend  = $_GET['mat_vend'];
+$Mat_Vend  = ltrim($Mat_Vend, '0');
 $Vendedora = $_GET['Vendedora'];
 $Cliente   = $_GET['Cliente'];
 $vlr_ext   = $_GET['vlr_ext'];
@@ -31,6 +33,7 @@ $horaaut   = $_GET['horaaut'];
 $dtAut     = $_GET['dtAut'];
 $SgRec     = $_GET['SgRec'];
 $VrEnt     = $_GET['VrEnt'];
+$VrEntr   = number_format($VrEnt, 2, "", ".");
 $Mat       = $_GET['Mat'];
 
 ?>
@@ -291,7 +294,7 @@ $Mat       = $_GET['Mat'];
                     <font size=1><br></font>
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $Vendedora; ?></font>
+                    <font size=1><?php echo $Vendedora . " - " . $Mat_Vend; ?></font>
                 </td>
                 <!--<td align="left" valign=bottom>
                 <font size=1><br></font>
@@ -488,7 +491,7 @@ $Mat       = $_GET['Mat'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrEnt . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrEntr . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
@@ -599,7 +602,7 @@ $Mat       = $_GET['Mat'];
                     <font size=1><br></font>
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $Vendedora; ?></font>
+                    <font size=1><?php echo $Vendedora . " - " . $Mat_Vend; ?></font>
                 </td>
                 <!--<td align="left" valign=bottom>
                 <font size=1><br></font>
@@ -796,7 +799,7 @@ $Mat       = $_GET['Mat'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrEnt . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrEntr . $Mat; ?></font>
                 </td>
             </tr>
             <tr>

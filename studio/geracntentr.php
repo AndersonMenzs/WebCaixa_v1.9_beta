@@ -28,6 +28,26 @@ error_reporting(E_ALL);
 		}
 	</style>
 
+	<script>
+		// Previne o botão voltar
+		history.pushState(null, null, location.href);
+		window.onpopstate = function() {
+			history.go(1);
+		};
+
+		// Previne F5 e Ctrl+R
+		document.onkeydown = function(e) {
+			if (e.keyCode == 116 || (e.ctrlKey && e.keyCode == 82)) {
+				e.preventDefault();
+			}
+		};
+
+		// Desabilita clique direito (opcional)
+		document.addEventListener('contextmenu', function(e) {
+			e.preventDefault();
+		});
+	</script>
+
 	<?php
 	// Inserindo Cabeçalho
 	include "../cabecprs.php";
@@ -108,7 +128,7 @@ error_reporting(E_ALL);
 				$Reg = 0;
 			}
 
-				$Reg = $Reg + 1;
+			$Reg = $Reg + 1;
 
 			if ($FPag_1 <> "00") {
 				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";

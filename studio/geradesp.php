@@ -136,9 +136,6 @@
 	}
 
 	// Encerrando a Conexão
-	/* mysqli_free_result($rso);
-	mysqli_free_result($rsGr);
-	mysqli_free_result($rsx); */
 	$SisRot = "S-7.3.1.1.1";
 	include "rodape.php"; ?>
 

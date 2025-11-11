@@ -233,6 +233,8 @@
       }
    </script>
 
+   <script src="val_contrato.js" charset="utf-8"></script>
+
 </head>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
@@ -283,7 +285,7 @@
                   <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
                   <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
                      onkeypress="fPassaAlfaNumerico('an')"
-                     onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
+                     onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
                </td>
                <td width="50%" align="center">
                   <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"

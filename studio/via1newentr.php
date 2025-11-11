@@ -10,6 +10,25 @@ include "./valor_ext.php";
 
 ?>
 <html>
+<script>
+	// Previne o botão voltar
+	history.pushState(null, null, location.href);
+	window.onpopstate = function() {
+		history.go(1);
+	};
+
+	// Previne F5 e Ctrl+R
+	document.onkeydown = function(e) {
+		if (e.keyCode == 116 || (e.ctrlKey && e.keyCode == 82)) {
+			e.preventDefault();
+		}
+	};
+
+	// Desabilita clique direito (opcional)
+	document.addEventListener('contextmenu', function(e) {
+		e.preventDefault();
+	});
+</script>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
@@ -43,6 +62,7 @@ include "./valor_ext.php";
 	$VrEntr    = number_format($VrEnt, 2, ',', '.');
 	$VrEntrF   = $VrEntr;
 	$Mat       = trim($_POST['txtmat']);
+	$Mat_Vend  = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Vendedora_full = trim($_POST['vendedora_full']);
 	$Cliente   = trim($_POST['cliente']);
@@ -108,7 +128,7 @@ include "./valor_ext.php";
 
 	// Imprimindo Via Cliente
 	$Aut1 = $Reg;
-	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$VrEntrF$SgRec$FmRec_a$MatRec";
+	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut" . "R$ " . "$VrEntrF$SgRec$FmRec_a$MatRec";
 
 	// Remover ponto do valor
 	$VrEnt = str_replace('.', '', $VrEnt);
@@ -138,6 +158,7 @@ include "./valor_ext.php";
 				'&txt2=<?php echo urlencode($txt2); ?>' +
 				'&txt3=<?php echo urlencode($txt3); ?>' +
 				'&data=<?php echo urlencode($dtRec); ?>' +
+				'&mat_vend=<?php echo urlencode($Mat_Vend); ?>' +
 				'&Vendedora=<?php echo urlencode($Vendedora); ?>' +
 				'&Cliente=<?php echo urlencode($Cliente); ?>' +
 				'&vlr_ext=<?php echo urlencode($vlr_ext); ?>' +

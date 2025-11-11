@@ -59,7 +59,6 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
-
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.2.1";
