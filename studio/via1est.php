@@ -1,3 +1,11 @@
+<?php
+
+//Debug
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>
+
 <html>
 
 <head>
@@ -49,6 +57,7 @@
 	$horaaut   = $h1 . $h2;
 	$VrEnt     = trim($_POST['txtvalor']);
 	$VrEntr    = number_format($VrEnt, 2, ',', '');
+	$DataAtual = date("Y-m-d");
 
 	if (strlen($VrEnt) < 7) {
 		$VrEntrF   = "R$ " . $VrEntr;
@@ -66,14 +75,83 @@
 	$lnPC  = mysqli_fetch_array($rsPC);
 	$PC  = $lnPC['pc'];
 
-	// Obtendo a Forma de Recebimento
-	$sqlFm = "select siglapag from formapag where codpag = '$FPag' ";
-	$rsFm  = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
-	$lnFm  = mysqli_fetch_array($rsFm);
-	$FmRec  = $lnFm['siglapag'];
-	if ($FmRec == '') {
-		$FmRec = 'DIN';
+	$sql = "SELECT * FROM registro WHERE reg = '$Aut' AND datarec = '$DataAtual'";
+	$rs = mysqli_query($conec, $sql) or die("Nao foi possivel acessar o Registro");
+	$regs = mysqli_num_rows($rs);
+
+	// Verfica se a forma de pagamento foi unica
+	if ($regs == 1) {
+		$ln = mysqli_fetch_assoc($rs);
+		$FPag = $ln['modpgto'];
+
+		$sqlFm = "SELECT siglapag FROM formapag WHERE codpag = '$FPag'";
+		$rsFm  = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar a Forma de Pagamento");
+		$lnFm  = mysqli_fetch_assoc($rsFm);
+
+		$FmRec = $lnFm['siglapag'];
+	} elseif ($regs > 1) {
+		// Quando há mais de uma forma de pagamento
+		$FPag = array();
+
+		while ($ln = mysqli_fetch_assoc($rs)) {
+			$FPag[] = $ln['modpgto'];
+		}
+
+		// Remove duplicatas e valores inválidos
+		$FPag = array_unique(array_filter($FPag, function ($v) {
+			return $v != '' && $v != '---';
+		}));
+
+		// Monta a condição SQL dinamicamente
+		if (!empty($FPag)) {
+			$condicoes = array();
+			foreach ($FPag as $cod) {
+				$condicoes[] = "codpag = '$cod'";
+			}
+			$condicaoSQL = implode(' OR ', $condicoes);
+
+			$sqlFm = "SELECT siglapag FROM formapag WHERE ($condicaoSQL)";
+			$rsFm  = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar a Forma de Pagamento");
+
+			$FmRec = array();
+			while ($lnFm = mysqli_fetch_assoc($rsFm)) {
+				$FmRec[] = $lnFm['siglapag'];
+			}
+
+			// Remove duplicatas
+			$FmRec = array_unique($FmRec);
+
+			// Se tiver mais de uma forma, define como pagamento dividido
+
+			// Se houver mais de uma forma diferente
+			if (count($FmRec) > 1) {
+				$FmRec_a = 'DIV';
+			} elseif (in_array("DIN", $FmRec)) {
+				$ModPag = "DINHEIRO";
+				$FmRec_a = "DIN";
+			} elseif (in_array("CTD", $FmRec)) {
+				$ModPag = "CARTÃO DÉBITO";
+				$FmRec_a = "CTD";
+			} elseif (in_array("CTV", $FmRec)) {
+				$ModPag = "CARTÃO CRÉDITO";
+				$FmRec_a = "CTV";
+			} elseif (in_array("PXQ", $FmRec)) {
+				$ModPag = "PIX QR CODE";
+				$FmRec_a = "PXQ";
+			} elseif (in_array("PXC", $FmRec)) {
+				$ModPag = "PIX CNPJ";
+				$FmRec_a = "PXC";
+			}
+		} else {
+			$FmRec = '';
+			$ModPag = '';
+		}
+	} else {
+		// Nenhum registro encontrado
+		$FmRec = '';
+		$ModPag = '';
 	}
+
 
 	// Ajustando a Matrícula
 	$MatRec = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
@@ -88,8 +166,8 @@
 
 	// Imprimindo o Recibo
 	$Aut1 = $Aut;
-	$Aut2 = "$Aut$PC$horaaut$NDoc $dtAut$VrEntrF$TipoRec$FmRec$MatRec";
-	$AutR = "$Aut$PC$horaaut$NDoc $dtAut$VrEntrF$TipoRec$FmRec$MatRdz";
+	$Aut2 = "$Aut$PC$horaaut$NDoc $dtAut$VrEntrF$TipoRec$FmRec_a$MatRec";
+	$AutR = "$Aut$PC$horaaut$NDoc $dtAut$VrEntrF$TipoRec$FmRec_a$MatRdz";
 	shell_exec("echo $Aut2 > /dev/lp0");
 
 	// Gravando a Spool

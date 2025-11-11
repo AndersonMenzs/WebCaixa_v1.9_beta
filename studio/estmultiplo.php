@@ -47,7 +47,7 @@
 
 		// Gravando o Registro de Estorno
 		$SubRec = 'EST';
-		$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubRec', '$FPag', '0', '$dtRec', '$hora', '$VrEntr', '$Mat', '')";
+		$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubRec', '$FPag', '0', '$dtRec', '$hora', '$VrEntr', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
 		$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #M3. Contate seu Administrador.");
 		//mysqli_free_result($rsGr);
 
@@ -67,7 +67,6 @@
 		$Tipo = $lnART['tiporec'];
 		mysqli_free_result($rsART);
 	}
-	//mysqli_free_result($rsr);
 
 	// Preparando a Via Cliente 
 	?>

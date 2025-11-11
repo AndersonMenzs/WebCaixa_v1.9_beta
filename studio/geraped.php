@@ -79,17 +79,18 @@
 		<br><b>
 			<center><u><i>Autenticação de Solicitação</i></u></center>
 		</b>
-	</font><br><?php
+	</font><br>
+	<?php
 
-				include "us_cad.php";
+	include "us_cad.php";
 
-				if ($ch == 'ok' or $ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm') {
-					if ($regso > 0) {
-						$lno  = mysqli_fetch_array($rso);
-						$Mat = $lno['mat'];
+	if ($ch == 'ok' or $ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm') {
+		if ($regso > 0) {
+			$lno  = mysqli_fetch_array($rso);
+			$Mat = $lno['mat'];
 
-						// Preparando a Via Cliente 
-				?>
+			// Preparando a Via Cliente 
+	?>
 			<form name="geracntentr" method="post" action="via1newped.php">
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
@@ -102,7 +103,7 @@
 				<input type="hidden" name="txtmatvend" value="<?php echo $Mat_Vend; ?>">
 				<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
-				
+
 				<p>
 					<font size='6'><b>
 							<center>Verifique se a impressora do <font color='gold'>
@@ -121,7 +122,7 @@
 				</center>
 			</form><?php
 
-					} else { ?>
+				} else { ?>
 			<font size='6'><b>
 					<center>Senha <font color='gold'>
 							<blink>Incorreta</blink><br>
@@ -132,12 +133,12 @@
 				</b></font><br>
 			<center><a href='JavaScript:window.history.back()'><img src='images/voltar.gif'></a></center><br>
 	<?php
-					}
 				}
+			}
 
-				// Encerrando a Conexão
-				$SisRot = "S-7.1.1.1";
-				include "./rodape.php"; ?>
+			// Encerrando a Conexão
+			$SisRot = "S-7.1.1.1";
+			include "./rodape.php"; ?>
 
 	<script src="./js/ghost_click.js"></script>
 

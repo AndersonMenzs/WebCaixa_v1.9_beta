@@ -76,11 +76,11 @@
 
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
 		<table width="40%" border="5" cellpadding="10" cellspacing="0" align="center">
-			<form name="frmest" method="post" action="estconf.php" OnSubmit="JavaScript:return checkdata()">
+			<form name="frmest" method="post" action="estconf.php" OnSubmit="JavaScript:return checkdata()" autocomplete="off">
 				<tr>
 					<td align="center">
 						<font color='gold' size='5'><b><i>Autenticação Nº: &nbsp;</i></b></font>
-						<input type="text" name="txtaut" size="4" maxlength="4" class="campos" onKeyUp="validate(this)">
+						<input type="text" name="txtaut" size="4" maxlength="4" class="campos" onKeyUp="validate(this)" autofocus>
 						<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 					</td>
 				</tr>

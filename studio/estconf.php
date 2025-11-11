@@ -45,6 +45,7 @@
 	$Aut       = trim($_POST['txtaut']);
 	$AutFull = 10000 + $Aut;
 	$AutF      = substr($AutFull, 1, 4);
+
 	include "conexao.php";
 	include "dbselect.php";
 
@@ -79,10 +80,7 @@
 		$sqlX = "delete from databebe where recibo = '$NumDocE' ";
 		$rsX  = mysqli_query($conec, $sqlX) or die("Não foi possível acessar os dados");
 	}
-
-	/* mysqli_free_result($rsX);
-	mysqli_free_result($rsR);
-	mysqli_free_result($rsE); */ ?>
+	?>
 
 	<font color="gold" size="6">
 		<b>
@@ -159,7 +157,7 @@
 			<input type="hidden" name="txtvlrec" value="<?php echo $VlRec; ?>">
 			<p>
 				<center>
-					<input id="ghost_click"	 type="submit" name="btenvia" value="Continuar">
+					<input id="ghost_click" type="submit" name="btenvia" value="Continuar">
 					<input type="button" name="btret" value="Retornar" OnClick="JavaScript:window.history.back()">
 				</center><br>
 				<center>

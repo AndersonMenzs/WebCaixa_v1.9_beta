@@ -65,7 +65,7 @@
 	include "us_cad.php";
 
 	if ($ch == 'ok' or $ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm') {
-		
+
 		if ($regso > 0) {
 			$lno  = mysqli_fetch_array($rso);
 			$Mat = $lno['mat'];
@@ -79,6 +79,9 @@
 			$Reg     = $lnr['reg'];
 			$dtReceb = $lnr['datarec'];
 			$FPag    = $lnr['modpgto'];
+			$Mat_Vend  = $lnr['mat_vend'];
+			$Vendedora = $lnr['vendedora'];
+			$Cliente   = $lnr['cliente'];
 			mysqli_free_result($rsr);
 
 			if ($regsr == 1) {
