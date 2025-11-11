@@ -10,6 +10,25 @@ include "./valor_ext.php";
 
 ?>
 <html>
+<script>
+	// Previne o botão voltar
+	history.pushState(null, null, location.href);
+	window.onpopstate = function() {
+		history.go(1);
+	};
+
+	// Previne F5 e Ctrl+R
+	document.onkeydown = function(e) {
+		if (e.keyCode == 116 || (e.ctrlKey && e.keyCode == 82)) {
+			e.preventDefault();
+		}
+	};
+
+	// Desabilita clique direito (opcional)
+	document.addEventListener('contextmenu', function(e) {
+		e.preventDefault();
+	});
+</script>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
@@ -47,6 +66,8 @@ include "./valor_ext.php";
 	$h2 = substr($hora, 3, 2);
 	$horaaut   = $h1 . $h2;
 	$Mat       = trim($_POST['txtmat']);
+	$Mat_Vend  = trim($_POST['mat_vend']);
+	$Mat_Vend  = ltrim($Mat_Vend, '0');
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente   = trim($_POST['cliente']);
 	$DataNasc  = trim($_POST['data_nasc']);
@@ -115,7 +136,7 @@ include "./valor_ext.php";
 
 	// Imprimindo Via Cliente
 	$Aut1 = $Reg;
-	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$TaxaProdF$SgRec$FmRec_a$MatRec";
+	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut" . "R$ " . "$TaxaProdF$SgRec$FmRec_a$MatRec";
 
 	// Remover ponto do valor
 	$TaxaProd = str_replace('.', '', $TaxaProd);
@@ -134,7 +155,7 @@ include "./valor_ext.php";
 			var url = './<?php
 							if ($Idade >= 60) { ?>recibo_taxaprod_grt.php?tipo=<?php echo urlencode($tipo);
 																			} else { ?>recibo_taxaprod.php?tipo=<?php echo urlencode($tipo);
-																							} ?>' +
+																											} ?>' +
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&TaxaProd=<?php echo urlencode($TaxaProd); ?>' +
@@ -157,6 +178,7 @@ include "./valor_ext.php";
 				'&dtAut=<?php echo urlencode($dtAut); ?>' +
 				'&SgRec=<?php echo urlencode($SgRec); ?>' +
 				'&Mat=<?php echo urlencode($Mat); ?>' +
+				'&mat_vend=<?php echo urlencode($Mat_Vend); ?>' +
 				'&Idade=<?php echo urlencode($Idade); ?>' +
 				'&DataNasc=<?php echo urlencode($DataNasc); ?>';
 			window.open(url, '_blank');

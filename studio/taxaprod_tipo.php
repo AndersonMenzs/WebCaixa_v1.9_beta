@@ -241,8 +241,7 @@
     <?php
 
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') {
-    ?>
-        <!--<form name="taxaProd" method="post" action="confprod.php" onsubmit="return validaCampos() && validarSomaValores(); return checkdata();" autocomplete="off">-->
+    ?>        
         <form name="taxaProd" method="post" action="confprod.php" onsubmit="return checkdata();" autocomplete="off">
             <table width="80%" border="5" cellpadding="10" cellspacing="0" align="center">
                 <tr>

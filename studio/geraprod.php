@@ -19,18 +19,24 @@
 			color: #000000;
 		}
 	</style>
-
 	<script>
-		function F5(event) {
-			var tecla = document.all ? window.event.keyCode : event.which;
-			if (document.all) {
-				window.event.keyCode = 0;
-				window.event.returnValue = false;
-			}
-			if (tecla == 116) return false;
-		}
+		// Previne o botão voltar
+		history.pushState(null, null, location.href);
+		window.onpopstate = function() {
+			history.go(1);
+		};
 
-		document.onkeydown = F5;
+		// Previne F5 e Ctrl+R
+		document.onkeydown = function(e) {
+			if (e.keyCode == 116 || (e.ctrlKey && e.keyCode == 82)) {
+				e.preventDefault();
+			}
+		};
+
+		// Desabilita clique direito (opcional)
+		document.addEventListener('contextmenu', function(e) {
+			e.preventDefault();
+		});
 	</script>
 
 	<?php

@@ -33,6 +33,7 @@ $horaaut   = $_GET['horaaut'];
 $dtAut     = $_GET['dtAut'];
 $SgRec     = $_GET['SgRec'];
 $Mat       = $_GET['Mat'];
+$Mat_Vend  = $_GET['mat_vend'];
 $Nasc      = $_GET['DataNasc'];
 $Nasc      = date('d/m/Y', strtotime($Nasc));
 $idade     = $_GET['Idade'];
@@ -324,7 +325,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td align="left" valign=bottom></td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $Vendedora; ?></font>
+                    <font size=1><?php echo $Vendedora . " - " . $Mat_Vend; ?></font>
                 </td>
             </tr>
             <tr>
@@ -491,7 +492,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td align="left" valign=bottom></td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $Vendedora; ?></font>
+                    <font size=1><?php echo $Vendedora . " - " . $Mat_Vend; ?></font>
                 </td>
             </tr>
             <tr>
@@ -645,7 +646,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td align="left" valign=bottom></td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $Vendedora; ?></font>
+                    <font size=1><?php echo $Vendedora . " - " . $Mat_Vend; ?></font>
                 </td>
             </tr>
             <tr>
@@ -808,7 +809,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td align="left" valign=bottom></td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $Vendedora; ?></font>
+                    <font size=1><?php echo $Vendedora . " - " . $Mat_Vend; ?></font>
                 </td>
                 <td align="left" valign=bottom></td>
                 <td align="left" valign=bottom></td>
