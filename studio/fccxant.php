@@ -1032,7 +1032,7 @@ ini_set('track_errors', 1);*/
 			    OUTtot 	= '$OUTF',
 			    diferenca	= $Diferenca ";
 
-		$rsS  = mysqli_query($conec, $sqlS) or die("File fccxant Error #41. Contate seu Administrador.");
+		$rsS  = mysqli_query($conec, $sqlS)  or die("File fccxant Error #041. Contate seu Adminsitrador");
 
 		// Salvando os Dados
 		$sqlGr = "update caixa set dtclose   = '$dtOpenGr',
@@ -1092,10 +1092,10 @@ ini_set('track_errors', 1);*/
 
 
 		// antfech
-		$sqlATF_2 = "SELECT fita, datafch FROM antfech ORDER BY datafch DESC LIMIT 1";
+		$sqlATF_2 = "SELECT fita, datafch FROM antfech WHERE YEAR(STR_TO_DATE(datafch, '%d/%m/%Y')) = YEAR(CURDATE())ORDER BY datafch DESC LIMIT 1";
 		$rsATF_2 = mysqli_query($conec, $sqlATF_2) or die("Erro ao consultar antfech: " . mysqli_error($conec));
 		$lnATF_2 = mysqli_fetch_assoc($rsATF_2);
-		$FitaFch_2 = $lnATF_2['fita'];
+		$FitaFch_2 = $lnATF_2['fita'] ?? 0;
 
 		if ($FitaFch_1 > $FitaFch_2) {
 			// Especifique os campos conforme sua estrutura
@@ -1235,7 +1235,6 @@ ini_set('track_errors', 1);*/
 							`diferenca`
 						FROM
 							`spoolfch`";
-			//$sqlATF_3 = "INSERT INTO antfech SELECT * FROM spoolfch";
 			$rsATF_3 = mysqli_query($conec, $sqlATF_3) or die("Erro ao inserir dados: " . mysqli_error($conec));
 		} else {
 			echo "Não foi possivel inserir os dados na antfech";

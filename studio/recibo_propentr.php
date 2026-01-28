@@ -30,7 +30,7 @@ $Reg       = $_GET['Reg'];
 $horaaut   = $_GET['horaaut'];
 $dtAut     = $_GET['dtAut'];
 $SgRec     = $_GET['SgRec'];
-$VrEnt     = $_GET['VrEnt'];
+$VrEnt     = number_format($_GET['VrEnt'], 2, "", ".");
 $Mat       = $_GET['Mat'];
 
 ?>
@@ -205,7 +205,7 @@ $Mat       = $_GET['Mat'];
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
                     <b>
-                        <font size=1>CONTRATO</font>
+                        <font size=1>PROPOSTA</font>
                     </b>
                 </td>
                 <td align="left" valign=bottom>
@@ -256,7 +256,7 @@ $Mat       = $_GET['Mat'];
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=4 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc222.png" class="imagem_end_1">
+                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1">
                     </font>
                 </td>
                 <td align="left" valign=bottom>
@@ -513,7 +513,7 @@ $Mat       = $_GET['Mat'];
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
                     <b>
-                        <font size=1>CONTRATO</font>
+                        <font size=1>PROPOSTA</font>
                     </b>
                 </td>
                 <td align="left" valign=bottom>
@@ -564,7 +564,7 @@ $Mat       = $_GET['Mat'];
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=4 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc222.png" class="imagem_end_2">
+                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_2">
                     </font>
                 </td>
                 <td align="left" valign=bottom>

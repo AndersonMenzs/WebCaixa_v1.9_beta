@@ -69,10 +69,10 @@ error_reporting(E_ALL);
 	$Vendedora = strtoupper($Vendedora);
 	$Vendedora = substr($Vendedora, 0, strpos($Vendedora, ' ') + 1) . substr($Vendedora, strpos($Vendedora, ' ') + 1, 1) . '.';
 
-	// Variáveis
-	$TipoRec   = '3';
-	$SubTipo   = 'CNTE';
-	$DataHoje = date('Y-m-d');
+      // Variáveis
+	 $TipoRec   = '4';
+	 $SubTipo   = 'PVDE';
+	 $DataHoje = date('Y-m-d');
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -108,7 +108,7 @@ error_reporting(E_ALL);
 				$Reg = 0;
 			}
 
-			$Reg = $Reg + 1;
+				$Reg = $Reg + 1;
 
 			if ($FPag_1 <> "00") {
 				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec','$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
@@ -127,7 +127,7 @@ error_reporting(E_ALL);
 
 			// Preparando a Via Cliente 
 	?>
-			<form name="geracntentr" method="post" action="via1newentr.php">
+			<form name="geracntentr" method="post" action="via1newpentr.php">
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
 				<input type="hidden" name="tiporec" value="<?php echo $TipoRec; ?>">

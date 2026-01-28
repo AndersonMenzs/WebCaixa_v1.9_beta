@@ -345,9 +345,6 @@
                     <td width="45%" align="center">
                         <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
                     </td>
-                    <td width="10%" align="center">
-                        <font color='#FFFFFF' size='5'><b><i>Data Nasc.</i></b></font>
-                    </td>
                 </tr>
                 <tr>
                     <td align="center">
@@ -356,8 +353,22 @@
                     <td align="center">
                         <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos" onkeypress="fPassaAlfaNumerico('an')" onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
                     </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <font color='#FFFFFF' size='5'><b><i>Data Nasc.</i></b></font>
+                    </td>
+                    <td align="center">
+                        <font color='#FFFFFF' size='5'><b><i>Mulher Aghata?</i></b></font>
+                    </td>
+                </tr>
+                <tr>
                     <td align="center">
                         <input type="text" id="data_nasc" name="data_nasc" size='12' maxlength='10' class="campos" placeholder="01/01/1940" class='campos' OnKeyUp="FormataData('taxaProd', 'data_nasc', event)" required>
+                    </td>
+                    <td align="center">
+                        <input type="radio" name="regula" value="S" required><font color=#FFFFFF size=4> Sim</font>
+                        <input type="radio" name="regula" value="N" required checked><font color=#FFFFFF size=4> Não</font>
                     </td>
                 </tr>
             </table><br>

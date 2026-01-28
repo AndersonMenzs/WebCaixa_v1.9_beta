@@ -62,6 +62,11 @@
 	$Vendedora = $_POST['vendedora'];
 	$Cliente   = $_POST['cliente'];
 
+	// Truncar o nome da vendedora com o primeiro nome completo e após o primeiro espaco, deixar somente uma letra e ponto.
+	$Vendedora = strtoupper($Vendedora);
+	$Vendedora = substr($Vendedora, 0, strpos($Vendedora, ' ') + 1) . substr($Vendedora, strpos($Vendedora, ' ') + 1, 1) . '.';
+
+
 	// Pesquisando PC
 
 	include "conexao.php";

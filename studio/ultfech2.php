@@ -46,7 +46,7 @@ if ($ch == 'ok' or $ch == 'ok-enc')
 	include "conexao.php";
 	include "dbselect.php";
 		
-	$sqlP = "select * from antfech order by fita desc";
+	$sqlP = "select * from antfech WHERE YEAR(STR_TO_DATE(datafch, '%d/%m/%Y')) = YEAR(CURDATE()) order by fita desc";
 	$rsP  = mysqli_query($conec, $sqlP) or die ("Não foi Possível Consultar o Fechamento Anterior");	   
 	
 ?>

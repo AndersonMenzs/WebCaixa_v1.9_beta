@@ -43,15 +43,9 @@ include "./valor_ext.php";
 	$VrEntr    = number_format($VrEnt, 2, ',', '.');
 	$VrEntrF   = $VrEntr;
 	$Mat       = trim($_POST['txtmat']);
-	$Mat_Vend  = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
-	$Vendedora_full = trim($_POST['vendedora_full']);
 	$Cliente   = trim($_POST['cliente']);
 	$vlr_ext   = valorPorExtenso($VrEntr);
-
-	// Pesquisando PC
-	include "conexao.php";
-	include "dbselect.php";
 
 	// Obtendo o código do PC
 	$sqlPC = "select pc from inicial";
@@ -64,7 +58,7 @@ include "./valor_ext.php";
 	$rsRec = mysqli_query($conec, $sqlRec) or die("Não foi possível acessar o Tipo de Recebimento");
 	$lnRec = mysqli_fetch_array($rsRec);
 	$SgRec  = $lnRec['siglarec'];
-	$tipo = "CONTR. ENTRADA";
+	$tipo = "PROP. ENTRADA";
 
 	// Consulta SQL corrigida com parênteses
 	$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag_1' OR codpag = '$FPag_2' OR codpag = '$FPag_3') AND codpag <> '---'";
@@ -109,7 +103,7 @@ include "./valor_ext.php";
 
 	// Imprimindo Via Cliente
 	$Aut1 = $Reg;
-	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut" . "R$ " . "$VrEntrF$SgRec$FmRec_a$MatRec";
+	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$VrEntrF$SgRec$FmRec_a$MatRec";
 
 	// Remover ponto do valor
 	$VrEnt = str_replace('.', '', $VrEnt);
@@ -121,12 +115,13 @@ include "./valor_ext.php";
 
 	$SisRot = "S-7.2.2.1.2";
 	include "./rodape.php";
+
 	?>
 
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
-			var url = './recibo_cntentr.php?tipo=<?php echo urlencode($tipo); ?>' +
+			var url = './recibo_propentr.php?tipo=<?php echo urlencode($tipo); ?>' +
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&VrEntrF=<?php echo urlencode($VrEntrF); ?>' +
@@ -139,7 +134,6 @@ include "./valor_ext.php";
 				'&txt2=<?php echo urlencode($txt2); ?>' +
 				'&txt3=<?php echo urlencode($txt3); ?>' +
 				'&data=<?php echo urlencode($dtRec); ?>' +
-				'&mat_vend=<?php echo urlencode($Mat_Vend); ?>' +
 				'&Vendedora=<?php echo urlencode($Vendedora); ?>' +
 				'&Cliente=<?php echo urlencode($Cliente); ?>' +
 				'&vlr_ext=<?php echo urlencode($vlr_ext); ?>' +

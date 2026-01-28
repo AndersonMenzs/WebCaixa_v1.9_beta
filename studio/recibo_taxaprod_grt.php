@@ -35,9 +35,8 @@ $SgRec     = $_GET['SgRec'];
 $Mat       = $_GET['Mat'];
 $Mat_Vend  = $_GET['mat_vend'];
 $Nasc      = $_GET['DataNasc'];
-$Nasc      = date('d/m/Y', strtotime($Nasc));
+//$Nasc      = date('d/m/Y', strtotime($Nasc));
 $idade     = $_GET['Idade'];
-
 ?>
 
 <!DOCTYPE html>

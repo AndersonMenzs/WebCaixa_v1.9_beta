@@ -19,25 +19,6 @@
 			color: #000000;
 		}
 	</style>
-	<script>
-		// Previne o botão voltar
-		history.pushState(null, null, location.href);
-		window.onpopstate = function() {
-			history.go(1);
-		};
-
-		// Previne F5 e Ctrl+R
-		document.onkeydown = function(e) {
-			if (e.keyCode == 116 || (e.ctrlKey && e.keyCode == 82)) {
-				e.preventDefault();
-			}
-		};
-
-		// Desabilita clique direito (opcional)
-		document.addEventListener('contextmenu', function(e) {
-			e.preventDefault();
-		});
-	</script>
 
 	<?php
 	// Inserindo Cabeçalho
@@ -72,10 +53,25 @@
 	$Vendedora = trim($_POST['vendedora']);
 	$Vendedora_full = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
+	$Regula    = trim($_POST['regula']);
 	$DataNasc	= trim($_POST['data_nasc']);
 	$Idade 		= trim($_POST['idade']);
 	$Pass      = strtolower(trim($_POST['txtsen']));
 	$Senha     = sha1($Pass);
+	$Senior    = trim($_POST['senior']);
+	$Aghata    = trim($_POST['aghata']);
+
+	// CORREÇÃO: Calcular a idade corretamente se não foi passada
+	if (empty($Idade)) {
+		$partes = explode('/', $DataNasc);
+		$dia = $partes[0];
+		$mes = $partes[1];
+		$ano = $partes[2];
+		$Idade = date('Y') - $ano;
+		if (date('md') < $mes . $dia) {
+			$Idade--;
+		}
+	}
 
 	// Truncar o nome da vendedora com o primeiro nome completo e após o primeiro espaco, deixar somente uma letra e ponto.
 	$Vendedora = strtoupper($Vendedora);
@@ -86,8 +82,18 @@
 	$TaxaProd  = $txt1 + $txt2 + $txt3;
 	$TaxaProdF = number_format($TaxaProd, 2, ",", ".");
 
-	// Verifica o Tipo de Recibo pela idade do cliente
-	if ($Idade >= 60) {
+	// CORREÇÃO: Lógica corrigida para TipoRec e SubTipo baseado nas regras de gratuidade
+	$temGratuidade = false;
+	if ($Idade >= $Senior) {
+		// Para $Senior+ anos: SEMPRE gratuidade (S ou N)
+		$temGratuidade = true;
+	} elseif ($Idade >= $Aghata && $Regula == 'S') {
+		// Para $Aghata-49 anos: gratuidade APENAS se 'S'
+		$temGratuidade = true;
+	}
+
+	// CORREÇÃO: Verifica o Tipo de Recibo baseado na gratuidade
+	if ($temGratuidade) {
 		$TipoRec   = '10';
 		$SubTipo   = 'TXPG';
 	} else {
@@ -131,22 +137,23 @@
 			}
 			$Reg  = $Reg + 1;
 
-			if ($FPag_1 <> "00" or $FPag_1 == "99") {
-				//$fps = $fps + 1;
+			// CORREÇÃO: Lógica de gravação corrigida para gratuidade
+			if ($FPag_1 <> "00" || $FPag_1 == "99") {
 				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '0', '$dtRec', '$hora', '$txt1', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
 			}
 
-			if ($FPag_2 <> "00" and $FPag_1 <> "99") {
-				//$fps = $fps + 1;
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
-				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
-			}
+			// CORREÇÃO: Só grava formas de pagamento adicionais se NÃO for gratuidade
+			if (!$temGratuidade) {
+				if ($FPag_2 <> "00" && $FPag_2 != "") {
+					$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '0', '$dtRec', '$hora', '$txt2', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
+					$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
+				}
 
-			if ($FPag_3 <> "00" and $FPag_1 <> "99") {
-				//$fps = $fps + 1;
-				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
-				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
+				if ($FPag_3 <> "00" && $FPag_3 != "") {
+					$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
+					$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
+				}
 			}
 
 			// Preparando a Via Cliente 
@@ -174,6 +181,10 @@
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 				<input type="hidden" name="idade" value="<?php echo $Idade; ?>">
 				<input type="hidden" name="data_nasc" value="<?php echo $DataNasc; ?>">
+				<input type="hidden" name="regula" value="<?php echo $Regula; ?>">
+				<input type="hidden" name="tem_gratuidade" value="<?php echo $temGratuidade ? 'S' : 'N'; ?>">
+				<input type="hidden" name="senior" value="<?php echo $Senior; ?>">
+				<input type="hidden" name="aghata" value="<?php echo $Aghata; ?>">
 				<p>
 					<font size='6'><b>
 							<center>Verifique se a impressora do <font color='gold'>

@@ -8,7 +8,7 @@ ini_set('display_startup_errors', 1);
 $tipo      = $_GET['tipo'];
 $NDoc      = $_GET['NDoc'];
 $PC        = $_GET['PC'];
-$VrEntrF   = $_GET['VrEntrF'];
+$VrEntrF   = $_GET['VrEnt'];
 $ModPag    = $_GET['ModPag'];
 $FPag_1    = $_GET['fpag_1'];
 $FPag_2    = $_GET['fpag_2'];
@@ -33,6 +33,7 @@ $SgRec     = $_GET['SgRec'];
 $VrEnt     = $_GET['VrEnt'];
 $Mat       = $_GET['Mat'];
 
+echo $Reg . " - " . $NDoc . " - " . $dtRec . " - " . $VrEntrF . " - " . $SlgPag . " - " . $Opt . " - " . $Mat . " - " . $Mat_Vend . " - " . $Vendedora . " - " . $Cliente . " - " . $VrEnt . " - " . $VrEntr . " - " . $VrEntrF . " - " . $vlr_ext;
 ?>
 
 <!DOCTYPE html>
@@ -177,7 +178,8 @@ $Mat       = $_GET['Mat'];
 
 </head>
 
-<body onload="window.print()">
+<!--<body onload="window.print()">-->
+    <body>
     <div class="container">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
@@ -205,7 +207,7 @@ $Mat       = $_GET['Mat'];
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
                     <b>
-                        <font size=1>CONTRATO</font>
+                        <font size=1>RECIBO</font>
                     </b>
                 </td>
                 <td align="left" valign=bottom>
@@ -256,7 +258,7 @@ $Mat       = $_GET['Mat'];
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=4 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc222.png" class="imagem_end_1">
+                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1">
                     </font>
                 </td>
                 <td align="left" valign=bottom>
@@ -513,7 +515,7 @@ $Mat       = $_GET['Mat'];
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
                     <b>
-                        <font size=1>CONTRATO</font>
+                        <font size=1>RECIBO</font>
                     </b>
                 </td>
                 <td align="left" valign=bottom>
@@ -564,7 +566,7 @@ $Mat       = $_GET['Mat'];
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=4 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc222.png" class="imagem_end_2">
+                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_2">
                     </font>
                 </td>
                 <td align="left" valign=bottom>

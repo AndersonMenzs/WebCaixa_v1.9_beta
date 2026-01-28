@@ -126,9 +126,9 @@ error_reporting(E_ALL);
 					$Reg  = $Reg + 1;
 
 					if ($K == $QtdeParc) {
-						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$Mat', '')";
+						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$Mat', '', '', '', '')";
 					} else {
-						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag', '$PIni', '$dtRec', '$hora', '$Parc', '$Mat', '')";
+						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag', '$PIni', '$dtRec', '$hora', '$Parc', '$Mat', '', '', '', '')";
 					}
 					$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #3. Contate seu Administrador.");
 
@@ -182,9 +182,9 @@ error_reporting(E_ALL);
 				$Reg  = $Reg + 1;
 				for ($K = 1; $K <= $QtdeParc; $K++) {
 					if ($K == $QtdeParc) {
-						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$Mat', '')";
+						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$Mat', '', '', '', '')";
 					} else {
-						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag', '$PIni', '$dtRec', '$hora', '$Parc', '$Mat', '')";
+						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag', '$PIni', '$dtRec', '$hora', '$Parc', '$Mat', '', '', '', '')";
 					}
 					$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #3. Contate seu Administrador.");
 					$PIni = $PIni + 1;

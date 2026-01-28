@@ -61,21 +61,24 @@
 	$DataNasc	= trim($_POST['data_nasc']);
 	$TaxaProd  = $txt1 + $txt2 + $txt3;
 	$TaxaProdF = number_format($TaxaProd, 2, ",", ".");
+	$Regula    = trim($_POST['regula']);
+	$Senior    = trim($_POST['senior']);
+	$Aghata    = trim($_POST['aghata']);
 
-	// Converte para o formato internacional
-	$partes = explode('/', $DataNasc);
+    // Calculando quantos anos tem
+    $partes = explode('/', $DataNasc);
+    $dia = $partes[0];
+    $mes = $partes[1];
+    $ano = $partes[2];
 
-	if (count($partes) == 3) {
-		$DataNasc = $partes[2] . '-' . $partes[1] . '-' . $partes[0];
-		$Idade = date('Y') - date('Y', strtotime($DataNasc));
-
-		if (date('md') < date('md', strtotime($DataNasc))) {
-			$Idade--;
-		}
-	}
+    $Idade = date('Y') - $ano;
+    if (date('md') < $mes . $dia) {
+        $Idade--;
+    }
 
 	include "conexao.php";
 	include "dbselect.php";
+	include "config.php";
 
 	// Contando Formas de Pagamento
 	$FsPags = 0;
@@ -124,12 +127,22 @@
 			<center><u><i>Recebimento da Taxa de Produção</i></u></center>
 			<?php
 			// Verificando se a cliente é maior que 60 anos
-			if ($Idade >= 60) {
+			if ($Idade >= $Senior) {
 			?>
 				<center>
 					<font color='lime' size='7'>
 						<b>
 							<i>Cliente Senior</i>
+						</b>
+					</font>
+				</center>
+			<?php
+			} else if ($Regula == 'S') {
+			?>
+				<center>
+					<font color='lime' size='7'>
+						<b>
+							<i>Cliente Mulher Aghata</i>
 						</b>
 					</font>
 				</center>
@@ -203,6 +216,9 @@
 		<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 		<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
+		<input type="hidden" name="regula" value="<?php echo $Regula; ?>">
+		<input type="hidden" name="senior" value="<?php echo $Senior; ?>">
+		<input type="hidden" name="aghata" value="<?php echo $Aghata; ?>">
 		<p>
 			<center>
 				<input id="ghost_click" type="submit" name="btenvia" value="Continuar">

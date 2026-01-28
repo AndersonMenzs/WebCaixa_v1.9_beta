@@ -141,6 +141,9 @@ error_reporting(E_ALL);
 			} elseif (in_array("PXC", $FmRec)) {
 				$ModPag = "PIX CNPJ";
 				$FmRec_a = "PXC";
+			} elseif (in_array("GRT", $FmRec)) {
+				$ModPag = "GRATUIDADE";
+				$FmRec_a = "GRT";
 			}
 		} else {
 			$FmRec = '';
@@ -186,7 +189,7 @@ error_reporting(E_ALL);
 		<input type="hidden" name="dtaut" value="<?php echo $dtAut; ?>">
 		<input type="hidden" name="txtvalor" value="<?php echo $VrEnt; ?>">
 		<input type="hidden" name="siglarec" value="<?php echo $TipoRec; ?>">
-		<input type="hidden" name="formapag" value="<?php echo $FmRec; ?>">
+		<input type="hidden" name="formapag" value="<?php echo $FmRec_a; ?>">
 		<input type="hidden" name="txtmat" value="<?php echo $MatRec; ?>">
 		<br><br><br><br>
 		<font size='6'><b>

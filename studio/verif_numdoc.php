@@ -15,7 +15,7 @@ include "dbselect.php";
 
 try {
     // Consulta preparada para evitar SQL Injection
-    $sql = "SELECT COUNT(*) as total FROM registro WHERE numdoc = ?";
+    $sql = "SELECT COUNT(*) AS total FROM registro WHERE numdoc = ? AND subtipo = 'CNTE'";
     $stmt = mysqli_prepare($conec, $sql);
     mysqli_stmt_bind_param($stmt, "s", $txtdoc);
     mysqli_stmt_execute($stmt);

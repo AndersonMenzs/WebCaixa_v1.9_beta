@@ -5,8 +5,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	<style type="text/css">
 		body {
-			margin-left: 2%;
-			margin-right: 2%;
+			margin-top: 3%;
+			margin-left: 3%;
+			margin-right: 3%;
 			border: 3px solid gray;
 			padding: 10px 10px 10px 10px;
 			font-family: sans-serif;
@@ -14,7 +15,7 @@
 
 		.campos {
 			background-color: #C0C0C0;
-			font: 16px sans-serif;
+			font: 12px sans-serif;
 			color: #000000;
 		}
 	</style>
@@ -48,7 +49,7 @@
 		}
 	</script>
 
-	<script src="val_pgto.js"></script>
+	<script type="text/javascript" src="val_pgto.js" charset="utf-8"></script>
 
 	<?php
 	// Inserindo Cabeçalho
@@ -61,25 +62,27 @@
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
-	$Rot       = "S7R2.8.1";
+	$Rot       = "S7R2.2.1";
 	$lg_user   = trim($_POST['txtuser']);
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
 	$NumDoc    = trim($_POST['txtdoc']);
-	$NumDocF = 100000000 + $NumDoc;
-	$NDoc      = substr($NumDocF, 1, 8);
+	$NumDocF = 10000000 + $NumDoc;
+	$NDoc      = substr($NumDocF, 1, 7);
+	$VrEntr_1    = trim($_POST['txtvalor1']);
+	$VrEntr_2   = trim($_POST['txtvalor2']);
+	$VrEntr_3   = trim($_POST['txtvalor3']);
+	$EntrForm = $VrEntr_1 + $VrEntr_2 + $VrEntr_3;
+	$EntrForm = number_format($EntrForm, 2, ',', '.');
 	$FPag_1      = trim($_POST['lsPr1']);
 	$FPag_2      = trim($_POST['lsPr2']);
 	$FPag_3      = trim($_POST['lsPr3']);
 	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
-	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
-	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
-	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
-	$Valor     = $txt1 + $txt2 + $txt3;
-	$ValorF    = number_format($Valor, 2, ",", ".");
-	$Book      = trim($_POST['rdbook']);
+	$txt1 = isset($_POST['txtvalor1']) ? (float) trim($_POST['txtvalor1']) : 0;
+	$txt2 = isset($_POST['txtvalor2']) ? (float) trim($_POST['txtvalor2']) : 0;
+	$txt3 = isset($_POST['txtvalor3']) ? (float) trim($_POST['txtvalor3']) : 0;
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -140,11 +143,12 @@
 	} elseif ($FmRec == "PXC") {
 		$ModPag = "Pix Cnpj";
 	}
+
 	?>
 
 	<font color="gold" size="6">
 		<br><b>
-			<center><u><i>VENDAS À VISTA</i></u></center>
+			<center><u><i>Proposta - Entrada</i></u></center>
 		</b>
 	</font><br>
 	<?php
@@ -154,12 +158,13 @@
 		include "us_cad.php";
 	}
 
-	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
+	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
+	?>
 		<table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
-			<form name="confentr" method="post" action="geraprods.php" onSubmit='JavaScript:return checkdata()'>
+			<form name="confentr" method="post" action="gerapropentr.php" onsubmit="return checkdata()" autocomplete="off">
 				<tr>
 					<td width="30%" align="center">
-						<font color='gold' size='5'><b><i>Documento Nº </i></b></font>
+						<font color='gold' size='5'><b><i>Nº da Proposta</i></b></font>
 					</td>
 					<td width="70%" align="center">
 						<font color='#FFFFFF' size='5'><b><i><?php echo $NDoc; ?></i></b></font>
@@ -168,10 +173,10 @@
 
 				<tr>
 					<td width="30%" align="center">
-						<font color='gold' size='5'><b><i>Valor Pago</i></b></font>
+						<font color='gold' size='5'><b><i>Valor Cobrado</i></b></font>
 					</td>
 					<td width="70%" align="center">
-						<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $ValorF; ?></i></b></font>
+						<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $EntrForm; ?></i></b></font>
 					</td>
 				</tr>
 
@@ -189,55 +194,40 @@
 						</font>
 					</td>
 				</tr>
-
 				<tr>
 					<td width="30%" align="center">
-						<font color='gold' size='5'><b><i>Produto: </i></b></font>
-						<font color='#FFFFFF' size='5'><b><i>
-									<blink>
-										<?php
-										if ($Book == 'n') {
-											echo "Diversos";
-										} else {
-											echo "Book";
-										} ?></blink>
-								</i></b></font>
+						<font color='gold' size='5'><b><i>Senha</i></b></font>
 					</td>
 					<td width="70%" align="center">
-						<font color='gold' size='5'><b><i>Senha: </i></b></font>
 						<input type='password' name='txtsen' size='6' maxlength='6' class="campos">
 					</td>
 				</tr>
-
 		</table>
-
 		<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-		<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
-		<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
-		<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
-		<input type="hidden" name="txtvalor" value="<?php echo $Valor; ?>">
+		<input type="hidden" name="txtvalor1" value="<?php echo $txt1; ?>">
+		<input type="hidden" name="txtvalor2" value="<?php echo $txt2; ?>">
+		<input type="hidden" name="txtvalor3" value="<?php echo $txt3; ?>">
+		<input type="hidden" name="txtvalor" value="<?php echo $EntrForm; ?>">
 		<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
+		<input type="hidden" name="txtmodpag" value="<?php echo $FPag; ?>">
 		<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
 		<input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
 		<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
 		<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">
-		<input type="hidden" name="txtmodpag" value="<?php echo $ModPag; ?>">
 		<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 		<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
-		<input type="hidden" name="rdbook" value="<?php echo $Book; ?>">
-		<p>
-			<center>
-				<input id="ghost_click" type="submit" name="btenvia" value="Continuar">
-				<input type="button" name="btret" value="Retornar" OnClick="JavaScript:window.history.back()">
-			</center>
-		</p>
+		<br><br>
 		<center>
-			<font color='#FFFFFF' size='3'><span id="msg"></span></font>
+			<input id="ghost_click" type="submit" name="btenvia" value="Continuar">
+			<input type="button" name="btret" value="Retornar" OnClick="JavaScript:window.history.back()"><br><br>
+			<span id="msg"></span>
 		</center>
-		</form><?php
-
-			} else { ?>
+		</p>
+		</form>
+	<?php
+	} else {
+	?>
 		<br><br><br><br><br>
 		<font size='6'><b>
 				<center>Acesso <font color='gold'>
@@ -247,14 +237,13 @@
 			</b></font><br><br><br>
 		<center><a href='servrec.php?c_s=<?php echo $lg_user; ?>'><img src='images/voltar.gif'></a></center><br><br>
 	<?php
-			}
+	}
 
-			// Encerrando a Conexão
-			$SisRot = "S-7.2.8.1";
-			include "rodape.php"; ?>
-
+	// Encerrando
+	$SisRot = "S-7.2.2.1";
+	include "rodape.php";
+	?>
 	<script src="./js/ghost_click.js"></script>
-
 </body>
 
 </html>

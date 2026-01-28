@@ -1,0 +1,20 @@
+[14-Jan-2026 13:35:54 America/Sao_Paulo] PHP Warning:  mysqli_free_result() expects parameter 1 to be mysqli_result, null given in /var/www/html/caixa/studio/fccxant.php on line 1532
+[14-Jan-2026 13:37:09 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Object of class mysqli could not be converted to string in /var/www/html/caixa/studio/fccxant.php:1035
+Stack trace:
+#0 {main}
+  thrown in /var/www/html/caixa/studio/fccxant.php on line 1035
+[14-Jan-2026 13:37:53 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Object of class mysqli could not be converted to string in /var/www/html/caixa/studio/fccxant.php:1035
+Stack trace:
+#0 {main}
+  thrown in /var/www/html/caixa/studio/fccxant.php on line 1035
+[14-Jan-2026 13:39:05 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Object of class mysqli could not be converted to string in /var/www/html/caixa/studio/fccxant.php:1035
+Stack trace:
+#0 {main}
+  thrown in /var/www/html/caixa/studio/fccxant.php on line 1035
+[14-Jan-2026 13:39:12 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Object of class mysqli could not be converted to string in /var/www/html/caixa/studio/fccxant.php:1035
+Stack trace:
+#0 {main}
+  thrown in /var/www/html/caixa/studio/fccxant.php on line 1035
+[14-Jan-2026 13:46:30 America/Sao_Paulo] PHP Warning:  mysqli_free_result() expects parameter 1 to be mysqli_result, null given in /var/www/html/caixa/studio/fccxant.php on line 1545
+[14-Jan-2026 13:51:31 America/Sao_Paulo] PHP Warning:  mysqli_free_result() expects parameter 1 to be mysqli_result, null given in /var/www/html/caixa/studio/fccxant.php on line 1532
+[14-Jan-2026 13:56:59 America/Sao_Paulo] PHP Warning:  mysqli_free_result() expects parameter 1 to be mysqli_result, null given in /var/www/html/caixa/studio/fccxant.php on line 1532

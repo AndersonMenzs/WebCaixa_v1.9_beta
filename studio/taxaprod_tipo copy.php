@@ -42,6 +42,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
+
     <?php
     // Inserindo o Cabeçalho
     include "../cabecprs.php";
@@ -132,23 +133,16 @@
     $DataHj = date('Y-m-d');
 
     // Recebendo valores
-    $Mat_Vend = trim($_POST['mat_vend']);
+	$Mat_Vend = trim($_POST['mat_vend']);
     $Vendedora = trim($_POST['vendedora']);
     $Cliente    = trim($_POST['cliente']);
     $DataNasc    = trim($_POST['data_nasc']);
-    $Regula    = trim($_POST['regula']);
-    
-    // Obtendo Valor Atualizado de idades
-    include "config.php";
 
     // Calculando quantos anos tem
     $partes = explode('/', $DataNasc);
-    $dia = $partes[0];
-    $mes = $partes[1];
     $ano = $partes[2];
-
     $idade = date('Y') - $ano;
-    if (date('md') < $mes . $dia) {
+    if (date('md') < date('md', strtotime($DataNasc))) {
         $idade--;
     }
 
@@ -167,20 +161,11 @@
     $VrProd  = $ln['vltx'];
     $VrProdF = number_format($VrProd, 2, ',', '.');
 
-    // CORREÇÃO: Lógica simplificada e correta para gratuidade
-    $Gratuidade = false;
-    if ($idade >= $Senior) {
-        // Para $Senior+ anos: SEMPRE gratuidade (S ou N)
+    // Condição para gratuidade para maiores de 50 anos
+    if ($idade >= 50) {
         $VrProd = 0.00;
         $VrProdF = number_format($VrProd, 2, ',', '.');
-        $Gratuidade = true;
-    } elseif ($idade >= $Aghata && $Regula == 'S') {
-        // Para $Aghata-49 anos: gratuidade APENAS se 'S'
-        $VrProd = 0.00;
-        $VrProdF = number_format($VrProd, 2, ',', '.');
-        $Gratuidade = true;
     }
-    // Para outros casos: mantém o valor normal
 
     // Obtendo Valor Anterior
     $sqlA  = "select * from taxas where codigo = 'TXP' and vltx <> $VrProd order by datalt desc";
@@ -236,23 +221,13 @@
             <td></td>
             <td>
                 <?php
-                // CORREÇÃO: Exibição correta dos tipos de cliente
-                if ($idade >= $Senior) {
+                // Verificando se a cliente é maior que 50 anos
+                if ($idade >= 50) {
                 ?>
                     <center>
                         <font color='lime' size='7'>
                             <b>
                                 <i>Cliente Sênior</i>
-                            </b>
-                        </font>
-                    </center>
-                <?php
-                } elseif ($Gratuidade && $Regula == 'S') {
-                ?>
-                    <center>
-                        <font color='lime' size='7'>
-                            <b>
-                                <i>Cliente Mulher Aghata</i>
                             </b>
                         </font>
                     </center>
@@ -266,7 +241,7 @@
     <?php
 
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') {
-    ?>
+    ?>        
         <form name="taxaProd" method="post" action="confprod.php" onsubmit="return checkdata();" autocomplete="off">
             <table width="80%" border="5" cellpadding="10" cellspacing="0" align="center">
                 <tr>
@@ -304,8 +279,8 @@
                         <font size='5'><b><i>Nº Recibo</i></b></font>
                     </td>
                     <?php
-                    // CORREÇÃO: Mostrar opção "Amizade Premiada?" apenas para clientes de $Aghata-49 anos com Regula = 'N'
-                    if (($idade >= $Aghata && $idade < $Senior && $Regula == 'N') || $idade < $Aghata) {
+                    // Verificando se é menor de 50 anos
+                    if ($idade < 50) {
                     ?>
                         <td align="center">
                             <font color='gold' size='5'>
@@ -333,8 +308,8 @@
                         <input type='hidden' name='txtdoc' size='10' maxlength='8' class='campos' value="<?php echo $NumDoc; ?>">
                     </td>
                     <?php
-                    // CORREÇÃO: Mostrar radio buttons apenas para clientes de $Aghata-49 anos com Regula = 'N'
-                    if (($idade >= $Aghata && $idade < $Senior && $Regula == 'N') || $idade < $Aghata) {
+                    // Verificando se é menor de 50 anos
+                    if ($idade < 50) {
                     ?>
                         <td rowspan="4" align="center">
                             <font color='lime' size='5'><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -348,15 +323,12 @@
 
                     <input type="hidden" name="txtvrprod" value="<?php echo $VrProd; ?>">
                     <input type="hidden" name="txtvrprodf" value="<?php echo $VrProdF; ?>">
-                    <input type="hidden" name="regula" value="<?php echo $Regula; ?>">
-                    <input type="hidden" name="senior" value="<?php echo $Senior; ?>">
-                    <input type="hidden" name="aghata" value="<?php echo $Aghata; ?>">
                     <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 
                     <td align="center">
                         <?php
-                        // CORREÇÃO: Verificação consistente para gratuidade
-                        if ($Gratuidade) {
+                        // Verificando se é maior de 50 anos
+                        if ($idade >= 50) {
                         ?>
                             <font color='lime' size='5'><b><i>GRATUIDADE</i></b></font>
                             <input type="hidden" name="lsPr1" value="99">
@@ -381,11 +353,14 @@
                         <?php
                         }
                         ?>
+
                     </td>
                     <td align="center">
                         <font size="5"><b><i>R$ </i></b></font>
+
                         <?php
-                        if ($Gratuidade) {
+                        // Verificando se é maior de 50 anos
+                        if ($idade >= 50) {
                         ?>
                             <font size='5'><b><i>0,00</i></b></font>
                             <input type="hidden" name="txt1" value="0.00">
@@ -400,8 +375,8 @@
                 </tr>
 
                 <?php
-                // CORREÇÃO: Mostrar campos adicionais APENAS para quem NÃO tem gratuidade
-                if (!$Gratuidade) {
+                // Verifica se é menor de 50 anos para liberar os outros campos
+                if ($idade < 50) {
                 ?>
                     <tr>
                         <td align="center">
@@ -411,6 +386,7 @@
                                 $sqlpr2 = "select * from formapag where codpag <= 30 or codpag >= 70 and codpag <> 99 order by codpag";
                                 $rspr2 = mysqli_query($conec, $sqlpr2) or die("Não foi possível acessar os Dados");
 
+                                // Criando o Array para o campo PC
                                 while ($lnpr2 = mysqli_fetch_array($rspr2)) {
                                     $CodPag2  = $lnpr2['codpag'];
                                     $ModPag2  = $lnpr2['modpag'];
@@ -436,6 +412,7 @@
                                 $sqlpr3 = "select * from formapag where codpag <= 30 or codpag >= 70 and codpag <> 99 order by codpag";
                                 $rspr3 = mysqli_query($conec, $sqlpr3) or die("Não foi possível acessar os Dados");
 
+                                // Criando o Array para o campo PC
                                 while ($lnpr3 = mysqli_fetch_array($rspr3)) {
                                     $CodPag3  = $lnpr3['codpag'];
                                     $ModPag3  = $lnpr3['modpag'];
@@ -463,14 +440,13 @@
                     <td width="82%" align="center">
                         <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
                         <input type='submit' name='btenviar' value='Continuar'>
-                        &nbsp;&nbsp;
-                        <?php 
-                        if (!$Gratuidade) {
-                        ?>
+                        <?php
+                        // Verificando se é maior de 50 anos
+                        if ($idade < 50) {
+                        ?> &nbsp;&nbsp;
                             <input type='reset' name='btreset' value='Limpar'><br><br>
                         <?php
-                        }
-                        ?>
+                        } ?>
                     </td>
                     <td width="9%" align="right"></td>
                 </tr>

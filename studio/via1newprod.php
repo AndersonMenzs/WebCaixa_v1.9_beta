@@ -10,25 +10,6 @@ include "./valor_ext.php";
 
 ?>
 <html>
-<script>
-	// Previne o botão voltar
-	history.pushState(null, null, location.href);
-	window.onpopstate = function() {
-		history.go(1);
-	};
-
-	// Previne F5 e Ctrl+R
-	document.onkeydown = function(e) {
-		if (e.keyCode == 116 || (e.ctrlKey && e.keyCode == 82)) {
-			e.preventDefault();
-		}
-	};
-
-	// Desabilita clique direito (opcional)
-	document.addEventListener('contextmenu', function(e) {
-		e.preventDefault();
-	});
-</script>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
@@ -72,7 +53,21 @@ include "./valor_ext.php";
 	$Cliente   = trim($_POST['cliente']);
 	$DataNasc  = trim($_POST['data_nasc']);
 	$Idade     = trim($_POST['idade']);
+	$Regula    = isset($_POST['regula']) ? trim($_POST['regula']) : '';
+	$temGratuidade = isset($_POST['tem_gratuidade']) ? trim($_POST['tem_gratuidade']) : 'N';
+	$Senior	= isset($_POST['senior']) ? trim($_POST['senior']) : 'N';
+	$Aghata	= isset($_POST['aghata']) ? trim($_POST['aghata']) : 'N';
 	$vlr_ext   = valorPorExtenso($TaxaProdF);
+
+	// CORREÇÃO: Calcular gratuidade se não foi passada
+	if ($temGratuidade == 'N') {
+		// Recalcula a gratuidade baseado nas regras
+		if ($Idade >= $Senior) {
+			$temGratuidade = 'S';
+		} elseif ($Idade >= $Aghata && $Regula == 'S') {
+			$temGratuidade = 'S';
+		}
+	}
 
 	// Obtendo o código do PC
 	$sqlPC = "select pc from inicial";
@@ -93,41 +88,47 @@ include "./valor_ext.php";
 	$SgRec  = $lnRec['siglarec'];
 	$tipo = "TAXA PRODUÇÃO";
 
-	// Consulta SQL corrigida com parênteses
-	$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag_1' OR codpag = '$FPag_2' OR codpag = '$FPag_3') AND codpag <> '---'";
-	$rsFm = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
+	// CORREÇÃO: Para gratuidade, definir forma de pagamento específica
+	if ($temGratuidade == 'S') {
+		$FmRec_a = 'GRT';
+		$ModPag = 'GRATUIDADE';
+	} else {
+		// Consulta SQL corrigida com parênteses
+		$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag_1' OR codpag = '$FPag_2' OR codpag = '$FPag_3') AND codpag <> '---'";
+		$rsFm = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
 
-	$FmRec = [];
+		$FmRec = [];
 
-	while ($lnFm = mysqli_fetch_assoc($rsFm)) {
-		$FmRec[] = $lnFm['siglapag'];
-	}
+		while ($lnFm = mysqli_fetch_assoc($rsFm)) {
+			$FmRec[] = $lnFm['siglapag'];
+		}
 
-	// Remove duplicatas, caso existam
-	$FmRec = array_unique($FmRec);
+		// Remove duplicatas, caso existam
+		$FmRec = array_unique($FmRec);
 
-	// Define o modo de pagamento
-	$ModPag = '';
-	$FmRec_a = '';
+		// Define o modo de pagamento
+		$ModPag = '';
+		$FmRec_a = '';
 
-	// Se houver mais de uma forma diferente
-	if (count($FmRec) > 1) {
-		$FmRec_a = 'DIV';
-	} elseif (in_array("DIN", $FmRec)) {
-		$ModPag = "DINHEIRO";
-		$FmRec_a = "DIN";
-	} elseif (in_array("CTD", $FmRec)) {
-		$ModPag = "CARTÃO DÉBITO";
-		$FmRec_a = "CTD";
-	} elseif (in_array("CTV", $FmRec)) {
-		$ModPag = "CARTÃO CRÉDITO";
-		$FmRec_a = "CTV";
-	} elseif (in_array("PXQ", $FmRec)) {
-		$ModPag = "PIX QR CODE";
-		$FmRec_a = "PXQ";
-	} elseif (in_array("PXC", $FmRec)) {
-		$ModPag = "PIX CNPJ";
-		$FmRec_a = "PXC";
+		// Se houver mais de uma forma diferente
+		if (count($FmRec) > 1) {
+			$FmRec_a = 'DIV';
+		} elseif (in_array("DIN", $FmRec)) {
+			$ModPag = "DINHEIRO";
+			$FmRec_a = "DIN";
+		} elseif (in_array("CTD", $FmRec)) {
+			$ModPag = "CARTÃO DÉBITO";
+			$FmRec_a = "CTD";
+		} elseif (in_array("CTV", $FmRec)) {
+			$ModPag = "CARTÃO CRÉDITO";
+			$FmRec_a = "CTV";
+		} elseif (in_array("PXQ", $FmRec)) {
+			$ModPag = "PIX QR CODE";
+			$FmRec_a = "PXQ";
+		} elseif (in_array("PXC", $FmRec)) {
+			$ModPag = "PIX CNPJ";
+			$FmRec_a = "PXC";
+		}
 	}
 
 	// Reduzindo a Matrícula
@@ -151,12 +152,18 @@ include "./valor_ext.php";
 
 	<script>
 		function imprimirERedirecionar() {
+			// CORREÇÃO: Lógica corrigida para redirecionar para o recibo correto
+			var temGratuidade = '<?php echo $temGratuidade; ?>';
+			var url = '';
+			
+			if (temGratuidade == 'S') {
+				url = './recibo_taxaprod_grt.php?tipo=<?php echo urlencode($tipo); ?>';
+			} else {
+				url = './recibo_taxaprod.php?tipo=<?php echo urlencode($tipo); ?>';
+			}
+			
 			// Monta a URL com os dados
-			var url = './<?php
-							if ($Idade >= 60) { ?>recibo_taxaprod_grt.php?tipo=<?php echo urlencode($tipo);
-																			} else { ?>recibo_taxaprod.php?tipo=<?php echo urlencode($tipo);
-																											} ?>' +
-				'&NDoc=<?php echo urlencode($NDoc); ?>' +
+			url += '&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&TaxaProd=<?php echo urlencode($TaxaProd); ?>' +
 				'&VrProd=<?php echo urlencode($VrProd); ?>' +
@@ -180,7 +187,11 @@ include "./valor_ext.php";
 				'&Mat=<?php echo urlencode($Mat); ?>' +
 				'&mat_vend=<?php echo urlencode($Mat_Vend); ?>' +
 				'&Idade=<?php echo urlencode($Idade); ?>' +
-				'&DataNasc=<?php echo urlencode($DataNasc); ?>';
+				'&DataNasc=<?php echo urlencode($DataNasc); ?>' +
+				'&Regula=<?php echo urlencode($Regula); ?>' +
+				'&temGratuidade=<?php echo urlencode($temGratuidade); ?>' +
+				'&RdTaxa=<?php echo urlencode($RdTaxa); ?>';
+				
 			window.open(url, '_blank');
 			setTimeout(function() {
 				window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';

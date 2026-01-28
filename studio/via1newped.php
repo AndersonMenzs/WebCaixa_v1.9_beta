@@ -14,6 +14,11 @@ include "./valor_ext.php";
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
 	// Importando os Dados do Formulário
+
+	$dados = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+	echo "<pre>";
+	var_dump($dados);
+	echo "</pre>";
 	$Sis       = "S7";
 	$Rot       = "S7R1.1.1";
 	$lg_user   = trim($_POST['txtuser']);
@@ -37,6 +42,10 @@ include "./valor_ext.php";
 	$Mat_Vend  = $_POST['txtmatvend'];
 	$Vendedora = $_POST['vendedora'];
 	$Cliente   = $_POST['cliente'];
+	$vlr_ext   = valorPorExtenso($VrEnt);
+
+	echo $Reg . " - " . $NDoc . " - " . $dtRec . " - " . $VrEntrF . " - " . $SlgPag . " - " . $Opt . " - " . $Mat . " - " . $Mat_Vend . " - " . $Vendedora . " - " . $Cliente . " - " . $VrEnt . " - " . $VrEntr . " - " . $VrEntrF . " - " . $vlr_ext;
+	
 
 	// Obtendo o código do PC
 	$sqlPC = "select pc from inicial";
@@ -86,6 +95,8 @@ include "./valor_ext.php";
 				'&dtAut=<?php echo urlencode($dtAut); ?>' +
 				'&SgRec=<?php echo urlencode($SgRec); ?>' +
 				'&VrEnt=<?php echo urlencode($VrEnt); ?>' +
+				'&VrEntr=<?php echo urlencode($VrEntr); ?>' +
+				'&VrEntrF=<?php echo urlencode($VrEntrF); ?>' +
 				'&Mat=<?php echo urlencode($Mat); ?>';
 			window.open(url, '_blank');
 			setTimeout(function() {
