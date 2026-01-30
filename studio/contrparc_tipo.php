@@ -149,7 +149,6 @@
 	$mat_vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
-
 	$valor_parcela = floatval(str_replace(',', '.', str_replace('.', '', $_POST['txtvalor'] ?? '0')));
 	$vlr_recebido  = floatval(str_replace(',', '.', str_replace('.', '', $_POST['vlr_recebido'] ?? '0')));
 	$txtparc       = intval($_POST['txtparc'] ?? 0);
@@ -234,10 +233,10 @@
 					</td>
 					<td width="12%" align="center">
 						<font color='gold' size='4'><b><i>Parcial</i></b></font>
-					</td>
+					<!--</td>
 					<td width="9%" align="center">
 						<font color='gold' size='4'><b><i>Autent.</i></b></font>
-					</td>
+					</td>-->
 					<td width="20%" align="center">
 						<font color='gold' size='4'><b><i>Forma Pagamento</i></b></font>
 					</td>
@@ -270,13 +269,13 @@
 						<input type="hidden" name="parcial" id="parcial" value="<?php echo $Parcial; ?>">
 						<font color='#FFFFFF' size='4'><b><i><span id="Parcial"><?php echo $Parcial; ?></span></i></b></font>
 					</td>
-					<td rowspan="3" align="center">
+					<!--<td rowspan="3" align="center">
 						<input type="radio" name="rdaut" class="campos" value="c">
 						<font color='gold' size='4'><b><i>Carnê</i></b></font><br><br>
 						<input type="radio" name="rdaut" class="campos" value="a">
-						<font color='gold' size='4'><b><i>Avulso</i></b></font>
+						<font color='gold' size='4'><b><i>Avulso</i></b></font>-->
 						<input type="hidden" name="txtuser" value="<?php echo htmlspecialchars($lg_user, ENT_QUOTES); ?>">
-					</td>
+					<!--</td>-->
 					<td align="center">
 						<select name="lsPr1" class="campos">
 							<?php

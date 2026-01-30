@@ -14,11 +14,6 @@ include "./valor_ext.php";
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
 	// Importando os Dados do Formulário
-
-	$dados = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-	echo "<pre>";
-	var_dump($dados);
-	echo "</pre>";
 	$Sis       = "S7";
 	$Rot       = "S7R1.1.1";
 	$lg_user   = trim($_POST['txtuser']);

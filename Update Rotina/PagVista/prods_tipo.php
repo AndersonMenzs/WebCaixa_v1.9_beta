@@ -306,7 +306,7 @@
 
 				<tr>
 					<td colspan="2" align="center">
-						<font color='gold' size='6'><b><i>Deseja Book / Poster? </i></b></font>
+						<font color='gold' size='6'><b><i>Deseja Book? </i></b></font>
 					</td>
 					<td colspan="2" align="center">
 						<input type="radio" name="rdbook" value="s" class="campos">

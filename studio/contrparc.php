@@ -127,7 +127,7 @@
             $el.autocomplete({
                source: function(request, response) {
                   $.ajax({
-                     url: "buscar_numdoc.php",
+                     url: "buscar_funcionarias.php",
                      dataType: "json",
                      data: {
                         term: request.term,
@@ -136,21 +136,21 @@
                      success: function(data) {
                         var items = [];
 
-                        // Se o backend já retornar array de objetos {label,value,mat,cliente,numdoc}
+                        // já é um array de items {label,value,mat}
                         if (Array.isArray(data)) {
                            items = data;
                         }
-                        // formato antigo: { nomes: [...], mat_vend: [...], numdocs: [...] }
+                        // formato retornado pelo servidor: { nomes: [...], mat_vend: [...] }
                         else if (data && Array.isArray(data.nomes)) {
                            for (var i = 0; i < data.nomes.length; i++) {
                               items.push({
-                                 label: data.numdocs && data.numdocs[i] ? data.numdocs[i] + ' - ' + data.nomes[i] : data.nomes[i],
+                                 label: data.nomes[i],
                                  value: data.nomes[i],
-                                 mat: data.mat_vend && data.mat_vend[i] ? data.mat_vend[i] : '',
-                                 numdoc: data.numdocs && data.numdocs[i] ? data.numdocs[i] : ''
+                                 mat: data.mat_vend && data.mat_vend[i] ? data.mat_vend[i] : ''
                               });
                            }
                         }
+                        // fallback vazio
                         response(items);
                      },
                      error: function(xhr, status, err) {
@@ -162,41 +162,37 @@
                minLength: 2,
                delay: 300,
                select: function(event, ui) {
-                  // Preenche mat_vend, vendedora, cliente (se retornados)
-                  if (ui.item) {
-                     if (ui.item.mat) $('#mat_vend').val(ui.item.mat);
-                     if (ui.item.value) $('#vendedora').val(ui.item.value);
-                     if (ui.item.cliente) $('#cliente').val(ui.item.cliente);
-                     // se item tem numdoc, pode preencher o campo txtdoc com ele
-                     if (ui.item.numdoc) $(this).val(ui.item.numdoc);
-                     else $(this).val(ui.item.value || '');
+                  if (ui.item && ui.item.mat) {
+                     $('#mat_vend').val(ui.item.mat);
                   }
+                  $(this).val(ui.item ? ui.item.value : '');
                   return false;
                },
                focus: function(event, ui) {
-                  $(this).val(ui.item ? (ui.item.numdoc || ui.item.value) : '');
+                  $(this).val(ui.item ? ui.item.value : '');
                   return false;
                }
             });
 
+            // compatível com várias versões do jQuery UI: tenta obter a instância do widget
             var inst = $el.autocomplete("instance") || $el.data("ui-autocomplete") || $el.data("autocomplete");
             if (inst) {
                inst._renderItem = function(ul, item) {
                   return $("<li>")
-                     .append("<div>" + (item.label || item.numdoc || item.value || "") + "</div>")
+                     .append("<div>" + (item.label || item.value || "") + "</div>")
                      .appendTo(ul);
                };
             } else {
+               // fallback seguro: não quebrar se instância não for encontrada
                console.warn("Autocomplete instance não disponível para", element);
             }
          }
 
-         // Aplicar ao campo txtdoc (texto) — garanta que existe apenas UM elemento com id="txtdoc"
-         setupAutocomplete("#txtdoc", "txtdoc");
+         // Aplicar aos campos
+         setupAutocomplete("#vendedora", "vendedora");
       });
 
       function validaCampos() {
-         var txtdoc = document.getElementById('txtdoc').value.trim();
          var vendedora = document.getElementById('vendedora').value.trim();
          var cliente = document.getElementById('cliente').value.trim();
          if (vendedora.length <= 8) {
@@ -296,7 +292,7 @@
 
    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
       <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
-         <form name="parcela" method="post" action="contrparc_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos(); return checkdata()" autocomplete="off">
+         <form name="parcela" method="post" action="contrparc_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos()" autocomplete="off">
             <tr>
                <td width="20%" align="center">
                   <font color='#FFFFFF' size='5'><b><i>Contrato</i></b></font>

@@ -98,11 +98,11 @@ $Mat       = $_GET['Mat'];
 
         .imagem_end_1 {
             position: absolute;
-            top: 45px;
-            left: 1px;
-            width: 260px;
+            top: 38px;
+            left: 25px;
+            width: 285px;
             /* Largura original */
-            height: 55px;
+            height: 65px;
             /* Altura original */
             object-fit: contain;
             /* Mantém a proporção da imagem */
@@ -110,8 +110,8 @@ $Mat       = $_GET['Mat'];
 
         .imagem_end_2 {
             position: absolute;
-            top: 125px;
-            left: 10px;
+            top: 123px;
+            left: 25px;
             width: 285px;
             /* Largura original */
             height: 520px;
@@ -122,8 +122,8 @@ $Mat       = $_GET['Mat'];
 
         .imagem_end_3 {
             position: absolute;
-            top: 165px;
-            left: 10px;
+            top: 160px;
+            left: 25px;
             width: 285px;
             /* Largura original */
             height: 972px;
@@ -178,14 +178,24 @@ $Mat       = $_GET['Mat'];
 
         @media print {
 
+            html,
+            body {
+                height: 297mm;
+                width: 210mm;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                /* evita quebra */
+            }
+
             /* Remove margens padrão */
             @page {
-                margin: 0;
+                margin: 2mm;
             }
 
             body {
-                margin: 6mm;
-                padding: 0;
+                margin: 2mm;
+                padding: 2mm;
             }
 
             /* Se quiser esconder elementos que não devem aparecer */
@@ -195,14 +205,10 @@ $Mat       = $_GET['Mat'];
             .sem-imprimir {
                 display: none !important;
             }
-
-
         }
     </style>
 
-</head>
-<body>
-<!--<body onload="window.print()">-->
+</head><body onload="window.print()">
     <div class="container">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
