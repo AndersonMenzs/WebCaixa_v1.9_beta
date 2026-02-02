@@ -190,3 +190,42 @@ $sqlO = "UPDATE datafix SET horaf = 0, minf = 0;";
 $rsO  = mysqli_query($conec, $sqlO) or die ("File index.php Error #1. Contate seu Administrador.");
 ```
 
+# Despesas & Recolhomentos
+
+## Despesas
+
+Criar a tabela despesas
+
+```sql
+CREATE TABLE tiporef (
+    codref VARCHAR(2) NOT NULL,
+    nomeref VARCHAR(50) NOT NULL,
+    siglaref VARCHAR(5) NOT NULL,
+    ref_tiporec VARCHAR(5) NOT NULL
+)
+```
+Inserir linhas na tabela tiporef
+
+```sql
+INSERT INTO tiporef VALUES ('0', 'Selecione', '---', '---'), ('1', 'Salário', 'SAL', 'DDP'), ('2', 'Adiantamento Salarial', 'ADS', 'DDP'), ('3', 'Férias', 'FER', 'DDP'), ('4', 'Premiação', 'PREM', 'DDP'), ('5', 'Taxa Produção', 'TXP', 'RCL'), ('6', 'Contrato Entrada', 'CNTE', 'RCL'), ('7', 'Cancelamento de Venda', 'CVD', 'RCL'), ('8', 'Devolução PIX', 'DVP', 'RCL'), ('9', 'CARNÊ', 'CAR', 'RCL');
+```
+
+Inserir uma linha na tabela registro
+
+```sql
+INSERT INTO registro VALUES (6, 'CI222000', '0', '---', '0', '0', '2026-02-02', '00:00', 0.00, '00000000', '', '00000000', '', '');
+```
+
+```sql
+INSERT INTO registro VALUES (31, 'MC222000', '0', '---', '0', '0', '2026-02-02', '00:00', 0.00, '00000000', '', '00000000', '', '');
+```
+
+```sql
+INSERT INTO registro VALUES (32, 'MD222000', '0', '---', '0', '0', '2026-02-02', '00:00', 0.00, '00000000', '', '00000000', '', '');
+```
+
+```sql
+INSERT INTO registro VALUES (33, 'MP222000', '0', '---', '0', '0', '2026-02-02', '00:00', 0.00, '00000000', '', '00000000', '', '');
+```
+
+## Recolhimentos

@@ -58,7 +58,7 @@
 	$TipoPag   = trim($_POST['lsPr']);
 	$lsref_desp	= trim($_POST['lsref_desp']);
 	$lsref_remb	= trim($_POST['lsref_remb']);
-	$TipoRef = ($lsref_desp != 'Selecione' AND $lsPr == '1') ? $lsref_desp : (($lsref_remb != 'Selecione' AND $lsPr == '5') ? $lsref_remb : "");
+	$TipoRef = ($lsref_desp != 'Selecione' and $lsPr == '1') ? $lsref_desp : (($lsref_remb != 'Selecione' and $lsPr == '5') ? $lsref_remb : "");
 	$colab		= trim($_POST['colab']);
 	$mat_vend	= trim($_POST['mat_vend']);
 	$Cliente	= trim($_POST['cliente']);
@@ -71,8 +71,8 @@
 	$rs  = mysqli_query($conec, $sql);
 	$ln  = mysqli_fetch_array($rs);
 	$NomeDesc = $ln['tipopag'];
-	mysqli_free_result($rs); 
-	
+	mysqli_free_result($rs);
+
 	?>
 
 	<font color="gold" size="6">
@@ -104,9 +104,21 @@
 						<font color='gold' size='5'><b><i>Tipo de Despesa</i></b></font>
 					</td>
 					<td width="50%" align="center">
-						<font color='#FFFFFF' size='5'><b><i>
-									<blink><?php echo $NomeDesc . " - " . $TipoRef; ?></blink>
-								</i></b></font>
+						<?php
+						if ($lrPr == '1' or $lrPr == '5') {
+						?>
+							<font color='#FFFFFF' size='5'><b><i>
+										<blink><?php echo $NomeDesc . " - " . $TipoRef; ?></blink>
+									</i></b></font>
+						<?php
+						} else {
+						?>
+							<font color='#FFFFFF' size='5'><b><i>
+										<blink><?php echo $NomeDesc; ?></blink>
+									</i></b></font>
+						<?php
+						}
+						?>
 					</td>
 				</tr>
 
@@ -135,6 +147,12 @@
 		<input type="hidden" name="txttipodesp" value="<?php echo $TipoPag; ?>">
 		<input type="hidden" name="txtvalor" value="<?php echo $Valor; ?>">
 		<input type="hidden" name="txtmodpag" value="<?php echo 0; ?>">
+		<input type="hidden" name="colab" value="<?php echo $colab; ?>">
+		<input type="hidden" name="mat_vend" value="<?php echo $mat_vend; ?>">
+		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
+		<input type="hidden" name="tiporec_ext" value="<?php echo $TipoRef; ?>">
+		<input type="hidden" name="nomedesc" value="<?php echo $NomeDesc; ?>">
+
 		<p>
 			<center>
 				<input id="ghost_click" type="submit" name="btenvia" value="Continuar">
