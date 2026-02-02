@@ -85,7 +85,7 @@
 				$Reg = 0;
 			}
 			$Reg  = $Reg + 1;
-			$sqlGr = "insert into registro values($Reg, '0000000', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '')";
+			$sqlGr = "insert into registro values($Reg, '0000000', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '','', '')";
 			$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados");
 
 			// Preparando a Via Cliente 

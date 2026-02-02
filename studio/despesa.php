@@ -25,6 +25,11 @@
 	include "../cabecprs.php";
 	?>
 
+	<!-- Adicionando jQuery UI para o autocomplete -->
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
 	<script>
 		function putFocus(formInst, elementInst) {
 			if (document.forms.length > 0) {
@@ -92,6 +97,173 @@
 				}
 			}
 		}
+	</script>
+
+	<script>
+		$(function() {
+			function setupAutocomplete(element, tipo) {
+				var $el = $(element);
+				$el.autocomplete({
+					source: function(request, response) {
+						$.ajax({
+							url: "buscar_funcionarias.php",
+							dataType: "json",
+							data: {
+								term: request.term,
+								tipo: tipo
+							},
+							success: function(data) {
+								var items = [];
+
+								// já é um array de items {label,value,mat}
+								if (Array.isArray(data)) {
+									items = data;
+								}
+								// formato retornado pelo servidor: { nomes: [...], mat_vend: [...] }
+								else if (data && Array.isArray(data.nomes)) {
+									for (var i = 0; i < data.nomes.length; i++) {
+										items.push({
+											label: data.nomes[i],
+											value: data.nomes[i],
+											mat: data.mat_vend && data.mat_vend[i] ? data.mat_vend[i] : ''
+										});
+									}
+								}
+								// fallback vazio
+								response(items);
+							},
+							error: function(xhr, status, err) {
+								console.error("Erro na requisição:", status, err);
+								response([]);
+							}
+						});
+					},
+					minLength: 2,
+					delay: 300,
+					select: function(event, ui) {
+						if (ui.item && ui.item.mat) {
+							$('#mat_vend').val(ui.item.mat);
+						}
+						$(this).val(ui.item ? ui.item.value : '');
+						return false;
+					},
+					focus: function(event, ui) {
+						$(this).val(ui.item ? ui.item.value : '');
+						return false;
+					}
+				});
+
+				// compatível com várias versões do jQuery UI: tenta obter a instância do widget
+				var inst = $el.autocomplete("instance") || $el.data("ui-autocomplete") || $el.data("autocomplete");
+				if (inst) {
+					inst._renderItem = function(ul, item) {
+						return $("<li>")
+							.append("<div>" + (item.label || item.value || "") + "</div>")
+							.appendTo(ul);
+					};
+				} else {
+					// fallback seguro: não quebrar se instância não for encontrada
+					console.warn("Autocomplete instance não disponível para", element);
+				}
+			}
+
+			// Aplicar aos campos
+			setupAutocomplete("#colab", "colab");
+		});
+
+		function validaCampos() {
+			var vendedora = document.getElementById('vendedora').value.trim();
+			var cliente = document.getElementById('cliente').value.trim();
+			if (vendedora.length <= 8) {
+				alert('O campo Colaborador(a) deve ter mais que 8 letras.');
+				document.getElementById('vendedora').focus();
+				return false;
+			}
+			return true;
+		}
+
+		function fPassaAlfaNumerico(tipo) {
+			return function(e) {
+				let char = String.fromCharCode(e.which);
+				if (tipo === 'an') {
+					// permite apenas letras e números
+					if (!/^[a-zA-Z0-9\s]$/.test(char)) {
+						e.preventDefault();
+					}
+				}
+			};
+		}
+
+		function validnome(input) {
+			// remove tudo que não for letra, número ou espaço
+			input.value = input.value.replace(/[^A-Z0-9\s]/g, '');
+
+			// exemplo: exige pelo menos 3 caracteres
+			if (input.value.length < 3) {
+				input.style.borderColor = "red";
+			} else {
+				input.style.borderColor = "";
+			}
+		}
+
+		function mostrarTabelaDespesa() {
+
+			var select = document.getElementById('lsPr');
+			var selectedOption = select.options[select.selectedIndex];
+			var selectedValue = select.value;
+
+			// Pegue a classe da opção selecionada
+			var optionClass = selectedOption.className;
+
+			// Obtenha as tabelas
+			var tabelaDP = document.getElementById('tb_despesas_dp');
+			var tabelaRemb = document.getElementById('tb_reembolso_cli');
+
+			// Inicialmente oculte ambas
+			if (tabelaDP) tabelaDP.style.display = 'none';
+			if (tabelaRemb) tabelaRemb.style.display = 'none';
+
+			// Mostre a tabela correta
+			if (selectedValue === '1' || optionClass.includes('despesa-dp')) {
+				if (tabelaDP) tabelaDP.style.display = 'table';
+				if (tabelaRemb) tabelaRemb.style.display = 'none';
+			} else if (selectedValue === '5' || optionClass.includes('reembolso-cli')) {
+				if (tabelaRemb) tabelaRemb.style.display = 'table';
+				if (tabelaDP) tabelaDP.style.display = 'none';
+			}
+
+			// Opcional: Limpar campos quando mudar de tabela
+			if (selectedValue !== '1' && selectedValue !== '5') {
+				// Limpa campos se não for nenhum dos dois tipos especiais
+				if (tabelaDP) {
+					tabelaDP.querySelector('#colab').value = '';
+					tabelaDP.querySelector('#mat_vend').value = '';
+					tabelaDP.querySelector('#lsref_desp').selectedIndex = 0;
+				}
+				if (tabelaRemb) {
+					tabelaRemb.querySelector('#cliente').value = '';
+					tabelaRemb.querySelector('#lsref_remb').selectedIndex = 0;
+				}
+			}
+		}
+
+		// Função para inicializar na carga da página
+		function inicializarTabelasDespesa() {
+			// Inicialmente oculte ambas as tabelas
+			var tabelaDP = document.getElementById('tb_despesas_dp');
+			var tabelaRemb = document.getElementById('tb_reembolso_cli');
+
+			if (tabelaDP) tabelaDP.style.display = 'none';
+			if (tabelaRemb) tabelaRemb.style.display = 'none';
+
+			// Chame a função para mostrar a tabela correta baseado na seleção atual
+			mostrarTabelaDespesa();
+		}
+
+		// Execute quando a página carregar
+		$(document).ready(function() {
+			inicializarTabelasDespesa();
+		});
 	</script>
 
 	<script src="val_pag.js" charset="utf-8"></script>
@@ -208,7 +380,7 @@
 						<input type="hidden" name="txtcaixa" value="<?php echo $SdCaixa; ?>">
 					</td>
 					<td width="35%" align="center">
-						<select name="lsPr" class="campos">
+						<select name="lsPr" id="lsPr" class="campos" onchange="mostrarTabelaDespesa()">
 							<?php
 							// Obtendo a Relação
 							// Conectando ao Banco de Dados
@@ -224,8 +396,19 @@
 							while ($lnpr = mysqli_fetch_array($rspr)) {
 								$CodPag  = $lnpr['codpag'];
 								$TipoPag = $lnpr['tipopag'];
+
+								// Verificar se é Despesa DP ou Reembolso Cliente para adicionar classes
+								$classe = "";
+								// AJUSTE AQUI: Use 'DDP' para despesas DP (conforme seu switch PHP)
+								if ($CodPag == '1') {
+									$classe = "despesa-dp";
+								} elseif ($CodPag == '5') { // Para reembolso cliente
+									$classe = "reembolso-cli";
+								}
 							?>
-								<option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$TipoPag"; ?></option>
+								<option value="<?php echo $CodPag; ?>" class="<?php echo $classe; ?> campos">
+									<?php echo "$TipoPag"; ?>
+								</option>
 							<?php
 							}
 							mysqli_free_result($rspr);
@@ -233,6 +416,85 @@
 						</select>
 					</td>
 				</tr>
+		</table><br><br>
+
+		<table id="tb_despesas_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
+			<tr>
+				<td width="50%" align="center">
+					<font color='gold' size='5'><b><i>Reterente</i></b></font>
+				</td>
+				<td width="50%" align="center">
+					<font color='gold' size='5''><b><i>Colaborador(a)</i></b></font>
+				</td>
+			</tr>
+
+			<tr>
+				<td width="50%" align="center">
+					<select name="lsref_desp" id="lsref_desp" class="campos">
+						<?php
+						// Criando a Instrução SQL de Consulta
+						$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' ORDER BY codref";
+						$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+						
+						while ($lnpr = mysqli_fetch_array($rspr)) {
+							$CodRef_Desp  = $lnpr['codref'];
+							$TipoRef_Desp = $lnpr['nomeref'];
+						?>
+							<option value="<?php echo $TipoRef_Desp; ?>" class="campos">
+								<?php echo "$TipoRef_Desp"; ?>
+							</option>
+						<?php
+						}
+						mysqli_free_result($rspr);
+						?>	
+					</select>
+				</td>
+					<td width="50%" align="center">
+						<input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
+						<input type="text" id="colab" name="colab" size="40" maxlength="50" class="campos"
+							onkeypress="fPassaAlfaNumerico(' an')"
+						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus>
+				</td>
+			</tr>
+		</table>
+
+		<table id="tb_reembolso_cli" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
+			<tr>
+				<td width="50%" align="center">
+					<font color='gold' size='5'><b><i>Reterente</i></b></font>
+				</td>
+				<td width="50%" align="center">
+					<font color='gold' size='5''><b><i>Cliente</i></b></font>
+				</td>
+			</tr>
+
+			<tr>
+				<td width="50%" align="center">
+					<select name="lsref_remb" id="lsref_remb" class="campos">
+						<?php
+						// Criando a Instrução SQL de Consulta
+						$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'DDP' ORDER BY codref";
+						$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+						
+						while ($lnpr = mysqli_fetch_array($rspr)) {
+							$CodRef_Remb  = $lnpr['codref'];
+							$TipoRef_Remb = $lnpr['nomeref'];
+						?>
+							<option value="<?php echo $TipoRef_Remb; ?>" class="campos">
+								<?php echo "$TipoRef_Remb"; ?>
+							</option>
+						<?php
+						}
+						mysqli_free_result($rspr);
+						?>	
+					</select>
+				</td>
+					<td width="50%" align="center">
+						<input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
+							onkeypress="fPassaAlfaNumerico(' an')"
+						onkeyup='this.value=this.value.toUpperCase(); validnome(this)'>
+				</td>
+			</tr>
 		</table><br>
 
 		<table width="100%" border="0" cellspacing="0">

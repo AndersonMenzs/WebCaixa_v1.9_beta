@@ -38,6 +38,12 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
+
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";*/
+
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R3.1.1";
@@ -48,7 +54,15 @@
 	$Cod2      = trim($_POST['txtcod2']);
 	$Valor     = trim($_POST['txtvalor']);
 	$ValorF    = number_format($Valor, 2, ',', '.');
+	$lsPr      = trim($_POST['lsPr']);
 	$TipoPag   = trim($_POST['lsPr']);
+	$lsref_desp	= trim($_POST['lsref_desp']);
+	$lsref_remb	= trim($_POST['lsref_remb']);
+	$TipoRef = ($lsref_desp != 'Selecione' AND $lsPr == '1') ? $lsref_desp : (($lsref_remb != 'Selecione' AND $lsPr == '5') ? $lsref_remb : "");
+	$colab		= trim($_POST['colab']);
+	$mat_vend	= trim($_POST['mat_vend']);
+	$Cliente	= trim($_POST['cliente']);
+
 	include "conexao.php";
 	include "dbselect.php";
 
@@ -57,7 +71,9 @@
 	$rs  = mysqli_query($conec, $sql);
 	$ln  = mysqli_fetch_array($rs);
 	$NomeDesc = $ln['tipopag'];
-	mysqli_free_result($rs); ?>
+	mysqli_free_result($rs); 
+	
+	?>
 
 	<font color="gold" size="6">
 		<br><b>
@@ -72,7 +88,7 @@
 	}
 
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
-		<table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
+		<table width="80%" border="5" cellpadding="10" cellspacing="0" align="center">
 			<form name="confentr" method="post" action="geradesp.php" OnSubmit="JavaScript:return checkdata()">
 				<tr>
 					<td width="50%" align="center">
@@ -89,7 +105,7 @@
 					</td>
 					<td width="50%" align="center">
 						<font color='#FFFFFF' size='5'><b><i>
-									<blink><?php echo $NomeDesc; ?></blink>
+									<blink><?php echo $NomeDesc . " - " . $TipoRef; ?></blink>
 								</i></b></font>
 					</td>
 				</tr>

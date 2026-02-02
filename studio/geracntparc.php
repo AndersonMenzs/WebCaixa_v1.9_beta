@@ -147,16 +147,19 @@ error_reporting(E_ALL);
 
 					if ($K == $QtdeParc) {
 						if ($FPag_1 <> "00") {
+							echo "Pag1: " . $Reg . " - " . $NDoc . " - " . $TipoRec . " - " . $SubTipo . " - " . $FPag_1 . " - " . $PIni . " - " . $dtRec . " - " . $hora . " - " . $ParcUlt . " - " . $MatClean . " - " . "" . " - " . $Mat_Vend . " - " . $Vendedora_full . " - " . $Cliente . "<br>";
 							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #3.1. Contate seu Administrador.");
 						} 
 						
 						if ($FPag_2 <> "00") {
+							echo "Pag2: " . $Reg . " - " . $NDoc . " - " . $TipoRec . " - " . $SubTipo . " - " . $FPag_2 . " - " . $PIni . " - " . $dtRec . " - " . $hora . " - " . $ParcUlt . " - " . $MatClean . " - " . "" . " - " . $Mat_Vend . " - " . $Vendedora_full . " - " . $Cliente . "<br>";
 							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #3.2. Contate seu Administrador.");
 						} 
 						
 						if ($FPag_3 <> "00") {
+							echo "Pag3: " . $Reg . " - " . $NDoc . " - " . $TipoRec . " - " . $SubTipo . " - " . $FPag_3 . " - " . $PIni . " - " . $dtRec . " - " . $hora . " - " . $ParcUlt . " - " . $MatClean . " - " . "" . " - " . $Mat_Vend . " - " . $Vendedora_full . " - " . $Cliente . "<br>";
 							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 							$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #3.3. Contate seu Administrador.");
 						}
