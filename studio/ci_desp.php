@@ -1,10 +1,10 @@
 <?php
 
-	/*$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
+	$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
 	echo "<pre>";
 	print_r($dados);
 	echo "</pre>";
-	exit();*/
+	exit();
 // ==========================
 // Dados do Documento
 // ==========================
