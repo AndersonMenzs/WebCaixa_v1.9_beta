@@ -62,16 +62,15 @@ error_reporting(E_ALL);
 	$Pass      = strtolower(trim($_POST['txtsen']));
 	$Senha     = sha1($Pass);
 	$hora	  = date('H:i');
-	$EntrForm  = trim($_POST['txtvalor']);
-	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
-	$VrEnt	 = $txt1;
-	$VrEntr    = number_format($VrEnt, 2, ',', '.');
+	$VrPrest  = trim($_POST['vrprest']);
+	$VrRec = isset($_POST['vrrec']) ? (float) trim($_POST['vrrec']) : 0;
+	$VrRecF    = number_format($VrRec, 2, ',', '.');
 	$QtdeParc  = trim($_POST['qtdeparc']);
-	$VrEntr    = trim($_POST['txtvalor']);
-	$Parc      = trim($_POST['txtvalor']);
+	//$VrEntr    = trim($_POST['txtvalor']);
+	$Parc      = trim($_POST['vrprest']);
 	$PIni      = trim($_POST['txtparc_ini']);
 	$PUlt 	= trim($_POST['txtparc_ult']);
-	$Parcial = trim($_POST['parcial']);
+	$Parcial = trim($_POST['vrparcial']);
 
 	// Truncar o nome da vendedora com o primeiro nome completo e após o primeiro espaco, deixar somente uma letra e ponto.
 	$Vendedora = strtoupper($Vendedora);
@@ -81,7 +80,6 @@ error_reporting(E_ALL);
 	$TipoRec   = '3';
 	$SubTipo   = 'CNTP';
 	$DataHoje = date('Y-m-d');
-	$tipo = "CONTRATO PARCELADO";
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -124,7 +122,7 @@ error_reporting(E_ALL);
 			}
 
 			// Gravando Várias Parcelas
-			$ParcUlt = $VrEnt - $Parc * ($QtdeParc - 1);
+			$ParcUlt = $VrRec - $Parc * ($QtdeParc - 1);
 
 			$ParcUlt = number_format($ParcUlt, 2, '.', '');
 
@@ -281,20 +279,25 @@ error_reporting(E_ALL);
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
 				<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
-				<input type="hidden" name="pc" value="<?php echo $PC; ?>">
+				<input type="hidden" name="sgrec" value="<?php echo $SgRecSp; ?>">
+				<input type="hidden" name="pc" value="<?php echo $PCSp; ?>">
 				<input type="hidden" name="tiporec" value="<?php echo $TipoRec; ?>">
+				<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
+				<input type="hidden" name="modpag" value="<?php echo $ModPag; ?>">
 				<input type="hidden" name="tipo" value="<?php echo $tipo; ?>">
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">
 				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $MatClean; ?>">
+				<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 				<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
-				<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
+				<input type="hidden" name="vrprest" value="<?php echo $VrPrest; ?>">
+				<input type="hidden" name="vrrec" value="<?php echo $VrRec; ?>">
 				<input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
 				<input type="hidden" name="txtparc_ini" value="<?php echo $PIni - $QtdeParc; ?>">
 				<input type="hidden" name="txtparc_ult" value="<?php echo $PIni - 1; ?>">
 				<input type="hidden" name="txtparc" value="<?php echo $ParcUlt; ?>">
-				<input type="hidden" name="parcial" value="<?php echo $Parcial; ?>">
+				<input type="hidden" name="vrparcial" value="<?php echo $Parcial; ?>">
 
 				<font size='6'><b>
 						<center>Verifique se a impressora do <font color='gold'>

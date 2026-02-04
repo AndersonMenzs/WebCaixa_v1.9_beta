@@ -306,7 +306,7 @@
             </tr>
             <tr>
                <td width="20%" align="center">
-                  <input type="text" id="txtdoc" name="txtdoc" size="8" maxlength="10" class="campos" autofocus
+                  <input type="text" id="txtdoc" name="txtdoc" size="8" maxlength="8" class="campos" autofocus
                      onkeypress="return /[A-Za-z0-9 ]/.test(String.fromCharCode(event.which || event.keyCode))"
                      onkeyup="this.value=this.value.toUpperCase(); validnome(this)" required>
                </td>

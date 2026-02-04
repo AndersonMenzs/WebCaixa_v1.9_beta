@@ -60,6 +60,11 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	var_dump($dados);
+	echo "</pre>";
+	exit();*/
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -70,16 +75,16 @@
 	$NumDoc    = trim($_POST['txtdoc']);
 	$NumDocF = 10000000 + $NumDoc;
 	$NDoc      = substr($NumDocF, 1, 7);
-	$VrEntr    = trim($_POST['txtvalor']);
-	$VrEntrF   = number_format($VrEntr, 2, ',', '.');
+	$VrPrest    = trim($_POST['txtvalor']);
+	$VrPrestF   = number_format($VrPrest, 2, ',', '.');
 	$VrRec     = trim($_POST['vlr_recebido']);
 	$PIni      = trim($_POST['txtparc_ini']);
 	$PUlt      = trim($_POST['txtparc_ult']);
 	$QtdeParc  = $PUlt - $PIni + 1;
 	$ParcialF   = trim($_POST['parcial']);
 	$Parcial  = number_format($ParcialF, 2, '.', ',');
-	$EntrForm  = $VrEntr * $QtdeParc;
-	$EntrFormF  = number_format($EntrForm, 2, ',', '.');
+	$VrPrestForm  = $VrPrest * $QtdeParc;
+	$VrPrestFormF  = number_format($VrPrestForm, 2, ',', '.');
 	$FPag_1      = trim($_POST['lsPr1']);
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$Mat_Vend = trim($_POST['mat_vend']);
@@ -181,7 +186,7 @@
 							<font color='gold' size='5'><b><i>Valor de Cada Parcela </i></b></font>
 						</td>
 						<td width="55%" align="center">
-							<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $VrEntrF; ?></i></b></font>
+							<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $VrPrestF; ?></i></b></font>
 						</td>
 					</tr><?php
 						} ?>
@@ -191,7 +196,7 @@
 						<font color='gold' size='5'><b><i>Total Cobrado </i></b></font>
 					</td>
 					<td width="55%" align="center">
-						<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $EntrFormF; ?></i></b></font>
+						<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $VrPrestFormF; ?></i></b></font>
 					</td>
 				</tr>
 
@@ -231,14 +236,14 @@
 
 			<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 			<input type="hidden" name="txtdoc" value="<?php echo $NumDoc; ?>">
-			<input type="hidden" name="txtvalor" value="<?php echo $VrEntr; ?>">
+			<input type="hidden" name="vrprest" value="<?php echo $VrPrest; ?>">
 			<input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
 			<input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
 			<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
 			<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">
 			<input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
-			<input type="hidden" name="parcial" value="<?php echo $Parcial; ?>">
-			<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
+			<input type="hidden" name="vrparcial" value="<?php echo $Parcial; ?>">
+			<input type="hidden" name="vrrec" value="<?php echo $VrRec; ?>">
 			<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 			<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 			<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
