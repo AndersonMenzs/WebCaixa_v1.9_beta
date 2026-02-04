@@ -52,7 +52,7 @@
 	$Senha     = sha1($Pass);
 	$TipoRec   = '8';
 	$tipoDocumento = 'CI';
-	$TipoRef = trim($_POST['tiporec_ext']);
+	$TipoRef = trim($_POST['tiporef']);
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -188,7 +188,6 @@
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados");
 			}
 
-
 			// Preparando a Via Cliente 
 	?>
 			<form name="geraprod" method="post" action="via1newpag.php">
@@ -204,9 +203,9 @@
 				<input type="hidden" name="txtvalor" value="<?php echo $Valor; ?>">
 				<input type="hidden" name="txtvalor_ext" value="<?php echo $Valor_ext; ?>">
 				<input type="hidden" name="txttipodesp" value="<?php echo $TipoDesp; ?>">
-				<input type="hidden" name="tiporec_ext" value="<?php echo $TipoRef; ?>">
+				<input type="hidden" name="tiporef" value="<?php echo $TipoRef; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
-				<input type="hidden" name="txtmatvend" value="<?php echo $mat_vend; ?>">
+				<input type="hidden" name="mat_vend" value="<?php echo $mat_vend; ?>">
 				<input type="hidden" name="ultdoc_ci" value="<?php echo $UltDoc_ci; ?>">
 				<input type="hidden" name="ultdoc_mc" value="<?php echo $UltDoc_mc; ?>">
 				<input type="hidden" name="ultdoc_md" value="<?php echo $UltDoc_md; ?>">

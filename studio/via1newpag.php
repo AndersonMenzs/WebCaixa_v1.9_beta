@@ -54,6 +54,7 @@
 	$Cod2      = trim($_POST['txtcod2']);
 	$TipoRec   = trim($_POST['tiporec']);
 	$TipoDesp  = trim($_POST['txttipodesp']);
+	$TipoRef = trim($_POST['tiporef']);
 	$FPag      = trim($_POST['formapag']);
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
@@ -67,6 +68,7 @@
 	$horaaut   = $h1 . $h2;
 	$Valor     = trim($_POST['txtvalor']);
 	$Valor_ext    = trim($_POST['txtvalor_ext']);
+	$Vr        = number_format($Valor, 2, '', '.');
 	$VrF       = number_format($Valor, 2, ',', '.');
 	$ValorF   = "R$ " . $VrF;
 	$Mat       = trim($_POST['txtmat']);
@@ -74,13 +76,13 @@
 	$UltDoc_ci = trim($_POST['ultdoc_ci']);
 	$UltDoc_mp = trim($_POST['ultdoc_mp']);
 	$colab		= trim($_POST['txtcolab']);	
-	$mat_vend	= trim($_POST['txtmat_vend']);	
+	$mat_vend	= trim($_POST['mat_vend']);	
 	$Cliente	= trim($_POST['txtcliente']);
 	$PC = trim($_POST['pc']);
-	$Tes = trim($_POST['tesouraria']);
+	$Tes = "Tesouraria";
 
 
-	// Formatando o nuúmro do documento cd CI222000 para CI-222-000
+	// Formatando o número do documento cd CI222000 para CI-222-000
 	$UltDoc_ci = substr($UltDoc_ci, 0, 2) . "-" . substr($UltDoc_ci, 2, 3) . "-" . substr($UltDoc_ci, 5, 3);
 
 	// Pesquisando PC
@@ -112,6 +114,11 @@
 	}
 	//shell_exec("echo $Aut2 > /dev/lp0");
 
+	// Autenticação do Documento
+	// remover hifen do $UltDoc_ci
+	$UltDoc_ci_h = str_replace("-", "", $UltDoc_ci);
+	$Aut = $Reg . $PC . $horaaut . $UltDoc_ci_h . $dtAut . $Vr . $SgRec . $FmRec . $MatRec;
+
 	// Gravando a Spool
 	include "dbselect.php";
 	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
@@ -133,6 +140,7 @@
 			// Monta a URL com os dados
 			var url = './ci_desp.php?tipo=<?php echo urlencode($tipo); ?>' +
 				'&UlDoc_ci=<?php echo urlencode($UltDoc_ci); ?>' +
+				'&Aut=<?php echo urlencode($Aut); ?>' +
 				'&Data=<?php echo urlencode($Data); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>'	 +
 				'&Tes=<?php echo urlencode($Tes); ?>' +
@@ -141,7 +149,8 @@
 				'&mat_vend=<?php echo urlencode($mat_vend); ?>' +
 				'&Cliente=<?php echo urlencode($Cliente); ?>' +
 				'&Valor=<?php echo urlencode($Valor); ?>' +
-				'&Valor_ext=<?php echo urlencode($Valor_ext); ?>';
+				'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
+				'&TipoRef=<?php echo urlencode($TipoRef); ?>';
 			window.open(url, '_blank');
 			setTimeout(function() {
 				window.location.href = './index.php?c_s=<?php echo $lg_user; ?>';

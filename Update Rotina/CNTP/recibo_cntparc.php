@@ -346,7 +346,9 @@ include "./dbselect.php";
                 </td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <b>
-                        <font size=1>PARCELA</font>
+                        <font size=1>
+                            <?php echo ($QtdeParc > 1) ? 'PARCELAS' : 'PARCELA'; ?>
+                        </font>
                     </b>
                 </td>
                 <?php
@@ -356,7 +358,7 @@ include "./dbselect.php";
                         <font size=1><br></font>
                     </td>
                     <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
-                            <font size=1>QTD. PARCELAS</font>
+                            <font size=1>PARCIAL PARCELA</font>
                         </b>
                     </td>
 
@@ -381,24 +383,37 @@ include "./dbselect.php";
                 </td>
             </tr>
             <tr>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="500" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
-                    <font size=1><?php echo $PIni; ?></font>
-                </td>
                 <?php
                 if ($QtdeParc > 1) {
                 ?>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
                     </td>
-                    <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="1000" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
-                        <font size=1><?php echo $PIni . " a " . $PUlt; ?></font>
+                    <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="500" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
+                        <font size=1><?php
+                                $pini = (int)$PIni;
+                                $pult = (int)$PUlt;
+                                if ($pult >= $pini && $pini > 0) {
+                                    $arr = [];
+                                    for ($i = $pini; $i <= $pult; $i++) {
+                                        $arr[] = $i . "ª";
+                                    }
+                                    echo implode(', ', $arr);
+                                } else {
+                                    echo $PIni;
+                                }
+                                ?></font>
                     </td>
                 <?php
                 }
-
+                ?>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="1000" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
+                    <font size=1><?php echo $PUlt + 1; ?>ª</font>
+                </td>
+                <?php
                 if ($VrParcial > 0) {
                 ?>
                     <td align="left" valign=bottom>
@@ -623,7 +638,9 @@ include "./dbselect.php";
                 </td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <b>
-                        <font size=1>PARCELA</font>
+                        <font size=1>
+                            <?php echo ($QtdeParc > 1) ? 'PARCELAS' : 'PARCELA'; ?>
+                        </font>
                     </b>
                 </td>
                 <?php
@@ -633,7 +650,7 @@ include "./dbselect.php";
                         <font size=1><br></font>
                     </td>
                     <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle><b>
-                            <font size=1>QTD. PARCELAS</font>
+                            <font size=1>PARCIAL PARCELA</font>
                         </b>
                     </td>
 
@@ -658,24 +675,37 @@ include "./dbselect.php";
                 </td>
             </tr>
             <tr>
-                <td align="left" valign=bottom>
-                    <font size=1><br></font>
-                </td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="500" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
-                    <font size=1><?php echo $PIni; ?></font>
-                </td>
                 <?php
                 if ($QtdeParc > 1) {
                 ?>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
                     </td>
-                    <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="1000" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
-                        <font size=1><?php echo $PIni . " a " . $PUlt; ?></font>
+                    <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="500" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
+                        <font size=1><?php
+                                $pini = (int)$PIni;
+                                $pult = (int)$PUlt;
+                                if ($pult >= $pini && $pini > 0) {
+                                    $arr = [];
+                                    for ($i = $pini; $i <= $pult; $i++) {
+                                        $arr[] = $i . "ª";
+                                    }
+                                    echo implode(', ', $arr);
+                                } else {
+                                    echo $PIni;
+                                }
+                                ?></font>
                     </td>
                 <?php
                 }
-
+                ?>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="1000" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
+                    <font size=1><?php echo $PUlt + 1; ?>ª</font>
+                </td>
+                <?php
                 if ($VrParcial > 0) {
                 ?>
                     <td align="left" valign=bottom>
@@ -740,7 +770,7 @@ include "./dbselect.php";
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
                     <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrRecA . $Mat; ?></font>
                 </td>
-            </tr>   
+            </tr>
             <tr>
                 <td colspan=13 height="15" align="center" valign=middle>
                     <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>

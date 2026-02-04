@@ -105,7 +105,7 @@
 					</td>
 					<td width="50%" align="center">
 						<?php
-						if ($lrPr == '1' or $lrPr == '5') {
+						if ($lsPr == '1' or $lsPr == '5') {
 						?>
 							<font color='#FFFFFF' size='5'><b><i>
 										<blink><?php echo $NomeDesc . " - " . $TipoRef; ?></blink>
@@ -150,7 +150,7 @@
 		<input type="hidden" name="colab" value="<?php echo $colab; ?>">
 		<input type="hidden" name="mat_vend" value="<?php echo $mat_vend; ?>">
 		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
-		<input type="hidden" name="tiporec_ext" value="<?php echo $TipoRef; ?>">
+		<input type="hidden" name="tiporef" value="<?php echo $TipoRef; ?>">
 		<input type="hidden" name="nomedesc" value="<?php echo $NomeDesc; ?>">
 
 		<p>

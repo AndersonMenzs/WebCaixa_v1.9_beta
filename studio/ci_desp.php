@@ -1,33 +1,34 @@
 <?php
 
 	$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
-	echo "<pre>";
+	/*echo "<pre>";
 	print_r($dados);
 	echo "</pre>";
-	exit();
-// ==========================
-// Dados do Documento
-// ==========================
+	exit();*/
+
+// Importando os Dados do Formulário
 $empresa        = "ESTRELLA PHOTO STUDIO";
 $tipoDocumento  = "Comunicação Interna";
 
-$protocolo      = "CI-2026-0012";
-$dataDocumento  = "30/01/2026";
+$protocolo      = trim($_GET['UlDoc_ci']);
+$dataDocumento  = trim($_GET['Data']);
 
-$origem         = "PC-206 (Campo Grande 1)";
-$destino        = "Tesouraria";
+$origem         = "PC-" . trim($_GET['PC']);
+$destino        = trim($_GET['Tes']);
 
-$assunto        = "Comprovante de Recebimento de Adiantamento Salarial";
+$assunto        = "Comprovante de Recebimento de " . trim($_GET['TipoRef']);
 
-$nomeFuncionario = "ALESSANDRA MARTINS CARVALHO DA SILVA";
-$matricula       = "0.0000.035-9";
+$nomeFuncionario = trim($_GET['colab']);
+// fotmatar a matrícula com hífen (1234567-8)
+$matricula       = trim($_GET['mat_vend']);
+$matricula       = substr($matricula, 0, 7) . "-" . substr($matricula, 7, 1);
 $unidade         = "PC-206";
-$tipoDespesa    = "Adiantamento Salarial";
+$tipoDespesa    = trim($_GET['TipoRef']);
 
-$valor           = 200.00;
-$valorExtenso    = "duzentos reais";
+$valor           = trim($_GET['Valor']);
+$valorExtenso    = trim($_GET['Valor_ext']);
 
-$autenticacao    = "00022221036CI20260012300126DDP9800000035-9";
+$autenticacao    = trim($_GET['Aut']);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
