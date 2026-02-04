@@ -23,6 +23,7 @@ $Vlrs = [$txt1, $txt2, $txt3];
 
 $data      = $_GET['data'];
 $data = date('d/m/Y', strtotime($data));
+$Mat_Vend  = ltrim($_GET['Mat_Vend'], '0');
 $Vendedora = $_GET['Vendedora'];
 $Cliente   = $_GET['Cliente'];
 $vlr_ext   = $_GET['vlr_ext'];
@@ -291,7 +292,7 @@ $Mat       = $_GET['Mat'];
                     <font size=1><br></font>
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $Vendedora; ?></font>
+                    <font size=1><?php echo $Vendedora . " - " . $Mat_Vend; ?></font>
                 </td>
                 <!--<td align="left" valign=bottom>
                 <font size=1><br></font>
@@ -599,7 +600,7 @@ $Mat       = $_GET['Mat'];
                     <font size=1><br></font>
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo $Vendedora; ?></font>
+                    <font size=1><?php echo $Vendedora . " - " . $Mat_Vend; ?></font>
                 </td>
                 <!--<td align="left" valign=bottom>
                 <font size=1><br></font>

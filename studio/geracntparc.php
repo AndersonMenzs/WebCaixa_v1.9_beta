@@ -66,7 +66,6 @@ error_reporting(E_ALL);
 	$VrRec = isset($_POST['vrrec']) ? (float) trim($_POST['vrrec']) : 0;
 	$VrRecF    = number_format($VrRec, 2, ',', '.');
 	$QtdeParc  = trim($_POST['qtdeparc']);
-	//$VrEntr    = trim($_POST['txtvalor']);
 	$Parc      = trim($_POST['vrprest']);
 	$PIni      = trim($_POST['txtparc_ini']);
 	$PUlt 	= trim($_POST['txtparc_ult']);
@@ -203,6 +202,9 @@ error_reporting(E_ALL);
 					} elseif (in_array("PXC", $FmRec)) {
 						$ModPag = "PIX CNPJ";
 						$FmRec_a = "PXC";
+					} elseif (in_array("CPL", $FmRec)) {
+						$ModPag = "CART. CRED. PARC. LOJA";
+						$FmRec_a = "CPL";
 					}
 
 					$Spo = $RegSp . $PCSp . $HoraSp . $NDocSp . $dtAutSp . $ParcSp . $SgRecSp . $FmRec_a . $MatRec;

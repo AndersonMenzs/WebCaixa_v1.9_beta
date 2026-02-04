@@ -47,6 +47,7 @@ include "./valor_ext.php";
 	$h2 = substr($hora, 3, 2);
 	$horaaut   = $h1 . $h2;
 	$Mat       = trim($_POST['txtmat']);
+	$Mat_Vend  = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente   = trim($_POST['cliente']);
 	$VrPag     = $txt1 + $txt2 + $txt3;
@@ -107,6 +108,9 @@ include "./valor_ext.php";
 	} elseif (in_array("PXC", $FmRec)) {
 		$ModPag = "PIX CNPJ";
 		$FmRec_a = "PXC";
+	} elseif (in_array("CPL", $FmRec)) {
+		$ModPag = "CART. CRÉD. PARC. LOJA";
+		$FmRec_a = "CPL";
 	}
 
 	// Reduzindo a Matrícula
@@ -143,6 +147,7 @@ include "./valor_ext.php";
 				'&txt2=<?php echo urlencode($txt2); ?>' +
 				'&txt3=<?php echo urlencode($txt3); ?>' +
 				'&data=<?php echo urlencode($dtRec); ?>' +
+				'&mat_vend=<?php echo urlencode($Mat_Vend); ?>' +
 				'&Vendedora=<?php echo urlencode($Vendedora); ?>' +
 				'&Cliente=<?php echo urlencode($Cliente); ?>' +
 				'&vlr_ext=<?php echo urlencode($vlr_ext); ?>' +

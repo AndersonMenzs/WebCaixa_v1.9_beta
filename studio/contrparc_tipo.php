@@ -275,7 +275,7 @@
 							include "dbselect.php";
 
 							// Criando a Instrução SQL de Consulta
-							$sqlpr = "select * from formapag where codpag <= 30 or codpag >= 70 and codpag <> 99 order by codpag";
+							$sqlpr = "select * from formapag where codpag <= 31 or codpag >= 70 and codpag <> 99 order by codpag";
 
 							// Consultando os Registros
 							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");

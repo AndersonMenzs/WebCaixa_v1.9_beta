@@ -123,7 +123,9 @@
 		$ModPag = "Pix QR Code";
 	} elseif ($FmRec == "PXC") {
 		$ModPag = "Pix Cnpj";
-	} ?>
+	} elseif ($FmRec == "CLP") {
+		$ModPag = "Cartão Cred. Loja";
+		}?>
 
 	<font color="gold" size="6">
 		<b>

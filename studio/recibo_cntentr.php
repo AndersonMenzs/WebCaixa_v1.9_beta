@@ -76,7 +76,7 @@ $Mat       = $_GET['Mat'];
 
         .imagem_via2 {
             position: absolute;
-            top: 265px;
+            top: 310px;
             /* ajuste para a posição desejada */
             left: 5px;
             /* ajuste para a posição desejada */
@@ -89,7 +89,7 @@ $Mat       = $_GET['Mat'];
         .imagem_end_1 {
             position: absolute;
             top: 45px;
-            left: 1px;
+            left: 25px;
             width: 260px;
             /* Largura original */
             height: 55px;
@@ -100,11 +100,11 @@ $Mat       = $_GET['Mat'];
 
         .imagem_end_2 {
             position: absolute;
-            top: 313px;
-            left: -8px;
-            width: 300px;
+            top: 123px;
+            left: 25px;
+            width: 260px;
             /* Largura original */
-            height: 55px;
+            height: 520px;
             /* Altura original */
             object-fit: contain;
             /* Mantém a proporção da imagem */
@@ -498,10 +498,21 @@ $Mat       = $_GET['Mat'];
                 <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td colspan=13 height="15" align="center" valign=middle>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 rowspan=2 height="30" align="center" valign=middle>
+                    <b>
+                        <font size=5>(VIA TESOURARIA)</font>
+                    </b>
+                </td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td colspan=14 height="26" align="center" valign=middle>
                     <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>
                 </td>
             </tr>
+
 
             <!-- Segunda Via -->
             <tr>

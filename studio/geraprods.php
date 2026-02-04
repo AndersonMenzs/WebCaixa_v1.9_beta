@@ -135,6 +135,7 @@
 				<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
 				<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">
 				<input type="hidden" name="txtmodpag" value="<?php echo $ModPag; ?>">
+				<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 				<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">

@@ -246,6 +246,8 @@ include "./dbselect.php";
                     $ModPag = "PIX QR CODE";
                 } elseif ($FPag == 71) {
                     $ModPag = "PIX CNPJ";
+                } elseif ($FPag == 31) {
+                    $ModPag = "CART. CRED. PARC. LOJA";
                 }
 
                 ?>

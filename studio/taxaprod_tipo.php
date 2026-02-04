@@ -352,6 +352,7 @@
                     <input type="hidden" name="senior" value="<?php echo $Senior; ?>">
                     <input type="hidden" name="aghata" value="<?php echo $Aghata; ?>">
                     <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+                    <input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 
                     <td align="center">
                         <?php

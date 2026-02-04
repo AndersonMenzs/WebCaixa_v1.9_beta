@@ -45,6 +45,7 @@ include "./valor_ext.php";
 	$TaxaConc  = trim($_POST['taxaconc']);
 	$TaxaConcF = trim($_POST['taxaconcf']);
 	$Mat       = trim($_POST['txtmat']);
+	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente   = trim($_POST['cliente']);
 	$vlr_ext   = valorPorExtenso($TaxaConcF);			
@@ -133,6 +134,7 @@ include "./valor_ext.php";
 				'&txt2=<?php echo urlencode($txt2); ?>' +
 				'&txt3=<?php echo urlencode($txt3); ?>' +
 				'&data=<?php echo urlencode($dtRec); ?>' +
+				'&Mat_Vend=<?php echo urlencode($Mat_Vend); ?>' +
 				'&Vendedora=<?php echo urlencode($Vendedora); ?>' +
 				'&Cliente=<?php echo urlencode($Cliente); ?>' +
 				'&vlr_ext=<?php echo urlencode($vlr_ext); ?>' +

@@ -139,6 +139,8 @@
 		$ModPag = "Pix QR Code";
 	} elseif ($FmRec == "PXC") {
 		$ModPag = "Pix Cnpj";
+	} elseif ($FmRec == "CPL") {
+		$ModPag = "Cartão Crédito Parcelado Loja";
 	}
 	?>
 

@@ -58,13 +58,10 @@ include "./valor_ext.php";
 	$VrRecF    = number_format($VrRec, 2, ',', '.');
 	$vlr_ext   = valorPorExtenso($VrRecF);
 	$VrPrest   = trim($_POST['vrprest']);
-	//$vrPrestF  = valorPorExtenso(number_format($VrPrest, 2, ',', '.'));
-	//$VrEntr    = trim($_POST['txtvalor']);
 	$PIni = trim($_POST['txtparc_ini']);
 	$PUlt = trim($_POST['txtparc_ult']);
 	$QtdParcPag = trim($_POST['qtdeparc']);
 	$VrParcial = trim($_POST['vrparcial']);
-	//$ParcialF = number_format($VrParcial, 2, ',', '.');
 
 	// Pesquisando PC
 	include "conexao.php";
@@ -125,6 +122,9 @@ include "./valor_ext.php";
 	} elseif (in_array("PXC", $FmRec)) {
 		$ModPag = "PIX CNPJ";
 		$FmRec_a = "PXC";
+	} elseif (in_array("CPL", $FmRec)) {
+		$ModPag = "CART. CRED. PARC. LOJA";
+		$FmRec_a = "CPL";
 	}
 
 	// Encerrando a Conexão
