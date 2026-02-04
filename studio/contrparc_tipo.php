@@ -187,9 +187,9 @@
 	<?php
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
 		<form name="parcela" method="post" action="confcntparc.php" onsubmit="return checkdata()" autocomplete="off">
-			<table width="90%" border="5" cellpadding="10" cellspacing="0" align="center">
+			<table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
-					<td width="20%" align="center">
+					<td width="15%" align="center">
 						<font color='gold' size='5'><b><i>Contrato</i></b></font>
 					</td>
 					<td width="40%" align="center">
@@ -200,16 +200,16 @@
 					</td>
 				</tr>
 				<tr>
-					<td width="20%" align="center">
+					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i><?php echo $Contrato; ?></i></b></font>
 						<input type="hidden" name="txtdoc" id="txtdoc" value="<?php echo $Contrato; ?>">
 					</td>
-					<td width="40%" align="center">
+					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i><?php echo $Vendedora; ?></i></b></font>
 						<input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
 						<input type="hidden" name="vendedora" id="vendedora" value="<?php echo $Vendedora; ?>">
 					</td>
-					<td width="40%" align="center">
+					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i><?php echo $Cliente; ?></i></b></font>
 						<input type="hidden" name="cliente" id="cliente" value="<?php echo $Cliente; ?>">
 					</td>
@@ -219,39 +219,36 @@
 
 			<table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
-					<td width="12%" align="center">
-						<font color='gold' size='4'><b><i>Vlr. Prest.</i></b></font>
+					<td width="15%" align="center">
+						<font color='gold' size='4'><b><i>Vlr. Prestação</i></b></font>
+					</td>
+					<td width="15%" align="center">
+						<font color='gold' size='4'><b><i>Vlr. Recebido</i></b></font>
+					</td>
+					<td width="10%" align="center">
+						<font color='gold' size='4'><b><i>Nº Prestação</i></b></font>
 					</td>
 					<td width="12%" align="center">
-						<font color='gold' size='4'><b><i>Vlr. Rec.</i></b></font>
-					</td>
-					<td width="12%" align="center">
-						<font color='gold' size='4'><b><i>Nº Prest.</i></b></font>
-					</td>
-					<td width="12%" align="center">
-						<font color='gold' size='4'><b><i>Q. Prest. Rec.</i></b></font>
+						<font color='gold' size='4'><b><i>Qtd. Prestações Recebidas</i></b></font>
 					</td>
 					<td width="12%" align="center">
 						<font color='gold' size='4'><b><i>Parcial</i></b></font>
-					<!--</td>
-					<td width="9%" align="center">
-						<font color='gold' size='4'><b><i>Autent.</i></b></font>
-					</td>-->
+					</td>
 					<td width="20%" align="center">
 						<font color='gold' size='4'><b><i>Forma Pagamento</i></b></font>
 					</td>
-					<td width="11%" align="center">
+					<td width="15%" align="center">
 						<font color='gold' size='4'><b><i>Valor</i></b></font>
 					</td>
 				</tr>
 				<tr>
 					<td rowspan="3" align="center">
 						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
-						<input type="text" name="txtvalor" id="txtvalor" size="8" maxlength="7" class="campos" autofocus onKeyUp="FormataValor('parcela', 'txtvalor', event); validate(this)">
+						<input type="text" name="txtvalor" id="txtvalor" size="6" maxlength="7" class="campos" autofocus onKeyUp="FormataValor('parcela', 'txtvalor', event); validate(this)">
 					</td>
 					<td rowspan="3" align="center">
 						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
-						<input type="text" name="vlr_recebido" id="vlr_recebido" size="8" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'vlr_recebido', event); validate(this)">
+						<input type="text" name="vlr_recebido" id="vlr_recebido" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'vlr_recebido', event); validate(this)">
 					</td>
 					<td rowspan="3" align="center">
 						<input type="text" name="txtparc" id="txtparc" size="4" maxlength="4" class="campos" onkeyup="validate(this)">
@@ -269,13 +266,7 @@
 						<input type="hidden" name="parcial" id="parcial" value="<?php echo $Parcial; ?>">
 						<font color='#FFFFFF' size='4'><b><i><span id="Parcial"><?php echo $Parcial; ?></span></i></b></font>
 					</td>
-					<!--<td rowspan="3" align="center">
-						<input type="radio" name="rdaut" class="campos" value="c">
-						<font color='gold' size='4'><b><i>Carnê</i></b></font><br><br>
-						<input type="radio" name="rdaut" class="campos" value="a">
-						<font color='gold' size='4'><b><i>Avulso</i></b></font>-->
-						<input type="hidden" name="txtuser" value="<?php echo htmlspecialchars($lg_user, ENT_QUOTES); ?>">
-					<!--</td>-->
+					<input type="hidden" name="txtuser" value="<?php echo htmlspecialchars($lg_user, ENT_QUOTES); ?>">
 					<td align="center">
 						<select name="lsPr1" class="campos">
 							<?php
@@ -302,73 +293,7 @@
 						</select>
 					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
-						<input type="text" name="txt1" id="txt1" size="8" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt1', event); validate(this)">
-					</td>
-				</tr>
-
-				<tr>
-					<td align="center">
-						<select name="lsPr2" class="campos">
-							<?php
-							// Obtendo a Relação
-							// Conectando ao Banco de Dados
-							include "dbselect.php";
-
-							// Criando a Instrução SQL de Consulta
-							$sqlpr = "select * from formapag where codpag <= 30 or codpag >= 70 and codpag <> 99 order by codpag";
-
-							// Consultando os Registros
-							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
-
-							// Criando o Array para o campo PC
-							while ($lnpr = mysqli_fetch_array($rspr)) {
-								$CodPag  = $lnpr['codpag'];
-								$ModPag  = $lnpr['modpag'];
-							?>
-								<option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
-							<?php
-							}
-							mysqli_free_result($rspr);
-							?>
-						</select>
-					</td>
-					<td align="center">
-						<font size='4'><b><i>R$ </i></b></font>
-						<input type="text" name="txt2" id="txt2" size="8" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt2', event); validate(this)">
-						<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-					</td>
-				</tr>
-
-				<tr>
-					<td align="center">
-						<select name="lsPr3" class="campos">
-							<?php
-							// Obtendo a Relação
-							// Conectando ao Banco de Dados
-							include "dbselect.php";
-
-							// Criando a Instrução SQL de Consulta
-							$sqlpr = "select * from formapag where codpag <= 30 or codpag >= 70 and codpag <> 99 order by codpag";
-
-							// Consultando os Registros
-							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
-
-							// Criando o Array para o campo PC
-							while ($lnpr = mysqli_fetch_array($rspr)) {
-								$CodPag  = $lnpr['codpag'];
-								$ModPag  = $lnpr['modpag'];
-							?>
-								<option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
-							<?php
-							}
-							mysqli_free_result($rspr);
-							?>
-						</select>
-					</td>
-					<td align="center">
-						<font size='4'><b><i>R$ </i></b></font>
-						<input type="text" name="txt3" id="txt3" size="8" maxlength="7" class="campos" OnKeyUp="FormataValor('parcela', 'txt3', event); validate(this)">
-						<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+						<input type="text" name="txt1" id="txt1" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt1', event); validate(this)">
 					</td>
 				</tr>
 			</table><br>

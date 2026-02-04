@@ -39,7 +39,8 @@ error_reporting(E_ALL);
 	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	var_dump($dados);
-	echo "</pre>";*/
+	echo "</pre>";
+	exit();*/
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -52,29 +53,25 @@ error_reporting(E_ALL);
 	$NDoc      = trim($_POST['txtdoc']);
 	$NDoc_a 	= trim($_POST['txtdoc']);
 	$FPag_1    = trim($_POST['lsPr1']);
-	$FPag_2    = trim($_POST['lsPr2']);
-	$FPag_3    = trim($_POST['lsPr3']);
 	$ModPag    = trim($_POST['txtmodpag_ext']);
 	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Vendedora_full = trim($_POST['vendedora']);
 	$Cliente   = trim($_POST['cliente']);
-	//$rdAut     = trim($_POST['rdaut']);
 	$rdAut     = 'c';
 	$Pass      = strtolower(trim($_POST['txtsen']));
 	$Senha     = sha1($Pass);
 	$hora	  = date('H:i');
 	$EntrForm  = trim($_POST['txtvalor']);
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
-	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
-	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
-	$VrEnt	 = $txt1 + $txt2 + $txt3;
+	$VrEnt	 = $txt1;
 	$VrEntr    = number_format($VrEnt, 2, ',', '.');
 	$QtdeParc  = trim($_POST['qtdeparc']);
 	$VrEntr    = trim($_POST['txtvalor']);
 	$Parc      = trim($_POST['txtvalor']);
 	$PIni      = trim($_POST['txtparc_ini']);
 	$PUlt 	= trim($_POST['txtparc_ult']);
+	$Parcial = trim($_POST['parcial']);
 
 	// Truncar o nome da vendedora com o primeiro nome completo e após o primeiro espaco, deixar somente uma letra e ponto.
 	$Vendedora = strtoupper($Vendedora);
@@ -84,6 +81,7 @@ error_reporting(E_ALL);
 	$TipoRec   = '3';
 	$SubTipo   = 'CNTP';
 	$DataHoje = date('Y-m-d');
+	$tipo = "CONTRATO PARCELADO";
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -113,10 +111,9 @@ error_reporting(E_ALL);
 			// Usar $MatClean nos inserts. Manter $Mat para compatibilidade de exibição.
 			$Mat = $MatClean;
 
-
 			// Gravando o Registro
 			$sqlr = "select * from registro order by datarec desc, reg desc";
-			$rsr  = mysqli_query($conec, $sqlr) or die("Não foi possível acessar os Dados");
+			$rsr  = mysqli_query($conec, $sqlr) or die("File geracntparc Error #1. Contate seu Administrador.");
 			$regsr = mysqli_num_rows($rsr);
 			$lnr = mysqli_fetch_array($rsr);
 			$Reg     = $lnr['reg'];
@@ -129,48 +126,31 @@ error_reporting(E_ALL);
 			// Gravando Várias Parcelas
 			$ParcUlt = $VrEnt - $Parc * ($QtdeParc - 1);
 
-			echo "Parcela Primeira: " . $Parc . "<br>";
-			echo "Valor da Parcela: " . $VrEnt . "<br>";
-			echo "Quantidade de Parcelas: " . $QtdeParc . "<br>";
-			echo "Parcela Última: " . $ParcUlt . "<br>";
-
 			$ParcUlt = number_format($ParcUlt, 2, '.', '');
-			
-		// Formatar MatRec UMA VEZ antes do loop (não a cada iteração!)
-		$MatRec = substr($MatClean, 1, 6) . "-" . substr($MatClean, 7, 1);
-		$MatFormatado = substr($MatClean, 0, 7) . "-" . substr($MatClean, 7, 1);
 
-	// Debug: mostrar conteúdo preciso de $Mat
+			// Formatar MatRec UMA VEZ antes do loop (não a cada iteração!)
+			$MatRec = substr($MatClean, 1, 6) . "-" . substr($MatClean, 7, 1);
+			$MatFormatado = substr($MatClean, 0, 7) . "-" . substr($MatClean, 7, 1);
+
+			// Debug: mostrar conteúdo preciso de $Mat
 			if ($rdAut == 'c') {
 				for ($K = 1; $K <= $QtdeParc; $K++) {
 					$Reg  = $Reg + 1;
 
 					if ($K == $QtdeParc) {
-						if ($FPag_1 <> "00") {
-							echo "Pag1: " . $Reg . " - " . $NDoc . " - " . $TipoRec . " - " . $SubTipo . " - " . $FPag_1 . " - " . $PIni . " - " . $dtRec . " - " . $hora . " - " . $ParcUlt . " - " . $MatClean . " - " . "" . " - " . $Mat_Vend . " - " . $Vendedora_full . " - " . $Cliente . "<br>";
-							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
-							$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #3.1. Contate seu Administrador.");
-						} 
-						
-						if ($FPag_2 <> "00") {
-							echo "Pag2: " . $Reg . " - " . $NDoc . " - " . $TipoRec . " - " . $SubTipo . " - " . $FPag_2 . " - " . $PIni . " - " . $dtRec . " - " . $hora . " - " . $ParcUlt . " - " . $MatClean . " - " . "" . " - " . $Mat_Vend . " - " . $Vendedora_full . " - " . $Cliente . "<br>";
-							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
-							$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #3.2. Contate seu Administrador.");
-						} 
-						
-						if ($FPag_3 <> "00") {
-							echo "Pag3: " . $Reg . " - " . $NDoc . " - " . $TipoRec . " - " . $SubTipo . " - " . $FPag_3 . " - " . $PIni . " - " . $dtRec . " - " . $hora . " - " . $ParcUlt . " - " . $MatClean . " - " . "" . " - " . $Mat_Vend . " - " . $Vendedora_full . " - " . $Cliente . "<br>";
-							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
-							$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #3.3. Contate seu Administrador.");
-						}
+						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
+					} else {
+						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 					}
+
+					$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #2. Contate seu Administrador.");
 
 					// Criando o spoll
 					$RegFull  = 10000 + $Reg;
 					$RegSp    = substr($RegFull, 1, 4);
 
 					$sqlPC  = "select pc from inicial";
-					$rsPC  = mysqli_query($conec, $sqlPC) or die("File geracntparc Error #3A. Contate seu Administrador.");
+					$rsPC  = mysqli_query($conec, $sqlPC) or die("File geracntparc Error #3. Contate seu Administrador.");
 					$lnPC = mysqli_fetch_array($rsPC);
 					$PCSp    = $lnPC['pc'];
 
@@ -185,14 +165,14 @@ error_reporting(E_ALL);
 					$PParcUlt = "R$ " . $PParcUlt;
 
 					$sqlSg  = "select siglarec from tiporec where codrec = '$TipoRec' ";
-					$rsSg   = mysqli_query($conec, $sqlSg) or die("Não foi possível consultar o Tipo");
+					$rsSg   = mysqli_query($conec, $sqlSg) or die("File geracntparc Error #4. Contate seu Administrador.");
 					$lnSg = mysqli_fetch_array($rsSg);
 					$SgRecSp = $lnSg['siglarec'];
 					$tipo = "CONTRATO PARCELADO";
 
 					// Consulta SQL corrigida com parênteses
-					$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag_1' OR codpag = '$FPag_2' OR codpag = '$FPag_3') AND codpag <> '---'";
-					$rsFm = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
+					$sqlFm = "SELECT siglapag FROM formapag WHERE codpag = '$FPag_1' AND codpag <> '---'";
+					$rsFm = mysqli_query($conec, $sqlFm) or die("File geracntparc Error #5. Contate seu Administrador.");
 
 					$FmRec = [];
 
@@ -227,31 +207,25 @@ error_reporting(E_ALL);
 						$FmRec_a = "PXC";
 					}
 
-					/*$sqlSgpag  = "select siglapag from formapag where codpag = '$FPag' ";
-					$rsSgpag   = mysqli_query($conec, $sqlSgpag) or die("Não foi possível consultar o Tipo");
-					$lnSgpag = mysqli_fetch_array($rsSgpag);
-					$FmRecSp = $lnSgpag['siglapag'];*/
+					$Spo = $RegSp . $PCSp . $HoraSp . $NDocSp . $dtAutSp . $ParcSp . $SgRecSp . $FmRec_a . $MatRec;
 
-				// Reduzindo a Matrícula para impressão/spool — usar $MatRec já formatado (fora do loop)
-				
-						$Spo = $RegSp . $PCSp . $HoraSp . $NDocSp . $dtAutSp . $ParcSp . $SgRecSp . $FmRec_a . $MatRec;
-					
 					$sqlSp1 = "insert into spool values('$RegSp', '$Spo')";
-					$rsSp1  = mysqli_query($conec, $sqlSp1) or die("File geracntparc Error #1. Contate seu Administrador.");
+					$rsSp1  = mysqli_query($conec, $sqlSp1) or die("File geracntparc Error #6. Contate seu Administrador.");
 
 					$sqlSp2 = "insert into spool2 values('$RegSp', '$Spo')";
-					$rsSp2  = mysqli_query($conec, $sqlSp2) or die("File geracntparc Error #2. Contate seu Administrador.");
+					$rsSp2  = mysqli_query($conec, $sqlSp2) or die("File geracntparc Error #7. Contate seu Administrador.");
 					$PIni = $PIni + 1;
 				}
 			} else {
 				$Reg  = $Reg + 1;
 				for ($K = 1; $K <= $QtdeParc; $K++) {
 					if ($K == $QtdeParc) {
-						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '', '', '')";
-						} else {
-						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag', '$PIni', '$dtRec', '$hora', '$Parc', '$MatClean', '', '', '', '')";
+						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
+					} else {
+						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 					}
-					$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #3. Contate seu Administrador.");
+
+					$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #8. Contate seu Administrador.");
 					$PIni = $PIni + 1;
 				}
 
@@ -260,7 +234,7 @@ error_reporting(E_ALL);
 				$RegSp    = substr($RegFull, 1, 4);
 
 				$sqlPC  = "select pc from inicial";
-				$rsPC  = mysqli_query($conec, $sqlPC) or die("File geracntparc Error #4. Contate seu Administrador.");
+				$rsPC  = mysqli_query($conec, $sqlPC) or die("File geracntparc Error #9. Contate seu Administrador.");
 				$lnPC = mysqli_fetch_array($rsPC);
 				$PCSp    = $lnPC['pc'];
 
@@ -278,12 +252,12 @@ error_reporting(E_ALL);
 				}
 
 				$sqlSg  = "select siglarec from tiporec where codrec = '$TipoRec' ";
-				$rsSg   = mysqli_query($conec, $sqlSg) or die("File geracntparc Error #5. Contate seu Administrador.");
+				$rsSg   = mysqli_query($conec, $sqlSg) or die("File geracntparc Error #10. Contate seu Administrador.");
 				$lnSg = mysqli_fetch_array($rsSg);
 				$SgRecSp = $lnSg['siglarec'];
 
 				$sqlSgpag  = "select siglapag from formapag where codpag = '$FPag' ";
-				$rsSgpag   = mysqli_query($conec, $sqlSgpag) or die("File geracntparc Error #6. Contate seu Administrador.");
+				$rsSgpag   = mysqli_query($conec, $sqlSgpag) or die("File geracntparc Error #11. Contate seu Administrador.");
 				$lnSgpag = mysqli_fetch_array($rsSgpag);
 				$FmRecSp = $lnSgpag['siglapag'];
 
@@ -293,26 +267,41 @@ error_reporting(E_ALL);
 				include "dbselect.php";
 				$Spo = $RegSp . $PCSp . $HoraSp . $NDocSp . $dtAutSp . $VrEntrSp . $SgRecSp . $FmRecSp . $MatRecSp;
 				$sqlSp1 = "insert into spool values('$RegSp', '$Spo')";
-				$rsSp1  = mysqli_query($conec, $sqlSp1) or die("File geracntparc Error #7. Contate seu Administrador.");
+				$rsSp1  = mysqli_query($conec, $sqlSp1) or die("File geracntparc Error #12. Contate seu Administrador.");
 
 				$sqlSp2 = "insert into spool2 values('$RegSp', '$Spo')";
-				$rsSp2  = mysqli_query($conec, $sqlSp2) or die("File geracntparc Error #8. Contate seu Administrador.");
+				$rsSp2  = mysqli_query($conec, $sqlSp2) or die("File geracntparc Error #13. Contate seu Administrador.");
 				$PIni = $PIni + 1;
 			}
 
-			exit();
-
 			// Preparando a Via Cliente 
 	?>
-			<form name="geracntparc" method="post" action="via1parc.php">
+			<form name="geracntparc" method="post" action="via1newparc.php">
+
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
+				<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
+				<input type="hidden" name="pc" value="<?php echo $PC; ?>">
+				<input type="hidden" name="tiporec" value="<?php echo $TipoRec; ?>">
+				<input type="hidden" name="tipo" value="<?php echo $tipo; ?>">
+				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">
+				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
+				<input type="hidden" name="txtmat" value="<?php echo $MatClean; ?>">
+				<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
+				<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
+				<input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
+				<input type="hidden" name="txtparc_ini" value="<?php echo $PIni - $QtdeParc; ?>">
+				<input type="hidden" name="txtparc_ult" value="<?php echo $PIni - 1; ?>">
+				<input type="hidden" name="txtparc" value="<?php echo $ParcUlt; ?>">
+				<input type="hidden" name="parcial" value="<?php echo $Parcial; ?>">
+
 				<font size='6'><b>
-						<center>Coloque a <font color='gold'>
-								<blink>Via do Cliente</blink>
-								<font color='#FFFFFF'> na Autenticadora
-									e <br>
-									<p>Clique no <font color='gold'>
-											<blink>botão Abaixo</blink>
+						<center>Verifique se a impressora do <font color='gold'>
+								<blink>Caixa</blink>
+								<font color='#FFFFFF'> está ligada e com papel.
+									<p>Logo após clique no <font color='gold'>
+											<blink>botão abaixo</blink>
 											<font color='#FFFFFF'>.</center>
 					</b></font>
 				</p><br>
@@ -337,10 +326,9 @@ error_reporting(E_ALL);
 			}
 
 			// Encerrando a Conexão
-			/* mysqli_free_result($rso);
-       mysqli_free_result($rsGr);
-       mysqli_free_result($rsx); */
+			mysqli_close($conec);
 
+			// Inserindo Rodapé
 			$SisRot = "S-7.2.2.1.1";
 			include "./rodape.php"; ?>
 

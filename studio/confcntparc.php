@@ -78,19 +78,10 @@
 	$QtdeParc  = $PUlt - $PIni + 1;
 	$ParcialF   = trim($_POST['parcial']);
 	$Parcial  = number_format($ParcialF, 2, '.', ',');
-	$rdAut     = trim($_POST['rdaut']);
 	$EntrForm  = $VrEntr * $QtdeParc;
 	$EntrFormF  = number_format($EntrForm, 2, ',', '.');
-	//$Parcelas  = $VrEntr / $QtdeParc;
-	//$Parc      = round($Parcelas, 2);
-	//$ParcF     = number_format($Parc, 2, ',', '.');
-	//$FPag      = trim($_POST['lsPr']);
 	$FPag_1      = trim($_POST['lsPr1']);
-	$FPag_2      = trim($_POST['lsPr2']);
-	$FPag_3      = trim($_POST['lsPr3']);
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
-	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
-	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
 	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
@@ -104,13 +95,6 @@
 	if ($txt1 <> "") {
 		$Fspags = $Fspags + 1;
 	}
-	if ($txt2 <> "") {
-		$Fspags = $Fspags + 1;
-	}
-
-	if ($txt3 <> "") {
-		$Fspags = $Fspags + 1;
-	}
 
 	if ($Fspags == 1) {
 		if ($txt1 <> "") {
@@ -121,27 +105,8 @@
 			$ModPag = $ln['modpag'];
 			$FmRec  = $ln['siglapag'];
 			mysqli_free_result($rs);
-		} elseif ($txt2 <> "") {
-			$FPag = $FPag_2;
-			$sql = "select * from formapag where codpag = '$FPag' ";
-			$rs  = mysqli_query($conec, $sql);
-			$ln  = mysqli_fetch_array($rs);
-			$ModPag = $ln['modpag'];
-			$FmRec  = $ln['siglapag'];
-			mysqli_free_result($rs);
-		} elseif ($txt3 <> "") {
-			$FPag = $FPag_3;
-			$sql = "select * from formapag where codpag = '$FPag' ";
-			$rs  = mysqli_query($conec, $sql);
-			$ln  = mysqli_fetch_array($rs);
-			$ModPag = $ln['modpag'];
-			$FmRec  = $ln['siglapag'];
-			mysqli_free_result($rs);
 		}
-	} else {
-		$ModPag = "Diversas";
 	}
-
 	// Condição para nome em extensão para forma de pagamento
 	if ($FmRec == "DIN") {
 		$ModPag = "Dinheiro";
@@ -270,15 +235,10 @@
 			<input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
 			<input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
 			<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
-			<input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
-			<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
 			<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">
 			<input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
 			<input type="hidden" name="parcial" value="<?php echo $Parcial; ?>">
-			<input type="hidden" name="rdaut" value="<?php echo $rdAut; ?>">
 			<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
-			<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
-			<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
 			<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 			<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 			<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
