@@ -101,7 +101,7 @@
 
 	<script>
 		$(function() {
-			function setupAutocomplete(element, tipo) {
+			function setupAutocomplete(element, tipo, matFieldId) {
 				var $el = $(element);
 				$el.autocomplete({
 					source: function(request, response) {
@@ -141,8 +141,8 @@
 					minLength: 2,
 					delay: 300,
 					select: function(event, ui) {
-						if (ui.item && ui.item.mat) {
-							$('#mat_vend').val(ui.item.mat);
+						if (ui.item && ui.item.mat && matFieldId) {
+							$(matFieldId).val(ui.item.mat);
 						}
 						$(this).val(ui.item ? ui.item.value : '');
 						return false;
@@ -168,7 +168,9 @@
 			}
 
 			// Aplicar aos campos
-			setupAutocomplete("#colab", "colab");
+			setupAutocomplete("#colab", "colab", "#mat_vend");
+			setupAutocomplete("#colab_vl_trans", "colab", "#mat_vend_vl_trans");
+			setupAutocomplete("#colab_serv_prest", "colab", "#mat_vend_serv_prest");
 		});
 
 		function validaCampos() {
@@ -218,23 +220,41 @@
 			// Obtenha as tabelas
 			var tabelaDP = document.getElementById('tb_despesas_dp');
 			var tabelaRemb = document.getElementById('tb_reembolso_cli');
+			var tablaValeTrans = document.getElementById('tb_vale_trans_dp');
+			var tabelaServPrest = document.getElementById('tb_serv_prest_dp');
 
 			// Inicialmente oculte ambas
 			if (tabelaDP) tabelaDP.style.display = 'none';
 			if (tabelaRemb) tabelaRemb.style.display = 'none';
+			if (tablaValeTrans) tablaValeTrans.style.display = 'none';
+			if (tabelaServPrest) tabelaServPrest.style.display = 'none';
 
 			// Mostre a tabela correta
 			if (selectedValue === '1' || optionClass.includes('despesa-dp')) {
 				if (tabelaDP) tabelaDP.style.display = 'table';
 				if (tabelaRemb) tabelaRemb.style.display = 'none';
+				if (tablaValeTrans) tablaValeTrans.style.display = 'none';
+				if (tabelaServPrest) tabelaServPrest.style.display = 'none';
 			} else if (selectedValue === '5' || optionClass.includes('reembolso-cli')) {
 				if (tabelaRemb) tabelaRemb.style.display = 'table';
 				if (tabelaDP) tabelaDP.style.display = 'none';
+				if (tablaValeTrans) tablaValeTrans.style.display = 'none';
+				if (tabelaServPrest) tabelaServPrest.style.display = 'none';
+			} else if (selectedValue === '7' || optionClass.includes('vale_trans-dp')) {
+				if (tablaValeTrans) tablaValeTrans.style.display = 'table';
+				if (tabelaDP) tabelaDP.style.display = 'none';
+				if (tabelaRemb) tabelaRemb.style.display = 'none';
+				if (tabelaServPrest) tabelaServPrest.style.display = 'none';
+			} else if (selectedValue === '6' || optionClass.includes('serv_prest-dp')) {
+				if (tabelaServPrest) tabelaServPrest.style.display = 'table';
+				if (tabelaDP) tabelaDP.style.display = 'none';
+				if (tabelaRemb) tabelaRemb.style.display = 'none';
+				if (tablaValeTrans) tablaValeTrans.style.display = 'none';
 			}
 
 			// Opcional: Limpar campos quando mudar de tabela
-			if (selectedValue !== '1' && selectedValue !== '5') {
-				// Limpa campos se não for nenhum dos dois tipos especiais
+			if (selectedValue !== '1' && selectedValue !== '5' && selectedValue !== '7' && selectedValue !== '6') {
+				// Limpa campos se não for nenhum dos três tipos especiais
 				if (tabelaDP) {
 					tabelaDP.querySelector('#colab').value = '';
 					tabelaDP.querySelector('#mat_vend').value = '';
@@ -244,6 +264,14 @@
 					tabelaRemb.querySelector('#cliente').value = '';
 					tabelaRemb.querySelector('#lsref_remb').selectedIndex = 0;
 				}
+				if (tablaValeTrans) {
+					tablaValeTrans.querySelector('#colab_vl_trans').value = '';
+					tablaValeTrans.querySelector('#mat_vend_vl_trans').value = '';
+				}
+				if (tabelaServPrest) {
+					tabelaServPrest.querySelector('#colab_serv_prest').value = '';
+					tabelaServPrest.querySelector('#mat_vend_serv_prest').value = '';
+				}
 			}
 		}
 
@@ -252,9 +280,13 @@
 			// Inicialmente oculte ambas as tabelas
 			var tabelaDP = document.getElementById('tb_despesas_dp');
 			var tabelaRemb = document.getElementById('tb_reembolso_cli');
+			var tablaValeTrans = document.getElementById('tb_vale_trans_dp');
+			var tabelaServPrest = document.getElementById('tb_serv_prest_dp');
 
 			if (tabelaDP) tabelaDP.style.display = 'none';
 			if (tabelaRemb) tabelaRemb.style.display = 'none';
+			if (tablaValeTrans) tablaValeTrans.style.display = 'none';
+			if (tabelaServPrest) tabelaServPrest.style.display = 'none';
 
 			// Chame a função para mostrar a tabela correta baseado na seleção atual
 			mostrarTabelaDespesa();
@@ -387,7 +419,7 @@
 							include "dbselect.php";
 
 							// Criando a Instrução SQL de Consulta
-							$sqlpr = "select * from pgtos order by codpag";
+							$sqlpr = "select * from pgtos where codpag <> 3 order by codpag";
 
 							// Consultando os Registros
 							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
@@ -397,13 +429,14 @@
 								$CodPag  = $lnpr['codpag'];
 								$TipoPag = $lnpr['tipopag'];
 
-								// Verificar se é Despesa DP ou Reembolso Cliente para adicionar classes
 								$classe = "";
-								// AJUSTE AQUI: Use 'DDP' para despesas DP (conforme seu switch PHP)
+
 								if ($CodPag == '1') {
 									$classe = "despesa-dp";
-								} elseif ($CodPag == '5') { // Para reembolso cliente
+								} elseif ($CodPag == '5') {
 									$classe = "reembolso-cli";
+								} elseif ($CodPag == '7') {
+									$classe = "vale_trans-dp";
 								}
 							?>
 								<option value="<?php echo $CodPag; ?>" class="<?php echo $classe; ?> campos">
@@ -416,7 +449,9 @@
 						</select>
 					</td>
 				</tr>
-		</table><br><br>
+		</table>
+
+		<br>
 
 		<table id="tb_despesas_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
 			<tr>
@@ -424,7 +459,7 @@
 					<font color='gold' size='5'><b><i>Reterente</i></b></font>
 				</td>
 				<td width="50%" align="center">
-					<font color='gold' size='5''><b><i>Colaborador(a)</i></b></font>
+					<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
 				</td>
 			</tr>
 
@@ -435,7 +470,7 @@
 						// Criando a Instrução SQL de Consulta
 						$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' ORDER BY codref";
 						$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
-						
+
 						while ($lnpr = mysqli_fetch_array($rspr)) {
 							$CodRef_Desp  = $lnpr['codref'];
 							$TipoRef_Desp = $lnpr['nomeref'];
@@ -446,13 +481,13 @@
 						<?php
 						}
 						mysqli_free_result($rspr);
-						?>	
+						?>
 					</select>
 				</td>
-					<td width="50%" align="center">
-						<input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
-						<input type="text" id="colab" name="colab" size="40" maxlength="50" class="campos"
-							onkeypress="fPassaAlfaNumerico(' an')"
+				<td width="50%" align="center">
+					<input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
+					<input type="text" id="colab" name="colab" size="40" maxlength="50" class="campos"
+						onkeypress="fPassaAlfaNumerico(' an')"
 						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus>
 				</td>
 			</tr>
@@ -464,7 +499,7 @@
 					<font color='gold' size='5'><b><i>Reterente</i></b></font>
 				</td>
 				<td width="50%" align="center">
-					<font color='gold' size='5''><b><i>Cliente</i></b></font>
+					<font color='gold' size='5'><b><i>Cliente</i></b></font>
 				</td>
 			</tr>
 
@@ -475,7 +510,7 @@
 						// Criando a Instrução SQL de Consulta
 						$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'DDP' ORDER BY codref";
 						$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
-						
+
 						while ($lnpr = mysqli_fetch_array($rspr)) {
 							$CodRef_Remb  = $lnpr['codref'];
 							$TipoRef_Remb = $lnpr['nomeref'];
@@ -486,16 +521,52 @@
 						<?php
 						}
 						mysqli_free_result($rspr);
-						?>	
+						?>
 					</select>
 				</td>
-					<td width="50%" align="center">
-						<input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
-							onkeypress="fPassaAlfaNumerico(' an')"
+				<td width="50%" align="center">
+					<input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
+						onkeypress="fPassaAlfaNumerico(' an')"
 						onkeyup='this.value=this.value.toUpperCase(); validnome(this)'>
 				</td>
 			</tr>
-		</table><br>
+		</table>
+
+		<table id="tb_vale_trans_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
+			<tr>
+				<td width="50%" align="center">
+					<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
+				</td>
+			</tr>
+
+			<tr>
+				<td width="50%" align="center">
+					<input type="hidden" name="mat_vend" id="mat_vend_vl_trans" value="<?php echo $mat_vend; ?>">
+					<input type="text" id="colab_vl_trans" name="colab" size="40" maxlength="50" class="campos"
+						onkeypress="fPassaAlfaNumerico(' an')"
+						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus>
+				</td>
+			</tr>
+		</table>
+
+		<table id="tb_serv_prest_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
+			<tr>
+				<td width="50%" align="center">
+					<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
+				</td>
+			</tr>
+
+			<tr>
+				<td width="50%" align="center">
+					<input type="hidden" name="mat_vend" id="mat_vend_serv_prest" value="<?php echo $mat_vend; ?>">
+					<input type="text" id="colab_serv_prest" name="colab" size="40" maxlength="50" class="campos"
+						onkeypress="fPassaAlfaNumerico(' an')"
+						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus>
+				</td>
+			</tr>
+		</table>
+
+		<br>
 
 		<table width="100%" border="0" cellspacing="0">
 			<tr>

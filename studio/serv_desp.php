@@ -1,38 +1,41 @@
 <?php
 
-//$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
-//echo "<pre>";
-//print_r($dados);
-//echo "</pre>";
-//exit();
+$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
+/*echo "<pre>";
+print_r($dados);
+echo "</pre>";
+exit();*/
 
 // Importando os Dados do Formulário
 $empresa        = "ESTRELLA PHOTO STUDIO";
 $tipoDocumento  = "Comunicação Interna";
 
-$protocolo      = trim($_GET['UlDoc_rc']);
+$protocolo      = trim($_GET['UlDoc_sp']);
 $dataDocumento  = trim($_GET['Data']);
 
 $origem         = "PC-" . trim($_GET['PC']);
 $destino        = trim($_GET['Tes']);
 
-$assunto        = "Comprovante de Reembolso de " . trim($_GET['TipoRef']);
+$assunto        = "Comprovante de Recebimento de " . trim($_GET['NomeDesc']);
 
-$cliente = trim($_GET['cliente']);
-$tipoDespesa    = trim($_GET['TipoRef']);
+$nomeFuncionario = trim($_GET['colab']);
+
+// fotmatar a matrícula com hífen (1.234.567-8)
+$matricula       = trim($_GET['mat_vend']);
+$matricula       = substr($matricula, 0, 1) . "." . substr($matricula, 1, 3) . "." . substr($matricula, 4, 3) . "-" . substr($matricula, 7, 1);
+$tipoDespesa    = trim($_GET['NomeDesc']);
 
 $valor           = trim($_GET['Valor']);
 $valorExtenso    = trim($_GET['Valor_ext']);
 
 $autenticacao    = trim($_GET['Aut']);
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
-    <title>RC - <?php echo $cliente; ?></title>
+    <title>SP - <?php echo $nomeFuncionario; ?></title>
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -177,13 +180,17 @@ $autenticacao    = trim($_GET['Aut']);
         </div>
 
         <div class="texto">
-            Confirmamos a devolução do valor de <strong><i>R$ <?= number_format($valor, 2, ',', '.') . " (" . $valorExtenso . ")" ?></i></strong>
-            a(o) cliente <strong><i><?= $cliente ?></i></strong>, referente a(o) <strong><i><?= $tipoDespesa ?></i></strong>.
+            Eu, <strong><i><?= $nomeFuncionario ?></i></strong>, funcionário(a) registrado(a)
+            sob matrícula <strong><i><?= $matricula ?></i></strong> da unidade
+            <strong><i><?= $origem ?></i></strong>, confirmo ter recebido o valor de
+            <strong><i>R$ <?= number_format($valor, 2, ',', '.') . " (" . $valorExtenso . ")" ?></i></strong>
+            referente a(o) <strong><i><?= $tipoDespesa ?></i></strong>,
+            conforme acordo e políticas internas da empresa.
         </div>
 
         <div class="assinatura">
             <div class="linha-ass"></div>
-            Assinatura do Cliente(a)
+            Assinatura do Funcionário(a)
         </div>
 
         <div class="rodape">

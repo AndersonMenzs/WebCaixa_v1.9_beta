@@ -30,6 +30,13 @@
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
 
+	// Recebe dados do POST
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
+	exit();*/
+	
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R3.1.1.1";
@@ -48,11 +55,24 @@
 	$Pass      = strtolower(trim($_POST['txtsen']));
 	$colab		= trim($_POST['colab']);
 	$mat_vend	= trim($_POST['mat_vend']);
-	$Cliente	= trim($_POST['cliente']);
+	$cliente	= trim($_POST['cliente']);
 	$Senha     = sha1($Pass);
 	$TipoRec   = '8';
-	$tipoDocumento = 'CI';
+	$TipoDoc = trim($_POST['tipodoc']);
 	$TipoRef = trim($_POST['tiporef']);
+	$NomeDesc = trim($_POST['nomedesc']);
+
+	// Inicializações para evitar avisos/erros caso não existam valores
+	$hora = date('H:i');
+	$PC = trim($_POST['pc']);
+
+	$UltDoc_ci = '';
+	$UltDoc_rc = '';
+	$UltDoc_mc = '';
+	$UltDoc_mp = '';
+	$UltDoc_vt = '';
+	$UltDoc_sp = '';
+	$UltDoc_out = '';
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -97,7 +117,7 @@
 			$Reg  = $Reg + 1;
 
 			// Recebendo o próximo número de registro CI
-			$sqlr_ci = "select numdoc from registro where numdoc like 'CI%' order by reg desc";
+			$sqlr_ci = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg asc";
 			$rsr_ci  = mysqli_query($conec, $sqlr_ci) or die(" Não foi possível acessar os Dados");
 			$regsr_ci = mysqli_num_rows($rsr_ci);
 			$lnr_ci = mysqli_fetch_array($rsr_ci);
@@ -105,16 +125,29 @@
 
 			if ($regsr_ci > 0) {
 				$codigo_atual = $UltDoc_ci;
-				$prefixo = substr($codigo_atual, 0, 2); // "CI"
-				$numero = substr($codigo_atual, 2); // "222000"
-				$novo_numero = intval($numero) + 1; // 222001
+				$prefixo = substr($codigo_atual, 0, 2);
+				$numero = substr($codigo_atual, 2); 
+				$novo_numero = intval($numero) + 1; 
 				$UltDoc_ci = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
-				//echo $UltDoc_ci; // CI222001
+			}
 
+			// Recebendo o próximo número de registro Reembolso Cliente
+			$sql_rc = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
+			$rsr  = mysqli_query($conec, $sql_rc) or die(" Não foi possível acessar os Dados");
+			$regsr_rc = mysqli_num_rows($rsr);
+			$lnr_rc = mysqli_fetch_array($rsr);
+			$UltDoc_rc = $lnr_rc['numdoc'];
+
+			if ($regsr_rc > 0) {
+				$codigo_atual = $UltDoc_rc;
+				$prefixo = substr($codigo_atual, 0, 2);
+				$numero = substr($codigo_atual, 2); 
+				$novo_numero = intval($numero) + 1; 
+				$UltDoc_rc = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
 
 			// Recebendo o próximo número de registro Material de Consumo
-			$sql_mc = "select numdoc from registro where numdoc like 'MC%' order by reg desc";
+			$sql_mc = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
 			$rsr  = mysqli_query($conec, $sql_mc) or die(" Não foi possível acessar os Dados");
 			$regsr_mc = mysqli_num_rows($rsr);
 			$lnr_mc = mysqli_fetch_array($rsr);
@@ -122,32 +155,14 @@
 
 			if ($regsr_mc > 0) {
 				$codigo_atual = $UltDoc_mc;
-				$prefixo = substr($codigo_atual, 0, 2); // "MC"
-				$numero = substr($codigo_atual, 2); // "222000"
-				$novo_numero = intval($numero) + 1; // 222001
+				$prefixo = substr($codigo_atual, 0, 2);
+				$numero = substr($codigo_atual, 2);
+				$novo_numero = intval($numero) + 1; 
 				$UltDoc_mc = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
-				//echo $UltDoc_mc; // MC222001
-
-			}
-
-			// Recebendo o próximo número de registro Material de Divulgação
-			$sqlr_md = "select numdoc from registro where numdoc like 'MD%' order by reg desc";
-			$rsr  = mysqli_query($conec, $sqlr_md) or die(" Não foi possível acessar os Dados");
-			$regsr_md = mysqli_num_rows($rsr);
-			$lnr_md = mysqli_fetch_array($rsr);
-			$UltDoc_md = $lnr_md['numdoc'];
-
-			if ($regsr_md > 0) {
-				$codigo_atual = $UltDoc_md;
-				$prefixo = substr($codigo_atual, 0, 2); // "MD"
-				$numero = substr($codigo_atual, 2); // "222000"
-				$novo_numero = intval($numero) + 1; // 222001
-				$UltDoc_md = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
-				//echo $UltDoc_md; // MD222001
 			}
 
 			// Recebendo o próximo número de registro Material de Produção
-			$sqlr_mp = "select numdoc from registro where numdoc like 'MP%' order by reg desc";
+			$sqlr_mp = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
 			$rsr_mp  = mysqli_query($conec, $sqlr_mp) or die(" Não foi possível acessar os Dados");
 			$regsr_mp = mysqli_num_rows($rsr_mp);
 			$lnr_mp = mysqli_fetch_array($rsr_mp);
@@ -155,36 +170,97 @@
 
 			if ($regsr_mp > 0) {
 				$codigo_atual = $UltDoc_mp;
-				$prefixo = substr($codigo_atual, 0, 2); // "MP"
-				$numero = substr($codigo_atual, 2); // "222000"
-				$novo_numero = intval($numero) + 1; // 222001
+				$prefixo = substr($codigo_atual, 0, 2);
+				$numero = substr($codigo_atual, 2); 
+				$novo_numero = intval($numero) + 1; 
 				$UltDoc_mp = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
-				//echo $UltDoc_mp; // MP222001
+			}
 
+			// Recebendo o próximo número de registro Vale Transporte
+			$sqlr_vt = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
+			$rsr_vt  = mysqli_query($conec, $sqlr_vt) or die(" Não foi possível acessar os Dados");
+			$regsr_vt = mysqli_num_rows($rsr_vt);
+			$lnr_vt = mysqli_fetch_array($rsr_vt);
+			$UltDoc_vt = $lnr_vt['numdoc'];
+
+			if ($regsr_vt > 0) {
+				$codigo_atual = $UltDoc_vt;
+				$prefixo = substr($codigo_atual, 0, 2);
+				$numero = substr($codigo_atual, 2); 
+				$novo_numero = intval($numero) + 1; 
+				$UltDoc_vt = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+			}
+
+			// Recebendo o próximo número de registro Serviços Prestados
+			$sqlr_sp = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
+			$rsr_sp  = mysqli_query($conec, $sqlr_sp) or die(" Não foi possível acessar os Dados");
+			$regsr_sp = mysqli_num_rows($rsr_sp);
+			$lnr_sp = mysqli_fetch_array($rsr_sp);
+			$UltDoc_sp = $lnr_sp['numdoc'];
+
+			if ($regsr_sp > 0) {
+				$codigo_atual = $UltDoc_sp;
+				$prefixo = substr($codigo_atual, 0, 2);
+				$numero = substr($codigo_atual, 2); 
+				$novo_numero = intval($numero) + 1; 
+				$UltDoc_sp = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+			}
+
+			// Recebendo o próximo número de registro Outros
+			$sqlr_out = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
+			$rsr_out  = mysqli_query($conec, $sqlr_out) or die(" Não foi possível acessar os Dados");
+			$regsr_out = mysqli_num_rows($rsr_out);
+			$lnr_out = mysqli_fetch_array($rsr_out);
+			$UltDoc_out = $lnr_out['numdoc'];
+
+			if ($regsr_out > 0) {
+				$codigo_atual = $UltDoc_out;
+				$prefixo = substr($codigo_atual, 0, 2);
+				$numero = substr($codigo_atual, 2); 
+				$novo_numero = intval($numero) + 1; 
+				$UltDoc_out = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
 
 			// Condições para atribuir o número do documento correto
-			if ($TipoDesp == '1' or $TipoDesp == '5') {
+			if ($TipoDesp == '1') {
 
-				$sqlGr = "insert into registro values($Reg, '$UltDoc_ci', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '$mat_vend', '$colab', '$Cliente')";
+				$sqlGr = "insert into registro values($Reg, '$UltDoc_ci', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '$mat_vend', '$colab', '$cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados");
 			}
 
 			if ($TipoDesp == '2') {
 
-				$sqlGr = "insert into registro values($Reg, '$UltDoc_mc', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '$mat_vend', '$colab', '$Cliente')";
-				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados");
-			}
-
-			if ($TipoDesp == '3') {
-
-				$sqlGr = "insert into registro values($Reg, '$UltDoc_md', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '$mat_vend', '$colab', '$Cliente')";
+				$sqlGr = "insert into registro values($Reg, '$UltDoc_mc', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '$mat_vend', '$colab', '$cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados");
 			}
 
 			if ($TipoDesp == '4') {
 
-				$sqlGr = "insert into registro values($Reg, '$UltDoc_mp', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '$mat_vend', '$colab', '$Cliente')";
+				$sqlGr = "insert into registro values($Reg, '$UltDoc_mp', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '$mat_vend', '$colab', '$cliente')";
+				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados");
+			}
+
+			if ($TipoDesp == '5') {
+
+				$sqlGr = "insert into registro values($Reg, '$UltDoc_rc', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '$mat_vend', '$colab', '$cliente')";
+				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados");
+			}
+
+			if ($TipoDesp == '7') {
+
+				$sqlGr = "insert into registro values($Reg, '$UltDoc_vt', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '$mat_vend', '$colab', '$cliente')";
+				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados");
+			}
+
+			if ($TipoDesp == '6') {
+
+				$sqlGr = "insert into registro values($Reg, '$UltDoc_sp', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '$mat_vend', '$colab', '$cliente')";
+				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados");
+			}
+
+			if ($TipoDesp == '8') {
+
+				$sqlGr = "insert into registro values($Reg, '$UltDoc_out', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '$mat_vend', '$colab', '$cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados");
 			}
 
@@ -202,16 +278,21 @@
 				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
 				<input type="hidden" name="txtvalor" value="<?php echo $Valor; ?>">
 				<input type="hidden" name="txtvalor_ext" value="<?php echo $Valor_ext; ?>">
+				<input type="hidden" name="tipodoc" value="<?php echo $TipoDoc; ?>">
 				<input type="hidden" name="txttipodesp" value="<?php echo $TipoDesp; ?>">
 				<input type="hidden" name="tiporef" value="<?php echo $TipoRef; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
 				<input type="hidden" name="mat_vend" value="<?php echo $mat_vend; ?>">
 				<input type="hidden" name="ultdoc_ci" value="<?php echo $UltDoc_ci; ?>">
+				<input type="hidden" name="ultdoc_rc" value="<?php echo $UltDoc_rc; ?>">
 				<input type="hidden" name="ultdoc_mc" value="<?php echo $UltDoc_mc; ?>">
-				<input type="hidden" name="ultdoc_md" value="<?php echo $UltDoc_md; ?>">
 				<input type="hidden" name="ultdoc_mp" value="<?php echo $UltDoc_mp; ?>">
+				<input type="hidden" name="ultdoc_vt" value="<?php echo $UltDoc_vt; ?>">
+				<input type="hidden" name="ultdoc_sp" value="<?php echo $UltDoc_sp; ?>">
+				<input type="hidden" name="ultdoc_out" value="<?php echo $UltDoc_out; ?>">
 				<input type="hidden" name="txtcolab" value="<?php echo $colab; ?>">
-				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
+				<input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
+				<input type="hidden" name="nomedesc" value="<?php echo $NomeDesc; ?>">
 				<p>
 					<font size='6'><b>
 							<center>Verifique se a impressora do <font color='gold'>
@@ -223,7 +304,7 @@
 						</b></font>
 				</p><br>
 				<center>
-					<input id="ghost_click" type="submit" name="btimprime" value="Registrar">
+					<input id="ghost_click" type="submit" name="btimprime" value="Registrar" autofocus>
 				</center><br>
 				<center>
 					<font color='#FFFFFF' size='3'><span id="msg"></span></font>

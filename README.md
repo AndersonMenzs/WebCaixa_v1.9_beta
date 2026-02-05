@@ -202,30 +202,234 @@ CREATE TABLE tiporef (
     nomeref VARCHAR(50) NOT NULL,
     siglaref VARCHAR(5) NOT NULL,
     ref_tiporec VARCHAR(5) NOT NULL
-)
+);
 ```
 Inserir linhas na tabela tiporef
 
 ```sql
-INSERT INTO tiporef VALUES ('0', 'Selecione', '---', '---'), ('1', 'Salário', 'SAL', 'DDP'), ('2', 'Adiantamento Salarial', 'ADS', 'DDP'), ('3', 'Férias', 'FER', 'DDP'), ('4', 'Premiação', 'PREM', 'DDP'), ('5', 'Taxa Produção', 'TXP', 'RCL'), ('6', 'Contrato Entrada', 'CNTE', 'RCL'), ('7', 'Cancelamento de Venda', 'CVD', 'RCL'), ('8', 'Devolução PIX', 'DVP', 'RCL'), ('9', 'CARNÊ', 'CAR', 'RCL');
+INSERT INTO tiporef VALUES ('0', 'Selecione', '---', '---'), ('1', 'Salário', 'SAL', 'DDP'), ('2', 'Adiantamento Salarial', 'ADS', 'DDP'), ('3', 'Férias', 'FER', 'DDP'), ('4', 'Premiação', 'PREM', 'DDP'), ('5', 'Taxa Produção', 'TXP', 'RCL'), ('6', 'Contrato Entrada', 'CNTE', 'RCL'), ('7', 'Cancelamento de Venda', 'CVD', 'RCL'), ('8', 'Devolução PIX', 'DVP', 'RCL'), ('9', 'Carnê', 'CAR', 'RCL');
 ```
 
-Inserir uma linha na tabela registro
 
-```sql
-INSERT INTO registro VALUES (6, 'CI222000', '0', '---', '0', '0', '2026-02-02', '00:00', 0.00, '00000000', '', '00000000', '', '');
-```
+Antes de inserir precisa modificar a quantidade de caracter na tabela registro.
 
 ```sql
-INSERT INTO registro VALUES (31, 'MC222000', '0', '---', '0', '0', '2026-02-02', '00:00', 0.00, '00000000', '', '00000000', '', '');
+ALTER TABLE registro MODIFY numdoc CHAR(12);
+```
+
+Ao inserir as linhas já estarão seguindo a sequência da coluna reg atual 
+
+```sql
+INSERT INTO registro
+SELECT 
+    IFNULL(
+        (SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()),
+        0
+    ) + 1,
+    'CI2222600000',
+    '0',
+    '---',
+    '0',
+    '0',
+    CURDATE(),
+    '00:00',
+    0.00,
+    '00000359',
+    '',
+    '00000000',
+    '',
+    '';
 ```
 
 ```sql
-INSERT INTO registro VALUES (32, 'MD222000', '0', '---', '0', '0', '2026-02-02', '00:00', 0.00, '00000000', '', '00000000', '', '');
+INSERT INTO registro
+SELECT 
+    IFNULL(
+        (SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()),
+        0
+    ) + 1,
+    'RC2222600000',
+    '0',
+    '---',
+    '0',
+    '0',
+    CURDATE(),
+    '00:00',
+    0.00,
+    '00000359',
+    '',
+    '00000000',
+    '',
+    '';
 ```
 
 ```sql
-INSERT INTO registro VALUES (33, 'MP222000', '0', '---', '0', '0', '2026-02-02', '00:00', 0.00, '00000000', '', '00000000', '', '');
+INSERT INTO registro
+SELECT 
+    IFNULL(
+        (SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()),
+        0
+    ) + 1,
+    'MC2222600000',
+    '0',
+    '---',
+    '0',
+    '0',
+    CURDATE(),
+    '00:00',
+    0.00,
+    '00000359',
+    '',
+    '00000000',
+    '',
+    '';
 ```
+
+```sql
+INSERT INTO registro
+SELECT 
+    IFNULL(
+        (SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()),
+        0
+    ) + 1,
+    'MD2222600000',
+    '0',
+    '---',
+    '0',
+    '0',
+    CURDATE(),
+    '00:00',
+    0.00,
+    '00000359',
+    '',
+    '00000000',
+    '',
+    '';
+```
+
+```sql
+INSERT INTO registro
+SELECT 
+    IFNULL(
+        (SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()),
+        0
+    ) + 1,
+    'MP2222600000',
+    '0',
+    '---',
+    '0',
+    '0',
+    CURDATE(),
+    '00:00',
+    0.00,
+    '00000359',
+    '',
+    '00000000',
+    '',
+    '';
+```
+
+```sql
+INSERT INTO registro
+SELECT 
+    IFNULL(
+        (SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()),
+        0
+    ) + 1,
+    'VT2222600000',
+    '0',
+    '---',
+    '0',
+    '0',
+    CURDATE(),
+    '00:00',
+    0.00,
+    '00000359',
+    '',
+    '00000000',
+    '',
+    '';
+```
+
+```sql
+INSERT INTO registro
+SELECT 
+    IFNULL(
+        (SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()),
+        0
+    ) + 1,
+    'SP2222600000',
+    '0',
+    '---',
+    '0',
+    '0',
+    CURDATE(),
+    '00:00',
+    0.00,
+    '00000359',
+    '',
+    '00000000',
+    '',
+    '';
+```
+
+```sql
+INSERT INTO registro
+SELECT 
+    IFNULL(
+        (SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()),
+        0
+    ) + 1,
+    'OT2222600000',
+    '0',
+    '---',
+    '0',
+    '0',
+    CURDATE(),
+    '00:00',
+    0.00,
+    '00000359',
+    '',
+    '00000000',
+    '',
+    '';
+```
+
+A coluna numdoc segue no seguinte padrão
+
+| Tipo | Estúdio | Ano | Sequẽncia
+|---|---|---|---
+| CI | 222 | 26 | 00000 |
+
+| Coluna | Descição|
+|---|---|
+| CI, RC | Comunicação Interna, Reembolso ao Cliente |
+| 222 | Código do Estúdio |
+| 26 | Ano |
+| 00000 | Sequência |
+
+```sql
+INSERT INTO registro
+SELECT 
+    IFNULL(
+        (SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()),
+        0
+    ) + 1,
+    'RC2222600000',
+    '0',
+    '---',
+    '0',
+    '0',
+    CURDATE(),
+    '00:00',
+    0.00,
+    '00000359',
+    '',
+    '00000000',
+    '',
+    '';
+
+```
+
 
 ## Recolhimentos

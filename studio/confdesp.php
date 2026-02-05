@@ -39,10 +39,11 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
 
-	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	print_r($dados);
-	echo "</pre>";*/
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	//echo "<pre>";
+	//print_r($dados);
+	//echo "</pre>";
+	//exit();
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -58,10 +59,11 @@
 	$TipoPag   = trim($_POST['lsPr']);
 	$lsref_desp	= trim($_POST['lsref_desp']);
 	$lsref_remb	= trim($_POST['lsref_remb']);
-	$TipoRef = ($lsref_desp != 'Selecione' and $lsPr == '1') ? $lsref_desp : (($lsref_remb != 'Selecione' and $lsPr == '5') ? $lsref_remb : "");
+	$TipoRef = ($lsref_desp != 'Selecione' and $lsPr == '1') ? $lsref_desp : (($lsref_remb != 'Selecione' and $lsPr == '5') ? $lsref_remb : '');
+	$TipoDoc = ($lsref_desp != 'Selecione' and $lsPr == '1') ? 'CI' : (($lsref_remb != 'Selecione' and $lsPr == '5') ? 'RC' : ($lsPr == '7' ? 'VT' : ($lsPr == '6' ? 'SP' : ($lsPr == '4' ? 'MD' : ($lsPr == '2' ? 'MCS' : ($lsPr == '4' ? 'MPD' : ($lsPr == '8' ? 'OUT' : '')))))));
 	$colab		= trim($_POST['colab']);
 	$mat_vend	= trim($_POST['mat_vend']);
-	$Cliente	= trim($_POST['cliente']);
+	$cliente	= trim($_POST['cliente']);
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -149,7 +151,8 @@
 		<input type="hidden" name="txtmodpag" value="<?php echo 0; ?>">
 		<input type="hidden" name="colab" value="<?php echo $colab; ?>">
 		<input type="hidden" name="mat_vend" value="<?php echo $mat_vend; ?>">
-		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
+		<input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
+		<input type="hidden" name="tipodoc" value="<?php echo $TipoDoc; ?>">
 		<input type="hidden" name="tiporef" value="<?php echo $TipoRef; ?>">
 		<input type="hidden" name="nomedesc" value="<?php echo $NomeDesc; ?>">
 

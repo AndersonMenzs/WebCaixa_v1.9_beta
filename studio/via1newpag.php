@@ -41,6 +41,13 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
+
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
+	exit();*/
+	
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R3.1.2";
@@ -52,6 +59,7 @@
 	$Reg       = substr($AutFull, 1, 4);
 	$Cod       = trim($_POST['txtcod']);
 	$Cod2      = trim($_POST['txtcod2']);
+	$TipoDoc   = trim($_POST['tipodoc']);
 	$TipoRec   = trim($_POST['tiporec']);
 	$TipoDesp  = trim($_POST['txttipodesp']);
 	$TipoRef = trim($_POST['tiporef']);
@@ -68,23 +76,34 @@
 	$horaaut   = $h1 . $h2;
 	$Valor     = trim($_POST['txtvalor']);
 	$Valor_ext    = trim($_POST['txtvalor_ext']);
-	$Vr        = number_format($Valor, 2, '', '.');
+	$Vr	   = str_replace(".", "", $Valor);
 	$VrF       = number_format($Valor, 2, ',', '.');
 	$ValorF   = "R$ " . $VrF;
 	$Mat       = trim($_POST['txtmat']);
 	$FmRec  = "DIN";
-	$UltDoc_ci = trim($_POST['ultdoc_ci']);
-	$UltDoc_mp = trim($_POST['ultdoc_mp']);
+	$UltDoc_ci = trim($_POST['ultdoc_ci']) ? trim($_POST['ultdoc_ci']) : "0";
+	$UltDoc_rc = trim($_POST['ultdoc_rc']) ? trim($_POST['ultdoc_rc']) : "0";
+	$UltDoc_mp = trim($_POST['ultdoc_mp']) ? trim($_POST['ultdoc_mp']) : "0";
+	$UltDoc_mc = trim($_POST['ultdoc_mc']) ? trim($_POST['ultdoc_mc']) : "0";
+	$UltDoc_vt = trim($_POST['ultdoc_vt']) ? trim($_POST['ultdoc_vt']) : "0";
+	$UltDoc_sp = trim($_POST['ultdoc_sp']) ? trim($_POST['ultdoc_sp']) : "0";
+	$UltDoc_out = trim($_POST['ultdoc_out']) ? trim($_POST['ultdoc_out']) : "0";
 	$colab		= trim($_POST['txtcolab']);	
 	$mat_vend	= trim($_POST['mat_vend']);	
-	$Cliente	= trim($_POST['txtcliente']);
+	$cliente	= trim($_POST['cliente']);
 	$PC = trim($_POST['pc']);
 	$Tes = "Tesouraria";
+	$NomeDesc = trim($_POST['nomedesc']);
 
-
-	// Formatando o número do documento cd CI222000 para CI-222-000
-	$UltDoc_ci = substr($UltDoc_ci, 0, 2) . "-" . substr($UltDoc_ci, 2, 3) . "-" . substr($UltDoc_ci, 5, 3);
-
+	// Formatando o número do documento cd CI2222600000 para CI-22226-00000
+	$UltDoc_ci = substr($UltDoc_ci, 0, 2) . "-" . substr($UltDoc_ci, 2, 5) . "-" . substr($UltDoc_ci, 7);
+	$UltDoc_rc = substr($UltDoc_rc, 0, 2) . "-" . substr($UltDoc_rc, 2, 5) . "-" . substr($UltDoc_rc, 7);
+	$UltDoc_mp = substr($UltDoc_mp, 0, 2) . "-" . substr($UltDoc_mp, 2, 5) . "-" . substr($UltDoc_mp, 7);
+	$UltDoc_mc = substr($UltDoc_mc, 0, 2) . "-" . substr($UltDoc_mc, 2, 5) . "-" . substr($UltDoc_mc, 7);
+	$UltDoc_vt = substr($UltDoc_vt, 0, 2) . "-" . substr($UltDoc_vt, 2, 5) . "-" . substr($UltDoc_vt, 7);
+	$UltDoc_sp = substr($UltDoc_sp, 0, 2) . "-" . substr($UltDoc_sp, 2, 5) . "-" . substr($UltDoc_sp, 7);
+	$UltDoc_out = substr($UltDoc_out, 0, 2) . "-" . substr($UltDoc_out, 2, 5) . "-" . substr($UltDoc_out, 7);
+	
 	// Pesquisando PC
 	include "conexao.php";
 	include "dbselect.php";
@@ -112,12 +131,34 @@
 	} else {
 		$Aut2 = "$Reg$Cod$Cod2$horaaut$dtAut$ValorF$SgRec$MatRec";
 	}
-	//shell_exec("echo $Aut2 > /dev/lp0");
 
-	// Autenticação do Documento
-	// remover hifen do $UltDoc_ci
+	// Remover hifen do $UltDoc_ci
 	$UltDoc_ci_h = str_replace("-", "", $UltDoc_ci);
-	$Aut = $Reg . $PC . $horaaut . $UltDoc_ci_h . $dtAut . $Vr . $SgRec . $FmRec . $MatRec;
+	$UltDoc_rc_h = str_replace("-", "", $UltDoc_rc);
+	$UltDoc_mp_h = str_replace("-", "", $UltDoc_mp);
+	$UltDoc_mc_h = str_replace("-", "", $UltDoc_mc);
+	$UltDoc_vt_h = str_replace("-", "", $UltDoc_vt); 
+	$UltDoc_sp_h = str_replace("-", "", $UltDoc_sp);
+	$UltDoc_out_h = str_replace("-", "", $UltDoc_out);
+
+	// Gerando o código de autenticação
+	if ($TipoDoc == 'CI') {
+		$Aut = $Reg . $PC . $horaaut . $UltDoc_ci_h . $dtAut . $Vr . $SgRec . $FmRec . $MatRec;
+	} elseif ($TipoDoc == 'RC') {
+		$Aut = $Reg . $PC . $horaaut . $UltDoc_rc_h . $dtAut . $Vr . $SgRec . $FmRec . $MatRec;
+	} elseif ($TipoDoc == 'MP') {
+		$Aut = $Reg . $PC . $horaaut . $UltDoc_mp_h . $dtAut . $Vr . $SgRec . $FmRec . $MatRec;
+	} elseif ($TipoDoc == 'MC') {
+		$Aut = $Reg . $PC . $horaaut . $UltDoc_mc_h . $dtAut . $Vr . $SgRec . $FmRec . $MatRec;
+	} elseif ($TipoDoc == 'MD') {
+		$Aut = $Reg . $PC . $horaaut . $UltDoc_md_h . $dtAut . $Vr  .$SgRec  .$FmRec  .$MatRec;
+	} elseif ($TipoDoc == 'VT') {
+		$Aut = $Reg . $PC . $horaaut . $UltDoc_vt_h . $dtAut . $Vr  .$SgRec  .$FmRec  .$MatRec;
+	} elseif ($TipoDoc == 'SP') {
+		$Aut = $Reg . $PC . $horaaut . $UltDoc_sp_h . $dtAut . $Vr  .$SgRec  .$FmRec  .$MatRec;
+	} elseif ($TipoDoc == 'OUT') {
+		$Aut = $Reg . $PC . $horaaut . $UltDoc_out_h . $dtAut . $Vr  .$SgRec  .$FmRec  .$MatRec;
+	}
 
 	// Gravando a Spool
 	include "dbselect.php";
@@ -133,7 +174,7 @@
 	include "rodape.php";
 
 	// Redirecionando para a impressão ou para o servrec
-	if ($TipoDesp == '1' or $TipoDesp == '5') {
+	if ($TipoDesp == '1') {
 	?>
 	<script>
 		function imprimirERedirecionar() {
@@ -147,7 +188,6 @@
 				'&Assunto=<?php echo urlencode($Assunto); ?>' +
 				'&colab=<?php echo urlencode($colab); ?>' +
 				'&mat_vend=<?php echo urlencode($mat_vend); ?>' +
-				'&Cliente=<?php echo urlencode($Cliente); ?>' +
 				'&Valor=<?php echo urlencode($Valor); ?>' +
 				'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
 				'&TipoRef=<?php echo urlencode($TipoRef); ?>';
@@ -158,17 +198,99 @@
 		}
 	</script>
 	<?php
-		
-	} else {
-		?>
-	// Redireciona para o index
+	}
+		elseif ($TipoDesp == '5') {
+	?>
 	<script>
 		function imprimirERedirecionar() {
-			window.location.href = './index.php?c_s=<?php echo $lg_user; ?>';
+			// Monta a URL com os dados
+			var url = './rc_reemb.php?tipo=<?php echo urlencode($tipo); ?>' +
+				'&UlDoc_rc=<?php echo urlencode($UltDoc_rc); ?>' +
+				'&Aut=<?php echo urlencode($Aut); ?>' +
+				'&Data=<?php echo urlencode($Data); ?>' +
+				'&PC=<?php echo urlencode($PC); ?>'	 +
+				'&Tes=<?php echo urlencode($Tes); ?>' +
+				'&Assunto=<?php echo urlencode($Assunto); ?>' +
+				'&mat_vend=<?php echo urlencode($mat_vend); ?>' +
+				'&cliente=<?php echo urlencode($cliente); ?>' +
+				'&Valor=<?php echo urlencode($Valor); ?>' +
+				'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
+				'&TipoRef=<?php echo urlencode($TipoRef); ?>';
+			window.open(url, '_blank');
+			setTimeout(function() {
+				window.location.href = './index.php?c_s=<?php echo $lg_user; ?>';
+			}, 1000);
 		}
 	</script>
-		<?php
-	}
+<?php
+	} 
+		elseif ($TipoDesp == '7') {
+	?>
+	<script>
+		function imprimirERedirecionar() {
+			// Monta a URL com os dados
+			var url = './vt_trans.php?tipo=<?php echo urlencode($tipo); ?>' +
+				'&UlDoc_vt=<?php echo urlencode($UltDoc_vt); ?>' +
+				'&Aut=<?php echo urlencode($Aut); ?>' +
+				'&Data=<?php echo urlencode($Data); ?>' +
+				'&PC=<?php echo urlencode($PC); ?>'	 +
+				'&Tes=<?php echo urlencode($Tes); ?>' +
+				'&Assunto=<?php echo urlencode($Assunto); ?>' +
+				'&colab=<?php echo urlencode($colab); ?>' +
+				'&mat_vend=<?php echo urlencode($mat_vend); ?>' +
+				'&Valor=<?php echo urlencode($Valor); ?>' +
+				'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
+				'&TipoRef=<?php echo urlencode($TipoRef); ?>' +
+				'&NomeDesc=<?php echo urlencode($NomeDesc); ?>';
+			window.open(url, '_blank');
+			setTimeout(function() {
+				window.location.href = './index.php?c_s=<?php echo $lg_user; ?>';
+			}, 1000);
+		}
+	</script>
+<?php
+	}  
+		elseif ($TipoDesp == '6') {
+	?>
+	<script>
+		function imprimirERedirecionar() {
+			// Monta a URL com os dados
+			var url = './serv_desp.php?tipo=<?php echo urlencode($tipo); ?>' +
+				'&UlDoc_sp=<?php echo urlencode($UltDoc_sp); ?>' +
+				'&Aut=<?php echo urlencode($Aut); ?>' +
+				'&Data=<?php echo urlencode($Data); ?>' +
+				'&PC=<?php echo urlencode($PC); ?>'	 +
+				'&Tes=<?php echo urlencode($Tes); ?>' +
+				'&Assunto=<?php echo urlencode($Assunto); ?>' +
+				'&colab=<?php echo urlencode($colab); ?>' +
+				'&mat_vend=<?php echo urlencode($mat_vend); ?>' +
+				'&Valor=<?php echo urlencode($Valor); ?>' +
+				'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
+				'&TipoRef=<?php echo urlencode($TipoRef); ?>' +
+				'&NomeDesc=<?php echo urlencode($NomeDesc); ?>';
+			window.open(url, '_blank');
+			setTimeout(function() {
+				window.location.href = './index.php?c_s=<?php echo $lg_user; ?>';
+			}, 1000);
+		}
+	</script>
+<?php
+	}   
+		elseif ($TipoDesp == '2' or $TipoDesp == '4') {
+	?>
+	<script>
+		function imprimirERedirecionar() {
+			// Monta a URL com os dados
+			//var url = './serv_desp.php?tipo=<?php echo urlencode($tipo); ?>' +
+			//	'&NomeDesc=<?php echo urlencode($NomeDesc); ?>';
+			//window.open(url, '_blank');
+			setTimeout(function() {
+				window.location.href = './index.php?c_s=<?php echo $lg_user; ?>';
+			}, 1000);
+		}
+	</script>
+<?php
+	} 
 	?>
 </body>
 

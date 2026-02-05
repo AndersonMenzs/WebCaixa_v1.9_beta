@@ -1,7 +1,7 @@
 <?php
 
-	$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
-	/*echo "<pre>";
+$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
+/*echo "<pre>";
 	print_r($dados);
 	echo "</pre>";
 	exit();*/
@@ -19,10 +19,10 @@ $destino        = trim($_GET['Tes']);
 $assunto        = "Comprovante de Recebimento de " . trim($_GET['TipoRef']);
 
 $nomeFuncionario = trim($_GET['colab']);
-// fotmatar a matrícula com hífen (1234567-8)
+
+// fotmatar a matrícula com hífen (1.234.567-8)
 $matricula       = trim($_GET['mat_vend']);
-$matricula       = substr($matricula, 0, 7) . "-" . substr($matricula, 7, 1);
-$unidade         = "PC-206";
+$matricula       = substr($matricula, 0, 1) . "." . substr($matricula, 1, 3) . "." . substr($matricula, 4, 3) . "-" . substr($matricula, 7, 1);
 $tipoDespesa    = trim($_GET['TipoRef']);
 
 $valor           = trim($_GET['Valor']);
@@ -139,7 +139,7 @@ $autenticacao    = trim($_GET['Aut']);
             .container {
                 border: none;
             }
-            
+
             /* Remove margens padrão */
             @page {
                 margin: 2mm;
@@ -153,7 +153,7 @@ $autenticacao    = trim($_GET['Aut']);
     </style>
 </head>
 
-<body>
+<body onload="window.print()">
 
     <div class="container">
 
@@ -184,7 +184,7 @@ $autenticacao    = trim($_GET['Aut']);
             sob matrícula <strong><i><?= $matricula ?></i></strong> da unidade
             <strong><i><?= $origem ?></i></strong>, confirmo ter recebido o valor de
             <strong><i>R$ <?= number_format($valor, 2, ',', '.') . " (" . $valorExtenso . ")" ?></i></strong>
-            referente a(o) <strong><i><?= $tipoDespesa ?></i></strong>, 
+            referente a(o) <strong><i><?= $tipoDespesa ?></i></strong>,
             conforme acordo e políticas internas da empresa.
         </div>
 
