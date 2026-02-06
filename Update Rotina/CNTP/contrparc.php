@@ -231,9 +231,20 @@
             input.style.borderColor = "";
          }
       }
+
+      document.addEventListener('DOMContentLoaded', function() {
+         var inputs = document.querySelectorAll('input[data-alfa-num="true"]');
+         inputs.forEach(function(inp) {
+            inp.addEventListener('keypress', function(e) {
+               var char = String.fromCharCode(e.which || e.keyCode);
+               if (!/^[a-zA-Z0-9\s]$/.test(char)) e.preventDefault();
+            });
+         });
+      });
    </script>
 
-   <script src="val_contrato.js" charset="utf-8"></script>
+   <script type="text/javascript" src="val_parcela.js" charset="utf-8">
+   </script>
 
 </head>
 
@@ -247,6 +258,16 @@
    $user = substr($lg_user, 0, 8);
    $pss  = substr($lg_user, 8, 40);
 
+   // inicializa variáveis usadas no form para evitar undefined
+   $numdoc   = isset($numdoc) ? $numdoc : '';
+   $mat_vend = isset($mat_vend) ? $mat_vend : '';
+   // se vierem via REQUEST/POST, use-os
+   if (isset($_REQUEST['txtdoc']))   $numdoc   = trim($_REQUEST['txtdoc']);
+   if (isset($_REQUEST['mat_vend'])) $mat_vend = trim($_REQUEST['mat_vend']);
+
+   $numdocEsc   = htmlspecialchars($numdoc,   ENT_QUOTES);
+   $matVendEsc  = htmlspecialchars($mat_vend, ENT_QUOTES);
+
    include "us_sist.php";
    if ($ch == 'no') {
       include "us_cad.php";
@@ -259,7 +280,7 @@
          </td>
          <td width='82%' align='center'>
             <font color="gold" size="6"><b>
-                  <center><u><i>CONTRATO - ENTRADA</i></u></center>
+                  <center><u><i>CONTRATO - PARCELAS</i></u></center>
                </b></font><br><br><br>
          </td>
          <td width='9%'>
@@ -271,23 +292,30 @@
 
    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
       <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
-         <form name="cntentr" method="post" action="contrentr_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos()" autocomplete="off">
+         <form name="parcela" method="post" action="contrparc_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos()" autocomplete="off">
             <tr>
-               <td width="50%" align="center">
+               <td width="20%" align="center">
+                  <font color='#FFFFFF' size='5'><b><i>Contrato</i></b></font>
+               </td>
+               <td width="40%" align="center">
                   <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
                </td>
-               <td width="50%" align="center">
+               <td width="40%" align="center">
                   <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
                </td>
             </tr>
             <tr>
-               <td width="50%" align="center">
-                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
-                  <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
-                     onkeypress="fPassaAlfaNumerico('an')"
-                     onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+               <td width="20%" align="center">
+                  <input type="text" id="txtdoc" name="txtdoc" size="8" maxlength="8" class="campos" autofocus
+                     onkeypress="return /[A-Za-z0-9 ]/.test(String.fromCharCode(event.which || event.keyCode))"
+                     onkeyup="this.value=this.value.toUpperCase(); validnome(this)" required>
                </td>
-               <td width="50%" align="center">
+               <td width="40%" align="center">
+                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $matVendEsc; ?>">
+                  <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
+                     onkeyup="this.value=this.value.toUpperCase(); validnome(this)" required>
+               </td>
+               <td width="40%" align="center">
                   <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
                      onkeypress="fPassaAlfaNumerico('an')"
                      onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
