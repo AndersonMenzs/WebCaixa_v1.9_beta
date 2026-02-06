@@ -149,12 +149,16 @@
 	$mat_vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
-	$valor_parcela = floatval(str_replace(',', '.', str_replace('.', '', $_POST['txtvalor'] ?? '0')));
-	$vlr_recebido  = floatval(str_replace(',', '.', str_replace('.', '', $_POST['vlr_recebido'] ?? '0')));
-	$txtparc       = intval($_POST['txtparc'] ?? 0);
-
-	$valC = (int) round($valor_parcela * 100);
-	$recC = (int) round($vlr_recebido * 100);
+	
+	// Converter para centavos diretamente, evitando imprecisão de ponto flutuante
+	// Remove separadores de milhar (.) e converte vírgula em ponto decimal
+	$valor_str = str_replace(',', '.', str_replace('.', '', $_POST['txtvalor'] ?? '0'));
+	$vlr_recebido_str = str_replace(',', '.', str_replace('.', '', $_POST['vlr_recebido'] ?? '0'));
+	
+	// Converte para centavos usando intval + arredondamento seguro
+	$valC = intval(round(floatval($valor_str) * 100));
+	$recC = intval(round(floatval($vlr_recebido_str) * 100));
+	$txtparc = intval($_POST['txtparc'] ?? 0);
 
 	$parcelasPlenas = $valC > 0 ? intdiv($recC, $valC) : 0;
 	$parcialC = $recC - ($parcelasPlenas * $valC);

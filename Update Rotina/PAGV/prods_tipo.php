@@ -311,7 +311,7 @@
 					<td colspan="2" align="center">
 						<input type="radio" name="rdbook" value="s" class="campos">
 						<font color='#FFFFFF' size='6'><b><i>Sim</i></b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="radio" name="rdbook" value="n" class="campos">
+						<input type="radio" name="rdbook" value="n" class="campos" checked>
 						<font color='#FFFFFF' size='6'><b><i>Não</i></b></font>
 					</td>
 				</tr>

@@ -61,8 +61,8 @@ include "./valor_ext.php";
 	$PIni = trim($_POST['txtparc_ini']);
 	$PUlt = trim($_POST['txtparc_ult']);
 	$QtdParcPag = trim($_POST['qtdeparc']);
-	$VrParcial = trim($_POST['vrparcial']);
-
+	$VrParcial = $_POST['vrparcial'];
+	
 	// Pesquisando PC
 	include "conexao.php";
 	include "dbselect.php";
@@ -126,7 +126,7 @@ include "./valor_ext.php";
 		$ModPag = "CART. CRED. PARC. LOJA";
 		$FmRec_a = "CPL";
 	}
-
+	
 	// Encerrando a Conexão
 	mysqli_close($conec);
 

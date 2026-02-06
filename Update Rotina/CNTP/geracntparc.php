@@ -40,7 +40,7 @@ error_reporting(E_ALL);
 	echo "<pre>";
 	var_dump($dados);
 	echo "</pre>";
-	exit();*/
+	exit;*/
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -69,7 +69,7 @@ error_reporting(E_ALL);
 	$Parc      = trim($_POST['vrprest']);
 	$PIni      = trim($_POST['txtparc_ini']);
 	$PUlt 	= trim($_POST['txtparc_ult']);
-	$Parcial = trim($_POST['vrparcial']);
+	$Parcial = $_POST['vrparcial'];
 
 	// Truncar o nome da vendedora com o primeiro nome completo e após o primeiro espaco, deixar somente uma letra e ponto.
 	$Vendedora = strtoupper($Vendedora);
@@ -310,7 +310,7 @@ error_reporting(E_ALL);
 											<font color='#FFFFFF'>.</center>
 					</b></font>
 				</p><br>
-				<center><input id="ghost_click" type="submit" name="btimprime" value="Autenticar"></center><br>
+				<center><input id="ghost_click" type="submit" name="btimprime" value="Autenticar" autofocus></center><br>
 				<center>
 					<font color='#FFFFFF' size='3'><span id="msg"></span></font>
 				</center>

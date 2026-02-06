@@ -5,11 +5,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-/*$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
-echo "<pre>";
-var_dump($dados);
-echo "</pre>";
-exit();*/
+//$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
+//echo "<pre>";
+//var_dump($dados);
+//echo "</pre>";
+//exit();
 
 // Variáveis do $_GET
 $Reg       = trim($_GET['Reg']);
@@ -34,7 +34,8 @@ $VrRecF     = number_format($VrRec, 2, ",", ".");
 $VrRecA = number_format($VrRec, 2, "", "");
 $VrPrest     = trim($_GET['VrPrest']);
 $VrPrestF     = number_format($VrPrest, 2, ",", ".");
-$VrParcial     = trim($_GET['VrParcial']);
+$VrParcial     = floatval(str_replace(',', '.', str_replace('.', '', trim($_GET['VrParcial']))));
+$VrParcial     = number_format($VrParcial, 2, ".", ",");
 $VrParcialF     = number_format($VrParcial, 2, ",", ".");
 $vlr_ext   = trim($_GET['vlr_ext']);
 $FPag     = trim($_GET['FPag_1']);
@@ -351,7 +352,7 @@ include "./dbselect.php";
                     </b>
                 </td>
                 <?php
-                if ($QtdeParc > 1) {
+                if ($VrParcial > 0) {
                 ?>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
@@ -363,7 +364,7 @@ include "./dbselect.php";
                 <?php
                 }
 
-                if ($VrParcial > 0) {
+                if ($VrParcial > 0.00) {
                 ?>
 
                     <td align="left" valign=bottom>
@@ -405,7 +406,7 @@ include "./dbselect.php";
                     </td>
                 <?php
                 }
-                if ($QtdeParc > 1) {
+                if ($VrParcial > 0.00) {
                 ?>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
@@ -415,7 +416,7 @@ include "./dbselect.php";
                 </td>
                 <?php
                 }
-                if ($VrParcial > 1) {
+                if ($VrParcial > 0.00) {
                 ?>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
@@ -645,7 +646,7 @@ include "./dbselect.php";
                     </b>
                 </td>
                 <?php
-                if ($QtdeParc > 1) {
+                if ($VrParcial > 0.00) {
                 ?>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
@@ -657,7 +658,7 @@ include "./dbselect.php";
                 <?php
                 }
 
-                if ($VrParcial > 0) {
+                if ($VrParcial > 0.00) {
                 ?>
 
                     <td align="left" valign=bottom>
@@ -699,7 +700,7 @@ include "./dbselect.php";
                     </td>
                 <?php
                 }
-                if ($QtdeParc > 1) {
+                if ($VrParcial > 0.00) {
                 ?>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
@@ -709,7 +710,7 @@ include "./dbselect.php";
                 </td>
                 <?php
                 }
-                if ($VrParcial > 1) {
+                if ($VrParcial > 0.00) {
                 ?>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>

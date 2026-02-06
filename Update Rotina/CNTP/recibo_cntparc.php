@@ -5,11 +5,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-/*$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
-echo "<pre>";
-var_dump($dados);
-echo "</pre>";
-exit();*/
+//$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
+//echo "<pre>";
+//var_dump($dados);
+//echo "</pre>";
+//exit();
 
 // Variáveis do $_GET
 $Reg       = trim($_GET['Reg']);
@@ -34,13 +34,13 @@ $VrRecF     = number_format($VrRec, 2, ",", ".");
 $VrRecA = number_format($VrRec, 2, "", "");
 $VrPrest     = trim($_GET['VrPrest']);
 $VrPrestF     = number_format($VrPrest, 2, ",", ".");
-$VrParcial     = trim($_GET['VrParcial']);
+$VrParcial     = floatval(str_replace(',', '.', str_replace('.', '', trim($_GET['VrParcial']))));
+$VrParcial     = number_format($VrParcial, 2, ".", ",");
 $VrParcialF     = number_format($VrParcial, 2, ",", ".");
 $vlr_ext   = trim($_GET['vlr_ext']);
 $FPag     = trim($_GET['FPag_1']);
 $PIni = trim($_GET['PIni']);
 $PUlt = trim($_GET['PUlt']);
-
 
 // Conexão
 include "./conexao.php";
@@ -352,7 +352,7 @@ include "./dbselect.php";
                     </b>
                 </td>
                 <?php
-                if ($QtdeParc > 1) {
+                if ($VrParcial > 0) {
                 ?>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
@@ -361,11 +361,10 @@ include "./dbselect.php";
                             <font size=1>PARCIAL PARCELA</font>
                         </b>
                     </td>
-
                 <?php
                 }
 
-                if ($VrParcial > 0) {
+                if ($VrParcial > 0.00) {
                 ?>
 
                     <td align="left" valign=bottom>
@@ -384,28 +383,30 @@ include "./dbselect.php";
             </tr>
             <tr>
                 <?php
-                if ($QtdeParc > 1) {
+                if ($QtdeParc > 0) {
                 ?>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
                     </td>
                     <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="500" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
-                        <font size=1><?php
-                                $pini = (int)$PIni;
-                                $pult = (int)$PUlt;
-                                if ($pult >= $pini && $pini > 0) {
-                                    $arr = [];
-                                    for ($i = $pini; $i <= $pult; $i++) {
-                                        $arr[] = $i . "ª";
-                                    }
-                                    echo implode(', ', $arr);
-                                } else {
-                                    echo $PIni;
+                        <font size=1>
+                            <?php
+                            $pini = (int)$PIni;
+                            $pult = (int)$PUlt;
+                            if ($pult >= $pini && $pini > 0) {
+                                $arr = [];
+                                for ($i = $pini; $i <= $pult; $i++) {
+                                    $arr[] = $i . "ª";
                                 }
-                                ?></font>
+                                echo implode(', ', $arr);
+                            } else {
+                                echo $PIni;
+                            }
+                            ?></font>
                     </td>
                 <?php
                 }
+                if ($VrParcial > 0.00) {
                 ?>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
@@ -414,7 +415,8 @@ include "./dbselect.php";
                     <font size=1><?php echo $PUlt + 1; ?>ª</font>
                 </td>
                 <?php
-                if ($VrParcial > 0) {
+                }
+                if ($VrParcial > 0.00) {
                 ?>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
@@ -644,7 +646,7 @@ include "./dbselect.php";
                     </b>
                 </td>
                 <?php
-                if ($QtdeParc > 1) {
+                if ($VrParcial > 0.00) {
                 ?>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
@@ -653,11 +655,10 @@ include "./dbselect.php";
                             <font size=1>PARCIAL PARCELA</font>
                         </b>
                     </td>
-
                 <?php
                 }
 
-                if ($VrParcial > 0) {
+                if ($VrParcial > 0.00) {
                 ?>
 
                     <td align="left" valign=bottom>
@@ -676,28 +677,30 @@ include "./dbselect.php";
             </tr>
             <tr>
                 <?php
-                if ($QtdeParc > 1) {
+                if ($QtdeParc > 0) {
                 ?>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
                     </td>
                     <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="500" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
-                        <font size=1><?php
-                                $pini = (int)$PIni;
-                                $pult = (int)$PUlt;
-                                if ($pult >= $pini && $pini > 0) {
-                                    $arr = [];
-                                    for ($i = $pini; $i <= $pult; $i++) {
-                                        $arr[] = $i . "ª";
-                                    }
-                                    echo implode(', ', $arr);
-                                } else {
-                                    echo $PIni;
+                        <font size=1>
+                            <?php
+                            $pini = (int)$PIni;
+                            $pult = (int)$PUlt;
+                            if ($pult >= $pini && $pini > 0) {
+                                $arr = [];
+                                for ($i = $pini; $i <= $pult; $i++) {
+                                    $arr[] = $i . "ª";
                                 }
-                                ?></font>
+                                echo implode(', ', $arr);
+                            } else {
+                                echo $PIni;
+                            }
+                            ?></font>
                     </td>
                 <?php
                 }
+                if ($VrParcial > 0.00) {
                 ?>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
@@ -706,7 +709,8 @@ include "./dbselect.php";
                     <font size=1><?php echo $PUlt + 1; ?>ª</font>
                 </td>
                 <?php
-                if ($VrParcial > 0) {
+                }
+                if ($VrParcial > 0.00) {
                 ?>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>

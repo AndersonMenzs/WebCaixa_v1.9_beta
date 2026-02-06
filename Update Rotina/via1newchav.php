@@ -1,10 +1,5 @@
 <?php
 
-//debug
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-
 // Pesquisando PC
 include "conexao.php";
 include "dbselect.php";
@@ -14,62 +9,48 @@ include "../cabecprs.php";
 include "./valor_ext.php";
 
 ?>
+
 <html>
-
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
-
 	<?php
-	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	var_dump($dados);
-	echo "</pre>";
-	exit();*/
-
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
-	$Rot       = "S7R2.2.1.2";
+	$Rot       = "S7R5.1.1.2";
 	$lg_user   = trim($_POST['txtuser']);
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
 	$Aut       = trim($_POST['txtreg']);
 	$AutFull = 10000 + $Aut;
 	$Reg       = substr($AutFull, 1, 4);
-	$PC		= trim($_POST['pc']);
 	$NDoc      = trim($_POST['txtdoc']);
 	$TipoRec   = trim($_POST['tiporec']);
-	$tipo = trim($_POST['tipo']);
+	$FPag1      = isset($_POST['lsPr1']) ? (trim($_POST['lsPr1']) == '00' ? '' : trim($_POST['lsPr1'])) : '';
+	$FPag2      = isset($_POST['lsPr2']) ? (trim($_POST['lsPr2']) == '00' ? '' : trim($_POST['lsPr2'])) : '';
+	$FPag3      = isset($_POST['lsPr3']) ? (trim($_POST['lsPr3']) == '00' ? '' : trim($_POST['lsPr3'])) : '';
+	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
+	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
+	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
 	$mRec    = substr($dtRec, 5, 2);
 	$dRec    = substr($dtRec, 8, 2);
 	$dtAut     = $dRec . $mRec . $aRec;
-	$FPag_1      = isset($_POST['lsPr1']) ? (trim($_POST['lsPr1']) == '00' ? '' : trim($_POST['lsPr1'])) : '';
-	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
-	$ModPag    = trim($_POST['modpag']);
 	$hora      = trim($_POST['txthora']);
 	$h1 = substr($hora, 0, 2);
 	$h2 = substr($hora, 3, 2);
 	$horaaut   = $h1 . $h2;
+	$TaxaChav = trim($_POST['taxachav']);
+	$TaxaChavF = number_format($TaxaChav, 2, ",", ".");
+	$Qtde      = trim($_POST['qtde']);
 	$Mat       = trim($_POST['txtmat']);
-	$Mat_Vend  = trim($_POST['mat_vend']);
-	$Vendedora = trim($_POST['vendedora']);
-	$Cliente   = trim($_POST['cliente']);
-	$VrRec     = trim($_POST['vrrec']);
-	$VrRecF    = number_format($VrRec, 2, ',', '.');
-	$vlr_ext   = valorPorExtenso($VrRecF);
-	$VrPrest   = trim($_POST['vrprest']);
-	$PIni = trim($_POST['txtparc_ini']);
-	$PUlt = trim($_POST['txtparc_ult']);
-	$QtdParcPag = trim($_POST['qtdeparc']);
-	$VrParcial = $_POST['vrparcial'];
-	
-	// Pesquisando PC
-	include "conexao.php";
-	include "dbselect.php";
+	$Mat_Vend   = trim($_POST['mat_vend']);
+	$Vendedora  = trim($_POST['vendedora']);
+	$Cliente    = trim($_POST['cliente']);
+	$vlr_ext   = valorPorExtenso($TaxaChavF);
 
-	// Obtendo o código do PC
+	// Obtendo o PC
 	$sqlPC = "select pc from inicial";
-	$rsPC  = mysqli_query($conec, $sqlPC) or die("Não foi possível acessar o PC");
+	$rsPC  = mysqli_query($conec, $sqlPC) or die("Não foi possível caessar o PC");
 	$lnPC  = mysqli_fetch_array($rsPC);
 	$PC  = $lnPC['pc'];
 
@@ -78,17 +59,10 @@ include "./valor_ext.php";
 	$rsRec = mysqli_query($conec, $sqlRec) or die("Não foi possível acessar o Tipo de Recebimento");
 	$lnRec = mysqli_fetch_array($rsRec);
 	$SgRec  = $lnRec['siglarec'];
-	$tipo = "CONTR. PARCELADO";
+	$tipo = "CHAVEIRO";
 
-	// Imprimindo o Registro da Spool
-	$SqlSp = "select * from spool order by rec";
-	$rsSp  = mysqli_query($conec, $SqlSp) or die("Não foi possível obter dados da spool");
-	$lnSp  = mysqli_fetch_array($rsSp);
-	$Num = $lnSp['rec'];
-	$Spo = $lnSp['spo'];
-	
 	// Consulta SQL corrigida com parênteses
-	$sqlFm = "SELECT siglapag FROM formapag WHERE codpag = '$FPag_1' AND codpag <> '---'";
+	$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag1' OR codpag = '$FPag2' OR codpag = '$FPag3') AND codpag <> '---'";
 	$rsFm = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
 
 	$FmRec = [];
@@ -122,43 +96,55 @@ include "./valor_ext.php";
 	} elseif (in_array("PXC", $FmRec)) {
 		$ModPag = "PIX CNPJ";
 		$FmRec_a = "PXC";
-	} elseif (in_array("CPL", $FmRec)) {
-		$ModPag = "CART. CRED. PARC. LOJA";
-		$FmRec_a = "CPL";
 	}
-	
+
+	// Reduzindo a Matrícula
+	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
+	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
+
+	// Imprimindo Via Cliente
+	$Aut1 = $Reg;
+	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$TaxaChavF$SgRec$FmRec_a$MatRec";
+
+			// Remover ponto do valor
+			$TaxaChav = str_replace(',', '', $TaxaChavF);
+
+	// Gravando a Spool
+	include "dbselect.php";
+	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
+	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+
 	// Encerrando a Conexão
-	mysqli_close($conec);
+	$SisRot = "S-7.5.1.1.2";
+	include "rodape.php";
 
-	$SisRot = "S-7.2.2.1.2";
-	include "./rodape.php"; ?>
-
+	?>
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
-			var url = './recibo_cntparc.php?tipo=<?php echo urlencode($tipo); ?>' +
-				'&mat=<?php echo urlencode($Mat); ?>' +
+			var url = './recibo_chaveiro.php?tipo=<?php echo urlencode($tipo); ?>' +
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
-				'&Reg=<?php echo urlencode($Reg); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
-				'&SgRec=<?php echo urlencode($SgRec); ?>' +
-				'&PIni=<?php echo urlencode($PIni); ?>' +
-				'&PUlt=<?php echo urlencode($PUlt); ?>' +
-				'&FPag_1=<?php echo urlencode($FPag_1); ?>' +
-				'&ModPag=<?php echo urlencode($ModPag); ?>' +
-				'&QtdParcPag=<?php echo urlencode($QtdParcPag); ?>' +
-				'&VrPrest=<?php echo urlencode($VrPrest); ?>' +
-				'&VrRec=<?php echo urlencode($VrRec); ?>' +
-				'&FmRec=<?php echo urlencode($FmRec_a); ?>' +
+				'&TaxaChav=<?php echo urlencode($TaxaChav); ?>' +
+				'&TaxaChavF=<?php echo urlencode($TaxaChavF); ?>' +
+				'&qtde=<?php echo urlencode($Qtde); ?>' +
+				'&fpag_1=<?php echo urlencode($FPag1); ?>' +
+				'&fpag_2=<?php echo urlencode($FPag2); ?>' +
+				'&fpag_3=<?php echo urlencode($FPag3); ?>' +
+				'&fmrec=<?php echo urlencode($FmRec_a); ?>' +
+				'&txt1=<?php echo urlencode($txt1); ?>' +
+				'&txt2=<?php echo urlencode($txt2); ?>' +
+				'&txt3=<?php echo urlencode($txt3); ?>' +
 				'&data=<?php echo urlencode($dtRec); ?>' +
+				'&Mat_Vend=<?php echo urlencode($Mat_Vend); ?>' +
 				'&Vendedora=<?php echo urlencode($Vendedora); ?>' +
-				'&mat_vend=<?php echo urlencode($Mat_Vend); ?>' +
 				'&Cliente=<?php echo urlencode($Cliente); ?>' +
 				'&vlr_ext=<?php echo urlencode($vlr_ext); ?>' +
-				'&VrParcial=<?php echo urlencode($VrParcial); ?>' +
 				'&Reg=<?php echo urlencode($Reg); ?>' +
 				'&horaaut=<?php echo urlencode($horaaut); ?>' +
-				'&dtAut=<?php echo urlencode($dtAut); ?>';
+				'&dtAut=<?php echo urlencode($dtAut); ?>' +
+				'&SgRec=<?php echo urlencode($SgRec); ?>' +
+				'&Mat=<?php echo urlencode($Mat); ?>';
 			window.open(url, '_blank');
 			setTimeout(function() {
 				window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';

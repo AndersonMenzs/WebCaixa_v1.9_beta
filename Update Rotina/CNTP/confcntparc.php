@@ -82,7 +82,7 @@
 	$PUlt      = trim($_POST['txtparc_ult']);
 	$QtdeParc  = $PUlt - $PIni + 1;
 	$ParcialF   = trim($_POST['parcial']);
-	$Parcial  = number_format($ParcialF, 2, '.', ',');
+	$Parcial  = number_format($ParcialF, 2, ',', '.');
 	$VrPrestForm  = $VrPrest * $QtdeParc;
 	$VrPrestFormF  = number_format($VrPrestForm, 2, ',', '.');
 	$FPag_1      = trim($_POST['lsPr1']);
@@ -244,7 +244,7 @@
 			<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
 			<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">
 			<input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
-			<input type="hidden" name="vrparcial" value="<?php echo $Parcial; ?>">
+			<input type="hidden" name="vrparcial" value="<?php echo $ParcialF; ?>">
 			<input type="hidden" name="vrrec" value="<?php echo $VrRec; ?>">
 			<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 			<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
