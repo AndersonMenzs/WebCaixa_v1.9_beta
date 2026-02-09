@@ -70,6 +70,7 @@ error_reporting(E_ALL);
 	$PIni      = trim($_POST['txtparc_ini']);
 	$PUlt 	= trim($_POST['txtparc_ult']);
 	$Parcial = $_POST['vrparcial'];
+	$VrTot = $_POST['vrtotf'];
 
 	// Truncar o nome da vendedora com o primeiro nome completo e após o primeiro espaco, deixar somente uma letra e ponto.
 	$Vendedora = strtoupper($Vendedora);
@@ -121,8 +122,7 @@ error_reporting(E_ALL);
 			}
 
 			// Gravando Várias Parcelas
-			$ParcUlt = $VrRec - $Parc * ($QtdeParc - 1);
-
+			$ParcUlt = $VrRec - $VrTot * ($QtdeParc - 1);
 			$ParcUlt = number_format($ParcUlt, 2, '.', '');
 
 			// Formatar MatRec UMA VEZ antes do loop (não a cada iteração!)
@@ -156,7 +156,7 @@ error_reporting(E_ALL);
 					$HoraSp  = $hSp . $mSp;
 					$NDocSp  = $NDoc;
 					$dtAutSp = date('dmy');
-					$PParc   = number_format($Parc, 2, ',', '');
+					$PParc   = number_format($VrTot, 2, ',', '');
 					$PParcUlt = number_format($ParcUlt, 2, ',', '');
 					$ParcSp  = "R$ " . $PParc;
 					$PParcUlt = "R$ " . $PParcUlt;

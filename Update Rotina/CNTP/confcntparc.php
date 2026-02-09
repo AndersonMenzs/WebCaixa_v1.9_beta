@@ -90,6 +90,8 @@
 	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
+	$VrTot = $txt1 / $QtdeParc;
+	$VrTotF = number_format($VrTot, 2, '.', ',	');
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -245,6 +247,7 @@
 			<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">
 			<input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
 			<input type="hidden" name="vrparcial" value="<?php echo $ParcialF; ?>">
+			<input type="hidden" name="vrtotf" value="<?php echo $VrTotF; ?>">
 			<input type="hidden" name="vrrec" value="<?php echo $VrRec; ?>">
 			<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 			<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
