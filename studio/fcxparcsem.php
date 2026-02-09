@@ -7,7 +7,6 @@ ini_set('display_startup_errors', 1);
 ini_set('html_errors', 1);
 ini_set('error_log', 'php_errors.log');
 ini_set('log_errors', 1);
-ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 ini_set('track_errors', 1);
 
 ?>
@@ -42,11 +41,22 @@ ini_set('track_errors', 1);
 	<?php
 
 	// Obtendo a Data Atual
-	$DataAtual = date('Ymd'); ?>
+	$DataAtual = date('Ymd');
+
+	?>
 </head>
 
 <body background="../images/bg1.jpg" link='lime' vlink='#FFFFFF' alink='lime' text="#FFFFFF">
-	<?php include "../cabecprs.php";
+
+	<?php
+
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	var_dump($dados);
+	echo "</pre>";
+	exit;*/
+
+	include "../cabecprs.php";
 
 	// Obtendo o Login
 	$Sis     = "S7";
@@ -87,17 +97,17 @@ ini_set('track_errors', 1);
 
 	if ($ch == 'ok-enc' or $ch == 'ok') {
 		$CounterF = substr(100 + $Counter, 1, 2);
-		shell_exec("echo \n > /dev/lp0");
-		shell_exec("echo '=============================================' > /dev/lp0");
-		shell_exec("echo '=============================================' > /dev/lp0");
+		shell_exec("echo \n >> /backups/fchparcial.txt");
+		shell_exec("echo '=============================================' >> /backups/fchparcial.txt");
+		shell_exec("echo '=============================================' >> /backups/fchparcial.txt");
 		shell_exec("echo \n /dev/lp0");
-		shell_exec("echo '       FECHAMENTO PARCIAL NUMERO - $CounterF' > /dev/lp0");
-		shell_exec("echo '              REALIZADO AS $hora hs' > /dev/lp0");
-		shell_exec("echo '         SALDO INFORMADO: R$ $Gaveta' > /dev/lp0");
-		shell_exec("echo \n > /dev/lp0");
-		shell_exec("echo '=============================================' > /dev/lp0");
-		shell_exec("echo '=============================================' > /dev/lp0");
-		shell_exec("echo \n > /dev/lp0"); ?>
+		shell_exec("echo '       FECHAMENTO PARCIAL NUMERO - $CounterF' >> /backups/fchparcial.txt");
+		shell_exec("echo '              REALIZADO AS $hora hs' >> /backups/fchparcial.txt");
+		shell_exec("echo '         SALDO INFORMADO: R$ $Gaveta' >> /backups/fchparcial.txt");
+		shell_exec("echo \n >> /backups/fchparcial.txt");
+		shell_exec("echo '=============================================' >> /backups/fchparcial.txt");
+		shell_exec("echo '=============================================' >> /backups/fchparcial.txt");
+		shell_exec("echo \n >> /backups/fchparcial.txt"); ?>
 
 		<font size='4' color='gold'>
 			<b>
@@ -113,6 +123,7 @@ ini_set('track_errors', 1);
 		// Obtendo Apelido
 		include "conexao.php";
 		include "dblog.php";
+
 		$sqlP = "select ape from pessoal where mat = '$user' ";
 		$rsP  = mysqli_query($conec, $sqlP) or die("Não foi possível fechar o Caixa");
 		$lnP = mysqli_fetch_array($rsP);
@@ -183,6 +194,7 @@ ini_set('track_errors', 1);
 			$RecChav = $RecChav + $VlRec;
 			$ValorChav    = number_format($RecChav, 2, ",", ".");
 		}
+
 		if ($ValorChav == '') {
 			$ValorChav = '0,00';
 			$NTChav = 0;
@@ -197,11 +209,13 @@ ini_set('track_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='1' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #2A!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
 			$RecProd = $RecProd + $VlRec;
 			$ValorProd    = number_format($RecProd, 2, ",", ".");
 		}
+
 		if ($ValorProd == '') {
 			$ValorProd = '0,00';
 		}
@@ -213,32 +227,16 @@ ini_set('track_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='2' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #4!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
 			$RecConc = $RecConc + $VlRec;
 			$ValorConc = number_format($RecConc, 2, ",", ".");
 		}
+
 		if ($ValorConc == '') {
 			$ValorConc = '0,00';
 		}
-
-		// Totalizando Taxa Bebê Estrella
-		/*$sqlR  = "SELECT numdoc FROM registro where tiporec='A' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc, numdoc";
-       $rsR   = mysqli_query($conec, $sqlR) or die ('Erro #3!');
-       $NBebe = mysqli_num_rows($rsR);
-
-       $sqlR  = "SELECT vlrec FROM registro where tiporec='A' and estorno <> 'x' and datarec = '$dtOpen' ";
-       $rsR   = mysqli_query($conec, $sqlR) or die ('Erro #4!');
-       while ($lnR  = mysqli_fetch_array($rsR))
-	    {
-	     $VlRec     = $lnR['vlrec'];
-	     $RecBebe   = $RecBebe + $VlRec;
-	     $ValorBebe = number_format($RecBebe,2,",",".");
-	    }
-       if ($ValorBebe == '')
-	 {
-	  $ValorBebe = '0,00';
-	 }*/
 
 		// Totalizando Contratos (Entrada)
 		$sqlR = "SELECT numdoc FROM registro where tiporec='3' and subtipo = 'CNTE' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc";
@@ -247,11 +245,13 @@ ini_set('track_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='3' and subtipo = 'CNTE' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #6!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec        = $lnR['vlrec'];
 			$RecCntE      = $RecCntE + $VlRec;
 			$ValorContEnt = number_format($RecCntE, 2, ",", ".");
 		}
+
 		if ($ValorContEnt == '') {
 			$ValorContEnt = '0,00';
 		}
@@ -263,11 +263,13 @@ ini_set('track_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='3' and subtipo = 'CNTP' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #8!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$RecCntP  = $RecCntP + $VlRec;
 			$ValorContParc = number_format($RecCntP, 2, ",", ".");
 		}
+
 		if ($ValorContParc == '') {
 			$ValorContParc = '0,00';
 		}
@@ -279,11 +281,13 @@ ini_set('track_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='4' and subtipo = 'PVDE' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #1A!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec        = $lnR['vlrec'];
 			$RecPVDE      = $RecPVDE + $VlRec;
 			$ValorPropEnt = number_format($RecPVDE, 2, ",", ".");
 		}
+
 		if ($ValorPropEnt == '') {
 			$ValorPropEnt = '0,00';
 		}
@@ -295,11 +299,13 @@ ini_set('track_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='4' and subtipo = 'PVDP' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #3A!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec         = $lnR['vlrec'];
 			$RecPVDP       = $RecPVDP + $VlRec;
 			$ValorPropParc = number_format($RecPVDP, 2, ",", ".");
 		}
+
 		if ($ValorPropParc == '') {
 			$ValorPropParc = '0,00';
 		}
@@ -311,11 +317,13 @@ ini_set('track_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='6' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #5A!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$RecPrdt  = $RecPrdt + $VlRec;
 			$VrPRecsF = number_format($RecPrdt, 2, ",", ".");
 		}
+
 		if ($VrPRecsF == '') {
 			$VrPRecsF = '0,00';
 		}
@@ -327,11 +335,13 @@ ini_set('track_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='7' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #7A!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$RecBook  = $RecBook + $VlRec;
 			$VrBookRecF = number_format($RecBook, 2, ",", ".");
 		}
+
 		if ($VrBookRecF == '') {
 			$VrBookRecF = '0,00';
 		}
@@ -343,11 +353,13 @@ ini_set('track_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='5' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #9A!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$RecResg  = $RecResg + $VlRec;
 			$ValorResg = number_format($RecResg, 2, ",", ".");
 		}
+
 		if ($ValorResg == '') {
 			$ValorResg = '0,00';
 		}
@@ -359,11 +371,13 @@ ini_set('track_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='8' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #2B!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$RecDesp  = $RecDesp + $VlRec;
 			$PgtoTot = number_format($RecDesp, 2, ",", ".");
 		}
+
 		if ($PgtoTot == '') {
 			$PgtoTot = '0,00';
 		}
@@ -375,11 +389,13 @@ ini_set('track_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #4B!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$RecEst  = $RecEst + $VlRec;
 			$ValorEstorno = number_format($RecEst, 2, ",", ".");
 		}
+
 		if ($ValorEstorno == '') {
 			$ValorEstorno = '0,00';
 		}
@@ -387,11 +403,13 @@ ini_set('track_errors', 1);
 		// Arrecadado em Dinheiro
 		$sqlR = "SELECT vlrec FROM registro where modpgto='10' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #5B!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$cashTot  = $cashTot + $VlRec;
 			$Dinheiro = number_format($cashTot, 2, ",", ".");
 		}
+
 		if ($Dinheiro == '') {
 			$Dinheiro = '0,00';
 		}
@@ -399,6 +417,7 @@ ini_set('track_errors', 1);
 		// Arrecadado em Pix QRCode
 		$sqlR = "SELECT vlrec FROM registro where modpgto='70' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #29. Contate seu Administrador.');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$pixQRCode = $pixQRCode + $VlRec;
@@ -412,11 +431,13 @@ ini_set('track_errors', 1);
 		// Arrecadado em Pix CNPJ
 		$sqlR = "SELECT vlrec FROM registro where modpgto='71' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #29. Contate seu Administrador.');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$pixCNPJ = $pixCNPJ + $VlRec;
 			$PixCNPJ = number_format($pixCNPJ, 2, ",", ".");
 		}
+
 		if ($PixCNPJ == '') {
 			$PixCNPJ = '0,00';
 		}
@@ -424,11 +445,13 @@ ini_set('track_errors', 1);
 		// Arrecadado em Card Débito
 		$sqlR = "SELECT vlrec FROM registro where modpgto='20' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #6B!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
 			$cDebFinal  = $cDebFinal + $VlRec;
 			$CardDeb = number_format($cDebFinal, 2, ",", ".");
 		}
+
 		if ($CardDeb == '') {
 			$CardDeb = '0,00';
 		}
@@ -436,11 +459,13 @@ ini_set('track_errors', 1);
 		// Arrecadado em Card Crédito a Vista
 		$sqlR = "SELECT vlrec FROM registro where modpgto='30' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #7B!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
 			$credTotV  = $credTotV + $VlRec;
 			$CardVista = number_format($credTotV, 2, ",", ".");
 		}
+
 		if ($CardVista == '') {
 			$CardVista = '0,00';
 		}
@@ -448,11 +473,13 @@ ini_set('track_errors', 1);
 		// Arrecadado em Card Crédito Parc. Loja
 		$sqlR = "SELECT vlrec FROM registro where modpgto='31' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #8B!');
+
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$credTotPLoja  = $credTotPLoja + $VlRec;
 			$CardParcLj = number_format($credTotPLoja, 2, ",", ".");
 		}
+
 		if ($CardParcLj == '') {
 			$CardParcLj = '0,00';
 		}
@@ -469,42 +496,6 @@ ini_set('track_errors', 1);
 			$CardParcAdm = '0,00';
 		}
 
-		// Arrecadado em Cheques a Vista
-		$sqlR = "SELECT vlrec FROM registro where modpgto='40' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
-		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #1C!');
-		while ($lnR  = mysqli_fetch_array($rsR)) {
-			$VlRec   = $lnR['vlrec'];
-			$cheqTotV  = $cheqTotV + $VlRec;
-			$CheqTotal = number_format($cheqTotV, 2, ",", ".");
-		}
-		if ($CheqTotal == '') {
-			$CheqTotal = '0,00';
-		}
-
-		// Arrecadado em Cheques Pre-datados
-		$sqlR = "SELECT vlrec FROM registro where modpgto='50' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
-		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #2C!');
-		while ($lnR  = mysqli_fetch_array($rsR)) {
-			$VlRec   = $lnR['vlrec'];
-			$cheqTotPre  = $cheqTotPre + $VlRec;
-			$CheqPre = number_format($cheqTotPre, 2, ",", ".");
-		}
-		if ($CheqPre == '') {
-			$CheqPre = '0,00';
-		}
-
-		// Depósito de Clientes
-		$sqlR = "SELECT vlrec FROM registro where modpgto='60' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
-		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #3C!');
-		while ($lnR  = mysqli_fetch_array($rsR)) {
-			$VlRec    = $lnR['vlrec'];
-			$DepClientes   = $DepClientes + $VlRec;
-			$DepCli = number_format($DepClientes, 2, ",", ".");
-		}
-		if ($DepCli == '') {
-			$DepCli = '0,00';
-		}
-
 		// Obtendo o Total Depositado
 		$sqlR = "select * from depositos where dtdep = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die("Erro #4C!");
@@ -515,7 +506,7 @@ ini_set('track_errors', 1);
 		$Recolh = number_format($Recl, 2, ".", "");
 
 		// Totalizando Recebimentos
-		$Entradas  = $cashTot + $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $DepClientes + $pixQRCode + $pixCNPJ;
+		$Entradas  = $cashTot + $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $pixQRCode + $pixCNPJ;
 		$DemaisTot = $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $pixQRCode + $pixCNPJ;
 		$Geral     = $Recolh + $DemaisTot;
 		$TotIn     = number_format($Entradas, 2, ",", ".");
@@ -526,6 +517,7 @@ ini_set('track_errors', 1);
 		// Desmembrando Pagamentos
 		$sqlD = "SELECT subtipo,vlrec FROM registro where tiporec='8' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsD  = mysqli_query($conec, $sqlD) or die('Erro #5C!');
+
 		while ($lnD  = mysqli_fetch_array($rsD)) {
 			$STipo   = $lnD['subtipo'];
 			$VlRec   = $lnD['vlrec'];
@@ -537,10 +529,6 @@ ini_set('track_errors', 1);
 
 				case 'MCS':
 					$MCS = $MCS + $VlRec;
-					break;
-
-				case 'MDV':
-					$MDV = $MDV + $VlRec;
 					break;
 
 				case 'MPD':
@@ -568,7 +556,6 @@ ini_set('track_errors', 1);
 		// Formatando Resultados
 		$DDPF = number_format($DDP, 2, ",", ".");
 		$MCSF = number_format($MCS, 2, ",", ".");
-		$MDVF = number_format($MDV, 2, ",", ".");
 		$MPDF = number_format($MPD, 2, ",", ".");
 		$RCLF = number_format($RCL, 2, ",", ".");
 		$SRVF = number_format($SRV, 2, ",", ".");
@@ -576,7 +563,7 @@ ini_set('track_errors', 1);
 		$OUTF = number_format($OUT, 2, ",", ".");
 
 		// Totalizando Pagamentos
-		$Pgtos   = $DDP + $MCS + $MDV + $MPD + $RCL + $SRV + $VTR + $OUT;
+		$Pgtos   = $DDP + $MCS + $MPD + $RCL + $SRV + $VTR + $OUT;
 		$PgtoTot = number_format($Pgtos, 2, ",", ".");
 
 		// Calculando a Diferença de Caixa
@@ -673,13 +660,6 @@ ini_set('track_errors', 1);
 							</td>
 						</tr>
 
-						<!--<tr>
-			    <td>
-			       <font color="gold"><b><i>Taxa Bebê Estrella:. . . </b></i></font>
-			       <b><i><?php echo "$NBebe itens --> R$ $ValorBebe"; ?></i></b>
-			    </td>
-			 </tr>-->
-
 						<tr>
 							<td>
 								<font color="gold"><b><i>Contratos (Entrada):. . </b></i></font>
@@ -719,13 +699,6 @@ ini_set('track_errors', 1);
 								<font color="gold"><b><i>Books &agrave; Vista: . . . . . .<font color='#FFFFFF'><?php echo " $NBookRec itens --> R$ $VrBookRecF"; ?> </b></i></font>
 							</td>
 						</tr>
-
-						<!--<tr>
-			    <td>
-			       <font color="gold"><b><i>Resgate de Cheques: . </b></i></font>
-			       <b><i><?php echo "$NResgate itens --> R$ $ValorResg"; ?></i></b>
-			    </td>
-			 </tr>-->
 
 						<tr>
 							<td>
@@ -790,45 +763,18 @@ ini_set('track_errors', 1);
 								<b><i>R$ <?php echo $CardParcLj; ?></i></b>
 							</td>
 						</tr>
-
-						<!--<tr>
-							<td>
-								<font color="gold"><b><i>Cartão Crédito (Parc. Adm.): </b></i></font>
-								<b><i>R$ <?php echo $CardParcAdm; ?></i></b>
-							</td>
-						</tr>
-
-						<tr>
-			    <td>
-			       <font color="gold"><b><i>Cheques (A Vista):. . . . . . . . </b></i></font>
-			       <b><i>R$ <?php echo $CheqTotal; ?></i></b>
-			    </td>
-			 </tr>
-
-			 <tr>
-			    <td>
-			       <font color="gold"><b><i>Cheques (Pré-datados):. . . . </b></i></font>
-			       <b><i>R$ <?php echo $CheqPre; ?></i></b>
-			    </td>
-			 </tr>
-
-						<tr>
-							<td>
-								<font color="gold"><b><i>Depósito de Clientes: . . . . . </b></i></font>
-								<b><i><?php echo "R$ $DepCli"; ?></i></b>
-							</td>
-						</tr>-->
 					</table><br>
 
 					<center>
 						<font color="gold"><b><i>&nbsp;Diferença de Caixa: </b></i></font>
-						<b><i>R$ <?php echo $DifCx; ?></i></b><?php
-																if ($Diferenca <> 0) { ?>
+						<b><i>R$ <?php echo $DifCx; ?></i></b>
+						<?php
+						if ($Diferenca <> 0) { ?>
 							<font color='gold'>
 								<blink><?php echo $cd; ?><blink>
 							</font>
 						<?php
-																} ?>
+						} ?>
 						</i></b>
 					</center>
 				</td>
@@ -898,10 +844,12 @@ ini_set('track_errors', 1);
 								if ($IncSobra > 0) { ?>
 									<font color="gold"><b><i>&nbsp;Sobra Incorporada ao Caixa: </b></i></font>
 									<b><i>
-											<?php echo "R$ $IncSobraF"; ?></i></b><?php
-																				} else { ?>
-									&nbsp;<?php
-																				} ?>
+											<?php echo "R$ $IncSobraF"; ?></i></b>
+								<?php
+								} else { ?>
+									&nbsp;
+								<?php
+								} ?>
 							</td>
 						</tr>
 
@@ -909,10 +857,12 @@ ini_set('track_errors', 1);
 							<td><?php
 								if ($cashIn > 0) { ?>
 									<font color="gold"><b><i>&nbsp;Retificação de Lançamento(Créd): </b></i></font>
-									<b><i><?php echo "R$ $cashInF"; ?></i></b><?php
-																			} else { ?>
-									&nbsp;<?php
-																			} ?>
+									<b><i><?php echo "R$ $cashInF"; ?></i></b>
+								<?php
+								} else { ?>
+									&nbsp;
+								<?php
+								} ?>
 							</td>
 						</tr>
 
@@ -920,10 +870,12 @@ ini_set('track_errors', 1);
 							<td><?php
 								if ($cashOut > 0) { ?>
 									<font color="gold"><b><i>&nbsp;Retificação de Lançamento(Déb):&nbsp; </b></i></font>
-									<b><i><?php echo "R$ $cashOutF"; ?></i></b><?php
-																			} else { ?>
-									&nbsp;<?php
-																			} ?>
+									<b><i><?php echo "R$ $cashOutF"; ?></i></b>
+								<?php
+								} else { ?>
+									&nbsp;
+								<?php
+								} ?>
 							</td>
 						</tr>
 					</table>
@@ -933,23 +885,25 @@ ini_set('track_errors', 1);
 
 		<p>
 			<center><a href='index.php?c_s=<?php echo $lg_user; ?>'><img src='./images/ok28.gif' border='0'></a></center>
-		</p><?php
+		</p>
+	<?php
 
-		} else { ?>
+	} else { ?>
 		<br><br><br>
 		<font size='6'><b>
 				<center>Acesso <font color='gold'>
 						<blink><u>não Autorizado</u></blink>
 						<font color='#FFFFFF'>!!!</center>
 			</b></font><br><br><br>
-		<center><a href='index.php?c_s=<?php echo $lg_user; ?>'><img src='images/voltar.gif'></a></center><br><br><?php
-																												}
+		<center><a href='index.php?c_s=<?php echo $lg_user; ?>'><img src='images/voltar.gif'></a></center><br><br>
+	<?php
+	}
 
-																												// Encerrando a Conexão
-																												mysqli_free_result($rsA);
-																												mysqli_free_result($rsR);
-																												$SisRot = "S-7.5.0.1";
-																												include "rodape.php"; ?>
+	// Encerrando a Conexão
+	mysqli_free_result($rsA);
+	mysqli_free_result($rsR);
+	$SisRot = "S-7.5.0.1";
+	include "rodape.php"; ?>
 
 </body>
 

@@ -36,7 +36,7 @@
 	print_r($dados);
 	echo "</pre>";
 	exit();*/
-	
+
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R3.1.1.1";
@@ -126,8 +126,8 @@
 			if ($regsr_ci > 0) {
 				$codigo_atual = $UltDoc_ci;
 				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2); 
-				$novo_numero = intval($numero) + 1; 
+				$numero = substr($codigo_atual, 2);
+				$novo_numero = intval($numero) + 1;
 				$UltDoc_ci = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
 
@@ -141,8 +141,8 @@
 			if ($regsr_rc > 0) {
 				$codigo_atual = $UltDoc_rc;
 				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2); 
-				$novo_numero = intval($numero) + 1; 
+				$numero = substr($codigo_atual, 2);
+				$novo_numero = intval($numero) + 1;
 				$UltDoc_rc = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
 
@@ -157,7 +157,7 @@
 				$codigo_atual = $UltDoc_mc;
 				$prefixo = substr($codigo_atual, 0, 2);
 				$numero = substr($codigo_atual, 2);
-				$novo_numero = intval($numero) + 1; 
+				$novo_numero = intval($numero) + 1;
 				$UltDoc_mc = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
 
@@ -171,8 +171,8 @@
 			if ($regsr_mp > 0) {
 				$codigo_atual = $UltDoc_mp;
 				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2); 
-				$novo_numero = intval($numero) + 1; 
+				$numero = substr($codigo_atual, 2);
+				$novo_numero = intval($numero) + 1;
 				$UltDoc_mp = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
 
@@ -186,8 +186,8 @@
 			if ($regsr_vt > 0) {
 				$codigo_atual = $UltDoc_vt;
 				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2); 
-				$novo_numero = intval($numero) + 1; 
+				$numero = substr($codigo_atual, 2);
+				$novo_numero = intval($numero) + 1;
 				$UltDoc_vt = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
 
@@ -201,8 +201,8 @@
 			if ($regsr_sp > 0) {
 				$codigo_atual = $UltDoc_sp;
 				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2); 
-				$novo_numero = intval($numero) + 1; 
+				$numero = substr($codigo_atual, 2);
+				$novo_numero = intval($numero) + 1;
 				$UltDoc_sp = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
 
@@ -216,8 +216,8 @@
 			if ($regsr_out > 0) {
 				$codigo_atual = $UltDoc_out;
 				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2); 
-				$novo_numero = intval($numero) + 1; 
+				$numero = substr($codigo_atual, 2);
+				$novo_numero = intval($numero) + 1;
 				$UltDoc_out = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
 
@@ -265,7 +265,7 @@
 			}
 
 			// Preparando a Via Cliente 
-	?>
+			?>
 			<form name="geraprod" method="post" action="via1newpag.php">
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtsen" value="<?php echo $PC; ?>">

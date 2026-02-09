@@ -18,3 +18,279 @@ Stack trace:
 [14-Jan-2026 13:46:30 America/Sao_Paulo] PHP Warning:  mysqli_free_result() expects parameter 1 to be mysqli_result, null given in /var/www/html/caixa/studio/fccxant.php on line 1545
 [14-Jan-2026 13:51:31 America/Sao_Paulo] PHP Warning:  mysqli_free_result() expects parameter 1 to be mysqli_result, null given in /var/www/html/caixa/studio/fccxant.php on line 1532
 [14-Jan-2026 13:56:59 America/Sao_Paulo] PHP Warning:  mysqli_free_result() expects parameter 1 to be mysqli_result, null given in /var/www/html/caixa/studio/fccxant.php on line 1532
+[07-Feb-2026 10:47:48 America/Sao_Paulo] PHP Warning:  mysqli_free_result() expects parameter 1 to be mysqli_result, null given in /var/www/html/caixa/studio/fccxant.php on line 1532
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined index: txtcod in /var/www/html/caixa/studio/fcxparcsem.php on line 66
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined index: txtsen in /var/www/html/caixa/studio/fcxparcsem.php on line 67
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorChav in /var/www/html/caixa/studio/fcxparcsem.php on line 192
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorProd in /var/www/html/caixa/studio/fcxparcsem.php on line 213
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorConc in /var/www/html/caixa/studio/fcxparcsem.php on line 231
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 249
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContParc in /var/www/html/caixa/studio/fcxparcsem.php on line 267
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 285
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropParc in /var/www/html/caixa/studio/fcxparcsem.php on line 303
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: VrPRecsF in /var/www/html/caixa/studio/fcxparcsem.php on line 321
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: VrBookRecF in /var/www/html/caixa/studio/fcxparcsem.php on line 339
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorResg in /var/www/html/caixa/studio/fcxparcsem.php on line 357
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: PgtoTot in /var/www/html/caixa/studio/fcxparcsem.php on line 375
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorEstorno in /var/www/html/caixa/studio/fcxparcsem.php on line 393
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: Dinheiro in /var/www/html/caixa/studio/fcxparcsem.php on line 407
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: PixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 421
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: PixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 435
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: CardDeb in /var/www/html/caixa/studio/fcxparcsem.php on line 449
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: CardVista in /var/www/html/caixa/studio/fcxparcsem.php on line 463
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcLj in /var/www/html/caixa/studio/fcxparcsem.php on line 477
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 489
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: Recl in /var/www/html/caixa/studio/fcxparcsem.php on line 536
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: cashTot in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:11:59 America/Sao_Paulo] PHP Notice:  Undefined variable: cashTot in /var/www/html/caixa/studio/fcxparcsem.php on line 607
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined index: txtcod in /var/www/html/caixa/studio/fcxparcsem.php on line 66
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined index: txtsen in /var/www/html/caixa/studio/fcxparcsem.php on line 67
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorChav in /var/www/html/caixa/studio/fcxparcsem.php on line 192
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorProd in /var/www/html/caixa/studio/fcxparcsem.php on line 213
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorConc in /var/www/html/caixa/studio/fcxparcsem.php on line 231
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 249
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContParc in /var/www/html/caixa/studio/fcxparcsem.php on line 267
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 285
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropParc in /var/www/html/caixa/studio/fcxparcsem.php on line 303
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: VrPRecsF in /var/www/html/caixa/studio/fcxparcsem.php on line 321
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: VrBookRecF in /var/www/html/caixa/studio/fcxparcsem.php on line 339
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorResg in /var/www/html/caixa/studio/fcxparcsem.php on line 357
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: PgtoTot in /var/www/html/caixa/studio/fcxparcsem.php on line 375
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorEstorno in /var/www/html/caixa/studio/fcxparcsem.php on line 393
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: Dinheiro in /var/www/html/caixa/studio/fcxparcsem.php on line 407
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: PixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 421
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: PixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 435
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: CardDeb in /var/www/html/caixa/studio/fcxparcsem.php on line 449
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: CardVista in /var/www/html/caixa/studio/fcxparcsem.php on line 463
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcLj in /var/www/html/caixa/studio/fcxparcsem.php on line 477
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 489
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: Recl in /var/www/html/caixa/studio/fcxparcsem.php on line 536
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: cashTot in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:12:33 America/Sao_Paulo] PHP Notice:  Undefined variable: cashTot in /var/www/html/caixa/studio/fcxparcsem.php on line 607
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined index: txtcod in /var/www/html/caixa/studio/fcxparcsem.php on line 66
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined index: txtsen in /var/www/html/caixa/studio/fcxparcsem.php on line 67
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorChav in /var/www/html/caixa/studio/fcxparcsem.php on line 192
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorProd in /var/www/html/caixa/studio/fcxparcsem.php on line 213
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorConc in /var/www/html/caixa/studio/fcxparcsem.php on line 231
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 249
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContParc in /var/www/html/caixa/studio/fcxparcsem.php on line 267
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 285
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropParc in /var/www/html/caixa/studio/fcxparcsem.php on line 303
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: VrPRecsF in /var/www/html/caixa/studio/fcxparcsem.php on line 321
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: VrBookRecF in /var/www/html/caixa/studio/fcxparcsem.php on line 339
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorResg in /var/www/html/caixa/studio/fcxparcsem.php on line 357
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: PgtoTot in /var/www/html/caixa/studio/fcxparcsem.php on line 375
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorEstorno in /var/www/html/caixa/studio/fcxparcsem.php on line 393
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: Dinheiro in /var/www/html/caixa/studio/fcxparcsem.php on line 407
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: PixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 421
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: PixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 435
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: CardDeb in /var/www/html/caixa/studio/fcxparcsem.php on line 449
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: CardVista in /var/www/html/caixa/studio/fcxparcsem.php on line 463
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcLj in /var/www/html/caixa/studio/fcxparcsem.php on line 477
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 489
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: Recl in /var/www/html/caixa/studio/fcxparcsem.php on line 536
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: cashTot in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:13:43 America/Sao_Paulo] PHP Notice:  Undefined variable: cashTot in /var/www/html/caixa/studio/fcxparcsem.php on line 607
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined index: txtcod in /var/www/html/caixa/studio/fcxparcsem.php on line 66
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined index: txtsen in /var/www/html/caixa/studio/fcxparcsem.php on line 67
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorChav in /var/www/html/caixa/studio/fcxparcsem.php on line 192
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorProd in /var/www/html/caixa/studio/fcxparcsem.php on line 213
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorConc in /var/www/html/caixa/studio/fcxparcsem.php on line 231
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 249
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContParc in /var/www/html/caixa/studio/fcxparcsem.php on line 267
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 285
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropParc in /var/www/html/caixa/studio/fcxparcsem.php on line 303
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: RecPrdt in /var/www/html/caixa/studio/fcxparcsem.php on line 317
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: VrBookRecF in /var/www/html/caixa/studio/fcxparcsem.php on line 339
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorResg in /var/www/html/caixa/studio/fcxparcsem.php on line 357
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: PgtoTot in /var/www/html/caixa/studio/fcxparcsem.php on line 375
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorEstorno in /var/www/html/caixa/studio/fcxparcsem.php on line 393
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: cashTot in /var/www/html/caixa/studio/fcxparcsem.php on line 403
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: PixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 421
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: PixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 435
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: CardDeb in /var/www/html/caixa/studio/fcxparcsem.php on line 449
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: CardVista in /var/www/html/caixa/studio/fcxparcsem.php on line 463
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcLj in /var/www/html/caixa/studio/fcxparcsem.php on line 477
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 489
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: Recl in /var/www/html/caixa/studio/fcxparcsem.php on line 536
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:15:34 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined index: txtcod in /var/www/html/caixa/studio/fcxparcsem.php on line 66
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined index: txtsen in /var/www/html/caixa/studio/fcxparcsem.php on line 67
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorChav in /var/www/html/caixa/studio/fcxparcsem.php on line 192
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorProd in /var/www/html/caixa/studio/fcxparcsem.php on line 213
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorConc in /var/www/html/caixa/studio/fcxparcsem.php on line 231
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 249
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContParc in /var/www/html/caixa/studio/fcxparcsem.php on line 267
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 285
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropParc in /var/www/html/caixa/studio/fcxparcsem.php on line 303
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: RecPrdt in /var/www/html/caixa/studio/fcxparcsem.php on line 317
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: VrBookRecF in /var/www/html/caixa/studio/fcxparcsem.php on line 339
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorResg in /var/www/html/caixa/studio/fcxparcsem.php on line 357
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: PgtoTot in /var/www/html/caixa/studio/fcxparcsem.php on line 375
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorEstorno in /var/www/html/caixa/studio/fcxparcsem.php on line 393
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: cashTot in /var/www/html/caixa/studio/fcxparcsem.php on line 403
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: PixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 421
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: PixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 435
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: CardDeb in /var/www/html/caixa/studio/fcxparcsem.php on line 449
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: CardVista in /var/www/html/caixa/studio/fcxparcsem.php on line 463
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcLj in /var/www/html/caixa/studio/fcxparcsem.php on line 477
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 489
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: Recl in /var/www/html/caixa/studio/fcxparcsem.php on line 536
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:34 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:52 America/Sao_Paulo] PHP Notice:  Undefined index: txtcod in /var/www/html/caixa/studio/fcxparcsem.php on line 66
+[07-Feb-2026 21:19:52 America/Sao_Paulo] PHP Notice:  Undefined index: txtsen in /var/www/html/caixa/studio/fcxparcsem.php on line 67
+[07-Feb-2026 21:19:52 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[07-Feb-2026 21:19:52 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[07-Feb-2026 21:19:52 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorChav in /var/www/html/caixa/studio/fcxparcsem.php on line 192
+[07-Feb-2026 21:19:52 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorProd in /var/www/html/caixa/studio/fcxparcsem.php on line 213
+[07-Feb-2026 21:19:52 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorConc in /var/www/html/caixa/studio/fcxparcsem.php on line 231
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 249
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContParc in /var/www/html/caixa/studio/fcxparcsem.php on line 267
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 285
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropParc in /var/www/html/caixa/studio/fcxparcsem.php on line 303
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: RecPrdt in /var/www/html/caixa/studio/fcxparcsem.php on line 317
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: VrBookRecF in /var/www/html/caixa/studio/fcxparcsem.php on line 339
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorResg in /var/www/html/caixa/studio/fcxparcsem.php on line 357
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: PgtoTot in /var/www/html/caixa/studio/fcxparcsem.php on line 375
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorEstorno in /var/www/html/caixa/studio/fcxparcsem.php on line 393
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: cashTot in /var/www/html/caixa/studio/fcxparcsem.php on line 403
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: PixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 421
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: PixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 435
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: CardDeb in /var/www/html/caixa/studio/fcxparcsem.php on line 449
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: CardVista in /var/www/html/caixa/studio/fcxparcsem.php on line 463
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcLj in /var/www/html/caixa/studio/fcxparcsem.php on line 477
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 489
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: Recl in /var/www/html/caixa/studio/fcxparcsem.php on line 536
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:53 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Undefined index: txtuser in /var/www/html/caixa/studio/fcxparcsem.php on line 58
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Undefined index: txtcod in /var/www/html/caixa/studio/fcxparcsem.php on line 66
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Undefined index: txtsen in /var/www/html/caixa/studio/fcxparcsem.php on line 67
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Undefined index: txtfch in /var/www/html/caixa/studio/fcxparcsem.php on line 68
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Warning:  A non-numeric value encountered in /var/www/html/caixa/studio/fcxparcsem.php on line 68
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Undefined index: txtcash in /var/www/html/caixa/studio/fcxparcsem.php on line 69
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Warning:  number_format() expects parameter 1 to be float, string given in /var/www/html/caixa/studio/fcxparcsem.php on line 70
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 22
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 23
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 24
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Undefined variable: rsA in /var/www/html/caixa/studio/fcxparcsem.php on line 940
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Warning:  mysqli_free_result() expects parameter 1 to be mysqli_result, null given in /var/www/html/caixa/studio/fcxparcsem.php on line 940
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Undefined variable: rsR in /var/www/html/caixa/studio/fcxparcsem.php on line 941
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Warning:  mysqli_free_result() expects parameter 1 to be mysqli_result, null given in /var/www/html/caixa/studio/fcxparcsem.php on line 941
+[07-Feb-2026 21:19:57 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/rodape.php on line 10
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined index: txtcod in /var/www/html/caixa/studio/fcxparcsem.php on line 66
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined index: txtsen in /var/www/html/caixa/studio/fcxparcsem.php on line 67
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorChav in /var/www/html/caixa/studio/fcxparcsem.php on line 192
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorProd in /var/www/html/caixa/studio/fcxparcsem.php on line 213
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorConc in /var/www/html/caixa/studio/fcxparcsem.php on line 231
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 249
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContParc in /var/www/html/caixa/studio/fcxparcsem.php on line 267
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropEnt in /var/www/html/caixa/studio/fcxparcsem.php on line 285
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropParc in /var/www/html/caixa/studio/fcxparcsem.php on line 303
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: RecPrdt in /var/www/html/caixa/studio/fcxparcsem.php on line 317
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: VrBookRecF in /var/www/html/caixa/studio/fcxparcsem.php on line 339
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorResg in /var/www/html/caixa/studio/fcxparcsem.php on line 357
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: PgtoTot in /var/www/html/caixa/studio/fcxparcsem.php on line 375
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorEstorno in /var/www/html/caixa/studio/fcxparcsem.php on line 393
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: cashTot in /var/www/html/caixa/studio/fcxparcsem.php on line 403
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: PixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 421
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: PixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 435
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: CardDeb in /var/www/html/caixa/studio/fcxparcsem.php on line 449
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: CardVista in /var/www/html/caixa/studio/fcxparcsem.php on line 463
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcLj in /var/www/html/caixa/studio/fcxparcsem.php on line 477
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 489
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: Recl in /var/www/html/caixa/studio/fcxparcsem.php on line 536
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 540
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: cDebFinal in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotV in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPLoja in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 541
+[07-Feb-2026 21:20:16 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 541

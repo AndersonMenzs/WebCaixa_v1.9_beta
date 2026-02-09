@@ -126,6 +126,7 @@
     // Obtendo o Fechamento Parcial
     include "conexao.php";
     include "dbselect.php";
+    
     $sqlP = "select fch from datafix";
     $rsP  = mysqli_query($conec, $sqlP) or die("Erro de Acesso #1. Contate seu Administrador.");
     $lnP  = mysqli_fetch_array($rsP);

@@ -4,6 +4,11 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
+ini_set('html_errors', 1);
+ini_set('error_log', 'php_errors.log');
+ini_set('log_errors', 1);
+ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
+ini_set('track_errors', 1);
 
 ?>
 
@@ -33,21 +38,15 @@ ini_set('display_startup_errors', 1);
 		}
 
 		document.onkeydown = F5;
-	</script>
-	<?php
+	</script><?php
 
-	// Obtendo a Data Atual
-	$DataAtual = date('Y-m-d');
-	$DataFecha = date('d/m/Y');
-
-	?>
-
+				// Obtendo a Data Atual
+				$DataAtual = date('Y-m-d');
+				$DataFecha = date('d/m/Y'); ?>
 </head>
 
 <body background="../images/bg1.jpg" link='lime' vlink='#FFFFFF' alink='lime' text="#FFFFFF">
-
 	<?php
-
 	include "../cabecprs.php";
 
 	// Obtendo o Login
@@ -69,7 +68,6 @@ ini_set('display_startup_errors', 1);
 	if ($dtAbre == '') {
 		$dtAbre = date('Y-m-d');
 	}
-
 	$dty     = substr($dtAbre, 0, 4);
 	$dtm     = substr($dtAbre, 5, 2);
 	$dtd     = substr($dtAbre, 8, 2);
@@ -111,9 +109,9 @@ ini_set('display_startup_errors', 1);
 		$credTotV     = 0;
 		$credTotPLoja = 0;
 		$credTotPAdm  = 0;
-		//$cheqTotV     = 0;
-		//$cheqTotPre   = 0;
-		//$DepClientes  = 0;
+		$cheqTotV     = 0;
+		$cheqTotPre   = 0;
+		$DepClientes  = 0;
 		$cashTot      = 0;
 		$DDP          = 0;
 		$MCS          = 0;
@@ -127,7 +125,6 @@ ini_set('display_startup_errors', 1);
 		// Obtendo Apelido
 		include "conexao.php";
 		include "dblog.php";
-
 		$sqlP = "select ape from pessoal where mat = '$user' ";
 		$rsP  = mysqli_query($conec, $sqlP) or die("File fccxant Error #50. Contate seu Administrador.");
 		$lnP = mysqli_fetch_array($rsP);
@@ -135,7 +132,6 @@ ini_set('display_startup_errors', 1);
 
 		// Obtendo Dados do PC
 		include "dbselect.php";
-
 		$sqlI = "select * from inicial";
 		$rsI  = mysqli_query($conec, $sqlI) or die("File fccxant Error #51. Contate seu Administrador.");
 		$lnI = mysqli_fetch_array($rsI);
@@ -159,11 +155,9 @@ ini_set('display_startup_errors', 1);
 		$cashOut   = $lnA['cashout'];
 		$cashOutF  = number_format($cashOut, 2, ",", ".");
 		$IncSobra  = $lnA['incsobra'];
-
 		if ($IncSobra == NULL) {
 			$IncSobra = 0;
 		}
-
 		$IncSobraF = number_format($IncSobra, 2, ",", ".");
 		$cashIn    = $lnA['cashin'];
 		$cashInF   = number_format($cashIn, 2, ",", ".");
@@ -193,7 +187,6 @@ ini_set('display_startup_errors', 1);
 			$RecChav = $RecChav + $VlRec;
 			$ValorChav    = number_format($RecChav, 2, ",", ".");
 		}
-
 		if ($ValorChav == '') {
 			$ValorChav = '0,00';
 			$NTChav = 0;
@@ -214,7 +207,6 @@ ini_set('display_startup_errors', 1);
 			$RecProd = $RecProd + $VlRec;
 			$ValorProd    = number_format($RecProd, 2, ",", ".");
 		}
-
 		if ($ValorProd == '') {
 			$ValorProd = '0,00';
 		}
@@ -226,25 +218,22 @@ ini_set('display_startup_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='2' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #8. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
 			$RecConc = $RecConc + $VlRec;
 			$ValorConc = number_format($RecConc, 2, ",", ".");
 		}
-
 		if ($ValorConc == '') {
 			$ValorConc = '0,00';
 		}
 
 		// Totalizando Taxa Bebê Estrella
-		/*$sqlR  = "SELECT numdoc FROM registro where tiporec='A' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc, numdoc";
+		$sqlR  = "SELECT numdoc FROM registro where tiporec='A' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc, numdoc";
 		$rsR   = mysqli_query($conec, $sqlR) or die('File fccxant Error #9. Contate seu Administrador.');
 		$NBebe = mysqli_num_rows($rsR);
 
 		$sqlR  = "SELECT vlrec FROM registro where tiporec='A' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR   = mysqli_query($conec, $sqlR) or die('File fccxant Error #10. Contate seu Administrador.');
-		
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec     = $lnR['vlrec'];
 			$RecBebe   = $RecBebe + $VlRec;
@@ -252,7 +241,7 @@ ini_set('display_startup_errors', 1);
 		}
 		if ($ValorBebe == '') {
 			$ValorBebe = '0,00';
-		}*/
+		}
 
 		// Totalizando Contratos (Entrada)
 		$sqlR = "SELECT numdoc FROM registro where tiporec='3' and subtipo = 'CNTE' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc";
@@ -261,13 +250,11 @@ ini_set('display_startup_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='3' and subtipo = 'CNTE' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #12. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec        = $lnR['vlrec'];
 			$RecCntE      = $RecCntE + $VlRec;
 			$ValorContEnt = number_format($RecCntE, 2, ",", ".");
 		}
-
 		if ($ValorContEnt == '') {
 			$ValorContEnt = '0,00';
 		}
@@ -279,13 +266,11 @@ ini_set('display_startup_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='3' and subtipo = 'CNTP' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #14. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$RecCntP  = $RecCntP + $VlRec;
 			$ValorContParc = number_format($RecCntP, 2, ",", ".");
 		}
-
 		if ($ValorContParc == '') {
 			$ValorContParc = '0,00';
 		}
@@ -297,13 +282,11 @@ ini_set('display_startup_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='4' and subtipo = 'PVDE' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #16. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec        = $lnR['vlrec'];
 			$RecPVDE      = $RecPVDE + $VlRec;
 			$ValorPropEnt = number_format($RecPVDE, 2, ",", ".");
 		}
-
 		if ($ValorPropEnt == '') {
 			$ValorPropEnt = '0,00';
 		}
@@ -315,13 +298,11 @@ ini_set('display_startup_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='4' and subtipo = 'PVDP' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #18. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec         = $lnR['vlrec'];
 			$RecPVDP       = $RecPVDP + $VlRec;
 			$ValorPropParc = number_format($RecPVDP, 2, ",", ".");
 		}
-
 		if ($ValorPropParc == '') {
 			$ValorPropParc = '0,00';
 		}
@@ -333,13 +314,11 @@ ini_set('display_startup_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='6' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #20. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$RecPrdt  = $RecPrdt + $VlRec;
 			$VrPRecsF = number_format($RecPrdt, 2, ",", ".");
 		}
-
 		if ($VrPRecsF == '') {
 			$VrPRecsF = '0,00';
 		}
@@ -351,34 +330,30 @@ ini_set('display_startup_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='7' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #22. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$RecBook  = $RecBook + $VlRec;
 			$VrBookRecF = number_format($RecBook, 2, ",", ".");
 		}
-
 		if ($VrBookRecF == '') {
 			$VrBookRecF = '0,00';
 		}
 
 		// Resgate de Cheques
-		/*$sqlR = "SELECT numdoc FROM registro where tiporec='5' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc";
+		$sqlR = "SELECT numdoc FROM registro where tiporec='5' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #23. Contate seu Administrador.');
 		$NResgate = mysqli_num_rows($rsR);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='5' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #24. Contate seu Administrador.');
-		
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$RecResg  = $RecResg + $VlRec;
 			$ValorResg = number_format($RecResg, 2, ",", ".");
 		}
-		
 		if ($ValorResg == '') {
 			$ValorResg = '0,00';
-		}*/
+		}
 
 		// Despesas
 		$sqlR = "SELECT numdoc FROM registro where tiporec='8' and estorno <> 'x' and datarec = '$dtOpen' ";
@@ -387,13 +362,11 @@ ini_set('display_startup_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='8' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #26. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$RecDesp  = $RecDesp + $VlRec;
 			$PgtoTot = number_format($RecDesp, 2, ",", ".");
 		}
-
 		if ($PgtoTot == '') {
 			$PgtoTot = '0,00';
 		}
@@ -405,13 +378,11 @@ ini_set('display_startup_errors', 1);
 
 		$sqlR = "SELECT vlrec FROM registro where tiporec='E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #28. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$RecEst  = $RecEst + $VlRec;
 			$ValorEstorno = number_format($RecEst, 2, ",", ".");
 		}
-
 		if ($ValorEstorno == '') {
 			$ValorEstorno = '0,00';
 		}
@@ -419,13 +390,11 @@ ini_set('display_startup_errors', 1);
 		// Arrecadado em Dinheiro
 		$sqlR = "SELECT vlrec FROM registro where modpgto='10' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #29. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$cashTot  = $cashTot + $VlRec;
 			$Dinheiro = number_format($cashTot, 2, ",", ".");
 		}
-
 		if ($Dinheiro == '') {
 			$Dinheiro = '0,00';
 		}
@@ -433,13 +402,11 @@ ini_set('display_startup_errors', 1);
 		// Arrecadado em Pix QRCode
 		$sqlR = "SELECT vlrec FROM registro where modpgto='70' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #29. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$pixQRCode = $pixQRCode + $VlRec;
 			$PixQRCode = number_format($pixQRCode, 2, ",", ".");
 		}
-
 		if ($PixQRCode == '') {
 			$PixQRCode = '0,00';
 		}
@@ -447,13 +414,11 @@ ini_set('display_startup_errors', 1);
 		// Arrecadado em Pix CNPJ
 		$sqlR = "SELECT vlrec FROM registro where modpgto='71' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #29. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$pixCNPJ = $pixCNPJ + $VlRec;
 			$PixCNPJ = number_format($pixCNPJ, 2, ",", ".");
 		}
-
 		if ($PixCNPJ == '') {
 			$PixCNPJ = '0,00';
 		}
@@ -461,13 +426,11 @@ ini_set('display_startup_errors', 1);
 		// Arrecadado em Card Débito
 		$sqlR = "SELECT vlrec FROM registro where modpgto='20' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #30. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
 			$cDebFinal  = $cDebFinal + $VlRec;
 			$CardDeb = number_format($cDebFinal, 2, ",", ".");
 		}
-
 		if ($CardDeb == '') {
 			$CardDeb = '0,00';
 		}
@@ -475,13 +438,11 @@ ini_set('display_startup_errors', 1);
 		// Arrecadado em Card Crédito a Vista
 		$sqlR = "SELECT vlrec FROM registro where modpgto='30' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #31. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
 			$credTotV  = $credTotV + $VlRec;
 			$CardVista = number_format($credTotV, 2, ",", ".");
 		}
-
 		if ($CardVista == '') {
 			$CardVista = '0,00';
 		}
@@ -489,7 +450,6 @@ ini_set('display_startup_errors', 1);
 		// Arrecadado em Card Crédito Parc. Loja
 		$sqlR = "SELECT vlrec FROM registro where modpgto='31' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #32. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$credTotPLoja  = $credTotPLoja + $VlRec;
@@ -502,27 +462,23 @@ ini_set('display_startup_errors', 1);
 		// Arrecadado em Card Crédito Parc. Adm.
 		$sqlR = "SELECT vlrec FROM registro where modpgto='32' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #33. Contate seu Administrador.');
-
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
 			$credTotPAdm  = $credTotPAdm + $VlRec;
 			$CardParcAdm = number_format($credTotPAdm, 2, ",", ".");
 		}
-
 		if ($CardParcAdm == '') {
 			$CardParcAdm = '0,00';
 		}
 
 		// Arrecadado em Cheques a Vista
-		/*$sqlR = "SELECT vlrec FROM registro where modpgto='40' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
+		$sqlR = "SELECT vlrec FROM registro where modpgto='40' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #34. Contate seu Administrador.');
-		
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
 			$cheqTotV  = $cheqTotV + $VlRec;
 			$CheqTotal = number_format($cheqTotV, 2, ",", ".");
 		}
-		
 		if ($CheqTotal == '') {
 			$CheqTotal = '0,00';
 		}
@@ -530,13 +486,11 @@ ini_set('display_startup_errors', 1);
 		// Arrecadado em Cheques Pre-datados
 		$sqlR = "SELECT vlrec FROM registro where modpgto='50' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #35. Contate seu Administrador.');
-		
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
 			$cheqTotPre  = $cheqTotPre + $VlRec;
 			$CheqPre = number_format($cheqTotPre, 2, ",", ".");
 		}
-		
 		if ($CheqPre == '') {
 			$CheqPre = '0,00';
 		}
@@ -544,31 +498,26 @@ ini_set('display_startup_errors', 1);
 		// Depósito de Clientes
 		$sqlR = "SELECT vlrec FROM registro where modpgto='60' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #36. Contate seu Administrador.');
-		
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec    = $lnR['vlrec'];
 			$DepClientes   = $DepClientes + $VlRec;
 			$DepCli = number_format($DepClientes, 2, ",", ".");
 		}
-		
 		if ($DepCli == '') {
 			$DepCli = '0,00';
-		}*/
+		}
 
 		// Obtendo o Total Depositado
 		$sqlR = "select * from depositos where dtdep = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die("File fccxant Error #37. Contate seu Administrador.");
-
 		while ($lnR = mysqli_fetch_array($rsR)) {
 			$Dep  = $lnR['valor'];
 			$Recl = $Recl + $Dep;
 		}
-
 		$Recolh = number_format($Recl, 2, ".", "");
 
 		// Totalizando Recebimentos
-		//$Entradas    = $cashTot + $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $DepClientes + $pixQRCode + $pixCNPJ;
-		$Entradas    = $cashTot + $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $pixQRCode + $pixCNPJ;
+		$Entradas    = $cashTot + $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $DepClientes + $pixQRCode + $pixCNPJ;
 		$DemaisTot   = $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $pixQRCode + $pixCNPJ;
 		$Geral       = $Recolh + $DemaisTot;
 		$TotIn     = number_format($Entradas, 2, ",", ".");
@@ -579,7 +528,6 @@ ini_set('display_startup_errors', 1);
 		// Desmembrando Pagamentos
 		$sqlD = "SELECT subtipo,vlrec FROM registro where tiporec='8' and estorno <> 'x' and datarec = '$dtOpen' ";
 		$rsD  = mysqli_query($conec, $sqlD) or die('File fccxant Error #38. Contate seu Administrador.');
-
 		while ($lnD  = mysqli_fetch_array($rsD)) {
 			$STipo   = $lnD['subtipo'];
 			$VlRec   = $lnD['vlrec'];
@@ -742,6 +690,14 @@ ini_set('display_startup_errors', 1);
 							</td>
 						</tr>
 
+						<!--<tr>
+			    <td>
+			       <font color="gold"><b><i>Taxa Bebê Estrella:. . . </b></i></font>
+			       <b><i><?php //echo "$NBebe itens --> R$ $ValorBebe"; 
+							?></i></b>
+			    </td>
+			 </tr>-->
+
 						<tr>
 							<td>
 								<font color="gold"><b><i>Contratos (Entrada):. . </b></i></font>
@@ -781,6 +737,14 @@ ini_set('display_startup_errors', 1);
 								<font color="gold"><b><i>Books &agrave; Vista: . . . . . .<font color='#FFFFFF'><?php echo " $NBookRec itens --> R$ $VrBookRecF"; ?> </b></i></font>
 							</td>
 						</tr>
+
+						<!--<tr>
+								<td>
+									<font color="gold"><b><i>Resgate de Cheques: . </b></i></font>
+									<b><i><?php //echo "$NResgate itens --> R$ $ValorResg"; 
+											?></i></b>
+								</td>
+						</tr>-->
 
 						<tr>
 							<td>
@@ -839,12 +803,12 @@ ini_set('display_startup_errors', 1);
 							</td>
 						</tr>
 
-						<tr>
-							<td>
-								<font color="gold"><b><i>Cartão Crédito (Parc. Loja): . </b></i></font>
-								<b><i>R$ <?php echo $CardParcLj; ?></i></b>
-							</td>
-						</tr>
+						<!--<tr>
+			   <td>
+			      <font color="gold"><b><i>Cartão Crédito (Parc. Loja): . </b></i></font>
+			      <b><i>R$ <?php echo $CardParcLj; ?></i></b>
+			   </td>
+			</tr>-->
 
 						<tr>
 							<td>
@@ -852,6 +816,27 @@ ini_set('display_startup_errors', 1);
 								<b><i>R$ <?php echo $CardParcAdm; ?></i></b>
 							</td>
 						</tr>
+
+						<!--<tr>
+			   <td>
+			      <font color="gold"><b><i>Cheques (A Vista):. . . . . . . . </b></i></font>
+			      <b><i>R$ <?php echo $CheqTotal; ?></i></b>
+			   </td>
+			</tr>
+
+			<tr>
+			   <td>
+			      <font color="gold"><b><i>Cheques (Pré-datados):. . . . </b></i></font>
+			      <b><i>R$ <?php echo $CheqPre; ?></i></b>
+			   </td>
+			</tr>
+
+						<tr>
+							<td>
+								<font color="gold"><b><i>Depósito de Clientes: . . . . . </b></i></font>
+								<b><i><?php echo "R$ $DepCli"; ?></i></b>
+							</td>
+						</tr>-->
 					</table><br>
 
 					<center>
@@ -870,12 +855,8 @@ ini_set('display_startup_errors', 1);
 					<table border="05" cellpadding="02" cellspacing="0" align="right">
 						<tr>
 							<td align='center'>
-								<font color="aqua">
-									<b>
-										<i>TOTALIZAÇÕES: &nbsp;&nbsp;<font color='#FFFFFF'>
-												<blink>
-													<?php echo "$TotAut Autenticações Válidas"; ?></blink></b></i>
-								</font>
+								<font color="aqua"><b><i>TOTALIZAÇÕES: &nbsp;&nbsp;<font color='#FFFFFF'>
+												<blink><?php echo "$TotAut Autenticações Válidas"; ?></blink></b></i></font>
 							</td>
 						</tr>
 
@@ -937,12 +918,9 @@ ini_set('display_startup_errors', 1);
 									<font color="gold"><b><i>&nbsp;Sobra Incorporada ao Caixa: </b></i></font>
 									<b><i><?php echo "R$ $IncSobraF"; ?></i></b>
 								<?php
-								} else {
-								?>
-									&nbsp;
-								<?php
-								}
-								?>
+								} else { ?>
+									&nbsp;<?php
+										} ?>
 							</td>
 						</tr>
 
@@ -952,12 +930,9 @@ ini_set('display_startup_errors', 1);
 									<font color="gold"><b><i>&nbsp;Retificação de Lançamento(Créd): </b></i></font>
 									<b><i><?php echo "R$ $cashInF"; ?></i></b>
 								<?php
-								} else {
-								?>
-									&nbsp;
-								<?php
-								}
-								?>
+								} else { ?>
+									&nbsp;<?php
+										} ?>
 							</td>
 						</tr>
 
@@ -968,12 +943,9 @@ ini_set('display_startup_errors', 1);
 									<font color="gold"><b><i>&nbsp;Retificação de Lançamento(Déb):&nbsp; </b></i></font>
 									<b><i><?php echo "R$ $cashOutF"; ?></i></b>
 								<?php
-								} else {
-								?>
-									&nbsp;
-								<?php
-								}
-								?>
+								} else { ?>
+									&nbsp;<?php
+										} ?>
 							</td>
 						</tr>
 					</table>
@@ -1264,6 +1236,8 @@ ini_set('display_startup_errors', 1);
 						FROM
 							`spoolfch`";
 			$rsATF_3 = mysqli_query($conec, $sqlATF_3) or die("Erro ao inserir dados: " . mysqli_error($conec));
+		} else {
+			echo "Não foi possivel inserir os dados na antfech";
 		}
 
 		//=============================================================================================================
@@ -1318,7 +1292,7 @@ ini_set('display_startup_errors', 1);
 		shell_exec("echo 'Pix CNPJ:. . . . . . . . . . . . R$ $PixCNPJ' >> /backups/fccxant_$dtAbre.txt");
 		//shell_exec("echo 'Cheques (A Vista): . . . . . . . R$ $CheqTotal' >> /backups/fccxant_$dtAbre.txt");
 		//shell_exec("echo 'Cheques (Pre-datados): . . . . . R$ $CheqPre' >> /backups/fccxant_$dtAbre.txt");
-		//shell_exec("echo 'Deposito de Clientes:. . . . . . R$ $DepCli' >> /backups/fccxant_$dtAbre.txt");
+		shell_exec("echo 'Deposito de Clientes:. . . . . . R$ $DepCli' >> /backups/fccxant_$dtAbre.txt");
 		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
 		shell_exec("echo 'Total de Recebimentos: . . . . . R$ $TotIn' >> /backups/fccxant_$dtAbre.txt");
 

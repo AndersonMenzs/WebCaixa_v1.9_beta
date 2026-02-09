@@ -63,11 +63,11 @@ document.onkeydown = F5;
 	  </td>
 	</tr>
 
-	<tr>
+	<!--<tr>
 	  <td>
 	      <a href="depant.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a><font size='4'><b><i>- Recolhimentos Anteriores (Reimpressão) </i></b></font>
 	  </td>
-	</tr>
+	</tr>-->
      </table>
 
     <br><br><center><a href="index.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></center><br><?php
