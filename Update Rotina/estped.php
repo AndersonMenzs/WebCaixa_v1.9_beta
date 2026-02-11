@@ -52,6 +52,11 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	var_dump($dados);
+	echo "</pre>";*/
+
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R1.1";
@@ -65,6 +70,8 @@
 	$Mat_Vend  = $_POST['mat_vend'];
 	$Vendedora = $_POST['vendedora'];
 	$Cliente   = $_POST['cliente'];
+	$Pct_ped   = $_POST['pct_ped'];
+	$Tam_ped   = $_POST['tam_ped'];
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -90,7 +97,6 @@
 		$HoraRecE  = $lnE['horarec'];
 		$VlPago    = $lnE['vlrec'];
 		$VlRec     = $VlRec + $VlPago;
-		$VlRecF    = number_format($VlRec, 2, ',', '.');
 		$OperadorE = $lnE['operador'];
 		$Mat_Vend = $lnE['mat_vend'];
 		$Vendedora = $lnE['vendedora'];
@@ -134,7 +140,16 @@
 	$CodRec      = $lnR['codrec'];
 	$NomeRec     = $lnR['nomerec'];
 	mysqli_free_result($rsE);
-	mysqli_free_result($rsR); ?>
+	mysqli_free_result($rsR);
+
+	// Consulta o número de documento e soma os valores
+	$sqlP = "SELECT SUM(vlrec) AS vlrec FROM registro WHERE numdoc = '$NumDocE' AND datarec = '$DataRecE' ";
+	$rsP  = mysqli_query($conec, $sqlP) or die("Erro de Banco de Dados #4. Contate seu Administrador");
+	$lnP  = mysqli_fetch_array($rsP);
+	$VlRec = $lnP['vlrec'];
+	$VlRecF    = number_format($VlRec, 2, ',', '.');
+
+	?>
 
 	<font color="gold" size="6">
 		<b>
@@ -186,6 +201,30 @@
 
 					<tr>
 						<td width="50%" align="center">
+							<font color='gold' size='5'><b><i>Pedido</i></b></font>
+						</td>
+						<td width="50%" align="center">
+							<font color='#FFFFFF' size='5'><b><i>
+										<blink>
+											<?php
+											if ($Pct_ped <> '') {
+												echo $Pct_ped;
+											?>
+												<input type="hidden" name="pct_ped" value="<?php echo $Pct_ped; ?>">
+											<?php } elseif ($Tam_ped <> '') {
+												echo $Tam_ped;
+											?>
+												<input type="hidden" name="tam_ped" value="<?php echo $Tam_ped; ?>">
+											<?php
+											}
+											?>
+										</blink>
+									</i></b></font>
+						</td>
+					</tr>
+
+					<tr>
+						<td width="50%" align="center">
 							<font color='gold' size='5'><b><i>Forma de Pagamento</i></b></font>
 						</td>
 						<td width="50%" align="center">
@@ -215,7 +254,7 @@
 							<font color='gold' size='5'><b><i>Senha</i></b></font>
 						</td>
 						<td width="60%" align="center">
-							<input type='password' name='txtsen' size='6' maxlength='6' class="campos">
+							<input type='password' name='txtsen' size='6' maxlength='6' class="campos" autofocus>
 						</td>
 					</tr>
 			</table>

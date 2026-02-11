@@ -31,9 +31,10 @@ $dtAut     = $_GET['dtAut'];
 $SgRec     = $_GET['SgRec'];
 $VrEnt     = $_GET['VrEnt'];
 $VrEntr    = number_format($VrEnt, 2, ",", ".");
-$VrEntrF   = $_GET['VrEnt'];
+$VrEntrF   = str_replace(".", "", $VrEnt);
 $Mat       = $_GET['Mat'];
 $Opt       = $_GET['Opt'];
+$Tipo_ped = $_GET['tipo_ped'];
 
 ?>
 
@@ -274,13 +275,19 @@ $Opt       = $_GET['Opt'];
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle><b>
                         <font size=1>VENDEDORA</font>
-                    </b></td>
+                    </b>
+                </td>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
                 </td>
-                <!--<td style="border-top: 1px solid #999999; border-left: 1px solid #999999; border-right: 1px solid #999999" colspan=2 align="center" valign=middle><b>
-                    <font size=1 color="#999999">CARTÃO CRÉDITO</font>
-                </b></td>-->
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                    colspan=2 align="center" valign=middle><b>
+                        <font size=1>PEDIDO</font>
+                    </b>
+                </td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
             </tr>
             <tr>
                 <td align="left" valign=bottom>
@@ -295,12 +302,12 @@ $Opt       = $_GET['Opt'];
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <font size=1><?php echo $Vendedora; ?></font>
                 </td>
-                <!--<td align="left" valign=bottom>
-                <font size=1><br></font>
-            </td>
-            <td style="border-bottom: 1px solid #999999; border-left: 1px solid #999999; border-right: 1px solid #999999" colspan=2 align="center" valign=middle sdval="0" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
-                <font size=1 color="#999999">R$ 0,00</font>
-            </td>-->
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
+                    <font size=1><?php echo $Tipo_ped; ?></font>
+                </td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
@@ -490,7 +497,7 @@ $Opt       = $_GET['Opt'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrEnt . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrEntrF . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
@@ -568,7 +575,7 @@ $Opt       = $_GET['Opt'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrEntrF; ?></font>
+                    <font size=1><?php echo "R$ " . $VrEntr; ?></font>
                 </td>
             </tr>
             <tr>
@@ -596,9 +603,14 @@ $Opt       = $_GET['Opt'];
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
                 </td>
-                <!--<td style="border-top: 1px solid #999999; border-left: 1px solid #999999; border-right: 1px solid #999999" colspan=2 align="center" valign=middle><b>
-                    <font size=1 color="#999999">CARTÃO CRÉDITO</font>
-                </b></td>-->
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                    colspan=2 align="center" valign=middle><b>
+                        <font size=1>PEDIDO</font>
+                    </b>
+                </td>
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td>
             </tr>
             <tr>
                 <td align="left" valign=bottom>
@@ -613,12 +625,11 @@ $Opt       = $_GET['Opt'];
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <font size=1><?php echo $Vendedora; ?></font>
                 </td>
-                <!--<td align="left" valign=bottom>
-                <font size=1><br></font>
-            </td>
-            <td style="border-bottom: 1px solid #999999; border-left: 1px solid #999999; border-right: 1px solid #999999" colspan=2 align="center" valign=middle sdval="0" sdnum="1046;0;[$R$-416] #.##0,00;[RED]-[$R$-416] #.##0,00">
-                <font size=1 color="#999999">R$ 0,00</font>
-            </td>-->
+                <td align="left" valign=bottom>
+                    <font size=1><br></font>
+                </td><td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
+                    <font size=1><?php echo $Tipo_ped; ?></font>
+                </td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
@@ -808,7 +819,7 @@ $Opt       = $_GET['Opt'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrEnt . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrEntrF . $Mat; ?></font>
                 </td>
             </tr>
             <tr>

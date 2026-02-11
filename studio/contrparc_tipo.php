@@ -279,7 +279,9 @@
 						<input type="hidden" name="parcial" id="parcial" value="<?php echo $Parcial; ?>">
 						<font color='#FFFFFF' size='4'><b><i><span id="Parcial"><?php echo $Parcial; ?></span></i></b></font>
 					</td>
+
 					<input type="hidden" name="txtuser" value="<?php echo htmlspecialchars($lg_user, ENT_QUOTES); ?>">
+
 					<td align="center">
 						<select name="lsPr1" class="campos">
 							<?php
@@ -307,6 +309,66 @@
 					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
 						<input type="text" name="txt1" id="txt1" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt1', event); validate(this)">
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<select name="lsPr2" class="campos">
+							<?php
+							// Obtendo a Relação
+							// Conectando ao Banco de Dados
+							include "dbselect.php";
+
+							// Criando a Instrução SQL de Consulta
+							$sqlpr = "select * from formapag where codpag <= 31 or codpag >= 70 and codpag <> 99 order by codpag";
+
+							// Consultando os Registros
+							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+
+							// Criando o Array para o campo PC
+							while ($lnpr = mysqli_fetch_array($rspr)) {
+								$CodPag  = $lnpr['codpag'];
+								$ModPag  = $lnpr['modpag'];
+							?>
+								<option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
+							<?php
+							}
+							mysqli_free_result($rspr);
+							?>
+						</select>
+					<td align="center">
+						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
+						<input type="text" name="txt2" id="txt2" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt2', event); validate(this)">
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<select name="lsPr3" class="campos">
+							<?php
+							// Obtendo a Relação
+							// Conectando ao Banco de Dados
+							include "dbselect.php";
+
+							// Criando a Instrução SQL de Consulta
+							$sqlpr = "select * from formapag where codpag <= 31 or codpag >= 70 and codpag <> 99 order by codpag";
+
+							// Consultando os Registros
+							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+
+							// Criando o Array para o campo PC
+							while ($lnpr = mysqli_fetch_array($rspr)) {
+								$CodPag  = $lnpr['codpag'];
+								$ModPag  = $lnpr['modpag'];
+							?>
+								<option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
+							<?php
+							}
+							mysqli_free_result($rspr);
+							?>
+						</select>
+					<td align="center">
+						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
+						<input type="text" name="txt3" id="txt3" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt3', event); validate(this)">
 					</td>
 				</tr>
 			</table><br>

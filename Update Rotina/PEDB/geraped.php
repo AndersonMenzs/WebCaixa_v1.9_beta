@@ -41,6 +41,11 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	var_dump($dados);
+	echo "</pre>";
+	exit();*/
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -61,6 +66,7 @@
 	$Mat_Vend  = $_POST['txtmatvend'];
 	$Vendedora = $_POST['vendedora'];
 	$Cliente   = $_POST['cliente'];
+	$Tipo_ped   = isset($_POST['pct_ped']) ? $_POST['pct_ped'] : $_POST['tam_ped'];
 
 	// Truncar o nome da vendedora com o primeiro nome completo e após o primeiro espaco, deixar somente uma letra e ponto.
 	$Vendedora = strtoupper($Vendedora);
@@ -103,6 +109,7 @@
 				<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">
 				<input type="hidden" name="txthora" value="<?php echo $Opt; ?>">
+				<input type="hidden" name="tipo_ped" value="<?php echo $Tipo_ped; ?>">
 				<input type="hidden" name="txtvalor" value="<?php echo $VrEntr; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
 				<input type="hidden" name="txtmatvend" value="<?php echo $Mat_Vend; ?>">

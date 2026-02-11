@@ -517,21 +517,21 @@
             <!-- COLUNA 2: AUTENTICAÇÕES 16-30 -->
             <div class="col-md-4 coluna auth-column">
                 <div class="auth-header">AUTENTICAÇÕES 16-30</div>
-                <div class="auth-line">0016217131721700641 060226 R$ 0,00 TXPGRT001123-1</div>
-                <div class="auth-line">001721713191012903 060226 R$ 50,00 CNTDIN001123-1</div>
-                <div class="auth-line">0018217134521700642 060226 R$ 0,00 TXPGRT000233-3</div>
-                <div class="auth-line">001921714191012913 060226 R$ 50,00 CNTDIN000233-3</div>
-                <div class="auth-line">0020217143021700643 060226 R$ 0,00 TXPGRT001123-1</div>
-                <div class="auth-line">0021217143121700644 060226 R$ 0,00 TXPGRT001123-1</div>
-                <div class="auth-line">00222171451223473 060226 R$ 19,80 PRDDIN001123-1</div>
-                <div class="auth-line">002321715041011711 060226 R$ 142,00 CNTDIN001123-1</div>
-                <div class="auth-line">002421715311010464 060226 R$ 250,00 CNTDIN001123-1</div>
-                <div class="auth-line">00242171010464 060226 R$ 250,00 DIN001123-1-BOOK-</div>
-                <div class="auth-line">00252171010464 060226 R$ 135,00 DIN001123-1-BOOK-</div>
-                <div class="auth-line">002521715441010464 060226 R$ 135,00 CNTDIN001123-1</div>
-                <div class="auth-line">0026217155821700645 060226 R$ 0,00 TXPGRT001123-1</div>
-                <div class="auth-line">002721716161011510 060226 R$ 200,00 CNTDIN000233-3</div>
-                <div class="auth-line">0028217162621700646 060226 R$ 0,00 TXPGRT001123-1</div>
+                <div class="auth-line">0016217131721700641060226R$0,00TXPGRT001123-1</div>
+                <div class="auth-line">001721713191012903060226R$50,00CNTDIN001123-1</div>
+                <div class="auth-line">0018217134521700642060226R$0,00TXPGRT000233-3</div>
+                <div class="auth-line">001921714191012913060226R$50,00CNTDIN000233-3</div>
+                <div class="auth-line">0020217143021700643060226R$0,00TXPGRT001123-1</div>
+                <div class="auth-line">0021217143121700644060226R$0,00TXPGRT001123-1</div>
+                <div class="auth-line">00222171451223473060226R$19,80PRDDIN001123-1</div>
+                <div class="auth-line">002321715041011711060226R$142,00CNTDIN001123-1</div>
+                <div class="auth-line">002421715311010464060226R$250,00CNTDIN001123-1</div>
+                <div class="auth-line">00242171010464060226R$250,00DIN001123-1-BOOK-</div>
+                <div class="auth-line">00252171010464060226R$135,00DIN001123-1-BOOK-</div>
+                <div class="auth-line">002521715441010464060226R$135,00CNTDIN001123-1</div>
+                <div class="auth-line">0026217155821700645060226R$0,00TXPGRT001123-1</div>
+                <div class="auth-line">002721716161011510060226R$200,00CNTDIN000233-3</div>
+                <div class="auth-line">0028217162621700646060226R$0,00TXPGRT001123-1</div>
             </div>
             
             <!-- COLUNA 3: AUTENTICAÇÕES 31-39 -->

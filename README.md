@@ -431,5 +431,28 @@ SELECT
 
 ```
 
+## Pedidos de Books e Posters
 
-## Recolhimentos
+Criar tabela de produtos
+
+```sql
+CREATE TABLE studio.produtos (
+    cod_prod char(2) NOT NULL,
+    nome_prod varchar(100) NOT NULL);
+```
+
+Inserção de dados na tabela produtos
+
+```sql
+INSERT INTO studio.produtos VALUES
+('1','PACOTE FOTOGRÁFICO VIPP'),
+('2','PACOTE FOTOGRÁFICO UNIVERSAL'),
+('3','PACOTE FOTOGRÁFICO STYLLO'),
+('4','PACOTE FOTOGRÁFICO PERSONALITÉ'),
+('5','PACOTE FOTOGRÁFICO ESTRELINHA'),
+('6','PACOTE FOTOGRÁFICO NEWA PERSONALITÉ'),
+('7','PACOTE FOTOGRÁFICO DIAMANTE'),
+('8','PACOTE FOTOGRÁFICO ESPECIAL'),
+('9','AMPLIAÇÕES 30x40'),
+('10','AMPLIAÇÕES 50x60');
+```

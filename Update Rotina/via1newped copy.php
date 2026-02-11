@@ -37,8 +37,7 @@ include "./valor_ext.php";
 	$Mat_Vend  = $_POST['txtmatvend'];
 	$Vendedora = $_POST['vendedora'];
 	$Cliente   = $_POST['cliente'];
-	$vlr_ext   = valorPorExtenso($VrEntr);
-	$Tipo_ped = $_POST['tipo_ped'];
+	$vlr_ext   = valorPorExtenso($VrEnt);
 
 	// Obtendo o código do PC
 	$sqlPC = "select pc from inicial";
@@ -75,7 +74,6 @@ include "./valor_ext.php";
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&ModPag=<?php echo urlencode($ModPag); ?>' +
-				'&tipo_ped=<?php echo urlencode($Tipo_ped); ?>' +
 				'&fpag_1=<?php echo urlencode($FPag_1); ?>' +
 				'&fpag_2=<?php echo urlencode($FPag_2); ?>' +
 				'&fpag_3=<?php echo urlencode($FPag_3); ?>' +

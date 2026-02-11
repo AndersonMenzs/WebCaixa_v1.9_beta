@@ -1,9 +1,14 @@
 <?php
 
 // Debug
-error_reporting(E_ALL);
+/*error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
+ini_set('html_errors', 1);
+ini_set('error_log', 'php_errors.log');
+ini_set('log_errors', 1);
+ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
+ini_set('track_errors', 1);*/
 
 ?>
 
@@ -33,21 +38,15 @@ ini_set('display_startup_errors', 1);
 		}
 
 		document.onkeydown = F5;
-	</script>
-	<?php
+	</script><?php
 
-	// Obtendo a Data Atual
-	$DataAtual = date('Y-m-d');
-	$DataFecha = date('d/m/Y');
-
-	?>
-
+				// Obtendo a Data Atual
+				$DataAtual = date('Y-m-d');
+				$DataFecha = date('d/m/Y'); ?>
 </head>
 
 <body background="../images/bg1.jpg" link='lime' vlink='#FFFFFF' alink='lime' text="#FFFFFF">
-
 	<?php
-
 	include "../cabecprs.php";
 
 	// Obtendo o Login
@@ -69,7 +68,6 @@ ini_set('display_startup_errors', 1);
 	if ($dtAbre == '') {
 		$dtAbre = date('Y-m-d');
 	}
-
 	$dty     = substr($dtAbre, 0, 4);
 	$dtm     = substr($dtAbre, 5, 2);
 	$dtd     = substr($dtAbre, 8, 2);
@@ -111,9 +109,9 @@ ini_set('display_startup_errors', 1);
 		$credTotV     = 0;
 		$credTotPLoja = 0;
 		$credTotPAdm  = 0;
-		//$cheqTotV     = 0;
-		//$cheqTotPre   = 0;
-		//$DepClientes  = 0;
+		$cheqTotV     = 0;
+		$cheqTotPre   = 0;
+		$DepClientes  = 0;
 		$cashTot      = 0;
 		$DDP          = 0;
 		$MCS          = 0;
@@ -127,7 +125,6 @@ ini_set('display_startup_errors', 1);
 		// Obtendo Apelido
 		include "conexao.php";
 		include "dblog.php";
-
 		$sqlP = "select ape from pessoal where mat = '$user' ";
 		$rsP  = mysqli_query($conec, $sqlP) or die("File fccxant Error #50. Contate seu Administrador.");
 		$lnP = mysqli_fetch_array($rsP);
@@ -135,7 +132,6 @@ ini_set('display_startup_errors', 1);
 
 		// Obtendo Dados do PC
 		include "dbselect.php";
-
 		$sqlI = "select * from inicial";
 		$rsI  = mysqli_query($conec, $sqlI) or die("File fccxant Error #51. Contate seu Administrador.");
 		$lnI = mysqli_fetch_array($rsI);
@@ -159,11 +155,9 @@ ini_set('display_startup_errors', 1);
 		$cashOut   = $lnA['cashout'];
 		$cashOutF  = number_format($cashOut, 2, ",", ".");
 		$IncSobra  = $lnA['incsobra'];
-
 		if ($IncSobra == NULL) {
 			$IncSobra = 0;
 		}
-
 		$IncSobraF = number_format($IncSobra, 2, ",", ".");
 		$cashIn    = $lnA['cashin'];
 		$cashInF   = number_format($cashIn, 2, ",", ".");
@@ -177,7 +171,7 @@ ini_set('display_startup_errors', 1);
 		$SRV = 0;
 		$VTR = 0;
 		$OUT = 0;
-		$Versao = "3.05";
+		$Versao = "4.0";
 
 		// Totalizando Chaveiros
 		$sqlT = "SELECT vltx FROM taxas where codigo = 'CHV' order by datalt desc";
@@ -190,6 +184,7 @@ ini_set('display_startup_errors', 1);
 
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
+			echo $_POST['vlrec'];
 			$RecChav = $RecChav + $VlRec;
 			$ValorChav    = number_format($RecChav, 2, ",", ".");
 		}
@@ -200,7 +195,6 @@ ini_set('display_startup_errors', 1);
 		} else {
 			$NTChav = $RecChav / $VLTX;
 		}
-
 		// Totalizando Taxa de Produção
 		$sqlR = "SELECT numdoc FROM registro where tiporec='1' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #5. Contate seu Administrador.');
@@ -984,7 +978,13 @@ ini_set('display_startup_errors', 1);
 
 		// Calculando Recolhimentos
 		$TPgto = $Pgtos + $Recl;
-		$TotPgto = number_format($TPgto, 2, ",", "."); ?>
+		$TotPgto = number_format($TPgto, 2, ",", "."); 
+		
+		// Variáveis zeradas
+		$NBebe = '0';
+		$NResgate = '0';
+		
+		?>
 
 		<p>
 			<center><a href='http://localhost/caixa'><img src='./images/sair2.gif' border='0'></a>&nbsp;&nbsp;&nbsp;

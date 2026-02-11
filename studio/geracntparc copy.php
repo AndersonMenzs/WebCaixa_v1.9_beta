@@ -261,7 +261,7 @@ error_reporting(E_ALL);
 					$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #8. Contate seu Administrador.");
 					$PIni = $PIni + 1;
 				}
-
+exit;
 				// Criando o spoll
 				$RegFull  = 10000 + $Reg;
 				$RegSp    = substr($RegFull, 1, 4);

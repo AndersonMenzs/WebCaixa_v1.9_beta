@@ -15,17 +15,16 @@
 	</style>
 
 	<script>
-		function toggleDoc(doc) {
-			var linhas = document.querySelectorAll(".doc_" + doc);
-
-			linhas.forEach(function(l) {
-				if (l.style.display === "none") {
-					l.style.display = "table-row";
-				} else {
-					l.style.display = "none";
-				}
-			});
+		function F5(event) {
+			var tecla = document.all ? window.event.keyCode : event.which;
+			if (document.all) {
+				window.event.keyCode = 0;
+				window.event.returnValue = false;
+			}
+			if (tecla == 116) return false;
 		}
+
+		document.onkeydown = F5;
 	</script>
 
 	<?php
@@ -76,48 +75,12 @@
 		include "conexao.php";
 		include "dbselect.php";
 
-		$sql = "
-				SELECT 
-					caixa.fita,
-					registro.reg,
-					registro.numdoc,
-					registro.tiporec,
-					registro.subtipo,
-					registro.parcela,
-					registro.datarec,
-					registro.horarec,
-					registro.vlrec,
-					registro.operador,
-					registro.estorno,
-					registro.modpgto,
-
-					COALESCE(tiporec.siglarec, registro.subtipo) AS siglarec,
-					formapag.siglapag
-
-				FROM caixa
-
-				INNER JOIN registro 
-					ON caixa.dtopen = registro.datarec
-
-				LEFT JOIN tiporec 
-					ON tiporec.siglarec = registro.subtipo
-
-				LEFT JOIN formapag 
-					ON formapag.codpag = registro.modpgto
-
-				WHERE registro.datarec = '$DataForm'
-
-				ORDER BY 
-					registro.reg,
-					registro.numdoc,
-					registro.parcela,
-					registro.subtipo
-				";
-
+		$sql  = "select caixa.fita, registro.reg, registro.numdoc, registro.tiporec, registro.parcela, registro.datarec, registro.horarec, registro.vlrec, registro.operador, registro.estorno from caixa inner join registro on caixa.dtopen = registro.datarec where registro.datarec = '$DataForm' ";
 		$rs   = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #1. Contate seu Administrador");
 		$regs = mysqli_num_rows($rs);
 
-		if ($regs > 0) { ?>
+		if ($regs > 0) {
+	?>
 			<table border="01" cellpadding="05" cellspacing="0" align="center">
 				<tr>
 					<td>
@@ -128,9 +91,6 @@
 					</td>
 					<td>
 						<font size='4' color='aqua'><b><i>Documento</i></b></font>
-					</td>
-					<td>
-						<font size='4' color='aqua'><b><i>Rec.</i></b></font>
 					</td>
 					<td>
 						<font size='4' color='aqua'><b><i>Parcela</i></b></font>
@@ -145,9 +105,6 @@
 						<font size='4' color='aqua'><b><i>Valor Rec</i></b></font>
 					</td>
 					<td>
-						<font size='4' color='aqua'><b><i>Forma</i></b></font>
-					</td>
-					<td>
 						<font size='4' color='aqua'><b><i>Operador</i></b></font>
 					</td>
 					<td>
@@ -156,104 +113,79 @@
 				</tr>
 
 				<?php
-
-				$docsCount = [];
-				$docsTotal = [];
-				$docsEstorno = [];
-
-				mysqli_data_seek($rs, 0);
-
-				while ($tmp = mysqli_fetch_assoc($rs)) {
-
-					$d   = $tmp['numdoc'];
-					$vlr = floatval($tmp['vlrec']);
-
-					if (!empty($tmp['estorno'])) {
-						$docsEstorno[$d] = true;
-					}
-
-					if (!isset($docsCount[$d])) {
-						$docsCount[$d] = 0;
-						$docsTotal[$d] = 0;
-					}
-
-					$docsCount[$d]++;
-					$docsTotal[$d] += $vlr;
-				}
-
-				mysqli_data_seek($rs, 0);
-
-				$docsIndex = [];
-
-				mysqli_data_seek($rs, 0);
-
-				while ($ln = mysqli_fetch_assoc($rs)) {
-
-					$Doc     = $ln['numdoc'];
-
-					if (!isset($docsIndex[$Doc])) {
-						$docsIndex[$Doc] = 0;
-					}
-
-					$docsIndex[$Doc]++;
-
+				while ($ln       = mysqli_fetch_array($rs)) {
 					$Fita    = $ln['fita'];
 					$Reg     = $ln['reg'];
 					$RegF    = substr(10000 + $Reg, 1, 4);
-					$SubTipo = $ln['siglarec'];
-					$ModPgto = $ln['siglapag'];
-					$Parc    = $ln['parcela'] ?: "-";
-
+					$Doc     = $ln['numdoc'];
+					$TipoRec = $ln['tiporec'];
+					$Parc    = $ln['parcela'];
 					$DtRec   = $ln['datarec'];
-					$RecFull = substr($DtRec, 8, 2) . "/" . substr($DtRec, 5, 2) . "/" . substr($DtRec, 0, 4);
-
+					$RecA  = substr($DtRec, 0, 4);
+					$RecM  = substr($DtRec, 5, 2);
+					$RecD  = substr($DtRec, 8, 2);
+					$RecFull = "$RecD-$RecM-$RecA";
 					$HrRec   = $ln['horarec'];
 					$VlRec   = $ln['vlrec'];
 					$VlRecF  = number_format($VlRec, 2, ",", ".");
-
 					$Oper    = $ln['operador'];
-					$OpFull  = substr($Oper, 0, 7) . "-" . substr($Oper, 7, 1);
-
+					$Op1   = substr($user, 0, 7);
+					$Dv1   = substr($user, 7, 1);
+					$OpFull  = "$Op1-$Dv1";
 					$Estorno = $ln['estorno'];
 
-					// Linha Pai
-					if ($docsIndex[$Doc] == 1) {
-
-						echo "<tr onclick=\"toggleDoc('{$Doc}')\" style='cursor:pointer'>";
-
-						echo "
-							<td><b><i>{$Fita}</b></i></td>
-							<td align='right'><b><i>{$RegF}</b></i></td>
-							<td align='right'><b><i>{$Doc}</b></i></td>
-							<td align='right'><b><i>{$SubTipo}</b></i></td>
-							<td align='center'><b><i>-</b></i></td>
-							<td align='right'><b><i>{$RecFull}</b></i></td>
-							<td align='right'><b><i>{$HrRec}</b></i></td>
-							<td align='right'><b><i>R$ " . number_format($docsTotal[$Doc], 2, ",", ".") . "</b></i></td>
-							<td align='center'><b><i>-</b></i></td>
-							<td align='right'><b><i>{$OpFull}</b></i></td>
-							<td align='center'><b>".(!empty($docsEstorno[$Doc]) ? "x" : "-")."</b></td>
-							</tr>";
+					if ($TipoRec <> 'E') {
+				?>
+						<tr>
+							<td>
+								<font><b><i><?php echo "$Fita"; ?></i></b></font>
+							</td>
+							<td align='right'>
+								<font><b><i><?php echo "$RegF"; ?></i></b></font>
+							</td>
+							<td align='right'>
+								<font><b><i><?php echo "$Doc"; ?></i></b></font>
+							</td>
+							<td align='center'>
+								<?php
+								if ($Parc == 0) {
+									$Parc = "-";
+								}
+								?>
+								<font><b><i><?php echo "$Parc"; ?></i></b></font>
+							</td>
+							<td align='right'>
+								<font><b><i><?php echo "$RecFull"; ?></i></b></font>
+							</td>
+							<td align='right'>
+								<font><b><i><?php echo "$HrRec"; ?></i></b></font>
+							</td>
+							<td align='right'>
+								<font><b><i>R$ <?php echo "$VlRecF"; ?></i></b></font>
+							</td>
+							<td align='right'>
+								<font><b><i><?php echo "$OpFull"; ?></i></b></font>
+							</td>
+							<td align='center'>
+								<font><b><i>
+											<?php
+											if ($Estorno <> "") {
+											?>
+												<font color='gold'>
+													<blink>Sim</blink>
+												<?php
+											} else {
+												?>
+													Não
+												<?php
+											}
+												?>
+										</i></b></font>
+							</td>
+						</tr>
+				<?php
 					}
-
-					// Linha Filha
-					echo "<tr class='doc_{$Doc}' style='display:none;color:gold;'>";
-
-					echo "
-						<td><b><i>{$Fita}</b></i></td>
-						<td align='right'><b><i>{$RegF}</b></i></td>
-						<td align='right'><b><i>{$Doc}</b></i></td>
-						<td align='right'><b><i>{$SubTipo}</b></i></td>
-						<td align='center'><b><i>{$Parc}</b></i></td>
-						<td align='right'><b><i>{$RecFull}</b></i></td>
-						<td align='right'><b><i>{$HrRec}</b></i></td>
-						<td align='right'><b><i>R$ {$VlRecF}</b></i></td>
-						<td align='right'><b><i>{$ModPgto}</b></i></td>
-						<td align='right'><b><i>{$OpFull}</b></i></td>
-						<td align='center'><b><i>" . ($Estorno <> "" ? "x" : "-") . "</b></i></td>
-						</tr>";
 				}
-
 				?>
 			</table>
 		<?php
