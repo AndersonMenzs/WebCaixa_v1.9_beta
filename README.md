@@ -288,10 +288,66 @@ INSERT INTO studio.produtos VALUES
 ('10','AMPLIAÇÕES 50x60');
 ```
 
-# Fechamento do Caixa
+# Alteração na tabela registro na coluna numdoc (Recebimentos)
 
-Algumas colunas de algumas tabelas precisam ser alteradas para os valores de 7 caracteres possanser inseridos no banco de dados.
+Algumas colunas de algumas tabelas precisam ser alteradas para os valores de 7 caracteres para serem inseridos no banco de dados.
 
 ```sql
 ALTER TABLE registro MODIFY numdoc CHAR(12);
+```
+# Alteração na tabela caixa no campo type decimal (Fechamento Caixa)
+
+Na tabela caixa precisa alterar o type decimal.
+
+```sql
+START TRANSACTION;
+
+-- Fazer backup da estrutura antes da alteração
+CREATE TABLE caixa_backup_20260212 AS SELECT * FROM caixa;
+
+-- Aplicar as alterações
+ALTER TABLE caixa
+MODIFY COLUMN vrtxprod DECIMAL(8,2),
+MODIFY COLUMN vrconcurso DECIMAL(8,2),
+MODIFY COLUMN vrbebe DECIMAL(8,2),
+MODIFY COLUMN vrchav DECIMAL(8,2),
+MODIFY COLUMN vrcontent DECIMAL(8,2),
+MODIFY COLUMN vrcontparc DECIMAL(8,2),
+MODIFY COLUMN vrpropent DECIMAL(8,2),
+MODIFY COLUMN vrpropparc DECIMAL(8,2),
+MODIFY COLUMN vrprodsrec DECIMAL(8,2),
+MODIFY COLUMN vrbookrec DECIMAL(8,2),
+MODIFY COLUMN vrresgate DECIMAL(8,2),
+MODIFY COLUMN vrestorno DECIMAL(8,2),
+MODIFY COLUMN numerario DECIMAL(8,2),
+MODIFY COLUMN despddp DECIMAL(8,2),
+MODIFY COLUMN despmcs DECIMAL(8,2),
+MODIFY COLUMN despmdv DECIMAL(8,2),
+MODIFY COLUMN despmpd DECIMAL(8,2),
+MODIFY COLUMN desprcl DECIMAL(8,2),
+MODIFY COLUMN despsrv DECIMAL(8,2),
+MODIFY COLUMN despvtr DECIMAL(8,2),
+MODIFY COLUMN despout DECIMAL(8,2),
+MODIFY COLUMN incsobra DECIMAL(8,2);
+
+-- Verificar as colunas alteradas
+SELECT 
+    COLUMN_NAME,
+    COLUMN_TYPE,
+    DATA_TYPE,
+    NUMERIC_PRECISION,
+    NUMERIC_SCALE
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_SCHEMA = DATABASE() 
+    AND TABLE_NAME = 'caixa'
+    AND DATA_TYPE = 'decimal'
+ORDER BY COLUMN_NAME;
+
+-- Se estiver tudo correto:
+COMMIT;
+SELECT 'Alterações aplicadas com sucesso!' as Status;
+
+-- Se precisar desfazer:
+-- ROLLBACK;
+-- SELECT 'Alterações desfeitas.' as Status;
 ```
