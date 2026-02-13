@@ -142,18 +142,17 @@ error_reporting(E_ALL);
 
 					if ($K == $QtdeParc) {
 
-					if ($FPag_1 <> "00") {
-						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
-					}
+						if ($FPag_1 <> "00") {
+							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
+						}
 
-					if ($FPag_2 <> "00") {
-						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
-					}
+						if ($FPag_2 <> "00") {
+							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
+						}
 
-					if ($FPag_3 <> "00") {
-						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
-					}
-
+						if ($FPag_3 <> "00") {
+							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
+						}
 					} else {
 						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
@@ -241,17 +240,17 @@ error_reporting(E_ALL);
 				for ($K = 1; $K <= $QtdeParc; $K++) {
 					if ($K == $QtdeParc) {
 
-					if ($FPag_1 <> "00") {
-						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
-					}
+						if ($FPag_1 <> "00") {
+							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
+						}
 
-					if ($FPag_2 <> "00") {
-						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
-					}
+						if ($FPag_2 <> "00") {
+							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
+						}
 
-					if ($FPag_3 <> "00") {
-						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
-					}
+						if ($FPag_3 <> "00") {
+							$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
+						}
 					} else {
 						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_1', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 						$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_2', '$PIni', '$dtRec', '$hora', '$ParcUlt', '$MatClean', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
@@ -261,7 +260,7 @@ error_reporting(E_ALL);
 					$rsGr  = mysqli_query($conec, $sqlGr) or die("File geracntparc Error #8. Contate seu Administrador.");
 					$PIni = $PIni + 1;
 				}
-exit;
+
 				// Criando o spoll
 				$RegFull  = 10000 + $Reg;
 				$RegSp    = substr($RegFull, 1, 4);

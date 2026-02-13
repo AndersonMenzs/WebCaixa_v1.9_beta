@@ -1,45 +1,45 @@
 <?php
 // ========== DADOS DO CONTRATO ==========
 $contrato = [
-    'total' => 300.00,
-    'qtde_parcelas' => 10,
-    'valor_parcela' => 300.00 / 10
+    'total' => 743.84,
+    'qtde_parcelas' => 6,
+    'valor_parcela' => 743.89 / 6
 ];
 
 // ========== ARRAY DE PAGAMENTOS ==========
 $pagamentos = [];
 
 // MÊS 1 - Pagou 1 parcela
-$pagamentos[] = [
+/*$pagamentos[] = [
     'mes' => 1,
     'parcelas_pagas' => 1,
     'detalhes' => [
-        ['forma' => 'DIN', 'descricao' => 'Dinheiro', 'valor' => 10.00],
+        ['forma' => 'DIN', 'descricao' => 'Dinheiro', 'valor' => ],
         ['forma' => 'CD', 'descricao' => 'Cartão Débito', 'valor' => 10.00],
         ['forma' => 'CC', 'descricao' => 'Cartão Crédito', 'valor' => 10.00]
     ]
-];
+];*/
 
 // MÊS 2 - Pagou 4 parcelas
 $pagamentos[] = [
     'mes' => 2,
-    'parcelas_pagas' => 4,
+    'parcelas_pagas' => 6,
     'detalhes' => [
-        ['forma' => 'DIN', 'descricao' => 'Dinheiro', 'valor' => 50.00],
-        ['forma' => 'CC', 'descricao' => 'Cartão Crédito', 'valor' => 50.00],
-        ['forma' => 'CD', 'descricao' => 'Cartão Débito', 'valor' => 20.00]
+        ['forma' => 'DIN', 'descricao' => 'Dinheiro', 'valor' => 500.00],
+        ['forma' => 'CC', 'descricao' => 'Cartão Crédito', 'valor' => 143.89],
+        ['forma' => 'CD', 'descricao' => 'Cartão Débito', 'valor' => 100.00]
     ]
 ];
 
 // MÊS 3 - Pagou 2 parcelas (exemplo)
-$pagamentos[] = [
+/*$pagamentos[] = [
     'mes' => 3,
     'parcelas_pagas' => 2,
     'detalhes' => [
         ['forma' => 'PIX', 'descricao' => 'PIX', 'valor' => 40.00],
         ['forma' => 'DIN', 'descricao' => 'Dinheiro', 'valor' => 20.00]
     ]
-];
+];*/
 
 // ========== FUNÇÕES ==========
 
