@@ -351,3 +351,10 @@ SELECT 'Alterações aplicadas com sucesso!' as Status;
 -- ROLLBACK;
 -- SELECT 'Alterações desfeitas.' as Status;
 ```
+
+# Alterar o type da coluna spo e spo2 nas tabelas spool e spool2.
+
+```sql
+ALTER TABLE spool MODIFY spo varchar(50);
+ALTER TABLE spool2 MODIFY spo2 varchar(50);
+```
