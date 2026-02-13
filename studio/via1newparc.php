@@ -19,11 +19,11 @@ include "./valor_ext.php";
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 
 	<?php
-	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	var_dump($dados);
 	echo "</pre>";
-	exit();*/
+	exit();
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -45,6 +45,8 @@ include "./valor_ext.php";
 	$dtAut     = $dRec . $mRec . $aRec;
 	$FPag_1      = isset($_POST['lsPr1']) ? (trim($_POST['lsPr1']) == '00' ? '' : trim($_POST['lsPr1'])) : '';
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
+	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
+	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
 	$ModPag    = trim($_POST['modpag']);
 	$hora      = trim($_POST['txthora']);
 	$h1 = substr($hora, 0, 2);
@@ -88,7 +90,7 @@ include "./valor_ext.php";
 	$Spo = $lnSp['spo'];
 	
 	// Consulta SQL corrigida com parênteses
-	$sqlFm = "SELECT siglapag FROM formapag WHERE codpag = '$FPag_1' AND codpag <> '---'";
+	/*$sqlFm = "SELECT siglapag FROM formapag WHERE codpag = '$FPag_1' AND codpag <> '---'";
 	$rsFm = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
 
 	$FmRec = [];
@@ -125,7 +127,7 @@ include "./valor_ext.php";
 	} elseif (in_array("CPL", $FmRec)) {
 		$ModPag = "CART. CRED. PARC. LOJA";
 		$FmRec_a = "CPL";
-	}
+	}*/
 	
 	// Encerrando a Conexão
 	mysqli_close($conec);

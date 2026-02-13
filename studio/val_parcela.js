@@ -1,16 +1,11 @@
 function checkdata() {
 	const form = document.parcela;
 
-	if (form.ref_std.value) {
-		if (confirm("Este Pagamento é Referente a Este Estúdio?")) {
-			form.submit();
-		} else {
-			return false;
-		}
-	}
-
 	// VALIDAÇÃO 1: Valor da Prestação vs Valor Recebido
-	if (form.txtvalor.value > form.vlr_recebido.value) {
+	var valor = parseFloat(form.txtvalor.value);
+	var recebido = parseFloat(form.vlr_recebido.value);
+
+	if (valor > recebido) {
 		alert("Valor da Prestação não pode ser maior que o Valor Recebido!!!");
 		form.txtvalor.select();
 		form.txtvalor.focus();

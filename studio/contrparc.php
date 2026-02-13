@@ -243,7 +243,7 @@
       });
    </script>
 
-   <script type="text/javascript" src="val_parcela.js" charset="utf-8">
+   <script type="text/javascript" src="val_parc.js" charset="utf-8">
    </script>
 
 </head>
@@ -324,7 +324,7 @@
                   </select>
                </td>
                <td align="center">
-                  <input type="text" id="txtdoc" name="txtdoc" size="5" maxlength="8" class="campos" autofocus
+                  <input type="text" id="txtdoc" name="txtdoc" size="6" maxlength="8" class="campos" autofocus
                      onkeypress="return /[A-Za-z0-9 ]/.test(String.fromCharCode(event.which || event.keyCode))"
                      onkeyup="this.value=this.value.toUpperCase(); validnome(this)" required>
                </td>

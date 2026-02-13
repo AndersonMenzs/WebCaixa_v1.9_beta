@@ -60,10 +60,10 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	var_dump($dados);
-	echo "</pre>";
+	echo "</pre>";*/
 	//exit();
 
 	// Importando os Dados do Formulário
@@ -268,7 +268,7 @@
 						<font color='gold' size='5'><b><i>Referente Estúdio</i></b></font>
 					</td>
 					<td width="55%" align="center">
-						<font size='6' color='#FFFFFF'>
+						<font size='5' color='#FFFFFF'>
 							<b>
 								<i>
 									<?php 
@@ -316,7 +316,7 @@
 			<!--<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">-->
 
 			<input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
-			<!--<input type="hidden" name="vrparcial" value="<?php echo $ParcialF; ?>">-->
+			<input type="hidden" name="vrparcial" value="<?php echo $ParcialF; ?>">
 			<!--<input type="hidden" name="vrtotf" value="<?php echo $VrTotF; ?>">-->
 			
 			<!--<input type="hidden" name="vrrec" value="<?php echo $VrRec; ?>">-->
