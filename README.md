@@ -355,6 +355,33 @@ SELECT 'Alterações aplicadas com sucesso!' as Status;
 # Alterar o type da coluna spo e spo2 nas tabelas spool e spool2.
 
 ```sql
-ALTER TABLE spool MODIFY spo varchar(50);
-ALTER TABLE spool2 MODIFY spo2 varchar(50);
+ALTER TABLE spool MODIFY spo varchar(55);
+ALTER TABLE spool2 MODIFY spo2 varchar(55);
 ```
+
+# Consultas Autenticadas Auditoria
+
+Pelo motivo de não haver mais a fita de autenticações do dia foi necessário alterar o arquivo aud.php para e criar os arquivos cntaud.php e cntaud_aut.php.
+
+## Arquivos modificados e alterados:
+
+| ARQUIVOS | DESCRIÇÃO DAS ALTERAÇÕES |
+| --- | --- |
+| aud.php | Arquivo de link para o arquivo de consulta autenticada da auditoria; |
+| cntaud.php | Arquivo de consulta autenticada da auditoria; |
+| cntaud_aut.php | Lista as consultas autenticadas da auditoria; |
+
+# Alteração dos arquivos de recebimento para auditoria:
+
+Foi necessário acrescebtar o regoistro de recebimento para a auditoria nas tabelas.
+
+## Arquivos modificados e alterados:
+
+| ARQUIVOS | DESCRIÇÃO DAS ALTERAÇÕES |
+| --- | --- |
+| via1newentr.php | |
+| via1newprod.php | |
+| via1newconc.php | |
+| via1newchv.php | |
+| via1newprods.php | |
+| via1newpag.php | |

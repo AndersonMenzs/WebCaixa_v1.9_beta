@@ -132,7 +132,7 @@ include "./valor_ext.php";
 	}
 
 	// Reduzindo a Matrícula
-	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
+	$MatRec = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 
 	// Imprimindo Via Cliente
@@ -143,7 +143,10 @@ include "./valor_ext.php";
 	$TaxaProd = str_replace('.', '', $TaxaProd);
 
 	// Gravando a Spool
-	include "dbselect.php";
+	$sql = "insert into spool values ('$Aut1', '$Aut2')";
+	$rs  = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
+
+	// Gravando a Spool2
 	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
 	$rs  = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #5. Contate seu Administrador.");
 

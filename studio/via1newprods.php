@@ -30,7 +30,7 @@ include "./valor_ext.php";
 	$Reg       = substr($AutFull, 1, 4);
 	$NDoc      = trim($_POST['txtdoc']);
 	$TipoRec   = trim($_POST['tiporec']);
-	$Books     = trim($_POST['rdbooks']);
+	//$Books     = trim($_POST['rdbooks']);
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
 	$mRec    = substr($dtRec, 5, 2);
@@ -68,10 +68,10 @@ include "./valor_ext.php";
 
 	// Definindo o Tipo de Autenticação
 	if ($TipoRec == '6') {
-	    $tipo = "PRODUTOS";
+		$tipo = "PRODUTOS";
 	} else {
-	    $tipo = "BOOK";
-	} 	
+		$tipo = "BOOK";
+	}
 
 	// Consulta SQL corrigida com parênteses
 	$sqlFm = "SELECT siglapag FROM formapag WHERE (codpag = '$FPag_1' OR codpag = '$FPag_2' OR codpag = '$FPag_3') AND codpag <> '---'";
@@ -114,22 +114,25 @@ include "./valor_ext.php";
 	}
 
 	// Reduzindo a Matrícula
-	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
+	$MatRec = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 
-			// Imprimindo Via Cliente
-			$Aut1 = $Reg;
-			$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut$VrPagF$SgRec$FmRec_a$MatRec";
+	// Imprimindo Via Cliente
+	$Aut1 = $Reg;
+	$Aut2 = "$Reg$PC$horaaut$NDoc $dtAut" . "R$ " . "$VrPagF$SgRec$FmRec_a$MatRec";
 
 	// Gravando a Spool
-	include "dbselect.php";
+	$sql = "insert into spool values ('$Aut1', '$Aut2')";
+	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+
+	// Gravando a Spool
 	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
 	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
 
 	// Encerrando a Conexão
 	$SisRot = "S-7.2.8.1.2";
 	include "rodape.php"; ?>
-	
+
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
@@ -155,7 +158,7 @@ include "./valor_ext.php";
 				'&horaaut=<?php echo urlencode($horaaut); ?>' +
 				'&dtAut=<?php echo urlencode($dtAut); ?>' +
 				'&SgRec=<?php echo urlencode($SgRec); ?>' +
-				'&Mat=<?php echo urlencode($Mat); ?>'; 
+				'&Mat=<?php echo urlencode($Mat); ?>';
 			window.open(url, '_blank');
 			setTimeout(function() {
 				window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';

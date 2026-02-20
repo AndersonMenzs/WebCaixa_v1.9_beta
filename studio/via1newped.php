@@ -50,15 +50,18 @@ include "./valor_ext.php";
 	$tipo = "PEDIDO";
 
 	// Reduzindo a Matrícula
-	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
+	$MatRec = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 
 	// Imprimindo o Recibo
 	$Aut1 = $Reg;
-	$Aut2 = "$Reg$PC$NDoc$dtAut$VrEntrF$SlgPag$MatRec$Opt";
+	$Aut2 = "$Reg$PC$NDoc$ dtAut" . "R$ " . "$VrEntrF$SlgPag$MatRec$Opt";
 
 	// Gravando a Spool
-	include "dbselect.php";
+	$sql = "insert into spool values ('$Aut1', '$Aut2')";
+	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+
+	// Gravando a Spool
 	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
 	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
 

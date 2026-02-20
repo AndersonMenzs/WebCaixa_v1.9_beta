@@ -37,7 +37,8 @@ include "./valor_ext.php";
 	$Mat_Vend  = $_POST['txtmatvend'];
 	$Vendedora = $_POST['vendedora'];
 	$Cliente   = $_POST['cliente'];
-	$vlr_ext   = valorPorExtenso($VrEnt);
+	$vlr_ext   = valorPorExtenso($VrEntr);
+	$Tipo_ped = $_POST['tipo_ped'];
 
 	// Obtendo o código do PC
 	$sqlPC = "select pc from inicial";
@@ -49,15 +50,18 @@ include "./valor_ext.php";
 	$tipo = "PEDIDO";
 
 	// Reduzindo a Matrícula
-	$MatRec = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1);
+	$MatRec = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 	$Mat = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 
 	// Imprimindo o Recibo
 	$Aut1 = $Reg;
-	$Aut2 = "$Reg$PC$NDoc$dtAut$VrEntrF$SlgPag$MatRec$Opt";
+	$Aut2 = "$Reg$PC$NDoc$ dtAut" . "R$ " . "$VrEntrF$SlgPag$MatRec$Opt";
 
 	// Gravando a Spool
-	include "dbselect.php";
+	$sql = "insert into spool values ('$Aut1', '$Aut2')";
+	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+
+	// Gravando a Spool
 	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
 	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
 
@@ -74,6 +78,7 @@ include "./valor_ext.php";
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&ModPag=<?php echo urlencode($ModPag); ?>' +
+				'&tipo_ped=<?php echo urlencode($Tipo_ped); ?>' +
 				'&fpag_1=<?php echo urlencode($FPag_1); ?>' +
 				'&fpag_2=<?php echo urlencode($FPag_2); ?>' +
 				'&fpag_3=<?php echo urlencode($FPag_3); ?>' +
