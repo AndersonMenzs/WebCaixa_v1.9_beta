@@ -1,20 +1,20 @@
 <?php
 
 // Debug
-error_reporting(E_ALL);
+/*error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-//$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
-//echo "<pre>";
-//var_dump($dados);
-//echo "</pre>";
+$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
+echo "<pre>";
+var_dump($dados);
+echo "</pre>";*/
 //exit();
 
 // Variáveis do $_GET
 $Reg       = trim($_GET['Reg']);
 $NDoc       = trim($_GET['NDoc']);
-$Mat       = trim($_GET['mat']);
+$Mat       = trim($_GET['txtmat']);
 $Mat = substr_replace($Mat, "-", -1, 0);
 $PIni       = trim($_GET['PIni']);
 $PC         = trim($_GET['PC']);
@@ -189,7 +189,8 @@ include "./dbselect.php";
 
 </head>
 
-<body onload="window.print()">
+<!--<body onload="window.print()">-->
+    <body>
     <div class="container">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
@@ -255,7 +256,7 @@ include "./dbselect.php";
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
                     <b>
-                        <font size=1>VLR. PAGO - <?php echo $ModPag; ?></font>
+                        <font size=1>VLR. PAGO</font>
                     </b>
                 </td>
             </tr>
@@ -285,6 +286,7 @@ include "./dbselect.php";
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
+            </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=4 rowspan=5 height="60" align="center" valign=middle>

@@ -16,14 +16,14 @@ include "./valor_ext.php";
 ?>
 <html>
 
-<body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
+<body background="../images/bg1.jpg" text="#FFFFFF">
 
 	<?php
 	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	var_dump($dados);
 	echo "</pre>";
-	exit();
+	//exit();
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -35,15 +35,18 @@ include "./valor_ext.php";
 	$AutFull = 10000 + $Aut;
 	$Reg       = substr($AutFull, 1, 4);
 	$PC		= trim($_POST['pc']);
+	$Ref_Std   = trim($_POST['ref_std']);
 	$NDoc      = trim($_POST['txtdoc']);
 	$TipoRec   = trim($_POST['tiporec']);
-	$tipo = trim($_POST['tipo']);
+	//$tipo = trim($_POST['tipo']);
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
 	$mRec    = substr($dtRec, 5, 2);
 	$dRec    = substr($dtRec, 8, 2);
 	$dtAut     = $dRec . $mRec . $aRec;
 	$FPag_1      = isset($_POST['lsPr1']) ? (trim($_POST['lsPr1']) == '00' ? '' : trim($_POST['lsPr1'])) : '';
+	$FPag_2      = isset($_POST['lsPr2']) ? (trim($_POST['lsPr2']) == '00' ? '' : trim($_POST['lsPr2'])) : '';
+	$FPag_3      = isset($_POST['lsPr3']) ? (trim($_POST['lsPr3']) == '00' ? '' : trim($_POST['lsPr3'])) : '';
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
@@ -65,6 +68,9 @@ include "./valor_ext.php";
 	$QtdParcPag = trim($_POST['qtdeparc']);
 	$VrParcial = $_POST['vrparcial'];
 	
+	//echo "<pre>";
+	//echo $Reg . " - " . $PC . " - " . $NDoc . " - " . $TipoRec . " - " . $FPag_1 . " - " . $FPag_2 . " - " . $FPag_3 . " - " . $ModPag . " - " . $txt1 . " - " . $txt2 . " - " . $txt3 . " - " . $VrRec . " - " . $VrParcial . " - " . $Mat . " - " . $Mat_Vend . " - " . $Vendedora . " - " . $Cliente . " - " . $VrRec . " - " . $VrPrest . " - " . $PIni . " - " . $PUlt . " - " . $QtdParcPag; 
+
 	// Pesquisando PC
 	include "conexao.php";
 	include "dbselect.php";
@@ -90,7 +96,7 @@ include "./valor_ext.php";
 	$Spo = $lnSp['spo'];
 	
 	// Consulta SQL corrigida com parênteses
-	/*$sqlFm = "SELECT siglapag FROM formapag WHERE codpag = '$FPag_1' AND codpag <> '---'";
+	$sqlFm = "SELECT siglapag FROM formapag WHERE codpag IN('$FPag_1', '$FPag_2', '$FPag_3') AND codpag <> '---'";
 	$rsFm = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
 
 	$FmRec = [];
@@ -108,6 +114,7 @@ include "./valor_ext.php";
 
 	// Se houver mais de uma forma diferente
 	if (count($FmRec) > 1) {
+		$ModPag = " ";
 		$FmRec_a = 'DIV';
 	} elseif (in_array("DIN", $FmRec)) {
 		$ModPag = "DINHEIRO";
@@ -127,8 +134,8 @@ include "./valor_ext.php";
 	} elseif (in_array("CPL", $FmRec)) {
 		$ModPag = "CART. CRED. PARC. LOJA";
 		$FmRec_a = "CPL";
-	}*/
-	
+	}
+
 	// Encerrando a Conexão
 	mysqli_close($conec);
 
@@ -139,14 +146,20 @@ include "./valor_ext.php";
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
 			var url = './recibo_cntparc.php?tipo=<?php echo urlencode($tipo); ?>' +
-				'&mat=<?php echo urlencode($Mat); ?>' +
+				'&txtmat=<?php echo urlencode($Mat); ?>' +
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
 				'&Reg=<?php echo urlencode($Reg); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
+				'&Ref_Std=<?php echo urlencode($Ref_Std); ?>' +
 				'&SgRec=<?php echo urlencode($SgRec); ?>' +
 				'&PIni=<?php echo urlencode($PIni); ?>' +
 				'&PUlt=<?php echo urlencode($PUlt); ?>' +
 				'&FPag_1=<?php echo urlencode($FPag_1); ?>' +
+				'&FPag_2=<?php echo urlencode($FPag_2); ?>' +
+				'&FPag_3=<?php echo urlencode($FPag_3); ?>' +
+				'&txt1=<?php echo urlencode($txt1); ?>' +
+				'&txt2=<?php echo urlencode($txt2); ?>' +
+				'&txt3=<?php echo urlencode($txt3); ?>' +
 				'&ModPag=<?php echo urlencode($ModPag); ?>' +
 				'&QtdParcPag=<?php echo urlencode($QtdParcPag); ?>' +
 				'&VrPrest=<?php echo urlencode($VrPrest); ?>' +
@@ -158,13 +171,23 @@ include "./valor_ext.php";
 				'&Cliente=<?php echo urlencode($Cliente); ?>' +
 				'&vlr_ext=<?php echo urlencode($vlr_ext); ?>' +
 				'&VrParcial=<?php echo urlencode($VrParcial); ?>' +
-				'&Reg=<?php echo urlencode($Reg); ?>' +
 				'&horaaut=<?php echo urlencode($horaaut); ?>' +
 				'&dtAut=<?php echo urlencode($dtAut); ?>';
+
+				console.log(url);
 			window.open(url, '_blank');
 			setTimeout(function() {
 				window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';
 			}, 1000);
+		}
+	</script>
+
+	<script>
+		// Chama a função de forma segura após o carregamento da página
+		if (document.readyState === 'complete') {
+			try { imprimirERedirecionar(); } catch (e) {}
+		} else {
+			window.addEventListener('load', function() { try { imprimirERedirecionar(); } catch (e) {} });
 		}
 	</script>
 

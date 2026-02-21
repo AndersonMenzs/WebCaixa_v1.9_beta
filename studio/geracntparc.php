@@ -80,6 +80,7 @@ include 'dbselect.php';
 	$Parcial   = $_POST['vrparcial'] ?? '';
 	$Ref_Std   = trim($_POST['ref_std']);
 	$Parc_Card_Cred = trim($_POST['parc_card_cred'] ?? '');
+	$ModPag    = trim($_POST['modpgto'] ?? '');
 
 	$Estorno = '';
 	$hora    = date('H:i');
@@ -325,6 +326,7 @@ include 'dbselect.php';
 
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
+				<input type="hidden" name="txtmat" value="<?php echo $Operador; ?>">
 				<input type="hidden" name="ref_std" value="<?php echo $Ref_Std; ?>">
 				<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
 				<input type="hidden" name="sgrec" value="<?php echo $SgRecSp; ?>">
@@ -346,8 +348,8 @@ include 'dbselect.php';
 				<input type="hidden" name="vrprest" value="<?php echo $VrPrest; ?>">
 				<input type="hidden" name="vrrec" value="<?php echo $VrRec; ?>">
 				<input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
-				<input type="hidden" name="txtparc_ini" value="<?php echo $PIni - $QtdeParc; ?>">
-				<input type="hidden" name="txtparc_ult" value="<?php echo $PIni - 1; ?>">
+				<input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
+				<input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
 				<input type="hidden" name="txtparc" value="<?php echo $Parcial; ?>">
 				<input type="hidden" name="vrparcial" value="<?php echo $Parcial; ?>">
 

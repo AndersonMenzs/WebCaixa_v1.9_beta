@@ -117,6 +117,7 @@
     </script>
 
     <script src="val_prod.js" charset="utf-8"></script>
+    <script src="fch_aba.js"></script>
 
 </head>
 
@@ -191,19 +192,18 @@
     $VrAnt   = $lnA['vltx'];
     $VrAntF = number_format($VrAnt, 2, ',', '.');
 
-    // Consultando o último recibo dentro das rotinas TXP, TXC, PROD e BOOK
+    // Consultando o último recibo dentro das rotinas TXP, TXC, TXPG, PROD e BOOK
     $sql = "SELECT numdoc, datarec FROM registro 
         WHERE numdoc >= $NumDocInicial
-        AND datarec >= '2025-08-29'  
-        AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK', 'PROD', 'CHV')
+        AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK', 'CHV')
         ORDER BY numdoc DESC";
     $rs  = mysqli_query($conec, $sql) or die('Erro #3!');
     $ln  = mysqli_fetch_array($rs);
     $NumDoc = $ln['numdoc'];
     $DataRec = $ln['datarec'];
-
+    
     // Condição para usar o próximo número do recibo
-    if ($DataHj >= $DataRec) {
+    if ($DataHj >= $DataRec) {        
         $NumDoc = $NumDoc + 1;
     } else {
         echo "Entre em contato com o administrador do sistema.";

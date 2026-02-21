@@ -122,8 +122,7 @@
 	// Consultando o último recibo dentro das rotinas TXP, TXC, PROD e BOOK
 	$sql = "SELECT numdoc, datarec FROM registro 
         WHERE numdoc >= $NumDocInicial
-        AND datarec >= '2025-08-29' 
-        AND subtipo IN ('TXP', 'TXC', 'PROD', 'BOOK') 
+        AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK', 'CHV') 
         ORDER BY numdoc DESC";
 	$rs  = mysqli_query($conec, $sql) or die('Erro #3!');
 	$ln  = mysqli_fetch_array($rs);

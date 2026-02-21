@@ -111,7 +111,9 @@
 					registro.reg,
 					registro.numdoc,
 					registro.parcela,
-					registro.subtipo
+					registro.subtipo,
+					formapag.siglapag
+				DESC
 				";
 
 		$rs   = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #1. Contate seu Administrador");

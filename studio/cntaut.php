@@ -112,6 +112,7 @@
 					registro.numdoc,
 					registro.parcela,
 					registro.subtipo
+					DESC
 				";
 
 		$rs   = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #1. Contate seu Administrador");

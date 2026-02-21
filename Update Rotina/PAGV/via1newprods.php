@@ -30,7 +30,7 @@ include "./valor_ext.php";
 	$Reg       = substr($AutFull, 1, 4);
 	$NDoc      = trim($_POST['txtdoc']);
 	$TipoRec   = trim($_POST['tiporec']);
-	//$Books     = trim($_POST['rdbooks']);
+	$Books     = trim($_POST['rdbooks']);
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
 	$mRec    = substr($dtRec, 5, 2);

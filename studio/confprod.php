@@ -65,16 +65,16 @@
 	$Senior    = trim($_POST['senior']);
 	$Aghata    = trim($_POST['aghata']);
 
-    // Calculando quantos anos tem
-    $partes = explode('/', $DataNasc);
-    $dia = $partes[0];
-    $mes = $partes[1];
-    $ano = $partes[2];
+	// Calculando quantos anos tem
+	$partes = explode('/', $DataNasc);
+	$dia = $partes[0];
+	$mes = $partes[1];
+	$ano = $partes[2];
 
-    $Idade = date('Y') - $ano;
-    if (date('md') < $mes . $dia) {
-        $Idade--;
-    }
+	$Idade = date('Y') - $ano;
+	if (date('md') < $mes . $dia) {
+		$Idade--;
+	}
 
 	include "conexao.php";
 	include "dbselect.php";

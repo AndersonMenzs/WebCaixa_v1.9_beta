@@ -31,8 +31,8 @@ include "./valor_ext.php";
 	$dtAut     = $dRec . $mRec . $aRec;
 	$Opt       = $_POST['txthora'];
 	$VrEnt     = trim($_POST['txtvalor']);
-	$VrEntr    = number_format($VrEnt, 2, ',', '');
-	$VrEntrF   = "R$ " . "$VrEntr";
+	$VrEntr    = number_format($VrEnt, 2, ',', '.');
+	$VrEntrF   = $VrEntr;
 	$Mat       = trim($_POST['txtmat']);
 	$Mat_Vend  = $_POST['txtmatvend'];
 	$Vendedora = $_POST['vendedora'];
@@ -55,7 +55,7 @@ include "./valor_ext.php";
 
 	// Imprimindo o Recibo
 	$Aut1 = $Reg;
-	$Aut2 = "$Reg$PC$NDoc$ dtAut" . "R$ " . "$VrEntrF$SlgPag$MatRec$Opt";
+	$Aut2 = "$Reg$PC$NDoc $dtAut" . "R$ " . "$VrEntrF$SlgPag$MatRec$Opt";
 
 	// Gravando a Spool
 	$sql = "insert into spool values ('$Aut1', '$Aut2')";

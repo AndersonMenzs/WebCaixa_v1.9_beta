@@ -256,6 +256,7 @@ $Mat       = $_GET['Mat'];
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
+            </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=4 rowspan=5 height="60" align="center" valign=middle>
