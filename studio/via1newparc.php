@@ -19,10 +19,10 @@ include "./valor_ext.php";
 <body background="../images/bg1.jpg" text="#FFFFFF">
 
 	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	var_dump($dados);
-	echo "</pre>";
+	echo "</pre>";*/
 	//exit();
 
 	// Importando os Dados do Formulário
@@ -38,7 +38,6 @@ include "./valor_ext.php";
 	$Ref_Std   = trim($_POST['ref_std']);
 	$NDoc      = trim($_POST['txtdoc']);
 	$TipoRec   = trim($_POST['tiporec']);
-	//$tipo = trim($_POST['tipo']);
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
 	$mRec    = substr($dtRec, 5, 2);
@@ -67,9 +66,10 @@ include "./valor_ext.php";
 	$PUlt = trim($_POST['txtparc_ult']);
 	$QtdParcPag = trim($_POST['qtdeparc']);
 	$VrParcial = $_POST['vrparcial'];
-	
-	//echo "<pre>";
-	//echo $Reg . " - " . $PC . " - " . $NDoc . " - " . $TipoRec . " - " . $FPag_1 . " - " . $FPag_2 . " - " . $FPag_3 . " - " . $ModPag . " - " . $txt1 . " - " . $txt2 . " - " . $txt3 . " - " . $VrRec . " - " . $VrParcial . " - " . $Mat . " - " . $Mat_Vend . " - " . $Vendedora . " - " . $Cliente . " - " . $VrRec . " - " . $VrPrest . " - " . $PIni . " - " . $PUlt . " - " . $QtdParcPag; 
+	$Parc_Card_Cred = $_POST['parc_card_cred'];
+	$Rdopt = $_POST['rdopt'] ?? '';
+	$Pedido = $_POST['pedido'];
+	$DataAtual = date('Ymd');
 
 	// Pesquisando PC
 	include "conexao.php";
@@ -88,13 +88,88 @@ include "./valor_ext.php";
 	$SgRec  = $lnRec['siglarec'];
 	$tipo = "CONTR. PARCELADO";
 
+	// Verifica se é um pedido
+	if ($Rdopt != '') {
+		
+		// TIpo do pedido
+		$tipo_2 = "PEDIDO";
+
+		// Obtendo Dados da solicitação do pedido
+		$sqlE = "select * from registro where reg = '$Aut' and (tiporec = 3 or tiporec = 4 or tiporec = 6 or tiporec = 7) and estorno <> 'x' and datarec = $DataAtual";
+		$rsE  = mysqli_query($conec, $sqlE);
+		$regE = mysqli_num_rows($rsE);
+
+		// Arrays para armazenar múltiplos valores
+		$ModPgtoE_array = array();
+		$VlRec = 0;
+
+		while ($lnE  = mysqli_fetch_array($rsE)) {
+			$Aut      = $lnE['reg'];
+			$NumDocE   = $lnE['numdoc'];
+			$TipoRecE  = $lnE['tiporec'];
+			$ModPgtoE_array[] = $lnE['modpgto']; // Armazena todas as formas de pagamento
+			$DataRecE  = $lnE['datarec'];
+			$HoraRecE  = $lnE['horarec'];
+			$VlPago    = $lnE['vlrec'];
+			$VlRec     = $VlRec + $VlPago;
+		}
+
+		// Remove duplicatas e prepara a exibição das formas de pagamento
+		$ModPgtoE_unique = array_unique($ModPgtoE_array);
+
+		// Se há mais de uma forma de pagamento, exibe "Diversos"
+		if (count($ModPgtoE_unique) > 1) {
+			$ModPgtoE_display = 'Diversos';
+			$SlgPag = 'Diversos';
+			$SlgPag_a = 'DIV';
+		} else {
+			// Caso contrário, busca os dados da única forma de pagamento
+			$ModPgtoE = $ModPgtoE_unique[0];
+			$sqlM = "select modpag, siglapag from formapag where codpag = '$ModPgtoE' ";
+			$rsM  = mysqli_query($conec, $sqlM) or die("Erro de Banco de Dados #2. Contate seu Administrador");
+			$lnM  = mysqli_fetch_array($rsM);
+			$ModPgtoE_display = $lnM['modpag'];
+			$SlgPag  = $lnM['siglapag'];
+
+			// Verificando cada forma de pagamento
+			if ($ModPgtoE == '10') {
+				$SlgPag_a = 'DIN';
+			} elseif ($ModPgtoE == '20') {
+				$SlgPag_a = 'CTD';
+			} elseif ($ModPgtoE == '30') {
+				$SlgPag_a = 'CTV';
+			} elseif ($ModPgtoE == '70') {
+				$SlgPag_a = 'PXQ';
+			} elseif ($ModPgtoE == '71') {
+				$SlgPag_a = 'PXC';
+			} elseif ($ModPgtoE == 'CPL') {
+				$SlgPag_a = 'CPL';
+			}
+		}
+
+		$sqlR = "select * from tiporec where codrec = '$TipoRecE' ";
+		$rsR  = mysqli_query($conec, $sqlR) or die("Erro de Banco de Dados #3. Contate seu Administrador");
+		$lnR  = mysqli_fetch_array($rsR);
+		$CodRec      = $lnR['codrec'];
+		$NomeRec     = $lnR['nomerec'];
+		mysqli_free_result($rsE);
+		mysqli_free_result($rsR);
+
+		// Consulta o número de documento e soma os valores
+		$sqlP = "SELECT SUM(vlrec) AS vlrec FROM registro WHERE numdoc = '$NumDocE' AND datarec = '$DataRecE' ";
+		$rsP  = mysqli_query($conec, $sqlP) or die("Erro de Banco de Dados #4. Contate seu Administrador");
+		$lnP  = mysqli_fetch_array($rsP);
+		$VlRec = $lnP['vlrec'];
+		$VlRecF    = number_format($VlRec, 2, ',', '.');
+	}
+
 	// Imprimindo o Registro da Spool
 	$SqlSp = "select * from spool order by rec";
 	$rsSp  = mysqli_query($conec, $SqlSp) or die("Não foi possível obter dados da spool");
 	$lnSp  = mysqli_fetch_array($rsSp);
 	$Num = $lnSp['rec'];
 	$Spo = $lnSp['spo'];
-	
+
 	// Consulta SQL corrigida com parênteses
 	$sqlFm = "SELECT siglapag FROM formapag WHERE codpag IN('$FPag_1', '$FPag_2', '$FPag_3') AND codpag <> '---'";
 	$rsFm = mysqli_query($conec, $sqlFm) or die("Não foi possível acessar o Forma de Pagamento");
@@ -136,6 +211,21 @@ include "./valor_ext.php";
 		$FmRec_a = "CPL";
 	}
 
+	if ($Rdopt != '') {
+		// Imprimindo o Recibo
+		$VrRecF    = number_format($VrRec, 2, ',', '.');
+		$Aut1 = $Reg;
+		$Aut2 = "$Reg$PC$NDoc $dtAut" . "R$ " . "$VrRecF$SlgPag_a$Mat$Rdopt";
+
+		// Gravando a Spool
+		$sql = "insert into spool values ('$Aut1', '$Aut2')";
+		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+
+		// Gravando a Spool
+		$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
+		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+	}
+
 	// Encerrando a Conexão
 	mysqli_close($conec);
 
@@ -172,9 +262,11 @@ include "./valor_ext.php";
 				'&vlr_ext=<?php echo urlencode($vlr_ext); ?>' +
 				'&VrParcial=<?php echo urlencode($VrParcial); ?>' +
 				'&horaaut=<?php echo urlencode($horaaut); ?>' +
+				'&parc_card_cred=<?php echo urlencode($Parc_Card_Cred); ?>' +
+				'&rdopt=<?php echo urlencode($Rdopt) ?? ""; ?>' +
+				'&pedido=<?php echo urlencode($Pedido) ?? ""; ?>' +
+				'&tipo_2=<?php echo urlencode($tipo_2) ?? ""; ?>' +
 				'&dtAut=<?php echo urlencode($dtAut); ?>';
-
-				console.log(url);
 			window.open(url, '_blank');
 			setTimeout(function() {
 				window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';
@@ -185,9 +277,15 @@ include "./valor_ext.php";
 	<script>
 		// Chama a função de forma segura após o carregamento da página
 		if (document.readyState === 'complete') {
-			try { imprimirERedirecionar(); } catch (e) {}
+			try {
+				imprimirERedirecionar();
+			} catch (e) {}
 		} else {
-			window.addEventListener('load', function() { try { imprimirERedirecionar(); } catch (e) {} });
+			window.addEventListener('load', function() {
+				try {
+					imprimirERedirecionar();
+				} catch (e) {}
+			});
 		}
 	</script>
 

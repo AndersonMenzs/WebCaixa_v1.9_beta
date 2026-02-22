@@ -49,12 +49,12 @@
 		$SubRec = 'EST';
 		$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubRec', '$FPag', '0', '$dtRec', '$hora', '$VrEntr', '$Mat', '', '$Mat_Vend', '$Vendedora', '$Cliente')";
 		$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #M3. Contate seu Administrador.");
-		//mysqli_free_result($rsGr);
+		mysqli_free_result($rsGr);
 
 		// Atualizando o Registro
-		$sqlAt = "update registro set estorno = 'x' where reg = '$Aut' and datarec = '$DataAtual' and tiporec<> 'E' ";
+		$sqlAt = "update registro set estorno = 'x' where reg = '$Aut' and datarec = '$DataAtual' and tiporec <> 'E' ";
 		$rsAt  = mysqli_query($conec, $sqlAt) or die("Erro de Banco de Dados #M4. Contate seu Administrador.");
-		//mysqli_free_result($rsAt);
+		mysqli_free_result($rsAt);
 
 		// Consultando Registro Estornado
 		$sqlART = "select * from registro where reg = '$Aut' and datarec = '$DataAtual' ";

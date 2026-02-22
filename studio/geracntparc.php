@@ -39,10 +39,10 @@ include 'dbselect.php';
 <body background="../images/bg1.jpg" text="#FFFFFF">
 
 	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	var_dump($dados);
-	echo "</pre>";
+	echo "</pre>";*/
 	//exit();
 
 	// Importando os Dados do Formulário
@@ -81,6 +81,8 @@ include 'dbselect.php';
 	$Ref_Std   = trim($_POST['ref_std']);
 	$Parc_Card_Cred = trim($_POST['parc_card_cred'] ?? '');
 	$ModPag    = trim($_POST['modpgto'] ?? '');
+	$Rdopt     = trim($_POST['rdopt'] ?? '');
+	$Pedido    = trim($_POST['pedido'] ?? '');
 
 	$Estorno = '';
 	$hora    = date('H:i');
@@ -352,6 +354,8 @@ include 'dbselect.php';
 				<input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
 				<input type="hidden" name="txtparc" value="<?php echo $Parcial; ?>">
 				<input type="hidden" name="vrparcial" value="<?php echo $Parcial; ?>">
+				<input type="hidden" name="rdopt" value="<?php echo $Rdopt; ?>">
+				<input type="hidden" name="pedido" value="<?php echo $Pedido; ?>">
 
 				<font size='6'><b>
 						<center>Verifique se a impressora do <font color='gold'>

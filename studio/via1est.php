@@ -144,6 +144,9 @@ error_reporting(E_ALL);
 			} elseif (in_array("GRT", $FmRec)) {
 				$ModPag = "GRATUIDADE";
 				$FmRec_a = "GRT";
+			} elseif (in_array("CPL", $FmRec)) {
+				$ModPag = "CARTÃO CRÉDITO PARCELADO (LOJA)";
+				$FmRec_a = "CPL";
 			}
 		} else {
 			$FmRec = '';

@@ -1,6 +1,17 @@
 function checkdata() {
 	const form = document.parcela;
 
+	// PERGUNTA: É QUITAÇÃO E SOLICITAÇÃO DE BOOK/POSTER?
+	const response = confirm('Deseja registrar uma QUITAÇÃO com SOLICITAÇÃO de BOOK ou POSTER?');
+	
+	if (response) {
+		// SIM - redireciona para contrparc_solic.php
+		form.action = 'contrparc_solic.php';
+	} else {
+		// NÃO - redireciona para confcntparc.php
+		form.action = 'confcntparc.php';
+	}
+
 	// VALIDAÇÃO 1: Valor da Prestação vs Valor Recebido
 	var valor = parseFloat(form.txtvalor.value);
 	var recebido = parseFloat(form.vlr_recebido.value);

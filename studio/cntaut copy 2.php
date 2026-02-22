@@ -111,7 +111,8 @@
 					registro.reg,
 					registro.numdoc,
 					registro.parcela,
-					registro.subtipo DESC
+					registro.subtipo
+					DESC
 				";
 
 		$rs   = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #1. Contate seu Administrador");
@@ -178,49 +179,24 @@
 					}
 
 					$docsCount[$d]++;
-					// Não somar se estiver marcado com x (estorno)
-					if (empty($tmp['estorno'])) {
-						$docsTotal[$d] += $vlr;
-					}
+					$docsTotal[$d] += $vlr;
 				}
 
 				mysqli_data_seek($rs, 0);
 
-			// Agrupar dados por documento
-			$docsByKey = [];
-			$docsFirstRow = [];
+				$docsIndex = [];
 
-			while ($ln = mysqli_fetch_assoc($rs)) {
-				$Doc = $ln['numdoc'];
+				mysqli_data_seek($rs, 0);
 
-				if (!isset($docsByKey[$Doc])) {
-					$docsByKey[$Doc] = [
-						'sem_estorno' => [],
-						'com_estorno' => []
-					];
-					$docsFirstRow[$Doc] = $ln; // Guardar primeira linha de cada doc
-				}
+				while ($ln = mysqli_fetch_assoc($rs)) {
 
-				if (!empty($ln['estorno'])) {
-					$docsByKey[$Doc]['com_estorno'][] = $ln;
-				} else {
-					$docsByKey[$Doc]['sem_estorno'][] = $ln;
-				}
-			}
+					$Doc     = $ln['numdoc'];
 
-			mysqli_data_seek($rs, 0);
+					if (!isset($docsIndex[$Doc])) {
+						$docsIndex[$Doc] = 0;
+					}
 
-			// Exibir cada documento com seus registros
-			$docsIndexPrinted = [];
-
-			foreach ($docsByKey as $Doc => $docData) {
-
-				// Combinar: primeiro sem estorno, depois com estorno
-				$allRows = array_merge($docData['sem_estorno'], $docData['com_estorno']);
-
-				$docsIndexPrinted[$Doc] = 0;
-
-				foreach ($allRows as $ln) {
+					$docsIndex[$Doc]++;
 
 					$Fita    = $ln['fita'];
 					$Reg     = $ln['reg'];
@@ -241,10 +217,8 @@
 
 					$Estorno = $ln['estorno'];
 
-					$docsIndexPrinted[$Doc]++;
-
-					// Linha Pai (primeira linha do documento)
-					if ($docsIndexPrinted[$Doc] == 1) {
+					// Linha Pai
+					if ($docsIndex[$Doc] == 1) {
 
 						echo "<tr onclick=\"toggleDoc('{$Doc}')\" style='cursor:pointer'>";
 
@@ -264,8 +238,6 @@
 					}
 
 					// Linha Filha
-					//$bgColor = !empty($Estorno) ? "background-color:#FF6347;" : "";
-					//echo "<tr class='doc_{$Doc}' style='display:none;color:gold;{$bgColor}'>";
 					echo "<tr class='doc_{$Doc}' style='display:none;color:gold;'>";
 
 					echo "
@@ -279,10 +251,10 @@
 						<td align='right'><b><i>R$ {$VlRecF}</b></i></td>
 						<td align='right'><b><i>{$ModPgto}</b></i></td>
 						<td align='right'><b><i>{$OpFull}</b></i></td>
-						<td align='center'><b><i>" . ($Estorno != "" ? "x" : "-") . "</b></i></td>
+						<td align='center'><b><i>" . ($Estorno <> "" ? "x" : "-") . "</b></i></td>
 						</tr>";
 				}
-			}
+
 				?>
 			</table>
 		<?php

@@ -384,6 +384,7 @@
 
 		$Cx  = $numerario + $cashin - $cashout + $Creditos - $Depsto - $DespTot;
 		$SdCaixa = number_format($Cx, 2, ".", "");
+		
 	?>
 
 		<table width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
