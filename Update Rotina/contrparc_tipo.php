@@ -144,17 +144,18 @@
 	$lg_user = $_REQUEST['c_s'];
 	$user = substr($lg_user, 0, 8);
 	$pss  = substr($lg_user, 8, 40);
+	$ref_std = trim($_POST['ref_std']);
 
 	$Contrato = trim($_POST['txtdoc']);
 	$mat_vend = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
-	
+
 	// Converter para centavos diretamente, evitando imprecisão de ponto flutuante
 	// Remove separadores de milhar (.) e converte vírgula em ponto decimal
 	$valor_str = str_replace(',', '.', str_replace('.', '', $_POST['txtvalor'] ?? '0'));
 	$vlr_recebido_str = str_replace(',', '.', str_replace('.', '', $_POST['vlr_recebido'] ?? '0'));
-	
+
 	// Converte para centavos usando intval + arredondamento seguro
 	$valC = intval(round(floatval($valor_str) * 100));
 	$recC = intval(round(floatval($vlr_recebido_str) * 100));
@@ -193,20 +194,27 @@
 
 	<?php
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
-		<form name="parcela" method="post" action="confcntparc.php" onsubmit="return checkdata()" autocomplete="off">
+		<form name="parcela" method="post" action="contrparc_solic.php" onsubmit="return checkdata()" autocomplete="off">
 			<table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
-					<td width="12%" align="center">
+					<td align="center">
+						<font color='gold' size='5'><b><i>Ref. Estúdio</i></b></font>
+					</td>
+					<td align="center">
 						<font color='gold' size='5'><b><i>Contrato</i></b></font>
 					</td>
-					<td width="40%" align="center">
+					<td align="center">
 						<font color='gold' size='5'><b><i>Vendedora</i></b></font>
 					</td>
-					<td width="40%" align="center">
+					<td align="center">
 						<font color='gold' size='5'><b><i>Cliente</i></b></font>
 					</td>
 				</tr>
 				<tr>
+					<td align="center">
+						<font color='#FFFFFF' size='4'><b><i><?php echo $ref_std; ?></i></b></font>
+						<input type="hidden" name="txtdoc" id="txtdoc" value="<?php echo $Contrato; ?>">
+					</td>
 					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i><?php echo $Contrato; ?></i></b></font>
 						<input type="hidden" name="txtdoc" id="txtdoc" value="<?php echo $Contrato; ?>">
@@ -242,7 +250,7 @@
 									<span id="labelQtdPrestacoes">Parcela(s)</span>
 								</i>
 							</b>
-							</font>
+						</font>
 					</td>
 					<td width="12%" align="center">
 						<font color='gold' size='4'><b><i><span id="labelParcial"><?php echo ($parcialC > 0) ? 'Parcial . ' . $parcialC . 'ª Parcela' : 'Parcial'; ?></span></i></b></font>
@@ -279,9 +287,12 @@
 						<input type="hidden" name="parcial" id="parcial" value="<?php echo $Parcial; ?>">
 						<font color='#FFFFFF' size='4'><b><i><span id="Parcial"><?php echo $Parcial; ?></span></i></b></font>
 					</td>
-					<input type="hidden" name="txtuser" value="<?php echo htmlspecialchars($lg_user, ENT_QUOTES); ?>">
+
+					<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+					<input type="hidden" name="ref_std" value="<?php echo $ref_std; ?>">
+
 					<td align="center">
-						<select name="lsPr1" class="campos">
+						<select name="lsPr1" id="lsPr1" class="campos" onchange="mostrarTabelaParcelas(this)">
 							<?php
 							// Obtendo a Relação
 							// Conectando ao Banco de Dados
@@ -304,9 +315,119 @@
 							mysqli_free_result($rspr);
 							?>
 						</select>
+
+						<table width="100%" name="tb_parc_cred_1" id="tb_parc_cred_1" style="display: none;">
+							<tr>
+								<td align="center">
+									<br>
+									<font color='gold' size='4'><b><i>Parcela(s): </i></b></font>
+									<select name="parc_card_cred_1" id="parc_card_cred_1" class="campos">
+										<option value="0" selected>Selecione</option>
+										<?php
+										for ($i = 1; $i <= 10; $i++) {
+										?>
+											<option value='<?php echo $i; ?>' class="campos">Parcelas <?php echo $i; ?>x</option>
+										<?php
+										}
+										?>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</td>
 					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
 						<input type="text" name="txt1" id="txt1" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt1', event); validate(this)">
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<select name="lsPr2" id="lsPr2" class="campos" onchange="mostrarTabelaParcelas(this)">
+							<?php
+							// Obtendo a Relação
+							// Conectando ao Banco de Dados
+							include "dbselect.php";
+
+							// Criando a Instrução SQL de Consulta
+							$sqlpr = "select * from formapag where codpag <= 31 or codpag >= 70 and codpag <> 99 order by codpag";
+
+							// Consultando os Registros
+							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+
+							// Criando o Array para o campo PC
+							while ($lnpr = mysqli_fetch_array($rspr)) {
+								$CodPag  = $lnpr['codpag'];
+								$ModPag  = $lnpr['modpag'];
+							?>
+								<option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
+							<?php
+							}
+							mysqli_free_result($rspr);
+							?>
+						</select>
+						<table width="100%" name="tb_parc_cred_2" id="tb_parc_cred_2" style="display: none;">
+							<tr>
+								<td align="center">
+									<br>
+									<font color='gold' size='4'><b><i>Parcela(s): </i></b></font>
+									<select name="parc_card_cred_2" id="parc_card_cred_2" class="campos">
+										<option value="0" selected>Selecione</option>
+										<?php for ($i = 1; $i <= 10; $i++) { ?>
+											<option value='<?php echo $i; ?>' class="campos">Parcelas <?php echo $i; ?>x</option>
+										<?php } ?>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td align="center">
+						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
+						<input type="text" name="txt2" id="txt2" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt2', event); validate(this)">
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<select name="lsPr3" id="lsPr3" class="campos" onchange="mostrarTabelaParcelas(this)">
+							<?php
+							// Obtendo a Relação
+							// Conectando ao Banco de Dados
+							include "dbselect.php";
+
+							// Criando a Instrução SQL de Consulta
+							$sqlpr = "select * from formapag where codpag <= 31 or codpag >= 70 and codpag <> 99 order by codpag";
+
+							// Consultando os Registros
+							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+
+							// Criando o Array para o campo PC
+							while ($lnpr = mysqli_fetch_array($rspr)) {
+								$CodPag  = $lnpr['codpag'];
+								$ModPag  = $lnpr['modpag'];
+							?>
+								<option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
+							<?php
+							}
+							mysqli_free_result($rspr);
+							?>
+						</select>
+						<table width="100%" name="tb_parc_cred_3" id="tb_parc_cred_3" style="display: none;">
+							<tr>
+								<td align="center">
+									<br>
+									<font color='gold' size='4'><b><i>Parcela(s): </i></b></font>
+									<select name="parc_card_cred_3" id="parc_card_cred" class="campos">
+										<option value="0" selected>Selecione</option>
+										<?php for ($i = 1; $i <= 10; $i++) { ?>
+											<option value='<?php echo $i; ?>' class="campos">Parcelas <?php echo $i; ?>x</option>
+										<?php } ?>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td align="center">
+						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
+						<input type="text" name="txt3" id="txt3" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt3', event); validate(this)">
 					</td>
 				</tr>
 			</table><br>
@@ -459,8 +580,41 @@
 			el.addEventListener('input', atualizaParcelas);
 			el.addEventListener('blur', atualizaParcelas);
 		});
-		// chama uma vez ao carregar
-		document.addEventListener('DOMContentLoaded', atualizaParcelas);
+
+		// Event listeners
+		document.addEventListener('DOMContentLoaded', function() {
+			// Campos de cálculo
+			['txtvalor', 'vlr_recebido', 'txtparc'].forEach(function(id) {
+				var el = document.getElementById(id);
+				if (el) {
+					el.addEventListener('input', atualizaParcelas);
+					el.addEventListener('blur', atualizaParcelas);
+				}
+			});
+
+			// Inicializa parcelas
+			atualizaParcelas();
+
+			// Inicializa selects de cartão de crédito
+			for (var i = 1; i <= 3; i++) {
+				var select = document.getElementById('lsPr' + i);
+				if (select) {
+					mostrarTabelaParcelas(select);
+				}
+			}
+		});
+
+		function mostrarTabelaParcelas(selectElement) {
+			if (!selectElement || !selectElement.id) return;
+
+			var index = selectElement.id.replace('lsPr', '');
+			var targetTable = document.getElementById('tb_parc_cred_' + index);
+
+			if (targetTable) {
+				// TABELA deve usar 'table' ou 'table-row-group', NÃO 'block'
+				targetTable.style.display = (selectElement.value === '31') ? 'table' : 'none';
+			}
+		}
 	</script>
 
 	<?php

@@ -4,6 +4,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
+ini_set('error_log', 'php_errors.log');
+
 
 // Pesquisando PC
 include "conexao.php";
@@ -22,8 +24,8 @@ include "./valor_ext.php";
 	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	var_dump($dados);
-	echo "</pre>";*/
-	//exit();
+	echo "</pre>";
+	exit();*/
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -67,7 +69,7 @@ include "./valor_ext.php";
 	$QtdParcPag = trim($_POST['qtdeparc']);
 	$VrParcial = $_POST['vrparcial'];
 	$Parc_Card_Cred = $_POST['parc_card_cred'];
-	$Rdopt = $_POST['rdopt'] ?? '';
+	$Rdopt = $_POST['rdopt'];
 	$Pedido = $_POST['pedido'];
 	$DataAtual = date('Ymd');
 
@@ -87,12 +89,10 @@ include "./valor_ext.php";
 	$lnRec = mysqli_fetch_array($rsRec);
 	$SgRec  = $lnRec['siglarec'];
 	$tipo = "CONTR. PARCELADO";
+	$tipo_2 = "PEDIDO";
 
 	// Verifica se é um pedido
-	if ($Rdopt != '') {
-		
-		// TIpo do pedido
-		$tipo_2 = "PEDIDO";
+	if ($Rdopt == 'BOOK' or $Rdopt == 'POSTER') {
 
 		// Obtendo Dados da solicitação do pedido
 		$sqlE = "select * from registro where reg = '$Aut' and (tiporec = 3 or tiporec = 4 or tiporec = 6 or tiporec = 7) and estorno <> 'x' and datarec = $DataAtual";
@@ -211,11 +211,12 @@ include "./valor_ext.php";
 		$FmRec_a = "CPL";
 	}
 
-	if ($Rdopt != '') {
+	if ($Rdopt == 'BOOK' or $Rdopt == 'POSTER') {
 		// Imprimindo o Recibo
+		$MatRec = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 		$VrRecF    = number_format($VrRec, 2, ',', '.');
 		$Aut1 = $Reg;
-		$Aut2 = "$Reg$PC$NDoc $dtAut" . "R$ " . "$VrRecF$SlgPag_a$Mat$Rdopt";
+		$Aut2 = "$Reg$PC$NDoc $dtAut" . "R$ " . "$VrRecF$SlgPag_a$MatRec$Rdopt";
 
 		// Gravando a Spool
 		$sql = "insert into spool values ('$Aut1', '$Aut2')";
@@ -225,7 +226,7 @@ include "./valor_ext.php";
 		$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
 		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
 	}
-
+	var_dump($Rdopt);
 	// Encerrando a Conexão
 	mysqli_close($conec);
 
@@ -238,6 +239,7 @@ include "./valor_ext.php";
 			var url = './recibo_cntparc.php?tipo=<?php echo urlencode($tipo); ?>' +
 				'&txtmat=<?php echo urlencode($Mat); ?>' +
 				'&NDoc=<?php echo urlencode($NDoc); ?>' +
+				'&dtAut=<?php echo urlencode($dtAut); ?>' +
 				'&Reg=<?php echo urlencode($Reg); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&Ref_Std=<?php echo urlencode($Ref_Std); ?>' +
@@ -262,11 +264,15 @@ include "./valor_ext.php";
 				'&vlr_ext=<?php echo urlencode($vlr_ext); ?>' +
 				'&VrParcial=<?php echo urlencode($VrParcial); ?>' +
 				'&horaaut=<?php echo urlencode($horaaut); ?>' +
-				'&parc_card_cred=<?php echo urlencode($Parc_Card_Cred); ?>' +
-				'&rdopt=<?php echo urlencode($Rdopt) ?? ""; ?>' +
-				'&pedido=<?php echo urlencode($Pedido) ?? ""; ?>' +
-				'&tipo_2=<?php echo urlencode($tipo_2) ?? ""; ?>' +
-				'&dtAut=<?php echo urlencode($dtAut); ?>';
+				'&parc_card_cred=<?php echo urlencode($Parc_Card_Cred); ?>';
+
+			// Verifica se o $Rdopt tem algum valor antes de adicioná-lo à URL
+			<?php if ($Rdopt == 'BOOK' || $Rdopt == 'POSTER') { ?>
+				url += '&rdopt=<?php echo urlencode($Rdopt); ?>';
+				url += '&pedido=<?php echo urlencode($Pedido); ?>';
+				url += '&tipo_2=<?php echo urlencode($tipo_2); ?>';
+			<?php } ?>
+
 			window.open(url, '_blank');
 			setTimeout(function() {
 				window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';

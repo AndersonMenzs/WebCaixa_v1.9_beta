@@ -96,7 +96,9 @@
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
-	$Parc_card_cred = trim($_POST['parc_card_cred']);
+	//$Parc_card_cred = trim($_POST['parc_card_cred']);
+	$Parc_card_cred = (float) ($_POST['parc_card_cred_1'] ?: $_POST['parc_card_cred_2'] ?: $_POST['parc_card_cred_3']);
+
 	$ref_std = trim($_POST['ref_std']);
 	$Rdopt = trim($_POST['rdopt']);
 	$Pedido = trim($_POST['pct_ped']) ? trim($_POST['pct_ped']) : trim($_POST['tam_ped']);

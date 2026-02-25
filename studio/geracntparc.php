@@ -244,7 +244,12 @@ include 'dbselect.php';
 						}
 					}
 				}
-				// Criando o spool (FORA do loop de parcelas - valores TOTAIS por forma de pagamento)
+				// Criando o spool após inserir os registros para garantir que o reg seja o correto
+				$sqlReg = "SELECT MIN(reg) AS reg FROM registro WHERE datarec = '$dtRec' AND numdoc = '$NDoc'";
+				$rsReg = mysqli_query($conec, $sqlReg) or die("File geracntparc Error #2. Contate seu Administrador.");
+				$lnReg = mysqli_fetch_array($rsReg);
+				$Reg = $lnReg['reg'];
+
 				$RegFull = 10000 + $Reg;
 				$RegSp = substr($RegFull, 1, 4);
 
@@ -327,7 +332,7 @@ include 'dbselect.php';
 			<form name="geracntparc" method="post" action="via1newparc.php">
 
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
+				<input type="hidden" name="txtreg" value="<?php echo $RegSp; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Operador; ?>">
 				<input type="hidden" name="ref_std" value="<?php echo $Ref_Std; ?>">
 				<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">

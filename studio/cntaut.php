@@ -264,8 +264,6 @@
 					}
 
 					// Linha Filha
-					//$bgColor = !empty($Estorno) ? "background-color:#FF6347;" : "";
-					//echo "<tr class='doc_{$Doc}' style='display:none;color:gold;{$bgColor}'>";
 					echo "<tr class='doc_{$Doc}' style='display:none;color:gold;'>";
 
 					echo "

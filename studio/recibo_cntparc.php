@@ -8,8 +8,8 @@ ini_set('display_startup_errors', 1);*/
 /*$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
 echo "<pre>";
 var_dump($dados);
-echo "</pre>";*/
-//exit();
+echo "</pre>";
+exit();*/
 
 // Variáveis do $_GET
 $Reg       = trim($_GET['Reg']);

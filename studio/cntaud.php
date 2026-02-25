@@ -108,7 +108,6 @@ field.select();
        if ((tam > 7) && (tam <= 10)) 
        { 
          strCampo.value = vr.substr(0, tam - 7) + '/' + vr.substr(tam - 7, 2) + '/' + vr.substr(tam - 5, tam); 
-//         strCampo.value = vr.substr(0, tam - 8) + '/' + vr.substr(tam - 7, 2) + '/' + vr.substr(tam - 4, tam); 
       } 
     } 
   } 

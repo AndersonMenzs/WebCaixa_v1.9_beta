@@ -194,7 +194,7 @@
 
 	<?php
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
-		<form name="parcela" method="post" action="contrparc_solic.php" onsubmit="return checkdata()" autocomplete="off">
+		<form name="parcela" method="post" action="confcntparc.php" onsubmit="return checkdata()" autocomplete="off">
 			<table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
 					<td align="center">

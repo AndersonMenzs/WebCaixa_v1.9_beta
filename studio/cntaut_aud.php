@@ -97,8 +97,6 @@
 				while ($ln       = mysqli_fetch_array($rs)) {
 					$Rec    = $ln['rec'];
 					$Spo     = $ln['spo'];
-
-					//if ($Rec <> '') {
 				?>
 						<tr>
 							<td align="center">
@@ -109,7 +107,6 @@
 							</td>
 						</tr>
 				<?php
-					//}
 				}
 				?>
 			</table>

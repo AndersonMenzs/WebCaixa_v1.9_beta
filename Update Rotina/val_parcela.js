@@ -1,13 +1,29 @@
 function checkdata() {
 	const form = document.parcela;
 
-	if (form.txtvalor.value > form.vlr_recebido.value) {
+	// PERGUNTA: É QUITAÇÃO E SOLICITAÇÃO DE BOOK/POSTER?
+	const response = confirm('Deseja registrar uma QUITAÇÃO com SOLICITAÇÃO de BOOK ou POSTER?');
+	
+	if (response) {
+		// SIM - redireciona para contrparc_solic.php
+		form.action = 'contrparc_solic.php';
+	} else {
+		// NÃO - redireciona para confcntparc.php
+		form.action = 'confcntparc.php';
+	}
+
+	// VALIDAÇÃO 1: Valor da Prestação vs Valor Recebido
+	var valor = parseFloat(form.txtvalor.value);
+	var recebido = parseFloat(form.vlr_recebido.value);
+
+	if (valor > recebido) {
 		alert("Valor da Prestação não pode ser maior que o Valor Recebido!!!");
 		form.txtvalor.select();
 		form.txtvalor.focus();
 		return false;
 	}
 
+	// VALIDAÇÃO 2: Valor da Prestação vazio
 	if (form.txtvalor.value == "0" || form.txtvalor.value == "" || form.txtvalor.value.length < 1) {
 		alert("Valor da Prestação Está Vazio!!!");
 		form.txtvalor.select();
@@ -15,6 +31,7 @@ function checkdata() {
 		return false;
 	}
 
+	// VALIDAÇÃO 3: Número da Prestação vazio
 	if (form.txtparc.value == "0" || form.txtparc.value == "" || form.txtparc.value.length < 1) {
 		alert("Número da Prestação Está Vazio!!!");
 		form.txtparc.select();
@@ -22,13 +39,7 @@ function checkdata() {
 		return false;
 	}
 
-	/*if (form.txtnparc.value == "0" || form.txtnparc.value == "" || form.txtnparc.value.length < 1) {
-		alert("Quantidade da Prestações Recebidas Está Vazio!!!");
-		form.txtnparc.select();
-		form.txtnparc.focus();
-		return false;
-	}*/
-
+	// VALIDAÇÃO 4: Nenhuma Forma de Pagamento selecionada
 	if (form.lsPr1.value == "00" && form.lsPr2.value == "00" && form.lsPr3.value == "00") {
 		alert("Nenhuma Forma de Pagamento Selecionada!!!");
 		form.txt1.select();
@@ -36,111 +47,136 @@ function checkdata() {
 		return false;
 	}
 
-	if (form.lsPr1.value != "00" && (form.lsPr1.value == form.lsPr2.value || form.lsPr1.value == form.lsPr3.value) || form.lsPr2.value != "00" && (form.lsPr2.value == form.lsPr3.value)) {
+	// =============================================
+	// VALIDAÇÃO 5: Formas de Pagamento Repetidas
+	// =============================================
+	if (form.lsPr1.value != "00" && (form.lsPr1.value == form.lsPr2.value || form.lsPr1.value == form.lsPr3.value) ||
+		form.lsPr2.value != "00" && (form.lsPr2.value == form.lsPr3.value)) {
+
 		alert("Formas de Pagamento Repetidas!!!");
-		form.txt1.select();
-		form.txt1.focus();
+
+		// --- LIMPEZA DOS CAMPOS PRINCIPAIS ---
+		form.txtvalor.value = "";
+		form.vlr_recebido.value = "";
+		form.txtparc.value = "";
+		// ---------------------------------------
+
+		// --- LIMPEZA DOS CAMPOS HIDDEN E SPANS DE PARCELAS ---
+		const txtparc_ini = document.getElementById('txtparc_ini');
+		const txtparc_ult = document.getElementById('txtparc_ult');
+		const parcial = document.getElementById('parcial');
+
+		if (txtparc_ini) txtparc_ini.value = "";
+		if (txtparc_ult) txtparc_ult.value = "";
+		if (parcial) parcial.value = "";
+
+		const PIni = document.getElementById('PIni');
+		const PUlt = document.getElementById('PUlt');
+		const Psep = document.getElementById('Psep');
+		const Parcial = document.getElementById('Parcial');
+		const labelQtdPrestacoes = document.getElementById('labelQtdPrestacoes');
+		const labelParcial = document.getElementById('labelParcial');
+
+		if (PIni) PIni.textContent = "";
+		if (PUlt) PUlt.textContent = "";
+		if (Psep) Psep.style.display = 'none';
+		if (Parcial) Parcial.textContent = "";
+		if (labelQtdPrestacoes) labelQtdPrestacoes.textContent = "Parcela(s)";
+		if (labelParcial) labelParcial.textContent = "Parcial";
+		// ---------------------------------------
+
+		// --- LIMPEZA DOS CAMPOS DE FORMAS DE PAGAMENTO ---
+		form.txt1.value = "";
+		form.txt2.value = "";
+		form.txt3.value = "";
+		// ---------------------------------------
+
+		// --- LIMPEZA ESPECÍFICA PARA CARTÕES DE CRÉDITO ---
+		for (let i = 1; i <= 3; i++) {
+			const parcCred = document.getElementById('parc_card_cred_' + i);
+			if (parcCred) parcCred.value = "0";
+
+			const tabela = document.getElementById('tb_parc_cred_' + i);
+			if (tabela) tabela.style.display = 'none';
+		}
+		// ------------------------------------------------
+
+		// --- RESET DOS SELECTS DE FORMAS DE PAGAMENTO ---
+		form.lsPr1.value = "00";
+		form.lsPr2.value = "00";
+		form.lsPr3.value = "00";
+		// ------------------------------------------------
+
+		// Foco no primeiro campo para recomeçar
+		form.txtvalor.focus();
 		return false;
 	}
 
-	if ((form.txt1.value == "" && form.txt2.value == "" && form.txt3.value == "") || (form.txt1.value == 0 && form.txt2.value == 0 && form.txt3.value == 0)) {
+	// VALIDAÇÃO 6: Nenhum Valor Informado
+	if ((form.txt1.value == "" && form.txt2.value == "" && form.txt3.value == "") ||
+		(form.txt1.value == 0 && form.txt2.value == 0 && form.txt3.value == 0)) {
 		alert("Nenhum Valor Informado!!!");
 		form.txt1.select();
 		form.txt1.focus();
 		return false;
 	}
 
-	if ((form.lsPr1.value == "00" && (form.txt1.value != "" || form.txt1.value.length > 3)) || (form.lsPr1.value != "00" && (form.txt1.value == "" || form.txt1.value.length < 3))) {
+	// VALIDAÇÃO 7: Forma de Pagamento 1 inválida
+	if ((form.lsPr1.value == "00" && (form.txt1.value != "" || form.txt1.value.length > 3)) ||
+		(form.lsPr1.value != "00" && (form.txt1.value == "" || form.txt1.value.length < 3))) {
 		alert("Forma de Pagamento Inválida!!!");
 		form.txt1.select();
 		form.txt1.focus();
 		return false;
 	}
 
-	if ((form.lsPr2.value == "00" && (form.txt2.value != "" || form.txt2.value.length > 3)) || (form.lsPr2.value != "00" && (form.txt2.value == "" || form.txt2.value.length < 3))) {
+	// VALIDAÇÃO 8: Forma de Pagamento 2 inválida
+	if ((form.lsPr2.value == "00" && (form.txt2.value != "" || form.txt2.value.length > 3)) ||
+		(form.lsPr2.value != "00" && (form.txt2.value == "" || form.txt2.value.length < 3))) {
 		alert("Forma de Pagamento Inválida!!!");
 		form.txt2.select();
 		form.txt2.focus();
 		return false;
 	}
 
-	if ((form.lsPr3.value == "00" && (form.txt3.value != "" || form.txt3.value.length > 3)) || (form.lsPr3.value != "00" && (form.txt3.value == "" || form.txt3.value.length < 3))) {
+	// VALIDAÇÃO 9: Forma de Pagamento 3 inválida
+	if ((form.lsPr3.value == "00" && (form.txt3.value != "" || form.txt3.value.length > 3)) ||
+		(form.lsPr3.value != "00" && (form.txt3.value == "" || form.txt3.value.length < 3))) {
 		alert("Forma de Pagamento Inválida!!!");
 		form.txt3.select();
 		form.txt3.focus();
 		return false;
 	}
 
-	const valor1 = form.txt1.value * 1;
-	const valor2 = form.txt2.value * 1;
-	const valor3 = form.txt3.value * 1;
-	let soma = valor1 + valor2 + valor3;
-	const somaFx = soma.toFixed(2);
-	soma = parseFloat(somaFx);
-
-	const taxa = form.vlr_recebido.value * 1;
+	// VALIDAÇÃO 10: Soma dos valores
+	const valor1 = parseCurrencyToCents(form.txt1.value);
+	const valor2 = parseCurrencyToCents(form.txt2.value);
+	const valor3 = parseCurrencyToCents(form.txt3.value);
+	const soma = valor1 + valor2 + valor3;
+	const taxa = parseCurrencyToCents(form.vlr_recebido.value);
 
 	if (taxa !== soma) {
-		const diferenca = soma - taxa;
+		const diferenca = (soma - taxa) / 100;
 		const msg = diferenca > 0 ?
-			"A soma dos valores está MAIOR em R$ " + Math.abs(diferenca).toFixed(2) :
-			"A soma dos valores está MENOR em R$ " + Math.abs(diferenca).toFixed(2);
+			"A soma dos valores está MAIOR em R$ " + Math.abs(diferenca).toFixed(2).replace('.', ',') :
+			"A soma dos valores está MENOR em R$ " + Math.abs(diferenca).toFixed(2).replace('.', ',');
 		alert(msg);
 		return false;
 	}
 
-	let rd_select = "no";
-	for (var loop = 0; loop < rdaut.length; loop++) {
-		if (rdaut[loop].checked == true) {
-			rd_select = "yes";
-		}
-	}
-	if (rd_select == "no") {
-		alert("Voce precisa selecionar\n \"Carnê\" ou \"Avulso\"");
-		return false;
-	}
-	form.submit();
+	return true;
 }
 
-function parseCurrencyToCents(str){
-    if (!str) return 0;
-    str = String(str).trim();
-    if (str === '') return 0;
-    // remove espaços
-    str = str.replace(/\s+/g, '');
+// Função auxiliar para converter para centavos
+function parseCurrencyToCents(str) {
+	if (!str) return 0;
+	str = String(str).trim().replace(/\s+/g, '');
+	if (str === '') return 0;
 
-    var lastDot = str.lastIndexOf('.');
-    var lastComma = str.lastIndexOf(',');
-    var decimalSep = null;
+	// Formato brasileiro: 1.234,56
+	str = str.replace(/\./g, ''); // remove pontos de milhar
+	str = str.replace(',', '.');   // vírgula decimal vira ponto
 
-    if (lastDot > -1 && lastComma > -1) {
-        // quem vem por último é o separador decimal
-        decimalSep = (lastDot > lastComma) ? '.' : ',';
-    } else if (lastDot > -1) {
-        // se houver um '.' e tiver exatamente 2 casas depois, trata como decimal
-        decimalSep = (str.length - lastDot - 1 === 2) ? '.' : null;
-    } else if (lastComma > -1) {
-        decimalSep = (str.length - lastComma - 1 === 2) ? ',' : null;
-    }
-
-    if (decimalSep) {
-        // remove o separador de milhares (o outro caractere) e transforma decimal em ponto
-        if (decimalSep === ',') {
-            str = str.replace(/\./g, ''); // remove pontos milhares
-            str = str.replace(',', '.');  // vírgula -> ponto decimal
-        } else { // decimalSep === '.'
-            str = str.replace(/,/g, '');  // remove vírgulas milhares
-            // ponto já é decimal
-        }
-    } else {
-        // sem separador decimal claro: remove tudo que não é dígito
-        str = str.replace(/[^\d]/g, '');
-        // tratar como inteiro (centavos implícitos)
-        var n = parseInt(str || '0', 10);
-        return isNaN(n) ? 0 : n; // já em centavos se você digitar 100 => 100 centavos
-    }
-
-    var f = parseFloat(str);
-    if (isNaN(f)) return 0;
-    return Math.round(f * 100);
+	const num = parseFloat(str);
+	return isNaN(num) ? 0 : Math.round(num * 100);
 }

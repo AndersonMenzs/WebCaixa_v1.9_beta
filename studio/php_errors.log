@@ -364,3 +364,17 @@ Stack trace:
 [21-Feb-2026 11:19:21 America/Sao_Paulo] PHP Notice:  Undefined variable: credTotPAdm in /var/www/html/caixa/studio/fcxparcsem.php on line 510
 [21-Feb-2026 11:19:21 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fcxparcsem.php on line 510
 [21-Feb-2026 11:19:21 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fcxparcsem.php on line 510
+[23-Feb-2026 07:39:12 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 274
+[23-Feb-2026 07:43:12 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 274
+[23-Feb-2026 07:43:41 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 274
+[23-Feb-2026 07:44:14 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 274
+[23-Feb-2026 07:55:38 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 274
+[23-Feb-2026 07:56:48 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 271
+[23-Feb-2026 07:56:48 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 274
+[23-Feb-2026 08:02:52 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 271
+[23-Feb-2026 08:05:04 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 271
+[23-Feb-2026 08:12:12 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 271
+[23-Feb-2026 08:12:57 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 271
+[23-Feb-2026 08:13:16 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 271
+[23-Feb-2026 08:13:45 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 271
+[23-Feb-2026 09:01:05 America/Sao_Paulo] PHP Notice:  Undefined variable: SlgPag_a in /var/www/html/caixa/studio/via1newparc.php on line 219

@@ -63,8 +63,8 @@
 	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	var_dump($dados);
-	echo "</pre>";
-	exit();*/
+	echo "</pre>";*/
+	//exit();
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -72,12 +72,17 @@
 	$lg_user   = trim($_POST['txtuser']);
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
+
 	$NumDoc    = trim($_POST['txtdoc']);
 	$NumDocF = 10000000 + $NumDoc;
 	$NDoc      = substr($NumDocF, 1, 7);
+
+	$Mat_Vend = trim($_POST['mat_vend']);
+	$Vendedora = trim($_POST['vendedora']);
+	$Cliente	= trim($_POST['cliente']);
+
 	$VrPrest    = trim($_POST['txtvalor']);
 	$VrPrestF   = number_format($VrPrest, 2, ',', '.');
-	$VrRec     = trim($_POST['vlr_recebido']);
 	$PIni      = trim($_POST['txtparc_ini']);
 	$PUlt      = trim($_POST['txtparc_ult']);
 	$QtdeParc  = $PUlt - $PIni + 1;
@@ -86,12 +91,17 @@
 	$VrPrestForm  = $VrPrest * $QtdeParc;
 	$VrPrestFormF  = number_format($VrPrestForm, 2, ',', '.');
 	$FPag_1      = trim($_POST['lsPr1']);
+	$FPag_2      = trim($_POST['lsPr2']);
+	$FPag_3      = trim($_POST['lsPr3']);
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
-	$Mat_Vend = trim($_POST['mat_vend']);
-	$Vendedora = trim($_POST['vendedora']);
-	$Cliente	= trim($_POST['cliente']);
-	$VrTot = $txt1 / $QtdeParc;
-	$VrTotF = number_format($VrTot, 2, '.', ',	');
+	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
+	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
+	//$Parc_card_cred = trim($_POST['parc_card_cred']);
+	$Parc_card_cred = (float) ($_POST['parc_card_cred_1'] ?: $_POST['parc_card_cred_2'] ?: $_POST['parc_card_cred_3']);
+
+	$ref_std = trim($_POST['ref_std']);
+	$Rdopt = trim($_POST['rdopt']);
+	$Pedido = trim($_POST['pct_ped']) ? trim($_POST['pct_ped']) : trim($_POST['tam_ped']);
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -100,6 +110,13 @@
 	$Fspags = 0;
 
 	if ($txt1 <> "") {
+		$Fspags = $Fspags + 1;
+	}
+	if ($txt2 <> "") {
+		$Fspags = $Fspags + 1;
+	}
+
+	if ($txt3 <> "") {
 		$Fspags = $Fspags + 1;
 	}
 
@@ -112,8 +129,27 @@
 			$ModPag = $ln['modpag'];
 			$FmRec  = $ln['siglapag'];
 			mysqli_free_result($rs);
+		} elseif ($txt2 <> "") {
+			$FPag = $FPag_2;
+			$sql = "select * from formapag where codpag = '$FPag' ";
+			$rs  = mysqli_query($conec, $sql);
+			$ln  = mysqli_fetch_array($rs);
+			$ModPag = $ln['modpag'];
+			$FmRec  = $ln['siglapag'];
+			mysqli_free_result($rs);
+		} elseif ($txt3 <> "") {
+			$FPag = $FPag_3;
+			$sql = "select * from formapag where codpag = '$FPag' ";
+			$rs  = mysqli_query($conec, $sql);
+			$ln  = mysqli_fetch_array($rs);
+			$ModPag = $ln['modpag'];
+			$FmRec  = $ln['siglapag'];
+			mysqli_free_result($rs);
 		}
+	} else {
+		$ModPag = "Diversas";
 	}
+
 	// Condição para nome em extensão para forma de pagamento
 	if ($FmRec == "DIN") {
 		$ModPag = "Dinheiro";
@@ -125,9 +161,11 @@
 		$ModPag = "Pix QR Code";
 	} elseif ($FmRec == "PXC") {
 		$ModPag = "Pix Cnpj";
-	} elseif ($FmRec == "CLP") {
-		$ModPag = "Cartão Cred. Loja";
-		}?>
+	} elseif ($FmRec == "CPL") {
+		$ModPag = "Cartão Crédito Parcelado Loja";
+	}
+
+	?>
 
 	<font color="gold" size="6">
 		<b>
@@ -218,7 +256,7 @@
 						<font color='gold' size='5'><b><i>Forma de Pagamento </i></b></font>
 					</td>
 					<td width="55%" align="center">
-						<font size='6' color='#FFFFFF'>
+						<font size='5' color='#FFFFFF'>
 							<b>
 								<i>
 									<?php echo $ModPag; ?>
@@ -227,6 +265,43 @@
 						</font>
 					</td>
 				</tr>
+
+				<tr>
+					<td width="45%" align="right">
+						<font color='gold' size='5'><b><i>Referente Estúdio</i></b></font>
+					</td>
+					<td width="55%" align="center">
+						<font size='5' color='#FFFFFF'>
+							<b>
+								<i>
+									<?php 
+									if ($std == $ref_std) {
+										echo "PC-" . $ref_std;
+									} else {									
+									echo "PC-" . $ref_std;
+									}
+									 ?>
+								</i>
+							</b>
+						</font>
+					</td>
+				</tr>
+
+				<?php
+				if ($Rdopt) { 
+					?>
+					<tr>
+						<td width="45%" align="right">
+							<font color='gold' size='5'><b><i>Solicitação Book/Poster </i></b></font>
+						</td>
+						<td width="55%" align="center">
+							<font color='#FFFFFF' size='5'><b><i><?php echo $Pedido; ?></i></b></font>
+						</td>
+					</tr>
+					<?php
+				}
+				?>
+
 
 				<tr>
 					<td width="45%" align="right">
@@ -239,19 +314,25 @@
 			</table>
 
 			<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+			<input type="hidden" name="ref_std" value="<?php echo $ref_std; ?>">
 			<input type="hidden" name="txtdoc" value="<?php echo $NumDoc; ?>">
+			<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
+			<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+			<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 			<input type="hidden" name="vrprest" value="<?php echo $VrPrest; ?>">
 			<input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
 			<input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
 			<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
-			<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">
+			<input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
+			<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
+			<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
+			<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
+			<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
 			<input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
 			<input type="hidden" name="vrparcial" value="<?php echo $ParcialF; ?>">
-			<input type="hidden" name="vrtotf" value="<?php echo $VrTotF; ?>">
-			<input type="hidden" name="vrrec" value="<?php echo $VrRec; ?>">
-			<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
-			<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
-			<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
+			<input type="hidden" name="parc_card_cred" value="<?php echo $Parc_card_cred; ?>">
+			<input type="hidden" name="rdopt" value="<?php echo $Rdopt; ?>">
+			<input type="hidden" name="pedido" value="<?php echo $Pedido; ?>">
 			<p>
 				<center>
 					<input id="ghost_click" type="submit" name="btenvia" value="Continuar">
