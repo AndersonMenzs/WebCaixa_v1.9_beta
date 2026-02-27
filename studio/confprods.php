@@ -58,6 +58,10 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
+$dados = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+echo "<pre>";
+var_dump($dados);
+echo "</pre>";
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -79,7 +83,8 @@
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
 	$Valor     = $txt1 + $txt2 + $txt3;
 	$ValorF    = number_format($Valor, 2, ",", ".");
-	$Book      = trim($_POST['rdbook']);
+	$Book      = trim($_POST['ped_book']) ?? '';
+	$Produto   = trim($_POST['ped_prod']) ?? '';
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -195,18 +200,25 @@
 				<tr>
 					<td width="30%" align="center">
 						<font color='gold' size='5'><b><i>Produto: </i></b></font>
+					</td>
+					<td width="70%" align="center">
 						<font color='#FFFFFF' size='5'><b><i>
 									<blink>
 										<?php
-										if ($Book == 'n') {
-											echo "Diversos";
+										if ($Book <> '') {
+											echo $Book;
 										} else {
-											echo "Book";
+											echo $Produto;
+											echo " - ";
 										} ?></blink>
 								</i></b></font>
 					</td>
+				</tr>
+				<tr>
 					<td width="70%" align="center">
 						<font color='gold' size='5'><b><i>Senha: </i></b></font>
+					</td>
+					<td width="70%" align="center">
 						<input type='password' name='txtsen' size='6' maxlength='6' class="campos">
 					</td>
 				</tr>

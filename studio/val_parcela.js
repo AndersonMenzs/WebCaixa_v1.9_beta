@@ -112,6 +112,24 @@ function checkdata() {
 		return false;
 	}
 
+	// VALIDAÇÃO 9: Parcelas obrigatórias para cartão de crédito
+	for (let i = 1; i <= 3; i++) {
+		const lsPr = document.getElementById('lsPr' + i);
+		const parcCred = document.getElementById('parc_card_cred_' + i);
+		
+		if (lsPr && parcCred) {
+			// Se a forma de pagamento é cartão de crédito (31)
+			if (lsPr.value === '31') {
+				// Verifica se a parcela está selecionada (valor diferente de "0")
+				if (parcCred.value === '0' || parcCred.value === '') {
+					alert("Você deve selecionar o número de parcelas para o CARTÃO CRÉDITO PARCELADO LOJA " + i + "!");
+					parcCred.focus();
+					return false;
+				}
+			}
+		}
+	}
+
 	// VALIDAÇÃO 6: Nenhum Valor Informado
 	if ((form.txt1.value == "" && form.txt2.value == "" && form.txt3.value == "") ||
 		(form.txt1.value == 0 && form.txt2.value == 0 && form.txt3.value == 0)) {
