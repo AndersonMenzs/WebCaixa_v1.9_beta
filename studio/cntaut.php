@@ -1,3 +1,12 @@
+<?php
+// Debug
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//ini_set('display_errors', 1);
+//ini_set('error_log', 'php_errors.log');
+
+?>
 <html>
 
 <head>
@@ -160,6 +169,7 @@
 				$docsCount = [];
 				$docsTotal = [];
 				$docsEstorno = [];
+				$doscX = [];
 
 				mysqli_data_seek($rs, 0);
 
@@ -170,6 +180,7 @@
 
 					if (!empty($tmp['estorno'])) {
 						$docsEstorno[$d] = true;
+						$doscX[$d] = true;
 					}
 
 					if (!isset($docsCount[$d])) {

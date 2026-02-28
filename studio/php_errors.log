@@ -378,3 +378,5 @@ Stack trace:
 [23-Feb-2026 08:13:16 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 271
 [23-Feb-2026 08:13:45 America/Sao_Paulo] PHP Notice:  Undefined variable: tipo_2 in /var/www/html/caixa/studio/via1newparc.php on line 271
 [23-Feb-2026 09:01:05 America/Sao_Paulo] PHP Notice:  Undefined variable: SlgPag_a in /var/www/html/caixa/studio/via1newparc.php on line 219
+[27-Feb-2026 18:39:03 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[27-Feb-2026 18:39:03 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
