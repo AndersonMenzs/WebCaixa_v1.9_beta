@@ -52,8 +52,16 @@
 	// Obtendo a Data Atual
 	$DataAtual = date('Ymd');
 
+	// Obtendo número do documento
+	$sqlD = "select numdoc from registro where reg = '$Aut' and datarec = '$DataAtual' and estorno <> 'x' ";
+	$rsD  = mysqli_query($conec, $sqlD);
+	$lnD  = mysqli_fetch_array($rsD);
+	$NumDocE = $lnD['numdoc'];
+
 	// Obtendo Dados
-	$sqlE = "select * from registro where reg = '$Aut' and tiporec > '0' and estorno <> 'x' and datarec = $DataAtual";
+	//$sqlE = "select * from registro where reg = '$Aut' and tiporec > '0' and estorno <> 'x' and numdoc = '$NumDocE' and datarec = $DataAtual";
+	$sqlE = "select reg, numdoc, tiporec, datarec, horarec, operador, vlrec from registro where reg >= '$Aut' and tiporec > '0' and estorno <> 'x' and numdoc = '$NumDocE' and datarec
+= '$DataAtual'";
 	$rsE  = mysqli_query($conec, $sqlE);
 	$regE = mysqli_num_rows($rsE);
 

@@ -13,6 +13,11 @@ include "./valor_ext.php";
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	var_dump($dados);
+	echo "</pre>";
+	//exit();
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R1.1.1";

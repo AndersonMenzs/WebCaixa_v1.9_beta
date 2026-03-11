@@ -75,6 +75,7 @@
 <body background="../images/bg1.jpg" text="#FFFFFF">
 
    <?php
+
    // Obtendo o Login
    $Sis     = "S7";
    $Rot     = "S7R2.8";
@@ -95,7 +96,8 @@
    $txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
    $Valor     = $txt1 + $txt2 + $txt3;
    $ValorF    = number_format($Valor, 2, ",", ".");
-
+   $Parcelas  = trim($_POST['parc_card_cred_1']) + trim($_POST['parc_card_cred_2']) + trim($_POST['parc_card_cred_3']);
+ 
    // Verificando o Sistema
    include "us_sist.php";
    if ($ch == 'no') {
@@ -164,8 +166,8 @@
             </tr>
             <tr>
                <td width="50%" align="center">
-                  <font color='gold' size='5'><b><i>Produtos:</i></b></font>
-                  <input id="rdopt_prod" type="radio" name="rdopt" class="campos" value="PRODUTO">
+                  <font color='gold' size='5'><b><i>Poster:</i></b></font>
+                  <input id="rdopt_poster" type="radio" name="rdopt" class="campos" value="POSTER">
                </td>
                <td align="center">
                   <font size="4" color='gold'>
@@ -173,7 +175,7 @@
                         <i>Pacote: </i>
                      </b>
                   </font>
-                  <select name="ped_prod" id="ped_prod" class="campos" style="width: 300px; height: 30px;">
+                  <select name="ped_poster" id="ped_poster" class="campos" style="width: 300px; height: 30px;">
                      <option value="" selected>Selecione</option>
                      <font size="4">
                         <?php
@@ -190,6 +192,12 @@
                         ?>
                      </font>
                   </select>
+               </td>
+            </tr>
+            <tr>
+               <td colspan="2" align="center">
+                  <font color='gold' size='5'><b><i>Produtos:</i></b></font>
+                  <input id="rdopt_prod" type="radio" name="rdopt" class="campos" value="PRODUTO">
                </td>
             </tr>
          </table><br>
@@ -226,6 +234,7 @@
          <input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
          <input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
          <input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
+         <input type="hidden" name="parcelas" value="<?php echo $Parcelas; ?>">
          <input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
          <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
          <input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
@@ -265,7 +274,7 @@
       (function() {
          const radios = Array.from(document.querySelectorAll('input[name="rdopt"]'));
          const selectPct = document.getElementById('pct_book');
-         const selectTam = document.getElementById('ped_prod');
+         const selectTam = document.getElementById('ped_poster');
 
          if (!radios.length || !selectPct || !selectTam) return;
 
@@ -274,7 +283,7 @@
             
             // Verificar se algum radio está marcado
             if (!rdoMarked) {
-               alert('Selecione um tipo: Books ou Produtos');
+               alert('Selecione um tipo: Books, Poster ou Produtos');
                return false;
             }
 
@@ -287,12 +296,14 @@
                   selectPct.focus();
                   return false;
                }
-            } else if (tipo === 'PRODUTO') {
+            } else if (tipo === 'POSTER') {
                if (selectTam.value === '' || selectTam.selectedIndex === 0) {
-                  alert('Selecione um Produto');
+                  alert('Selecione um Tamanho do Poster');
                   selectTam.focus();
                   return false;
                }
+            } else if (tipo === 'PRODUTO') {
+               return true;
             }
 
             return true;
@@ -306,10 +317,15 @@
                selectPct.disabled = false;   
                selectTam.disabled = true;
                selectTam.selectedIndex = 0;
-            } else if (tipo === 'PRODUTO') {
+            } else if (tipo === 'POSTER') {
                selectPct.disabled = true;
                selectPct.selectedIndex = 0;
                selectTam.disabled = false;
+            } else if (tipo === 'PRODUTO') {
+               selectPct.disabled = true;
+               selectPct.selectedIndex = 0;
+               selectTam.disabled = true;
+               selectTam.selectedIndex = 0;
             } else {
                selectPct.disabled = true;
                selectTam.disabled = true;

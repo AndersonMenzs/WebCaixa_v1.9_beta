@@ -52,7 +52,11 @@
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
 	$Valor     = $txt1 + $txt2 + $txt3;
 	$ValorF    = number_format($Valor, 2, ",", ".");
-	$RdBook    = trim($_POST['rdbook']);
+	$Book    = trim($_POST['pct_book']) ?? '';
+	$RdBook  = trim($_POST['rdbook']);
+	$Poster   = trim($_POST['ped_poster']) ?? '';
+	$Produto   = trim($_POST['ped_prod']) ?? '';
+	$Parcelas = trim($_POST['parcelas']);
 	$Pass      = strtolower(trim($_POST['txtsen']));
 	$Senha     = sha1($Pass);
 
@@ -133,6 +137,7 @@
 				<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
 				<input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
 				<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
+				<input type="hidden" name="parcelas" value="<?php echo $Parcelas; ?>">
 				<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">
 				<input type="hidden" name="txtmodpag" value="<?php echo $ModPag; ?>">
 				<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
@@ -141,6 +146,9 @@
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">
 				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
 				<input type="hidden" name="rdbook" value="<?php echo $RdBook; ?>">
+				<input type="hidden" name="pct_book" value="<?php echo $Book; ?>">
+				<input type="hidden" name="ped_poster" value="<?php echo $Poster; ?>">
+				<input type="hidden" name="ped_prod" value="<?php echo $Produto; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
 				<p>
 					<font size='6'><b>

@@ -269,7 +269,7 @@ Criar tabela de produtos
 ```sql
 CREATE TABLE studio.produtos (
     cod_prod char(2) NOT NULL,
-    nome_prod varchar(100) NOT NULL
+    nome_prod varchar(100) NOT NULL,
     desc_prod char(1) NOT NULL);
 ```
 
@@ -468,3 +468,40 @@ Foi necessário acrescebtar o regoistro de recebimento para a auditoria nas tabe
 | via1newchv.php | |
 | via1newprods.php | |
 | via1newpag.php | |
+
+# Criação de tabela de estúdios para CONTRATO PARCELA e PRODS
+
+```sql
+CREATE TABLE `estudios` (
+  `id_std` int(11) NOT NULL AUTO_INCREMENT,
+  `cod_std` varchar(3) NOT NULL,
+  `nome_std` varchar(50) NOT NULL,
+  `status_std` varchar(1) NOT NULL DEFAULT ' ',
+  PRIMARY KEY (`id_std`)
+);
+```
+# Inserção de dados na tabela estudios
+
+```sql
+INSERT INTO `estudios` (`id_std`, `cod_std`, `nome_std`, `status_std`) VALUES
+(1, '201', 'São Gonçalo', 'x'),
+(2, '202', '---', 'x'),
+(3, '204', '---', 'x'),
+(4, '206', 'Campo Grande', ''),
+(5, '207', '---', 'x'),
+(6, '210', '---', 'x'),
+(7, '211', 'Madureira 2', ''),
+(8, '212', '---', 'x'),
+(9, '213', '---', 'x'),
+(10, '214', '---', 'x'),
+(11, '215', 'Tijuca', ''),
+(12, '216', '---', 'x'),
+(13, '217', 'Nova Iguaçu 2', ''),
+(14, '218', 'Alcântara 1', ''),
+(15, '219', 'Campo Grande Calçadão', ''),
+(16, '220', 'Alcântara 2', ''),
+(17, '221', 'Caxias 2', ''),
+(18, '222', 'Alfândega', ''),
+(19, '223', 'Caxias 3', ''),
+(20, '221', '---', 'x');
+```

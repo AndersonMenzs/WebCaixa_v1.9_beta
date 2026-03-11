@@ -49,7 +49,6 @@ include "./valor_ext.php";
 	$h1 = substr($hora, 0, 2);
 	$h2 = substr($hora, 3, 2);
 	$horaaut   = $h1 . $h2;
-	$DataRec = date('Y-m-d');
 	$Mat       = trim($_POST['txtmat']);
 	$Mat_Vend  = trim($_POST['mat_vend']);
 	$Vendedora = trim($_POST['vendedora']);
@@ -57,9 +56,6 @@ include "./valor_ext.php";
 	$VrPag     = $txt1 + $txt2 + $txt3;
 	$VrPagF    = number_format($VrPag, 2, ',', '.');
 	$vlr_ext   = valorPorExtenso($VrPagF);
-	$Book = $_POST['pct_book'];
-	$Poster = $_POST['ped_poster'];
-	$Tipo_ped = isset($_POST['pct_book']) ? trim($_POST['pct_book']) : $_POST['ped_poster'];;
 
 	// Obtendo o código do PC
 	$sqlPC = "select pc from inicial";
@@ -76,13 +72,10 @@ include "./valor_ext.php";
 	// Definindo o Tipo de Autenticação
 	if ($TipoRec == '6') {
 		$tipo = "POSTER";
-		$Opt = "POSTER";
 	} elseif ($TipoRec == '7') {
 		$tipo = "BOOK";
-		$Opt = "BOOK";
 	} else {
 		$tipo = "PRODUTO";
-		$Opt = "PRODUTO";
 	}
 
 	// Consulta SQL corrigida com parênteses
@@ -141,30 +134,6 @@ include "./valor_ext.php";
 	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
 	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
 
-	// Verifica se é um book ou poster para a solicitação do pedido
-	if ($TipoRec == '6' || $TipoRec == '7') {
-		
-	// Consulta o número de documento e soma os valores
-	$sqlP = "SELECT SUM(vlrec) AS vlrec FROM registro WHERE numdoc = '$NDoc' AND datarec = '$DataRec' AND estorno <> 'x' AND subtipo <> 'EST'";
-	$rsP  = mysqli_query($conec, $sqlP) or die("Erro de Banco de Dados #4. Contate seu Administrador");
-	$lnP  = mysqli_fetch_array($rsP);
-	$VlRec = $lnP['vlrec'];
-	$VlRecF    = number_format($VlRec, 2, ',', '.');
-
-	// Imprimindo o Recibo
-	$Aut1 = $Reg;
-	$Aut2 = "$Reg$PC$NDoc $dtAut" . "R$ " . "$VlRecF$FmRec_a$MatRec$Opt";
-
-	// Gravando a Spool
-	$sql = "insert into spool values ('$Aut1', '$Aut2')";
-	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
-
-	// Gravando a Spool
-	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
-	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
-
-	}
-
 	// Encerrando a Conexão
 	$SisRot = "S-7.2.8.1.2";
 	include "rodape.php"; ?>
@@ -182,7 +151,6 @@ include "./valor_ext.php";
 				'&fpag_2=<?php echo urlencode($FPag_2); ?>' +
 				'&fpag_3=<?php echo urlencode($FPag_3); ?>' +
 				'&parcelas=<?php echo urlencode($Parcelas); ?>' +
-				'&tipo_ped=<?php echo urlencode($Tipo_ped); ?>' +
 				'&fmrec=<?php echo urlencode($FmRec_a); ?>' +
 				'&txt1=<?php echo urlencode($txt1); ?>' +
 				'&txt2=<?php echo urlencode($txt2); ?>' +
@@ -196,7 +164,6 @@ include "./valor_ext.php";
 				'&horaaut=<?php echo urlencode($horaaut); ?>' +
 				'&dtAut=<?php echo urlencode($dtAut); ?>' +
 				'&SgRec=<?php echo urlencode($SgRec); ?>' +
-				'&Opt=<?php echo urlencode($Opt); ?>' +
 				'&Mat=<?php echo urlencode($Mat); ?>';
 			window.open(url, '_blank');
 			setTimeout(function() {

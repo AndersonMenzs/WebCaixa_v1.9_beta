@@ -314,6 +314,14 @@
    $user = substr($lg_user, 0, 8);
    $pss  = substr($lg_user, 8, 40);
 
+   // inicializa variáveis usadas no form para evitar undefined
+   $mat_vend = isset($mat_vend) ? $mat_vend : '';
+
+   // se vierem via REQUEST/POST, use-os
+   if (isset($_REQUEST['mat_vend'])) $mat_vend = trim($_REQUEST['mat_vend']);
+
+   $Mat_Vend  = htmlspecialchars($mat_vend, ENT_QUOTES);
+
    include "us_sist.php";
    if ($ch == 'no') {
       include "us_cad.php";
@@ -344,9 +352,6 @@
                   <font color='#FFFFFF' size='5'><b><i>Ref. Estúdio</i></b></font>
                </td>
                <td align="center">
-                  <font color='#FFFFFF' size='5'><b><i>Contrato</i></b></font>
-               </td>
-               <td align="center">
                   <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
                </td>
                <td align="center">
@@ -356,26 +361,31 @@
             <tr>
                <td align="center">
                   <select name="ref_std" id="ref_std" class="campos" required>
-                     <option value="0">Selecione</option>
-                     <option value="206">PC-206</option>
-                     <option value="211">PC-211</option>
-                     <option value="215">PC-215</option>
-                     <option value="217">PC-217</option>
-                     <option value="218">PC-218</option>
-                     <option value="219">PC-219</option>
-                     <option value="220">PC-220</option>
-                     <option value="221">PC-221</option>
-                     <option value="222">PC-222</option>
-                     <option value="223">PC-223</option>
+                     <?php
+                     include "conexao.php";
+                     include "dbselect.php";
+
+                     $sql = "SELECT * FROM estudios WHERE status_std <> 'x' ORDER BY cod_std ASC";
+                     $res = mysqli_query($conec, $sql) or die("Não foi possível acessar os Dados");
+
+							// Criando o Array para o campo PC
+							while ($lnstd = mysqli_fetch_array($res)) {
+								$Cod_Std  = $lnstd['cod_std'];
+							?>
+                     <!-- Deixar o estúdio pre-selecionado -->
+                     <?php if ($Cod_Std == $std) { ?>
+                        <option value="<?php echo $Cod_Std; ?>" class="campos" selected><?php echo "PC-" . $Cod_Std; ?></option>
+                     <?php } else { ?>
+								<option value="<?php echo $Cod_Std; ?>" class="campos"><?php echo "PC-" . $Cod_Std; ?></option>
+                     <?php
+                     } 
+							}
+							mysqli_free_result($res);
+                     ?>
                   </select>
                </td>
                <td align="center">
-                  <input type="text" id="txtdoc" name="txtdoc" size="6" maxlength="8" class="campos" autofocus
-                     onkeypress="return /[A-Za-z0-9 ]/.test(String.fromCharCode(event.which || event.keyCode))"
-                     onkeyup="this.value=this.value.toUpperCase(); validnome(this)" required>
-               </td>
-               <td align="center">
-                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $matVendEsc; ?>">
+                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $Mat_Vend; ?>">
                   <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
                      onkeyup="this.value=this.value.toUpperCase(); validnome(this)" required>
                </td>
@@ -391,7 +401,7 @@
       <table width="100%" border="0" cellspacing="0">
          <tr>
             <td width="82%" align="center">
-               <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">               
+               <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $Mat_Vend; ?>">               
                <input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
                <input type='reset' name='btreset' value='Limpar'><br><br>
                <span id="msg"></span>

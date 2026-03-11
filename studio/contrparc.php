@@ -310,17 +310,27 @@
             <tr>
                <td align="center">
                   <select name="ref_std" id="ref_std" class="campos" required>
-                     <option value="0">Selecione</option>
-                     <option value="206">PC-206</option>
-                     <option value="211">PC-211</option>
-                     <option value="215">PC-215</option>
-                     <option value="217">PC-217</option>
-                     <option value="218">PC-218</option>
-                     <option value="219">PC-219</option>
-                     <option value="220">PC-220</option>
-                     <option value="221">PC-221</option>
-                     <option value="222">PC-222</option>
-                     <option value="223">PC-223</option>
+                     <?php
+                     include "conexao.php";
+                     include "dbselect.php";
+
+                     $sql = "SELECT * FROM estudios WHERE status_std <> 'x' ORDER BY cod_std ASC";
+                     $res = mysqli_query($conec, $sql) or die("Não foi possível acessar os Dados");
+
+							// Criando o Array para o campo PC
+							while ($lnstd = mysqli_fetch_array($res)) {
+								$Cod_Std  = $lnstd['cod_std'];
+							?>
+                     <!-- Deixar o estúdio pre-selecionado -->
+                     <?php if ($Cod_Std == $std) { ?>
+                        <option value="<?php echo $Cod_Std; ?>" class="campos" selected><?php echo "PC-" . $Cod_Std; ?></option>
+                     <?php } else { ?>
+								<option value="<?php echo $Cod_Std; ?>" class="campos"><?php echo "PC-" . $Cod_Std; ?></option>
+                     <?php
+                     } 
+							}
+							mysqli_free_result($res);
+                     ?>
                   </select>
                </td>
                <td align="center">

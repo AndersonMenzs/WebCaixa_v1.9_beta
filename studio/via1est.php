@@ -74,7 +74,7 @@ error_reporting(E_ALL);
 	$rsPC  = mysqli_query($conec, $sqlPC) or die("Não foi possível acessar o PC");
 	$lnPC  = mysqli_fetch_array($rsPC);
 	$PC  = $lnPC['pc'];
-
+	
 	$sql = "SELECT * FROM registro WHERE reg = '$Aut' AND datarec = '$DataAtual'";
 	$rs = mysqli_query($conec, $sql) or die("Nao foi possivel acessar o Registro");
 	$regs = mysqli_num_rows($rs);

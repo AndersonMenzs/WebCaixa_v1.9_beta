@@ -176,46 +176,60 @@
 				while ($tmp = mysqli_fetch_assoc($rs)) {
 
 					$d   = $tmp['numdoc'];
+					$temEstorno = !empty($tmp['estorno']) ? 1 : 0;
+					$groupKey = $d . "_" . $temEstorno;
 					$vlr = floatval($tmp['vlrec']);
 
 					if (!empty($tmp['estorno'])) {
-						$docsEstorno[$d] = true;
-						$doscX[$d] = true;
+						$docsEstorno[$groupKey] = true;
+						$doscX[$groupKey] = true;
 					}
 
-					if (!isset($docsCount[$d])) {
-						$docsCount[$d] = 0;
-						$docsTotal[$d] = 0;
+					if (!isset($docsCount[$groupKey])) {
+						$docsCount[$groupKey] = 0;
+						$docsTotal[$groupKey] = 0;
 					}
 
-					$docsCount[$d]++;
-					// Não somar se estiver marcado com x (estorno)
-					if (empty($tmp['estorno'])) {
-						$docsTotal[$d] += $vlr;
+					$docsCount[$groupKey]++;
+					// Não somar se estiver marcado com x (estorno) ou se subtipo for EST
+					if (empty($tmp['estorno']) && $tmp['siglarec'] != 'EST') {
+						$docsTotal[$groupKey] += $vlr;
 					}
 				}
-
 				mysqli_data_seek($rs, 0);
 
-			// Agrupar dados por documento
+			// Agrupar dados por documento e criar grupos separados por estorno
 			$docsByKey = [];
 			$docsFirstRow = [];
+			$docsCNTP = []; // Rastrear CNTP com múltiplas formas
 
 			while ($ln = mysqli_fetch_assoc($rs)) {
 				$Doc = $ln['numdoc'];
+				$temEstorno = !empty($ln['estorno']) ? 1 : 0;
+				$groupKey = $Doc . "_" . $temEstorno;
 
-				if (!isset($docsByKey[$Doc])) {
-					$docsByKey[$Doc] = [
-						'sem_estorno' => [],
-						'com_estorno' => []
-					];
-					$docsFirstRow[$Doc] = $ln; // Guardar primeira linha de cada doc
+				if (!isset($docsByKey[$groupKey])) {
+					$docsByKey[$groupKey] = [];
+					$docsFirstRow[$groupKey] = $ln; // Guardar primeira linha de cada grupo
 				}
 
-				if (!empty($ln['estorno'])) {
-					$docsByKey[$Doc]['com_estorno'][] = $ln;
-				} else {
-					$docsByKey[$Doc]['sem_estorno'][] = $ln;
+				$docsByKey[$groupKey][] = $ln;
+				
+				// Detectar CNTP
+				if ($ln['siglarec'] == 'CNTP') {
+					if (!isset($docsCNTP[$Doc])) {
+						$docsCNTP[$Doc] = [];
+					}
+					$docsCNTP[$Doc][] = $ln;
+				}
+			}
+			
+			// Verificar quais CNTP têm múltiplas formas de pagamento
+			$docsCNTPMultiplas = [];
+			foreach ($docsCNTP as $Doc => $registros) {
+				$formas = array_unique(array_column($registros, 'modpgto'));
+				if (count($formas) > 1) {
+					$docsCNTPMultiplas[$Doc] = true;
 				}
 			}
 
@@ -224,12 +238,14 @@
 			// Exibir cada documento com seus registros
 			$docsIndexPrinted = [];
 
-			foreach ($docsByKey as $Doc => $docData) {
+			foreach ($docsByKey as $groupKey => $allRows) {
 
-				// Combinar: primeiro sem estorno, depois com estorno
-				$allRows = array_merge($docData['sem_estorno'], $docData['com_estorno']);
-
-				$docsIndexPrinted[$Doc] = 0;
+				$docsIndexPrinted[$groupKey] = 0;
+				
+				// Extrair o número do documento do groupKey
+				$docArray = explode("_", $groupKey);
+				$Doc = $docArray[0];
+				$temEstorno = $docArray[1];
 
 				foreach ($allRows as $ln) {
 
@@ -252,36 +268,36 @@
 
 					$Estorno = $ln['estorno'];
 
-					$docsIndexPrinted[$Doc]++;
+					$docsIndexPrinted[$groupKey]++;
 
-					// Linha Pai (primeira linha do documento)
-					if ($docsIndexPrinted[$Doc] == 1) {
+					// Linha Pai (primeira linha do grupo)
+					if ($docsIndexPrinted[$groupKey] == 1) {
 
-						echo "<tr onclick=\"toggleDoc('{$Doc}')\" style='cursor:pointer'>";
+						echo "<tr onclick=\"toggleDoc('{$groupKey}')\" style='cursor:pointer'>";
 
 						echo "
 							<td><b><i>{$Fita}</b></i></td>
 							<td align='right'><b><i>{$RegF}</b></i></td>
 							<td align='right'><b><i>{$Doc}</b></i></td>
-							<td align='right'><b><i>{$SubTipo}</b></i></td>
+							<td align='right'><b><i><font color='" . ($SubTipo == 'EST' ? "red" : "white") . "'>{$SubTipo}</font></b></i></td>
 							<td align='center'><b><i>-</b></i></td>
 							<td align='right'><b><i>{$RecFull}</b></i></td>
 							<td align='right'><b><i>{$HrRec}</b></i></td>
-							<td align='right'><b><i>R$ " . number_format($docsTotal[$Doc], 2, ",", ".") . "</b></i></td>
+							<td align='right'><b><i>R$ " . number_format($docsTotal[$groupKey], 2, ",", ".") . "</b></i></td>
 							<td align='center'><b><i>-</b></i></td>
 							<td align='right'><b><i>{$OpFull}</b></i></td>
-							<td align='center'><b>".(!empty($docsEstorno[$Doc]) ? "x" : "-")."</b></td>
+							<td align='center'><b>".(!empty($docsEstorno[$groupKey]) ? "x" : "-")."</b></td>
 							</tr>";
 					}
 
 					// Linha Filha
-					echo "<tr class='doc_{$Doc}' style='display:none;color:gold;'>";
+					echo "<tr class='doc_{$groupKey}' style='display:none;color:gold;'>";
 
 					echo "
 						<td><b><i>{$Fita}</b></i></td>
 						<td align='right'><b><i>{$RegF}</b></i></td>
 						<td align='right'><b><i>{$Doc}</b></i></td>
-						<td align='right'><b><i>{$SubTipo}</b></i></td>
+						<td align='right'><b><i><font color='" . ($SubTipo == 'EST' ? "red" : "gold") . "'>{$SubTipo}</font></b></i></td>
 						<td align='center'><b><i>{$Parc}</b></i></td>
 						<td align='right'><b><i>{$RecFull}</b></i></td>
 						<td align='right'><b><i>{$HrRec}</b></i></td>

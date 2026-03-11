@@ -69,10 +69,11 @@
 		if ($regso > 0) {
 			$lno  = mysqli_fetch_array($rso);
 			$Mat = $lno['mat'];
-			//mysqli_free_result($rso);
+			mysqli_free_result($rso);
 
 			// Gravando o Registro
-			$sqlr = "select * from registro where reg = $Aut and datarec = '$dtComp' ";
+			//$sqlr = "select * from registro where reg = $Aut and datarec = '$dtComp' ";
+			$sqlr = "select * from registro where reg >= $Aut and numdoc = '$NDoc' and datarec = '$dtComp' ";
 			$rsr  = mysqli_query($conec, $sqlr) or die("Não foi possível acessar os Dados");
 			$regsr = mysqli_num_rows($rsr);
 			$lnr = mysqli_fetch_array($rsr);
@@ -85,10 +86,13 @@
 			mysqli_free_result($rsr);
 
 			if ($regsr == 1) {
-				include "estunico.php";
+				//include "estunico.php";
+				echo "Registro Único";
+				exit;
 			} else {
 				include "estmultiplo.php";
-			}
+				
+				}
 		} else { ?>
 			<font size='6'><b>
 					<center>Senha <font color='gold'>

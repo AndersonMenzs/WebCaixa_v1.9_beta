@@ -1,3 +1,13 @@
+<?php
+
+// debug
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+ini_set('display_errors', 1);
+ini_set('error_log', 'php_errors.log');
+?>
+
 <html>
 
 <head>
@@ -109,12 +119,11 @@
 	$user = substr($lg_user, 0, 8);
 	$pss  = substr($lg_user, 8, 40);
 	$ref_std = trim($_POST['ref_std']);
-	$Contrato = trim($_POST['txtdoc']);
 	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = $_REQUEST['vendedora'];
 	$Cliente   = $_REQUEST['cliente'];
 	$DataHj = date('Y-m-d');
-
+	
 	// Obtendo Valor Atualizado
 	include "conexao.php";
 	include "dbselect.php";
@@ -170,9 +179,6 @@
 						<font color='gold' size='5'><b><i>Ref. Estúdio</i></b></font>
 					</td>
 					<td align="center">
-						<font color='gold' size='5'><b><i>Contrato</i></b></font>
-					</td>
-					<td align="center">
 						<font color='gold' size='5'><b><i>Vendedora</i></b></font>
 					</td>
 					<td align="center">
@@ -185,12 +191,8 @@
 						<input type="hidden" name="txtdoc" id="txtdoc" value="<?php echo $Contrato; ?>">
 					</td>
 					<td align="center">
-						<font color='#FFFFFF' size='4'><b><i><?php echo $Contrato; ?></i></b></font>
-						<input type="hidden" name="txtdoc" id="txtdoc" value="<?php echo $Contrato; ?>">
-					</td>
-					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i><?php echo $Vendedora; ?></i></b></font>
-						<input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
+						<input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $Mat_Vend; ?>">
 						<input type="hidden" name="vendedora" id="vendedora" value="<?php echo $Vendedora; ?>">
 					</td>
 					<td align="center">
@@ -230,6 +232,8 @@
 						<select name="lsPr1" id="lsPr1" class="campos" onchange="mostrarTabelaParcelas(this)">
 							<?php
 							// Obtendo a Relação
+							include "conexao.php";
+							include "dbselect.php";
 
 							// Criando a Instrução SQL de Consulta
 							$sqlpr = "select * from formapag where codpag <= 31 or codpag >= 70 and codpag <> 99 order by codpag";
@@ -402,6 +406,7 @@
 	$SisRot = "S-7.2.8";
 	include "rodape.php";
 	mysqli_close($conec); ?>
+
 	<script>
 		function parseCurrencyToCents(str) {
 			if (!str) return 0;

@@ -143,7 +143,7 @@
 	mysqli_free_result($rsR);
 
 	// Consulta o número de documento e soma os valores
-	$sqlP = "SELECT SUM(vlrec) AS vlrec FROM registro WHERE numdoc = '$NumDocE' AND datarec = '$DataRecE' ";
+	$sqlP = "SELECT SUM(vlrec) AS vlrec FROM registro WHERE numdoc = '$NumDocE' AND datarec = '$DataRecE' AND estorno <> 'x' AND subtipo <> 'EST'";
 	$rsP  = mysqli_query($conec, $sqlP) or die("Erro de Banco de Dados #4. Contate seu Administrador");
 	$lnP  = mysqli_fetch_array($rsP);
 	$VlRec = $lnP['vlrec'];

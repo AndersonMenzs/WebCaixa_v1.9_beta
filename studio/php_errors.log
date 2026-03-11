@@ -380,3 +380,36 @@ Stack trace:
 [23-Feb-2026 09:01:05 America/Sao_Paulo] PHP Notice:  Undefined variable: SlgPag_a in /var/www/html/caixa/studio/via1newparc.php on line 219
 [27-Feb-2026 18:39:03 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
 [27-Feb-2026 18:39:03 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[06-Mar-2026 13:06:15 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[06-Mar-2026 13:06:15 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[06-Mar-2026 13:06:15 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:06:57 America/Sao_Paulo] PHP Notice:  Undefined variable: ch in /var/www/html/caixa/studio/prods_tipo.php on line 153
+[06-Mar-2026 13:06:57 America/Sao_Paulo] PHP Notice:  Undefined variable: ch in /var/www/html/caixa/studio/prods_tipo.php on line 174
+[06-Mar-2026 13:06:57 America/Sao_Paulo] PHP Notice:  Undefined variable: ch in /var/www/html/caixa/studio/prods_tipo.php on line 174
+[06-Mar-2026 13:06:57 America/Sao_Paulo] PHP Notice:  Undefined variable: ch in /var/www/html/caixa/studio/prods_tipo.php on line 174
+[06-Mar-2026 13:07:06 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[06-Mar-2026 13:07:06 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[06-Mar-2026 13:07:06 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:08:59 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[06-Mar-2026 13:08:59 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 20
+[06-Mar-2026 13:08:59 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:11:52 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:12:10 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:13:40 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:13:42 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:16:36 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:17:19 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:17:32 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:18:17 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:18:43 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:18:58 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[06-Mar-2026 13:19:36 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[09-Mar-2026 11:39:18 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/prods_tipo.php on line 142
+[09-Mar-2026 11:39:18 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/prods_tipo.php on line 143
+[09-Mar-2026 11:39:18 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[09-Mar-2026 11:41:34 America/Sao_Paulo] PHP Notice:  Undefined variable: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 203
+[09-Mar-2026 18:53:17 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 194
+[09-Mar-2026 18:53:17 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 197
+[09-Mar-2026 18:53:17 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 198
+[09-Mar-2026 18:53:56 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 191
+[11-Mar-2026 10:53:52 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 191
