@@ -63,8 +63,8 @@
 	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	var_dump($dados);
-	echo "</pre>";*/
-	//exit();
+	echo "</pre>";
+	exit();*/
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -96,12 +96,11 @@
 	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
 	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
-	//$Parc_card_cred = trim($_POST['parc_card_cred']);
-	$Parc_card_cred = (float) ($_POST['parc_card_cred_1'] ?: $_POST['parc_card_cred_2'] ?: $_POST['parc_card_cred_3']);
+	$Parc_card_cred = trim($_POST['parc_card_cred']);;
 
 	$ref_std = trim($_POST['ref_std']);
 	$Rdopt = trim($_POST['rdopt']);
-	$Pedido = trim($_POST['pct_ped']) ? trim($_POST['pct_ped']) : trim($_POST['tam_ped']);
+	$Pedido = trim($_POST['pct_book']) ? trim($_POST['pct_book']) : trim($_POST['ped_poster']);
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -288,7 +287,7 @@
 				</tr>
 
 				<?php
-				if ($Rdopt) { 
+				if ($Rdopt <> 'NORMAL') { 
 					?>
 					<tr>
 						<td width="45%" align="right">

@@ -299,6 +299,9 @@
       }
    </script>
 
+   <script type="text/javascript" src="val_parc.js" charset="utf-8">
+   </script>
+
 </head>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
@@ -310,6 +313,14 @@
    $lg_user = $_REQUEST['c_s'];
    $user = substr($lg_user, 0, 8);
    $pss  = substr($lg_user, 8, 40);
+
+   // inicializa variáveis usadas no form para evitar undefined
+   $mat_vend = isset($mat_vend) ? $mat_vend : '';
+
+   // se vierem via REQUEST/POST, use-os
+   if (isset($_REQUEST['mat_vend'])) $mat_vend = trim($_REQUEST['mat_vend']);
+
+   $matVendEsc  = htmlspecialchars($mat_vend, ENT_QUOTES);
 
    include "us_sist.php";
    if ($ch == 'no') {
@@ -334,23 +345,51 @@
    <?php
 
    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
-      <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
-         <form name="cntentr" method="post" action="prods_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos()" autocomplete="off">
+      <table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
+         <form name="parcela" method="post" action="prods_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return checkdata()" onsubmit="return validaCampos()" autocomplete="off">
             <tr>
-               <td width="50%" align="center">
+               <td align="center">
+                  <font color='#FFFFFF' size='5'><b><i>Ref. Estúdio</i></b></font>
+               </td>
+               <td align="center">
                   <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
                </td>
-               <td width="50%" align="center">
+               <td align="center">
                   <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
                </td>
             </tr>
             <tr>
-               <td width="50%" align="center">
-                  <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
-                     onkeypress="fPassaAlfaNumerico('an')"
-                     onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
+               <td align="center">
+                  <select name="ref_std" id="ref_std" class="campos" required>
+                     <?php
+                     include "conexao.php";
+                     include "dbselect.php";
+
+                     $sql = "SELECT * FROM estudios WHERE status_std <> 'x' ORDER BY cod_std ASC";
+                     $res = mysqli_query($conec, $sql) or die("Não foi possível acessar os Dados");
+
+							// Criando o Array para o campo PC
+							while ($lnstd = mysqli_fetch_array($res)) {
+								$Cod_Std  = $lnstd['cod_std'];
+							?>
+                     <!-- Deixar o estúdio pre-selecionado -->
+                     <?php if ($Cod_Std == $std) { ?>
+                        <option value="<?php echo $Cod_Std; ?>" class="campos" selected><?php echo "PC-" . $Cod_Std; ?></option>
+                     <?php } else { ?>
+								<option value="<?php echo $Cod_Std; ?>" class="campos"><?php echo "PC-" . $Cod_Std; ?></option>
+                     <?php
+                     } 
+							}
+							mysqli_free_result($res);
+                     ?>
+                  </select>
                </td>
-               <td width="50%" align="center">
+               <td align="center">
+                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $matVendEsc; ?>">
+                  <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
+                     onkeyup="this.value=this.value.toUpperCase(); validnome(this)" required>
+               </td>
+               <td align="center">
                   <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
                      onkeypress="fPassaAlfaNumerico('an')"
                      onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
@@ -361,8 +400,7 @@
 
       <table width="100%" border="0" cellspacing="0">
          <tr>
-            <td width="82%" align="center">
-               <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">               
+            <td width="82%" align="center">             
                <input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
                <input type='reset' name='btreset' value='Limpar'><br><br>
                <span id="msg"></span>

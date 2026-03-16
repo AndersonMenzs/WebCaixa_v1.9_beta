@@ -16,16 +16,16 @@ $FmRec     = $_GET['fmrec'];
 $txt1      = $_GET['txt1'];
 $txt2      = $_GET['txt2'];
 $txt3      = $_GET['txt3'];
-$VrPag    = $_GET['TaxaConc'];
-$VrPagF   = number_format($VrPag, 2, ",", ".");
-$VrPagA = number_format($VrPag, 2, "", "");
+$VrProd    = $_GET['VrProd'];
+$VrProdF   = number_format($VrProd, 2, ",", ".");
+$VrProdA = number_format($VrProd, 2, "", ".");
+$TaxaProdF = $_GET['TaxaProd'];
 
 $FPags = [$FPag_1, $FPag_2, $FPag_3];
 $Vlrs = [$txt1, $txt2, $txt3];
 
 $data      = $_GET['data'];
 $data = date('d/m/Y', strtotime($data));
-$Mat_Vend   = ltrim($_GET['mat_vend'], '0');
 $Vendedora = $_GET['Vendedora'];
 $Cliente   = $_GET['Cliente'];
 $vlr_ext   = $_GET['vlr_ext'];
@@ -34,6 +34,9 @@ $horaaut   = $_GET['horaaut'];
 $dtAut     = $_GET['dtAut'];
 $SgRec     = $_GET['SgRec'];
 $Mat       = $_GET['Mat'];
+$Mat_Vend  = $_GET['mat_vend'];
+$Nasc      = $_GET['DataNasc'];
+$idade     = $_GET['Idade'];
 
 ?>
 
@@ -99,7 +102,7 @@ $Mat       = $_GET['Mat'];
 
         .imagem_end_1 {
             position: absolute;
-            top: 38px;
+            top: 40px;
             left: 10px;
             width: 285px;
             /* Largura original */
@@ -215,6 +218,7 @@ $Mat       = $_GET['Mat'];
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via3">
+
         <table align="left" cellspacing="0" border="0">
             <colgroup width="100"></colgroup>
             <colgroup span="2" width="100"></colgroup>
@@ -232,7 +236,7 @@ $Mat       = $_GET['Mat'];
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=3 rowspan=2 align="center" valign=middle>
                     <b>
-                        <font size=4><?php echo $tipo; ?></font>
+                        <font size=5><?php echo $tipo; ?></font>
                     </b>
                 </td>
                 <td align="left" valign=bottom><br></td>
@@ -282,7 +286,7 @@ $Mat       = $_GET['Mat'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrPagF; ?></font>
+                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -355,8 +359,6 @@ $Mat       = $_GET['Mat'];
                         $ModPag = "PIX CNPJ";
                     } elseif ($FPag == 99) {
                         $ModPag = "GRATUIDADE";
-                    } elseif ($FPag == 31) {
-                        $ModPag = "CART. CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -384,8 +386,6 @@ $Mat       = $_GET['Mat'];
                         $ModPag = "PIX QR CODE";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
-                    } elseif ($FPag == 31) {
-                        $ModPag = "CART. CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -413,8 +413,6 @@ $Mat       = $_GET['Mat'];
                         $ModPag = "PIX QR CODE";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
-                    } elseif ($FPag == 31) {
-                        $ModPag = "CART. CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -521,7 +519,7 @@ $Mat       = $_GET['Mat'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrPagA . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrProdA . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
@@ -548,7 +546,7 @@ $Mat       = $_GET['Mat'];
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=3 rowspan=2 align="center" valign=middle>
                     <b>
-                        <font size=4><?php echo $tipo; ?></font>
+                        <font size=5><?php echo $tipo; ?></font>
                     </b>
                 </td>
                 <td align="left" valign=bottom><br></td>
@@ -598,7 +596,7 @@ $Mat       = $_GET['Mat'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrPagF; ?></font>
+                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -669,8 +667,6 @@ $Mat       = $_GET['Mat'];
                         $ModPag = "PIX QR CODE";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
-                    } elseif ($FPag == 31) {
-                        $ModPag = "CART. CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -698,8 +694,6 @@ $Mat       = $_GET['Mat'];
                         $ModPag = "PIX QR CODE";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
-                    } elseif ($FPag == 31) {
-                        $ModPag = "CART. CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -727,8 +721,6 @@ $Mat       = $_GET['Mat'];
                         $ModPag = "PIX QR CODE";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
-                    } elseif ($FPag == 31) {
-                        $ModPag = "CART. CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -835,7 +827,7 @@ $Mat       = $_GET['Mat'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrPagA . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrProdA . $Mat; ?></font>
                 </td>
             </tr>
             <tr>
@@ -852,7 +844,7 @@ $Mat       = $_GET['Mat'];
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=3 rowspan=2 align="center" valign=middle>
                     <b>
-                        <font size=4><?php echo $tipo; ?></font>
+                        <font size=5><?php echo $tipo; ?></font>
                     </b>
                 </td>
                 <td align="left" valign=bottom><br></td>
@@ -902,7 +894,7 @@ $Mat       = $_GET['Mat'];
                 </td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle>
-                    <font size=1><?php echo "R$ " . $VrPagF; ?></font>
+                    <font size=1><?php echo "R$ " . $VrProdF; ?></font>
                 </td>
             </tr>
             <tr>
@@ -973,8 +965,6 @@ $Mat       = $_GET['Mat'];
                         $ModPag = "PIX QR CODE";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
-                    } elseif ($FPag == 31) {
-                        $ModPag = "CART. CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -1002,8 +992,6 @@ $Mat       = $_GET['Mat'];
                         $ModPag = "PIX QR CODE";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
-                    } elseif ($FPag == 31) {
-                        $ModPag = "CART. CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -1031,8 +1019,6 @@ $Mat       = $_GET['Mat'];
                         $ModPag = "PIX QR CODE";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
-                    } elseif ($FPag == 31) {
-                        $ModPag = "CART. CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -1139,7 +1125,7 @@ $Mat       = $_GET['Mat'];
             </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=13 height="16" align="center" valign=middle>
-                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrPagA . $Mat; ?></font>
+                    <font size=1><?php echo $Reg . $PC . $horaaut . $NDoc . $dtAut . $SgRec . $FmRec . $VrProdA . $Mat; ?></font>
                 </td>
             </tr>
             <tr>

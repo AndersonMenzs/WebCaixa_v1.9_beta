@@ -60,6 +60,16 @@
 				field.select();
 			}
 		}
+
+		function validateParcelas(field) {
+			var valor = parseInt(field.value || 0, 10);
+			if (valor > 12) {
+				alert("Erro! \n  Máximo de 12 parcelas permitido!");
+				field.value = "";
+				field.focus();
+				field.select();
+			}
+		}
 	</script>
 
 	<script>
@@ -160,6 +170,11 @@
 	$valC = intval(round(floatval($valor_str) * 100));
 	$recC = intval(round(floatval($vlr_recebido_str) * 100));
 	$txtparc = intval($_POST['txtparc'] ?? 0);
+	
+	// Limita o número de parcelas a 12
+	if ($txtparc > 12) {
+		$txtparc = 12;
+	}
 
 	$parcelasPlenas = $valC > 0 ? intdiv($recC, $valC) : 0;
 	$parcialC = $recC - ($parcelasPlenas * $valC);
@@ -194,7 +209,7 @@
 
 	<?php
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
-		<form name="parcela" method="post" action="contrparc_solic.php" onsubmit="return checkdata()" autocomplete="off">
+		<form name="parcela" method="post" action="contrparc_select.php" onsubmit="return checkdata()" autocomplete="off">
 			<table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
 					<td align="center">
@@ -272,7 +287,7 @@
 						<input type="text" name="vlr_recebido" id="vlr_recebido" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'vlr_recebido', event); validate(this)">
 					</td>
 					<td rowspan="3" align="center">
-						<input type="text" name="txtparc" id="txtparc" size="4" maxlength="4" class="campos" onkeyup="validate(this)">
+						<input type="text" name="txtparc" id="txtparc" size="4" maxlength="2" class="campos" onkeyup="validate(this)" onchange="validateParcelas(this)">
 					</td>
 					<td rowspan="3" align="center">
 						<input type="hidden" name="txtparc_ini" id="txtparc_ini" value="<?php echo $PIni; ?>">

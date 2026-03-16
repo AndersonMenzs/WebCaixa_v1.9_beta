@@ -144,7 +144,7 @@ include "./dbselect.php";
 
         .imagem_end_3 {
             position: absolute;
-            top: 490px;
+            top: 473px;
             left: 22px;
             width: 260px;
             height: 520px;
@@ -221,13 +221,18 @@ include "./dbselect.php";
 
 </head>
 
-<!--<body onload="window.print()">-->
-
-<body>
+<body onload="window.print()">
     <div class="container">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
-        <img src="./images/logo.png" alt="Imagem" class="imagem_via3">
+
+        <?php
+        // Verifica se é uma quitação e pedido de venda para exibir a terceira via
+        if ($Rdopt == 'BOOK' OR $Rdopt == 'POSTER') {
+            echo '<img src="./images/logo.png" alt="Imagem" class="imagem_via3">';
+        }
+        ?>
+
         <table cellspacing="0" border="0">
             <colgroup width="100"></colgroup>
             <colgroup span="2" width="100"></colgroup>
@@ -467,7 +472,7 @@ include "./dbselect.php";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
                     } elseif ($FPag == 31) {
-                        $ModPag = "CARTÃO CRÉDITO PARCELADO LOJA";
+                        $ModPag = "CARTÃO CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -496,7 +501,7 @@ include "./dbselect.php";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
                     } elseif ($FPag == 31) {
-                        $ModPag = "CARTÃO CRÉDITO PARCELADO LOJA";
+                        $ModPag = "CARTÃO CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -525,7 +530,7 @@ include "./dbselect.php";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
                     } elseif ($FPag == 31) {
-                        $ModPag = "CARTÃO CRÉDITO PARCELADO LOJA";
+                        $ModPag = "CARTÃO CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -883,7 +888,7 @@ include "./dbselect.php";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
                     } elseif ($FPag == 31) {
-                        $ModPag = "CARTÃO CRÉDITO PARCELADO LOJA";
+                        $ModPag = "CARTÃO CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -912,7 +917,7 @@ include "./dbselect.php";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
                     } elseif ($FPag == 31) {
-                        $ModPag = "CARTÃO CRÉDITO PARCELADO LOJA";
+                        $ModPag = "CARTÃO CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -941,7 +946,7 @@ include "./dbselect.php";
                     } elseif ($FPag == 71) {
                         $ModPag = "PIX CNPJ";
                     } elseif ($FPag == 31) {
-                        $ModPag = "CARTÃO CRÉDITO PARCELADO LOJA";
+                        $ModPag = "CARTÃO CRÉD. PARC. LOJA";
                     }
 
                 ?>
@@ -1068,7 +1073,7 @@ include "./dbselect.php";
             <?php
 
             // Verifica se é uma quitação e pedido de venda para exibir a terceira via  
-            if ($Rdopt != '' && $Pedido != '' && $tipo_2 != '') {
+            if ($Rdopt == 'BOOK' OR $Rdopt == 'POSTER') {
             ?>
                 <!-- Primeira via -->
                 <tr>

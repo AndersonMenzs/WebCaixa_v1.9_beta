@@ -122,15 +122,15 @@
     <table width='100%' border='0' cellpadding='0' cellspacing='0'>
         <tr>
             <td width='9%'>
-                <a href="contrparc_tipo.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
+                <a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
             </td>
             <td width='82%' align='center'>
                 <font color="gold" size="6"><b>
-                        <center><u><i>SOLICITAÇÕES</i></u></center>
+                        <center><u><i>PRODUTOS</i></u></center>
                     </b></font><br><br><br>
             </td>
             <td width='9%'>
-                <a href="contrparc_tipo.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+                <a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
             </td>
         </tr>
     </table>
@@ -151,7 +151,7 @@
                 <tr width="50%" align="center">
                     <td>
                         <font color='gold' size='5'><b><i>Book:</i></b></font>
-                        <input id="rdopt_book" type="radio" name="rdopt" class="campos" value="BOOK" onchange="atualizarSelects()">
+                        <input id="rdopt_book" type="radio" name="rdopt" class="campos" value="BOOK">
                     </td>
                     <td align="center">
                         <font size="4" color='gold'>
@@ -159,13 +159,13 @@
                                 <i>Pacote: </i>
                             </b>
                         </font>
-                        <select name="pct_ped" id="pct_ped" class="campos" style="width: 300px; height: 30px;" disabled>
+                        <select name="pct_book" id="pct_book" class="campos" style="width: 300px; height: 30px;">
                             <option value="" selected>Selecione</option>
                             <font size="4">
                                 <?php
 
                                 // Pacotes
-                                $sql_Pct = "SELECT * FROM produtos WHERE cod_prod IN ('1','2','3','4','5','6','7','8') ORDER BY nome_prod ASC";
+                                $sql_Pct = "SELECT * FROM produtos WHERE cod_prod IN ('1','2','3','4','5','6','90','91') ORDER BY nome_prod ASC";
                                 $res_Pct = mysqli_query($conec, $sql_Pct) or die("File Error #1. Contate seu Administrador.");
 
                                 while ($row_Pct = mysqli_fetch_assoc($res_Pct)) {
@@ -182,7 +182,7 @@
                 <tr>
                     <td width="50%" align="center">
                         <font color='gold' size='5'><b><i>Poster:</i></b></font>
-                        <input id="rdopt_poster" type="radio" name="rdopt" class="campos" value="POSTER" onchange="atualizarSelects()">
+                        <input id="rdopt_poster" type="radio" name="rdopt" class="campos" value="POSTER">
                     </td>
                     <td align="center">
                         <font size="4" color='gold'>
@@ -190,12 +190,12 @@
                                 <i>Pacote: </i>
                             </b>
                         </font>
-                        <select name="tam_ped" id="tam_ped" class="campos" style="width: 300px; height: 30px;" disabled>
+                        <select name="ped_poster" id="ped_poster" class="campos" style="width: 300px; height: 30px;">
                             <option value="" selected>Selecione</option>
                             <font size="4">
                                 <?php
                                 // Tamanhos
-                                $sql_Tam = "SELECT * FROM produtos WHERE cod_prod IN ('9','10') ORDER BY nome_prod ASC";
+                                $sql_Tam = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod NOT IN ('1','2','3','4','5','6','90','91') ORDER BY nome_prod ASC";
                                 $res_Tam = mysqli_query($conec, $sql_Tam) or die("File Error #2. Contate seu Administrador.");
 
                                 while ($row_Tam = mysqli_fetch_assoc($res_Tam)) {
@@ -207,29 +207,58 @@
                                 ?>
                             </font>
                         </select>
-
-                        <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-                        <input type="hidden" name="ref_std" value="<?php echo $ref_std; ?>">
-                        <input type="hidden" name="txtdoc" value="<?php echo $NumDoc; ?>">
-                        <input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
-                        <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
-                        <input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
-                        <input type="hidden" name="txtvalor" value="<?php echo $VrPrest; ?>">
-                        <input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
-                        <input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
-                        <input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
-                        <input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
-                        <input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
-                        <input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
-                        <input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
-                        <input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
-                        <input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
-                        <input type="hidden" name="parcial" value="<?php echo $Parcial; ?>">
-                        <input type="hidden" name="parc_card_cred" value="<?php echo $Parc_card_cred; ?>">
-
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center">
+                        <font color='gold' size='5'><b><i>Nenhuma das opções acima:</i></b></font>
+                        <input id="rdopt_normal" type="radio" name="rdopt" class="campos" value="NORMAL">
                     </td>
                 </tr>
             </table><br>
+
+            <table id="tab_ped" name="tab_ped" width="70%" border="5" cellpadding="10" cellspacing="0" align="center" style="display:none;">
+                <thead>
+                    <tr>
+                        <td width="50%" align="center">
+                            <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
+                        </td>
+                        <td width="50%" align="center">
+                            <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody id="tab_ped_body">
+                    <tr>
+                        <td align="center">
+                            <font color='gold' size='5'><b><i><?php echo $Vendedora; ?></i></b></font>
+                        </td>
+                        <td align="center">
+                            <font color='lime' size='5'><b><i><?php echo $Cliente; ?></i></b></font>
+                        </td>
+                    </tr>
+                </tbody>
+            </table><br>
+
+            <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+            <input type="hidden" name="ref_std" value="<?php echo $ref_std; ?>">
+            <input type="hidden" name="txtdoc" value="<?php echo $NumDoc; ?>">
+            <input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
+            <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+            <input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
+            <input type="hidden" name="txtvalor" value="<?php echo $VrPrest; ?>">
+            <input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
+            <input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
+            <input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
+            <input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
+            <input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
+            <input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
+            <input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
+            <input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
+            <input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
+            <input type="hidden" name="parcial" value="<?php echo $Parcial; ?>">
+            <input type="hidden" name="parc_card_cred" value="<?php echo $Parc_card_cred; ?>">
+
 
             <table width="100%" border="0" cellspacing="0">
                 <tr>
@@ -259,68 +288,86 @@
             include "./rodape.php";
             mysqli_close($conec); ?>
 
-    <!-- Script para habilitar/desabilitar selects conforme o tipo selecionado -->
+    <!-- script para controlar habilitação/desabilitação dos selects e validação -->
     <script>
-        function atualizarSelects() {
-            const rdoptBook = document.getElementById('rdopt_book');
-            const rdoptPoster = document.getElementById('rdopt_poster');
-            const selectPct = document.getElementById('pct_ped');
-            const selectTam = document.getElementById('tam_ped');
+        (function() {
+            const radios = Array.from(document.querySelectorAll('input[name="rdopt"]'));
+            const selectPct = document.getElementById('pct_book');
+            const selectTam = document.getElementById('ped_poster');
 
-            if (rdoptBook.checked) {
-                selectPct.disabled = false;
-                selectTam.disabled = true;
-                selectTam.value = '';
-            } else if (rdoptPoster.checked) {
-                selectPct.disabled = true;
-                selectTam.disabled = false;
-                selectPct.value = '';
-            } else {
-                selectPct.disabled = true;
-                selectTam.disabled = true;
-                selectPct.value = '';
-                selectTam.value = '';
-            }
-        }
+            if (!radios.length || !selectPct || !selectTam) return;
 
-        // Função de validação antes de enviar
-        function checkdata() {
-            const rdoptBook = document.getElementById('rdopt_book');
-            const rdoptPoster = document.getElementById('rdopt_poster');
-            const selectPct = document.getElementById('pct_ped');
-            const selectTam = document.getElementById('tam_ped');
+            window.checkdata = function() {
+                const rdoMarked = radios.find(r => r.checked);
 
-            // Validar se selecionou Book ou Poster
-            if (!rdoptBook.checked && !rdoptPoster.checked) {
-                alert('Selecione BOOK ou POSTER!');
-                return false;
-            }
-
-            // Validar se selecionou Book
-            if (rdoptBook.checked) {
-                if (selectPct.value === '' || selectPct.value === null) {
-                    alert('Selecione um Pacote de BOOK!');
-                    selectPct.focus();
+                // Verificar se algum radio está marcado
+                if (!rdoMarked) {
+                    alert('Selecione um tipo: Books, Poster ou Nenhuma das Opções Acima');
                     return false;
+                }
+
+                const tipo = rdoMarked.value;
+
+                // Validar seleção conforme tipo marcado
+                if (tipo === 'BOOK') {
+                    if (selectPct.value === '' || selectPct.selectedIndex === 0) {
+                        alert('Selecione um Pacote de Books');
+                        selectPct.focus();
+                        return false;
+                    }
+                } else if (tipo === 'POSTER') {
+                    if (selectTam.value === '' || selectTam.selectedIndex === 0) {
+                        alert('Selecione um Tamanho do Poster');
+                        selectTam.focus();
+                        return false;
+                    }
+                } else if (tipo === 'NORMAL') {
+                    return true;
+                }
+
+                return true;
+            };
+
+            function atualizarSelects() {
+                const rdoMarked = radios.find(r => r.checked);
+                const tipo = rdoMarked ? rdoMarked.value : '';
+
+                if (tipo === 'BOOK') {
+                    selectPct.disabled = false;
+                    selectTam.disabled = true;
+                    selectTam.selectedIndex = 0;
+                } else if (tipo === 'POSTER') {
+                    selectPct.disabled = true;
+                    selectPct.selectedIndex = 0;
+                    selectTam.disabled = false;
+                } else if (tipo === 'NORMAL') {
+                    selectPct.disabled = true;
+                    selectPct.selectedIndex = 0;
+                    selectTam.disabled = true;
+                    selectTam.selectedIndex = 0;
+                } else {
+                    selectPct.disabled = true;
+                    selectTam.disabled = true;
+                    selectPct.selectedIndex = 0;
+                    selectTam.selectedIndex = 0;
                 }
             }
 
-            // Validar se selecionou Poster
-            if (rdoptPoster.checked) {
-                if (selectTam.value === '' || selectTam.value === null) {
-                    alert('Selecione um Tamanho de POSTER!');
-                    selectTam.focus();
-                    return false;
-                }
-            }
+            // Listener para cada radio button
+            radios.forEach(function(radio) {
+                radio.addEventListener('change', atualizarSelects);
+            });
 
-            return true;
-        }
-
-        // Inicializar ao carregar a página
-        document.addEventListener('DOMContentLoaded', function() {
+            // Aplicar estado inicial
             atualizarSelects();
-        });
+
+            // Foco no primeiro campo
+            if (document.forms.length > 0) {
+                try {
+                    document.forms[0].elements[0].focus();
+                } catch (e) {}
+            }
+        })();
     </script>
 
 </body>

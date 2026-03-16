@@ -57,6 +57,7 @@
 </head>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
+
 	<?php
 
 	// Importando os Dados do Formulário
@@ -65,6 +66,7 @@
 	$lg_user   = trim($_POST['txtuser']);
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
+	$Ref_Std   = trim($_POST['ref_std']);
 	$NumDoc    = trim($_POST['txtdoc']);
 	$NumDocF = 100000000 + $NumDoc;
 	$NDoc      = substr($NumDocF, 1, 8);
@@ -79,7 +81,10 @@
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
 	$Valor     = $txt1 + $txt2 + $txt3;
 	$ValorF    = number_format($Valor, 2, ",", ".");
-	$Book      = trim($_POST['rdbook']);
+	$Book      = trim($_POST['pct_book']) ?? '';
+	$Poster   = trim($_POST['ped_poster']) ?? '';
+	$Produto   = trim($_POST['ped_prod']) ?? '';
+	$Parcelas = trim($_POST['parcelas']);
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -182,7 +187,7 @@
 						<font color='gold' size='5'><b><i>Forma de Pagamento</i></b></font>
 					</td>
 					<td width="70%" align="center">
-						<font size='6' color='#FFFFFF'>
+						<font size='5' color='#FFFFFF'>
 							<b>
 								<i>
 									<?php echo $ModPag; ?>
@@ -191,22 +196,35 @@
 						</font>
 					</td>
 				</tr>
-
 				<tr>
 					<td width="30%" align="center">
 						<font color='gold' size='5'><b><i>Produto: </i></b></font>
+					</td>
+					<td width="70%" align="center">
 						<font color='#FFFFFF' size='5'><b><i>
 									<blink>
 										<?php
-										if ($Book == 'n') {
-											echo "Diversos";
+										if ($Book <> '') {
+											echo $Book;
+											$RdBook = 's';
+										} elseif ($Poster <> '') {
+											echo $Poster;
+											$RdBook = 'n';
 										} else {
-											echo "Book";
-										} ?></blink>
-								</i></b></font>
+											echo "Produtos";
+											$RdBook = 'p';
+										}
+										?></blink>
+								</i>
+							</b>
+						</font>
 					</td>
+				</tr>
+				<tr>
 					<td width="70%" align="center">
 						<font color='gold' size='5'><b><i>Senha: </i></b></font>
+					</td>
+					<td width="70%" align="center">
 						<input type='password' name='txtsen' size='6' maxlength='6' class="campos">
 					</td>
 				</tr>
@@ -214,6 +232,7 @@
 		</table>
 
 		<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+		<input type="hidden" name="ref_std" value="<?php echo $Ref_Std; ?>">
 		<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
 		<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
 		<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
@@ -222,12 +241,16 @@
 		<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
 		<input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
 		<input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
+		<input type="hidden" name="parcelas" value="<?php echo $Parcelas; ?>">
 		<input type="hidden" name="txtmodpag_ext" value="<?php echo $ModPag; ?>">
 		<input type="hidden" name="txtmodpag" value="<?php echo $ModPag; ?>">
 		<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 		<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
-		<input type="hidden" name="rdbook" value="<?php echo $Book; ?>">
+		<input type="hidden" name="pct_book" value="<?php echo $Book; ?>">
+		<input type="hidden" name="rdbook" value="<?php echo $RdBook; ?>">
+		<input type="hidden" name="ped_poster" value="<?php echo $Poster; ?>">
+		<input type="hidden" name="ped_prod" value="<?php echo $Produto; ?>">
 		<p>
 			<center>
 				<input id="ghost_click" type="submit" name="btenvia" value="Continuar">
