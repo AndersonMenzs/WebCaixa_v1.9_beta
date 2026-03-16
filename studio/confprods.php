@@ -57,6 +57,7 @@
 </head>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
+
 	<?php
 
 	// Importando os Dados do Formulário
@@ -65,6 +66,7 @@
 	$lg_user   = trim($_POST['txtuser']);
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
+	$Ref_Std   = trim($_POST['ref_std']);
 	$NumDoc    = trim($_POST['txtdoc']);
 	$NumDocF = 100000000 + $NumDoc;
 	$NDoc      = substr($NumDocF, 1, 8);
@@ -83,7 +85,6 @@
 	$Poster   = trim($_POST['ped_poster']) ?? '';
 	$Produto   = trim($_POST['ped_prod']) ?? '';
 	$Parcelas = trim($_POST['parcelas']);
-
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -195,31 +196,30 @@
 						</font>
 					</td>
 				</tr>
-					<tr>
-						<td width="30%" align="center">
-							<font color='gold' size='5'><b><i>Produto: </i></b></font>
-						</td>
-						<td width="70%" align="center">
-							<font color='#FFFFFF' size='5'><b><i>
-										<blink>
-											<?php
-											if ($Book <> '') {
-												echo $Book;
-												$RdBook = 's';
-											} elseif ($Poster <> '') {
-												echo $Poster;
-												$RdBook = 'n';
-											} else {
-												echo "Produtos";
-												$RdBook = 'n';
-											} 
-											
-											?></blink>
-									</i>
-								</b>
-							</font>
-						</td>
-					</tr>
+				<tr>
+					<td width="30%" align="center">
+						<font color='gold' size='5'><b><i>Produto: </i></b></font>
+					</td>
+					<td width="70%" align="center">
+						<font color='#FFFFFF' size='5'><b><i>
+									<blink>
+										<?php
+										if ($Book <> '') {
+											echo $Book;
+											$RdBook = 's';
+										} elseif ($Poster <> '') {
+											echo $Poster;
+											$RdBook = 'n';
+										} else {
+											echo "Produtos";
+											$RdBook = 'p';
+										}
+										?></blink>
+								</i>
+							</b>
+						</font>
+					</td>
+				</tr>
 				<tr>
 					<td width="70%" align="center">
 						<font color='gold' size='5'><b><i>Senha: </i></b></font>
@@ -232,6 +232,7 @@
 		</table>
 
 		<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+		<input type="hidden" name="ref_std" value="<?php echo $Ref_Std; ?>">
 		<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
 		<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
 		<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">

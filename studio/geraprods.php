@@ -37,6 +37,7 @@
 	$lg_user   = trim($_POST['txtuser']);
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
+	$Ref_Std   = trim($_POST['ref_std']);
 	$NumDoc    = trim($_POST['txtdoc']);
 	$NumDocF = 100000000 + $NumDoc;
 	$NDoc      = substr($NumDocF, 1, 8);
@@ -67,7 +68,7 @@
 	if ($RdBook == 'n') {
 		$TipoRec   = '6';
 		$SubTipo   = 'PROD';
-	} else {
+	} elseif ($RdBook == 's') {
 		$TipoRec   = '7';
 		$SubTipo   = 'BOOK';
 	}
@@ -130,6 +131,7 @@
 				<input type="hidden" name="txtreg" value="<?php echo $Reg; ?>">
 				<input type="hidden" name="tiporec" value="<?php echo $TipoRec; ?>">
 				<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
+				<input type="hidden" name="ref_std" value="<?php echo $Ref_Std; ?>">
 				<input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
 				<input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
 				<input type="hidden" name="txt3" value="<?php echo $txt3; ?>">

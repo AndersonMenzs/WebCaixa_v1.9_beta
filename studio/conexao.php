@@ -1,7 +1,7 @@
 <?php
 
 // Código do estúdio
-$std = '211';
+$std = '206';
 
 $conec = mysqli_connect ('localhost', 'root', 'cpd@cloud');
     IF (!$conec) { ?>

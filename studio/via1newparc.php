@@ -142,7 +142,7 @@ include "./valor_ext.php";
 				$SlgPag_a = 'PXQ';
 			} elseif ($ModPgtoE == '71') {
 				$SlgPag_a = 'PXC';
-			} elseif ($ModPgtoE == 'CPL') {
+			} elseif ($ModPgtoE == '31') {
 				$SlgPag_a = 'CPL';
 			}
 		}
@@ -225,8 +225,23 @@ include "./valor_ext.php";
 		// Gravando a Spool
 		$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
 		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+
+	} elseif ($Rdopt == 'NORMAL') {
+		// Imprimindo o Recibo
+		$MatRec = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
+		$VrRecF    = number_format($VrRec, 2, ',', '.');
+		$Aut1 = $Reg;
+		$Aut2 = "$Reg$PC$NDoc $dtAut" . "R$ " . "$VrRecF$FmRec_a$MatRec";
+
+		// Gravando a Spool
+		$sql = "insert into spool values ('$Aut1', '$Aut2')";
+		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+
+		// Gravando a Spool
+		$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
+		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
 	}
-	var_dump($Rdopt);
+	
 	// Encerrando a Conexão
 	mysqli_close($conec);
 

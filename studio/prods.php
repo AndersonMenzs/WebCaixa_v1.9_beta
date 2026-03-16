@@ -320,7 +320,7 @@
    // se vierem via REQUEST/POST, use-os
    if (isset($_REQUEST['mat_vend'])) $mat_vend = trim($_REQUEST['mat_vend']);
 
-   $Mat_Vend  = htmlspecialchars($mat_vend, ENT_QUOTES);
+   $matVendEsc  = htmlspecialchars($mat_vend, ENT_QUOTES);
 
    include "us_sist.php";
    if ($ch == 'no') {
@@ -385,7 +385,7 @@
                   </select>
                </td>
                <td align="center">
-                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $Mat_Vend; ?>">
+                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $matVendEsc; ?>">
                   <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
                      onkeyup="this.value=this.value.toUpperCase(); validnome(this)" required>
                </td>
@@ -400,8 +400,7 @@
 
       <table width="100%" border="0" cellspacing="0">
          <tr>
-            <td width="82%" align="center">
-               <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $Mat_Vend; ?>">               
+            <td width="82%" align="center">             
                <input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
                <input type='reset' name='btreset' value='Limpar'><br><br>
                <span id="msg"></span>

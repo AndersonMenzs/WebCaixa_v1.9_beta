@@ -82,6 +82,7 @@
    $lg_user   = trim($_POST['txtuser']);
    $user    = substr($lg_user, 0, 8);
    $pss     = substr($lg_user, 8, 40);
+   $Ref_Std   = trim($_POST['ref_std']);
    $NumDoc    = trim($_POST['txtdoc']);
    $NumDocF = 100000000 + $NumDoc;
    $NDoc      = substr($NumDocF, 1, 8);
@@ -231,6 +232,7 @@
          <input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
          <input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
          <input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
+         <input type="hidden" name="ref_std" value="<?php echo $Ref_Std; ?>">
          <input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
          <input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
          <input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">

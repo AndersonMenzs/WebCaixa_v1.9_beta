@@ -29,6 +29,7 @@ include "./valor_ext.php";
 	$AutFull = 10000 + $Aut;
 	$Reg       = substr($AutFull, 1, 4);
 	$NDoc      = trim($_POST['txtdoc']);
+	$Ref_Std   = trim($_POST['ref_std']);
 	$TipoRec   = trim($_POST['tiporec']);
 	$Book      = trim($_POST['pct_book']) ?? '';
 	$Poster   = trim($_POST['ped_poster']) ?? '';
@@ -57,9 +58,15 @@ include "./valor_ext.php";
 	$VrPag     = $txt1 + $txt2 + $txt3;
 	$VrPagF    = number_format($VrPag, 2, ',', '.');
 	$vlr_ext   = valorPorExtenso($VrPagF);
-	$Book = $_POST['pct_book'];
-	$Poster = $_POST['ped_poster'];
-	$Tipo_ped = isset($_POST['pct_book']) ? trim($_POST['pct_book']) : $_POST['ped_poster'];;
+
+	//Condição para definir o tipo de pedido
+	if (!empty($Poster)) {
+		$Tipo_ped = $Poster;
+	} elseif (!empty($Book)) {
+		$Tipo_ped = $Book;
+	} else {
+		$Tipo_ped = '';
+	}
 
 	// Obtendo o código do PC
 	$sqlPC = "select pc from inicial";
@@ -71,13 +78,13 @@ include "./valor_ext.php";
 	$sqlRec = "select siglarec from tiporec where codrec = '$TipoRec' ";
 	$rsRec = mysqli_query($conec, $sqlRec) or die("Não foi possível acessar o Tipo de Recebimento");
 	$lnRec = mysqli_fetch_array($rsRec);
-	$SgRec  = $lnRec['siglarec'];
+	$SgRec  = $lnRec['siglarec'] ?? '';
 
 	// Definindo o Tipo de Autenticação
-	if ($TipoRec == '6') {
+	if ($TipoRec === '6') {
 		$tipo = "POSTER";
 		$Opt = "POSTER";
-	} elseif ($TipoRec == '7') {
+	} elseif ($TipoRec === '7') {
 		$tipo = "BOOK";
 		$Opt = "BOOK";
 	} else {
@@ -142,8 +149,8 @@ include "./valor_ext.php";
 	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
 
 	// Verifica se é um book ou poster para a solicitação do pedido
-	if ($TipoRec == '6' || $TipoRec == '7') {
-		
+	if ($TipoRec === '6' || $TipoRec === '7') {
+
 	// Consulta o número de documento e soma os valores
 	$sqlP = "SELECT SUM(vlrec) AS vlrec FROM registro WHERE numdoc = '$NDoc' AND datarec = '$DataRec' AND estorno <> 'x' AND subtipo <> 'EST'";
 	$rsP  = mysqli_query($conec, $sqlP) or die("Erro de Banco de Dados #4. Contate seu Administrador");
@@ -197,6 +204,7 @@ include "./valor_ext.php";
 				'&dtAut=<?php echo urlencode($dtAut); ?>' +
 				'&SgRec=<?php echo urlencode($SgRec); ?>' +
 				'&Opt=<?php echo urlencode($Opt); ?>' +
+				'&Ref_Std=<?php echo urlencode($Ref_Std); ?>' +
 				'&Mat=<?php echo urlencode($Mat); ?>';
 			window.open(url, '_blank');
 			setTimeout(function() {

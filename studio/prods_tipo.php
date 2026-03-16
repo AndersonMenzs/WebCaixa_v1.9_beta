@@ -118,7 +118,7 @@ ini_set('error_log', 'php_errors.log');
 	$lg_user = $_REQUEST['c_s'];
 	$user = substr($lg_user, 0, 8);
 	$pss  = substr($lg_user, 8, 40);
-	$ref_std = trim($_POST['ref_std']);
+	$Ref_Std = trim($_POST['ref_std']);
 	$Mat_Vend = trim($_POST['mat_vend']);
 	$Vendedora = $_REQUEST['vendedora'];
 	$Cliente   = $_REQUEST['cliente'];
@@ -187,7 +187,8 @@ ini_set('error_log', 'php_errors.log');
 				</tr>
 				<tr>
 					<td align="center">
-						<font color='#FFFFFF' size='4'><b><i><?php echo $ref_std; ?></i></b></font>
+						<font color='#FFFFFF' size='4'><b><i><?php echo $Ref_Std; ?></i></b></font>
+						<input type="hidden" name="ref_std" id="ref_std" value="<?php echo $Ref_Std; ?>">
 						<input type="hidden" name="txtdoc" id="txtdoc" value="<?php echo $Contrato; ?>">
 					</td>
 					<td align="center">
