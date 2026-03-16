@@ -2,7 +2,7 @@
 
 <head>
     <title>WebCaixa v1.19_beta</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style type="text/css">
     <!--
     body {
