@@ -486,9 +486,9 @@
 					</select>
 				</td>
 				<td width="50%" align="center">
-					<input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
-					<input type="text" id="colab" name="colab" size="40" maxlength="50" class="campos"
-						onkeypress="fPassaAlfaNumerico(' an')"
+					<input type="hidden" name="mat_vend_dp" id="mat_vend" value="<?php echo $mat_vend; ?>">
+					<input type="text" name="colab_dp" id="colab" size="40" maxlength="50" class="campos"
+						onkeypress="fPassaAlfaNumerico('an')"
 						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus>
 				</td>
 			</tr>
@@ -527,7 +527,7 @@
 				</td>
 				<td width="50%" align="center">
 					<input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
-						onkeypress="fPassaAlfaNumerico(' an')"
+						onkeypress="fPassaAlfaNumerico('an')"
 						onkeyup='this.value=this.value.toUpperCase(); validnome(this)'>
 				</td>
 			</tr>
@@ -542,9 +542,9 @@
 
 			<tr>
 				<td width="50%" align="center">
-					<input type="hidden" name="mat_vend" id="mat_vend_vl_trans" value="<?php echo $mat_vend; ?>">
-					<input type="text" id="colab_vl_trans" name="colab" size="40" maxlength="50" class="campos"
-						onkeypress="fPassaAlfaNumerico(' an')"
+					<input type="hidden" name="mat_vend_vt" id="mat_vend_vl_trans" value="<?php echo $mat_vend; ?>">
+					<input type="text" name="colab_vt" id="colab_vl_trans" size="40" maxlength="50" class="campos"
+						onkeypress="fPassaAlfaNumerico('an')"
 						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus>
 				</td>
 			</tr>
@@ -559,9 +559,9 @@
 
 			<tr>
 				<td width="50%" align="center">
-					<input type="hidden" name="mat_vend" id="mat_vend_serv_prest" value="<?php echo $mat_vend; ?>">
-					<input type="text" id="colab_serv_prest" name="colab" size="40" maxlength="50" class="campos"
-						onkeypress="fPassaAlfaNumerico(' an')"
+					<input type="hidden" name="mat_vend_srv" id="mat_vend_serv_prest" value="<?php echo $mat_vend; ?>">
+					<input type="text" name="colab_srv" id="colab_serv_prest" size="40" maxlength="50" class="campos"
+						onkeypress="fPassaAlfaNumerico('an')"
 						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus>
 				</td>
 			</tr>

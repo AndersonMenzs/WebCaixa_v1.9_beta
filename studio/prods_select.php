@@ -140,18 +140,13 @@
                   <input id="rdopt_book" type="radio" name="rdopt" class="campos" value="BOOK">
                </td>
                <td align="center">
-                  <font size="4" color='gold'>
-                     <b>
-                        <i>Pacote: </i>
-                     </b>
-                  </font>
                   <select name="pct_book" id="pct_book" class="campos" style="width: 300px; height: 30px;">
                      <option value="" selected>Selecione</option>
                      <font size="4">
                         <?php
 
                         // Pacotes
-                        $sql_Pct = "SELECT * FROM produtos WHERE cod_prod IN ('1','2','3','4','5','6','90','91') ORDER BY nome_prod ASC";
+                        $sql_Pct = "SELECT * FROM produtos WHERE cod_prod IN ('1','2','3','5','90','91') ORDER BY nome_prod ASC";
                         $res_Pct = mysqli_query($conec, $sql_Pct) or die("File Error #1. Contate seu Administrador.");
 
                         while ($row_Pct = mysqli_fetch_assoc($res_Pct)) {
@@ -171,17 +166,12 @@
                   <input id="rdopt_poster" type="radio" name="rdopt" class="campos" value="POSTER">
                </td>
                <td align="center">
-                  <font size="4" color='gold'>
-                     <b>
-                        <i>Pacote: </i>
-                     </b>
-                  </font>
                   <select name="ped_poster" id="ped_poster" class="campos" style="width: 300px; height: 30px;">
                      <option value="" selected>Selecione</option>
                      <font size="4">
                         <?php
                         // Tamanhos
-                        $sql_Tam = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod NOT IN ('1','2','3','4','5','6','90','91') ORDER BY nome_prod ASC";
+                        $sql_Tam = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod IN ('29','30') ORDER BY nome_prod ASC";
                         $res_Tam = mysqli_query($conec, $sql_Tam) or die("File Error #2. Contate seu Administrador.");
 
                         while ($row_Tam = mysqli_fetch_assoc($res_Tam)) {
@@ -196,9 +186,82 @@
                </td>
             </tr>
             <tr>
-               <td colspan="2" align="center">
+               <td width="50%" align="center">
                   <font color='gold' size='5'><b><i>Produtos:</i></b></font>
                   <input id="rdopt_prod" type="radio" name="rdopt" class="campos" value="PRODUTO">
+               </td>
+               <td align="center">
+                  <table width="100%" cellpadding="5">
+                     <tr>
+                        <td align="center">
+                           <select name="ped_prod_1" id="ped_prod_1" class="campos" style="width: 300px; height: 30px;">
+                              <option value="" selected>Selecione</option>
+                              <font size="4">
+                                 <?php
+                                 // Tamanhos
+                                 $sql_Tam = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod NOT IN ('1','2','3','4','5','6','34','35','36','37','38','29','30','90','91') ORDER BY nome_prod ASC";
+                                 $res_Tam = mysqli_query($conec, $sql_Tam) or die("File Error #2. Contate seu Administrador.");
+
+                                 while ($row_Tam = mysqli_fetch_assoc($res_Tam)) {
+                                 ?>
+                                    <option value="<?php echo $row_Tam['nome_prod']; ?>"><?php echo $row_Tam['nome_prod']; ?></option>
+                                 <?php
+                                 }
+
+                                 ?>
+                              </font>
+                           </select>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td align="center">
+                           <select name="ped_prod_2" id="ped_prod_2" class="campos" style="width: 300px; height: 30px;">
+                              <option value="" selected>Selecione</option>
+                              <font size="4">
+                                 <?php
+                                 // Tamanhos
+                                 $sql_Tam = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod NOT IN ('1','2','3','4','5','6','34','35','36','37','38','29','30','90','91') ORDER BY nome_prod ASC";
+                                 $res_Tam = mysqli_query($conec, $sql_Tam) or die("File Error #2. Contate seu Administrador.");
+
+                                 while ($row_Tam = mysqli_fetch_assoc($res_Tam)) {
+                                 ?>
+                                    <option value="<?php echo $row_Tam['nome_prod']; ?>"><?php echo $row_Tam['nome_prod']; ?></option>
+                                 <?php
+                                 }
+
+                                 ?>
+                              </font>
+                           </select>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td align="center">
+                           <select name="ped_prod_3" id="ped_prod_3" class="campos" style="width: 300px; height: 30px;">
+                              <option value="" selected>Selecione</option>
+                              <font size="4">
+                                 <?php
+                                 // Tamanhos
+                                 $sql_Tam = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod NOT IN ('1','2','3','4','5','6','34','35','36','37','38','29','30','90','91') ORDER BY nome_prod ASC";
+                                 $res_Tam = mysqli_query($conec, $sql_Tam) or die("File Error #2. Contate seu Administrador.");
+
+                                 while ($row_Tam = mysqli_fetch_assoc($res_Tam)) {
+                                 ?>
+                                    <option value="<?php echo $row_Tam['nome_prod']; ?>"><?php echo $row_Tam['nome_prod']; ?></option>
+                                 <?php
+                                 }
+
+                                 ?>
+                              </font>
+                           </select>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+            </tr>
+            <tr>
+               <td colspan="2" align="center">
+                  <font color='gold' size='5'><b><i>Produtos Separados:</i></b></font>
+                  <input id="rdopt_prod2" type="radio" name="rdopt" class="campos" value="PRODUTO">
                </td>
             </tr>
          </table><br>
@@ -277,6 +340,9 @@
          const radios = Array.from(document.querySelectorAll('input[name="rdopt"]'));
          const selectPct = document.getElementById('pct_book');
          const selectTam = document.getElementById('ped_poster');
+         const selectProd1 = document.getElementById('ped_prod_1');
+         const selectProd2 = document.getElementById('ped_prod_2');
+         const selectProd3 = document.getElementById('ped_prod_3');
 
          if (!radios.length || !selectPct || !selectTam) return;
 
@@ -314,25 +380,59 @@
          function atualizarSelects() {
             const rdoMarked = radios.find(r => r.checked);
             const tipo = rdoMarked ? rdoMarked.value : '';
+            const idRdoMarked = rdoMarked ? rdoMarked.id : '';
 
             if (tipo === 'BOOK') {
                selectPct.disabled = false;   
                selectTam.disabled = true;
                selectTam.selectedIndex = 0;
+               if (selectProd1) selectProd1.disabled = true;
+               if (selectProd1) selectProd1.selectedIndex = 0;
+               if (selectProd2) selectProd2.disabled = true;
+               if (selectProd2) selectProd2.selectedIndex = 0;
+               if (selectProd3) selectProd3.disabled = true;
+               if (selectProd3) selectProd3.selectedIndex = 0;
             } else if (tipo === 'POSTER') {
                selectPct.disabled = true;
                selectPct.selectedIndex = 0;
                selectTam.disabled = false;
-            } else if (tipo === 'PRODUTO') {
+               if (selectProd1) selectProd1.disabled = true;
+               if (selectProd1) selectProd1.selectedIndex = 0;
+               if (selectProd2) selectProd2.disabled = true;
+               if (selectProd2) selectProd2.selectedIndex = 0;
+               if (selectProd3) selectProd3.disabled = true;
+               if (selectProd3) selectProd3.selectedIndex = 0;
+            } else if (tipo === 'PRODUTO' && idRdoMarked === 'rdopt_prod') {
                selectPct.disabled = true;
                selectPct.selectedIndex = 0;
                selectTam.disabled = true;
                selectTam.selectedIndex = 0;
+               if (selectProd1) selectProd1.disabled = false;
+               if (selectProd2) selectProd2.disabled = false;
+               if (selectProd3) selectProd3.disabled = false;
+            } else if (tipo === 'PRODUTO' && idRdoMarked === 'rdopt_prod2') {
+               // Produtos Separados - desabilitar os 3 selects
+               selectPct.disabled = true;
+               selectPct.selectedIndex = 0;
+               selectTam.disabled = true;
+               selectTam.selectedIndex = 0;
+               if (selectProd1) selectProd1.disabled = true;
+               if (selectProd1) selectProd1.selectedIndex = 0;
+               if (selectProd2) selectProd2.disabled = true;
+               if (selectProd2) selectProd2.selectedIndex = 0;
+               if (selectProd3) selectProd3.disabled = true;
+               if (selectProd3) selectProd3.selectedIndex = 0;
             } else {
                selectPct.disabled = true;
                selectTam.disabled = true;
                selectPct.selectedIndex = 0;
                selectTam.selectedIndex = 0;
+               if (selectProd1) selectProd1.disabled = true;
+               if (selectProd1) selectProd1.selectedIndex = 0;
+               if (selectProd2) selectProd2.disabled = true;
+               if (selectProd2) selectProd2.selectedIndex = 0;
+               if (selectProd3) selectProd3.disabled = true;
+               if (selectProd3) selectProd3.selectedIndex = 0;
             }
          }
 
@@ -340,6 +440,71 @@
          radios.forEach(function(radio) {
             radio.addEventListener('change', atualizarSelects);
          });
+
+         // Guardar opções originais para restauração
+         const prodSelects = [selectProd1, selectProd2, selectProd3];
+         const prodSelectsIds = ['ped_prod_1', 'ped_prod_2', 'ped_prod_3'];
+         const originalOptions = {};
+         
+         // Armazenar as opções originais
+         prodSelectsIds.forEach(id => {
+            const select = document.getElementById(id);
+            if (select) {
+               originalOptions[id] = Array.from(select.options).map(opt => ({
+                  value: opt.value,
+                  text: opt.text
+               }));
+            }
+         });
+
+         // Função para atualizar opções disponíveis nos selects de produtos
+         function atualizarOpcoesProdutos() {
+            const valores = {};
+            valores['ped_prod_1'] = selectProd1 && selectProd1.value ? selectProd1.value : null;
+            valores['ped_prod_2'] = selectProd2 && selectProd2.value ? selectProd2.value : null;
+            valores['ped_prod_3'] = selectProd3 && selectProd3.value ? selectProd3.value : null;
+
+            prodSelectsIds.forEach(id => {
+               const select = document.getElementById(id);
+               if (!select) return;
+
+               const valorAtual = select.value;
+               
+               // Remover todas as opções exceto a primeira (Selecione)
+               while (select.options.length > 1) {
+                  select.remove(1);
+               }
+
+               // Re-adicionar as opções originais, exceto as que foram selecionadas em outros
+               originalOptions[id].forEach(opt => {
+                  if (opt.value === '') return; // Pular a opção "Selecione"
+                  
+                  // Verificar se esta opção está selecionada em outro select
+                  let jaSelecionada = false;
+                  prodSelectsIds.forEach(outroId => {
+                     if (outroId !== id && opt.text === valores[outroId]) {
+                        jaSelecionada = true;
+                     }
+                  });
+
+                  // Adicionar opção somente se não estiver selecionada em outro lugar
+                  if (!jaSelecionada) {
+                     const option = document.createElement('option');
+                     option.value = opt.value;
+                     option.text = opt.text;
+                     select.appendChild(option);
+                  }
+               });
+
+               // Restaurar valor anterior se ainda estiver na lista
+               select.value = valorAtual;
+            });
+         }
+
+         // Adicionar listeners aos selects de produtos
+         if (selectProd1) selectProd1.addEventListener('change', atualizarOpcoesProdutos);
+         if (selectProd2) selectProd2.addEventListener('change', atualizarOpcoesProdutos);
+         if (selectProd3) selectProd3.addEventListener('change', atualizarOpcoesProdutos);
 
          // Aplicar estado inicial
          atualizarSelects();

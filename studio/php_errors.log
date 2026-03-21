@@ -432,3 +432,13 @@ Stack trace:
 [11-Mar-2026 17:13:56 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
 [11-Mar-2026 17:15:15 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
 [13-Mar-2026 13:13:33 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
+[16-Mar-2026 17:41:44 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
+[20-Mar-2026 12:28:41 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
+[20-Mar-2026 13:40:17 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
+[20-Mar-2026 14:32:42 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
+[20-Mar-2026 14:33:53 America/Sao_Paulo] PHP Notice:  Undefined index: ref_std in /var/www/html/caixa/studio/prods_tipo.php on line 121
+[20-Mar-2026 14:33:53 America/Sao_Paulo] PHP Notice:  Undefined index: mat_vend in /var/www/html/caixa/studio/prods_tipo.php on line 122
+[20-Mar-2026 14:33:53 America/Sao_Paulo] PHP Notice:  Undefined index: vendedora in /var/www/html/caixa/studio/prods_tipo.php on line 123
+[20-Mar-2026 14:33:53 America/Sao_Paulo] PHP Notice:  Undefined index: cliente in /var/www/html/caixa/studio/prods_tipo.php on line 124
+[20-Mar-2026 14:33:53 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
+[20-Mar-2026 15:17:19 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192

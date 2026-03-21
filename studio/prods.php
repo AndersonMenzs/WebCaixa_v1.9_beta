@@ -117,82 +117,77 @@
             }
          }
 
+         function setupAutocompleteMatricula(element) {
+            var $el = $(element);
+            $el.autocomplete({
+               source: function(request, response) {
+                  $.ajax({
+                     url: "buscar_funcionarias.php",
+                     dataType: "json",
+                     data: {
+                        term: request.term,
+                        tipo: "matricula"
+                     },
+                     success: function(data) {
+                        var items = [];
+
+                        if (Array.isArray(data)) {
+                           items = data;
+                        } else if (data && Array.isArray(data.mat_vend)) {
+                           for (var i = 0; i < data.mat_vend.length; i++) {
+                              items.push({
+                                 label: data.mat_vend[i] + ' - ' + (data.nomes && data.nomes[i] ? data.nomes[i] : ''),
+                                 value: data.mat_vend[i],
+                                 nome: data.nomes && data.nomes[i] ? data.nomes[i] : ''
+                              });
+                           }
+                        }
+                        response(items);
+                     },
+                     error: function(xhr, status, err) {
+                        console.error("Erro na requisição:", status, err);
+                        response([]);
+                     }
+                  });
+               },
+               minLength: 1,
+               delay: 300,
+               select: function(event, ui) {
+                  $('#mat_vend').val(ui.item ? ui.item.value : '');
+                  $('#mat_vend_input').val(ui.item && ui.item.nome ? ui.item.nome : '');
+                  $('#vendedora_hidden').val(ui.item && ui.item.nome ? ui.item.nome : '');
+                  $('#vendedora_nome').text(ui.item && ui.item.nome ? ui.item.nome : '');
+                  return false;
+               },
+               focus: function(event, ui) {
+                  $(this).val(ui.item ? ui.item.value : '');
+                  return false;
+               }
+            });
+
+            var inst = $el.autocomplete("instance") || $el.data("ui-autocomplete") || $el.data("autocomplete");
+            if (inst) {
+               inst._renderItem = function(ul, item) {
+                  return $("<li>")
+                     .append("<div>" + (item.label || item.value || "") + "</div>")
+                     .appendTo(ul);
+               };
+            }
+
+            // Listener para forçar busca quando digitar primeiro dígito diferente de 0
+            $el.on('keyup', function(e) {
+               var val = $(this).val();
+               // Verifica se tem pelo menos um dígito différente de 0
+               if (val && /[1-9]/.test(val)) {
+                  // Força abertura do autocomplete
+                  $(this).autocomplete("search", val);
+               }
+            });
+         }
+
          // Aplicar aos campos
-         setupAutocomplete("#vendedora", "vendedora");
+         setupAutocompleteMatricula("#mat_vend_input");
       });
-
-      function putFocus(formInst, elementInst) {
-         if (document.forms.length > 0) {
-            document.forms[formInst].elements[elementInst].focus();
-         }
-      }
-
-      function validata(field) {
-         var valid = "/0123456789"
-         var ok = "yes";
-         var temp;
-         for (var i = 0; i < field.value.length; i++) {
-            temp = "" + field.value.substring(i, i + 1);
-            if (valid.indexOf(temp) == "-1") ok = "no";
-         }
-         if (ok == "no") {
-            alert("Entrada Incorreta!\nDigite apenas algarismos!");
-            field.value = "";
-            field.focus();
-            field.select();
-         }
-      }
-
-      function FormataData(Formulario, Campo, TeclaPres) {
-         var tecla = TeclaPres.keyCode;
-         var strCampo;
-         var vr;
-         var tam;
-         var TamanhoMaximo = 10;
-
-         eval("strCampo = document." + Formulario + "." + Campo);
-
-         vr = strCampo.value;
-         vr = vr.replace("/", "");
-         vr = vr.replace("/", "");
-         vr = vr.replace("/", "");
-         vr = vr.replace(",", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace("-", "");
-         vr = vr.replace("-", "");
-         vr = vr.replace("-", "");
-         vr = vr.replace("-", "");
-         vr = vr.replace("-", "");
-         tam = vr.length;
-
-
-         if (tam < TamanhoMaximo && tecla != 8) {
-            tam = vr.length + 1;
-         }
-
-         if (tecla == 8) {
-            tam = tam - 1;
-         }
-
-         if (tecla == 8 || tecla >= 48 && tecla <= 57 || tecla >= 96 && tecla <= 105) {
-            if (tam <= 4) {
-               strCampo.value = vr;
-            }
-            if ((tam > 4) && (tam <= 7)) {
-               strCampo.value = vr.substr(0, tam - 2) + '/' + vr.substr(tam - 2, tam);
-            }
-            if ((tam > 7) && (tam <= 10)) {
-               strCampo.value = vr.substr(0, tam - 7) + '/' + vr.substr(tam - 7, 2) + '/' + vr.substr(tam - 5, tam);
-               //         strCampo.value = vr.substr(0, tam - 8) + '/' + vr.substr(tam - 7, 2) + '/' + vr.substr(tam - 4, tam); 
-            }
-         }
-      }
 
       function validvalor(field) {
          var valid = ".0123456789"
@@ -281,12 +276,12 @@
       }
 
       function validaCampos() {
-         var vendedora = document.getElementById('vendedora').value.trim();
+         var mat_vend = document.getElementById('mat_vend').value.trim();
          var cliente = document.getElementById('cliente').value.trim();
 
-         if (vendedora.length <= 8) {
-            alert('O campo Vendedora deve ter mais que 8 letras.');
-            document.getElementById('vendedora').focus();
+         if (mat_vend.length === 0) {
+            alert('O campo Matrícula da Vendedora é obrigatório.');
+            document.getElementById('mat_vend_input').focus();
             return false;
          }
          if (cliente.length <= 8) {
@@ -316,6 +311,7 @@
 
    // inicializa variáveis usadas no form para evitar undefined
    $mat_vend = isset($mat_vend) ? $mat_vend : '';
+   $std = isset($_REQUEST['ref_std']) ? trim($_REQUEST['ref_std']) : '';
 
    // se vierem via REQUEST/POST, use-os
    if (isset($_REQUEST['mat_vend'])) $mat_vend = trim($_REQUEST['mat_vend']);
@@ -346,7 +342,7 @@
 
    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
       <table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
-         <form name="parcela" method="post" action="prods_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return checkdata()" onsubmit="return validaCampos()" autocomplete="off">
+         <form name="parcela" method="post" action="prods_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos() && checkdata()" autocomplete="off">
             <tr>
                <td align="center">
                   <font color='#FFFFFF' size='5'><b><i>Ref. Estúdio</i></b></font>
@@ -385,9 +381,14 @@
                   </select>
                </td>
                <td align="center">
-                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $matVendEsc; ?>">
-                  <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
-                     onkeyup="this.value=this.value.toUpperCase(); validnome(this)" required>
+                     <table width="100%" border="0" cellpadding="3">
+                     <tr>
+                        <td align="center">
+                           <input type="text" id="mat_vend_input" name="mat_vend_input" size="40" maxlength="8" class="campos">
+                           <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $matVendEsc; ?>">
+                        </td>
+                     </tr>
+                  </table>
                </td>
                <td align="center">
                   <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
@@ -397,6 +398,8 @@
             </tr>
       </table>
       <br>
+
+      <input type="hidden" name="vendedora" id="vendedora_hidden" value="">
 
       <table width="100%" border="0" cellspacing="0">
          <tr>

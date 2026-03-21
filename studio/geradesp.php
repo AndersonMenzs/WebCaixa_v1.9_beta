@@ -117,7 +117,7 @@
 			$Reg  = $Reg + 1;
 
 			// Recebendo o próximo número de registro CI
-			$sqlr_ci = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg asc";
+			$sqlr_ci = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
 			$rsr_ci  = mysqli_query($conec, $sqlr_ci) or die(" Não foi possível acessar os Dados");
 			$regsr_ci = mysqli_num_rows($rsr_ci);
 			$lnr_ci = mysqli_fetch_array($rsr_ci);
@@ -147,7 +147,11 @@
 			}
 
 			// Recebendo o próximo número de registro Material de Consumo
-			$sql_mc = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
+			if ($TipoDoc == 'MCS') {
+				$TipoDoc_mc = 'MC';				
+			}
+
+			$sql_mc = "select numdoc from registro where numdoc like '$TipoDoc_mc%' order by reg desc";
 			$rsr  = mysqli_query($conec, $sql_mc) or die(" Não foi possível acessar os Dados");
 			$regsr_mc = mysqli_num_rows($rsr);
 			$lnr_mc = mysqli_fetch_array($rsr);
@@ -159,8 +163,8 @@
 				$numero = substr($codigo_atual, 2);
 				$novo_numero = intval($numero) + 1;
 				$UltDoc_mc = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
-			}
-
+			};
+//echo $UltDoc_mc;
 			// Recebendo o próximo número de registro Material de Produção
 			$sqlr_mp = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
 			$rsr_mp  = mysqli_query($conec, $sqlr_mp) or die(" Não foi possível acessar os Dados");
@@ -175,7 +179,7 @@
 				$novo_numero = intval($numero) + 1;
 				$UltDoc_mp = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
-
+//echo $UltDoc_mp;
 			// Recebendo o próximo número de registro Vale Transporte
 			$sqlr_vt = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
 			$rsr_vt  = mysqli_query($conec, $sqlr_vt) or die(" Não foi possível acessar os Dados");
@@ -190,7 +194,7 @@
 				$novo_numero = intval($numero) + 1;
 				$UltDoc_vt = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
-
+//echo $UltDoc_vt;
 			// Recebendo o próximo número de registro Serviços Prestados
 			$sqlr_sp = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
 			$rsr_sp  = mysqli_query($conec, $sqlr_sp) or die(" Não foi possível acessar os Dados");
@@ -205,7 +209,7 @@
 				$novo_numero = intval($numero) + 1;
 				$UltDoc_sp = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
-
+//echo $UltDoc_sp;
 			// Recebendo o próximo número de registro Outros
 			$sqlr_out = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
 			$rsr_out  = mysqli_query($conec, $sqlr_out) or die(" Não foi possível acessar os Dados");
@@ -220,7 +224,8 @@
 				$novo_numero = intval($numero) + 1;
 				$UltDoc_out = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 			}
-
+//echo $UltDoc_out;
+//exit();
 			// Condições para atribuir o número do documento correto
 			if ($TipoDesp == '1') {
 

@@ -39,11 +39,11 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
 
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	//echo "<pre>";
-	//print_r($dados);
-	//echo "</pre>";
-	//exit();
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
+	exit();*/
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -61,8 +61,14 @@
 	$lsref_remb	= trim($_POST['lsref_remb']);
 	$TipoRef = ($lsref_desp != 'Selecione' and $lsPr == '1') ? $lsref_desp : (($lsref_remb != 'Selecione' and $lsPr == '5') ? $lsref_remb : '');
 	$TipoDoc = ($lsref_desp != 'Selecione' and $lsPr == '1') ? 'CI' : (($lsref_remb != 'Selecione' and $lsPr == '5') ? 'RC' : ($lsPr == '7' ? 'VT' : ($lsPr == '6' ? 'SP' : ($lsPr == '4' ? 'MD' : ($lsPr == '2' ? 'MCS' : ($lsPr == '4' ? 'MPD' : ($lsPr == '8' ? 'OUT' : '')))))));
-	$colab		= trim($_POST['colab']);
-	$mat_vend	= trim($_POST['mat_vend']);
+	$colab =
+		$_POST['colab_dp'] ??
+		$_POST['colab_vt'] ??
+		$_POST['colab_srv'] ?? '';
+	$mat_vend =
+		$_POST['mat_vend_dp'] ??
+		$_POST['mat_vend_vt'] ??
+		$_POST['mat_vend_srv'] ?? '';
 	$cliente	= trim($_POST['cliente']);
 
 	include "conexao.php";

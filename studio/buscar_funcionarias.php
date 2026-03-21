@@ -7,7 +7,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 // 3. Configuração de erros (apenas para desenvolvimento)
 error_reporting(E_ALL);
-ini_set('display_errors', 0); // Não mostrar erros na tela
+ini_set('display_errors', 1); // Não mostrar erros na tela
 ini_set('log_errors', 1);
 
 // 4. Incluir arquivos necessários com verificação
@@ -39,7 +39,13 @@ if (strlen($term) < 2) {
 
 try {
     // 8. Preparar consulta SQL segura
-    $sql = "SELECT mat, nome FROM pessoal WHERE nome LIKE CONCAT('%', ?, '%') ORDER BY nome LIMIT 10";
+    if ($tipo === 'matricula') {
+        // Busca por matrícula
+        $sql = "SELECT mat, nome FROM pessoal WHERE mat LIKE CONCAT(?, '%') ORDER BY mat LIMIT 10";
+    } else {
+        // Busca por nome (padrão/vendedora)
+        $sql = "SELECT mat, nome FROM pessoal WHERE nome LIKE CONCAT('%', ?, '%') ORDER BY nome LIMIT 10";
+    }
     
     $stmt = $conec->prepare($sql);
     if (!$stmt) {
@@ -77,5 +83,5 @@ try {
 }
 
 
-exit;
+
 ?>
