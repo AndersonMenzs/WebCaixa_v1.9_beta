@@ -98,7 +98,7 @@
    $Valor     = $txt1 + $txt2 + $txt3;
    $ValorF    = number_format($Valor, 2, ",", ".");
    $Parcelas  = trim($_POST['parc_card_cred_1']) + trim($_POST['parc_card_cred_2']) + trim($_POST['parc_card_cred_3']);
- 
+
    // Verificando o Sistema
    include "us_sist.php";
    if ($ch == 'no') {
@@ -188,7 +188,7 @@
             <tr>
                <td width="50%" align="center">
                   <font color='gold' size='5'><b><i>Produtos:</i></b></font>
-                  <input id="rdopt_prod" type="radio" name="rdopt" class="campos" value="PRODUTO">
+                  <input id="rdopt_pct_prod" type="radio" name="rdopt" class="campos" value="PCT_PROD">
                </td>
                <td align="center">
                   <table width="100%" cellpadding="5">
@@ -261,7 +261,7 @@
             <tr>
                <td colspan="2" align="center">
                   <font color='gold' size='5'><b><i>Produtos Separados:</i></b></font>
-                  <input id="rdopt_prod2" type="radio" name="rdopt" class="campos" value="PRODUTO">
+                  <input id="rdopt_prod" type="radio" name="rdopt" class="campos" value="PRODUTO">
                </td>
             </tr>
          </table><br>
@@ -348,7 +348,7 @@
 
          window.checkdata = function() {
             const rdoMarked = radios.find(r => r.checked);
-            
+
             // Verificar se algum radio está marcado
             if (!rdoMarked) {
                alert('Selecione um tipo: Books, Poster ou Produtos');
@@ -370,6 +370,12 @@
                   selectTam.focus();
                   return false;
                }
+            } else if (tipo === 'PCT_PROD') {
+               if (selectProd1.value === '' || selectProd1.selectedIndex === 0) {
+                  alert('Selecione um Produto para o Item 1');
+                  selectProd1.focus();
+                  return false;
+               }
             } else if (tipo === 'PRODUTO') {
                return true;
             }
@@ -383,7 +389,7 @@
             const idRdoMarked = rdoMarked ? rdoMarked.id : '';
 
             if (tipo === 'BOOK') {
-               selectPct.disabled = false;   
+               selectPct.disabled = false;
                selectTam.disabled = true;
                selectTam.selectedIndex = 0;
                if (selectProd1) selectProd1.disabled = true;
@@ -402,7 +408,7 @@
                if (selectProd2) selectProd2.selectedIndex = 0;
                if (selectProd3) selectProd3.disabled = true;
                if (selectProd3) selectProd3.selectedIndex = 0;
-            } else if (tipo === 'PRODUTO' && idRdoMarked === 'rdopt_prod') {
+            } else if (tipo === 'PCT_PROD' && idRdoMarked === 'rdopt_pct_prod') {
                selectPct.disabled = true;
                selectPct.selectedIndex = 0;
                selectTam.disabled = true;
@@ -410,7 +416,7 @@
                if (selectProd1) selectProd1.disabled = false;
                if (selectProd2) selectProd2.disabled = false;
                if (selectProd3) selectProd3.disabled = false;
-            } else if (tipo === 'PRODUTO' && idRdoMarked === 'rdopt_prod2') {
+            } else if (tipo === 'PRODUTO' && idRdoMarked === 'rdopt_prod') {
                // Produtos Separados - desabilitar os 3 selects
                selectPct.disabled = true;
                selectPct.selectedIndex = 0;
@@ -445,7 +451,7 @@
          const prodSelects = [selectProd1, selectProd2, selectProd3];
          const prodSelectsIds = ['ped_prod_1', 'ped_prod_2', 'ped_prod_3'];
          const originalOptions = {};
-         
+
          // Armazenar as opções originais
          prodSelectsIds.forEach(id => {
             const select = document.getElementById(id);
@@ -469,7 +475,7 @@
                if (!select) return;
 
                const valorAtual = select.value;
-               
+
                // Remover todas as opções exceto a primeira (Selecione)
                while (select.options.length > 1) {
                   select.remove(1);
@@ -478,7 +484,7 @@
                // Re-adicionar as opções originais, exceto as que foram selecionadas em outros
                originalOptions[id].forEach(opt => {
                   if (opt.value === '') return; // Pular a opção "Selecione"
-                  
+
                   // Verificar se esta opção está selecionada em outro select
                   let jaSelecionada = false;
                   prodSelectsIds.forEach(outroId => {

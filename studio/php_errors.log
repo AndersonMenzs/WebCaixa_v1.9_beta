@@ -442,3 +442,4 @@ Stack trace:
 [20-Mar-2026 14:33:53 America/Sao_Paulo] PHP Notice:  Undefined index: cliente in /var/www/html/caixa/studio/prods_tipo.php on line 124
 [20-Mar-2026 14:33:53 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
 [20-Mar-2026 15:17:19 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
+[21-Mar-2026 10:26:31 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192

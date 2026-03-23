@@ -227,7 +227,7 @@ $Opt       = $_GET['Opt'];
 
         <?php
         // Verifica se é Book ou Poster para exibir o endereço correto
-        if ($Opt == 'BOOK' || $Opt == 'POSTER') {
+        if ($Opt == 'BOOK' || $Opt == 'POSTER' || $Opt == 'PCT_PROD') {
             echo '<img src="./images/logo.png" alt="Imagem" class="imagem_via3">';
         }
         ?>
@@ -876,7 +876,7 @@ $Opt       = $_GET['Opt'];
             <!-- Terceira via -->
             <?php
             // ecibo de solicitação - verifica se a solicitação é um book e ou poster
-            if ($Opt == "BOOK" || $Opt == "POSTER") {
+            if ($Opt == "BOOK" || $Opt == "POSTER" || $Opt == "PCT_PROD") {
             ?>
                 <tr>
                     <td height="17" align="left" valign=bottom><br></td>

@@ -19,6 +19,12 @@ include "./valor_ext.php";
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 
 	<?php
+	$dadps = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+	echo "<pre>";
+	print_r($dadps);
+	echo "</pre>";
+	//exit;
+	
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.8.1.2";
@@ -58,6 +64,16 @@ include "./valor_ext.php";
 	$VrPag     = $txt1 + $txt2 + $txt3;
 	$VrPagF    = number_format($VrPag, 2, ',', '.');
 	$vlr_ext   = valorPorExtenso($VrPagF);
+
+	// Verificando se os campos de pct_prod estão vazios ou não
+	
+	if (isset($_POST['ped_prod_1']) && !empty(trim($_POST['ped_prod_1']))) {
+		$Pct_Prod = trim($_POST['ped_prod_1']);
+	} elseif (isset($_POST['ped_prod_2']) && !empty(trim($_POST['ped_prod_2']))) {
+		$Pct_Prod = trim($_POST['ped_prod_2']);
+	} elseif (isset($_POST['ped_prod_3']) && !empty(trim($_POST['ped_prod_3']))) {
+		$Pct_Prod = trim($_POST['ped_prod_3']);
+	}
 
 	//Condição para definir o tipo de pedido
 	if (!empty($Poster)) {

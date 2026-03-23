@@ -57,6 +57,17 @@
 	$RdBook  = trim($_POST['rdbook']);
 	$Poster   = trim($_POST['ped_poster']) ?? '';
 	$Produto   = trim($_POST['ped_prod']) ?? '';
+
+	// Verificando se os campos de pct_prod estão vazios ou não
+	
+	if (isset($_POST['ped_prod_1']) && !empty(trim($_POST['ped_prod_1']))) {
+		$Pct_Prod = trim($_POST['ped_prod_1']);
+	} elseif (isset($_POST['ped_prod_2']) && !empty(trim($_POST['ped_prod_2']))) {
+		$Pct_Prod = trim($_POST['ped_prod_2']);
+	} elseif (isset($_POST['ped_prod_3']) && !empty(trim($_POST['ped_prod_3']))) {
+		$Pct_Prod = trim($_POST['ped_prod_3']);
+	}
+
 	$Parcelas = trim($_POST['parcelas']);
 	$Pass      = strtolower(trim($_POST['txtsen']));
 	$Senha     = sha1($Pass);
@@ -151,6 +162,9 @@
 				<input type="hidden" name="pct_book" value="<?php echo $Book; ?>">
 				<input type="hidden" name="ped_poster" value="<?php echo $Poster; ?>">
 				<input type="hidden" name="ped_prod" value="<?php echo $Produto; ?>">
+				<input type="hidden" name="ped_prod_1" value="<?php echo trim($_POST['ped_prod_1']); ?>">
+				<input type="hidden" name="ped_prod_2" value="<?php echo trim($_POST['ped_prod_2']); ?>">
+				<input type="hidden" name="ped_prod_3" value="<?php echo trim($_POST['ped_prod_3']); ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
 				<p>
 					<font size='6'><b>
