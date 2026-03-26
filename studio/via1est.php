@@ -174,8 +174,8 @@ error_reporting(E_ALL);
 	$Aut1 = $Aut;
 	$Aut2 = "$Aut$PC$horaaut$NDoc $dtAut$VrEntrF$TipoRec$FmRec_a$MatRec";
 	$AutR = "$Aut$PC$horaaut$NDoc $dtAut$VrEntrF$TipoRec$FmRec_a$MatRdz";
-	shell_exec("echo $Aut2 > /dev/lp0");
-
+	//shell_exec("echo $Aut2 > /dev/lp0");
+	
 	// Gravando a Spool
 	include "dbselect.php";
 	$sql = "insert into spool2 values ('$Aut1', '$AutR')";

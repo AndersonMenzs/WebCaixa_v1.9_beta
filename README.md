@@ -513,3 +513,12 @@ Este cadastramento só serve para informação dos contratos e recibos. foi alte
 ```sql
 $sqlC = "select * from cargos where ccargo = '03' or ccargo = '04' or ccargo = '05' or ccargo = '08' order by ccargo";
 ```
+
+# Alterar quantidade de caracter na coluna subtipo da tabela registro
+
+Alterado para comportar os produtos kit na rotina pagamento a vista.
+
+
+```sql
+ALTER TABLE registro MODIFY subtipo CHAR(5);
+```

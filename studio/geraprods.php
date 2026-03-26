@@ -1,3 +1,10 @@
+<?php
+// Debug
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+?>
+
 <html>
 
 <head>
@@ -84,9 +91,12 @@
 		$SubTipo   = 'BOOK';
 	} elseif ($RdBook == 'pk') {
 		$TipoRec   = '6';
+		$SubTipo   = 'PRODK';
+	} elseif ($RdBook == '') {
+		$TipoRec   = '6';
 		$SubTipo   = 'PROD';
 	}
-
+	
 	// Variáveis
 	$DataHoje = date('Y-m-d');
 

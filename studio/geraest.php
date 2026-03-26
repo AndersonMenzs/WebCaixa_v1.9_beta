@@ -86,12 +86,12 @@
 			mysqli_free_result($rsr);
 
 			if ($regsr == 1) {
-				//include "estunico.php";
-				echo "Registro Único";
-				exit;
+				//echo "Registro Único";
+				include "estunico.php";
 			} else {
+				//echo "Registros Múltiplos";
+				//echo "<br>" . $Aut . "<br>" . $NDoc . "<br>" . $dtComp;
 				include "estmultiplo.php";
-				
 				}
 		} else { ?>
 			<font size='6'><b>
