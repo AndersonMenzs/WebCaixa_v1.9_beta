@@ -149,6 +149,7 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
    <?php
+   
    // Obtendo o Login
    $Sis     = "S7";
    $Rot     = "S7R2.2";

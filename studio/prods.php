@@ -50,6 +50,12 @@
    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
    <script>
+      function putFocus(formInst, elementInst) {
+         if (document.forms.length > 0) {
+            document.forms[formInst].elements[elementInst].focus();
+         }
+      }
+
       $(function() {
          function setupAutocomplete(element, tipo) {
             var $el = $(element);
@@ -117,76 +123,63 @@
             }
          }
 
-         function setupAutocompleteMatricula(element) {
+         function setupAutocompleteVendedora(element) {
             var $el = $(element);
+
             $el.autocomplete({
                source: function(request, response) {
                   $.ajax({
                      url: "buscar_funcionarias.php",
                      dataType: "json",
                      data: {
-                        term: request.term,
-                        tipo: "matricula"
+                        term: request.term
                      },
                      success: function(data) {
                         var items = [];
 
-                        if (Array.isArray(data)) {
-                           items = data;
-                        } else if (data && Array.isArray(data.mat_vend)) {
-                           for (var i = 0; i < data.mat_vend.length; i++) {
+                        if (data && Array.isArray(data.nomes)) {
+                           for (var i = 0; i < data.nomes.length; i++) {
                               items.push({
-                                 label: data.mat_vend[i] + ' - ' + (data.nomes && data.nomes[i] ? data.nomes[i] : ''),
-                                 value: data.mat_vend[i],
-                                 nome: data.nomes && data.nomes[i] ? data.nomes[i] : ''
+                                 label: data.mat_vend[i] + ' - ' + data.nomes[i],
+                                 value: data.nomes[i],
+                                 mat: data.mat_vend[i],
+                                 nome: data.nomes[i]
                               });
                            }
                         }
+
                         response(items);
-                     },
-                     error: function(xhr, status, err) {
-                        console.error("Erro na requisição:", status, err);
-                        response([]);
                      }
                   });
                },
-               minLength: 1,
+               minLength: 2,
                delay: 300,
+
                select: function(event, ui) {
-                  $('#mat_vend').val(ui.item ? ui.item.value : '');
-                  $('#mat_vend_input').val(ui.item && ui.item.nome ? ui.item.nome : '');
-                  $('#vendedora_hidden').val(ui.item && ui.item.nome ? ui.item.nome : '');
-                  $('#vendedora_nome').text(ui.item && ui.item.nome ? ui.item.nome : '');
+                  $('#mat_vend').val(ui.item.mat); // matrícula (hidden)
+                  $('#mat_vend_input').val(ui.item.nome); // nome no campo visível
+                  $('#vendedora_hidden').val(ui.item.nome);
                   return false;
                },
+
                focus: function(event, ui) {
-                  $(this).val(ui.item ? ui.item.value : '');
+                  $(this).val(ui.item.nome);
                   return false;
                }
             });
 
-            var inst = $el.autocomplete("instance") || $el.data("ui-autocomplete") || $el.data("autocomplete");
+            var inst = $el.autocomplete("instance");
             if (inst) {
                inst._renderItem = function(ul, item) {
                   return $("<li>")
-                     .append("<div>" + (item.label || item.value || "") + "</div>")
+                     .append("<div>" + item.label + "</div>")
                      .appendTo(ul);
                };
             }
-
-            // Listener para forçar busca quando digitar primeiro dígito diferente de 0
-            $el.on('keyup', function(e) {
-               var val = $(this).val();
-               // Verifica se tem pelo menos um dígito différente de 0
-               if (val && /[1-9]/.test(val)) {
-                  // Força abertura do autocomplete
-                  $(this).autocomplete("search", val);
-               }
-            });
          }
 
          // Aplicar aos campos
-         setupAutocompleteMatricula("#mat_vend_input");
+         setupAutocompleteVendedora("#mat_vend_input");
       });
 
       function validvalor(field) {
@@ -364,27 +357,29 @@
                      $sql = "SELECT * FROM estudios WHERE status_std <> 'x' ORDER BY cod_std ASC";
                      $res = mysqli_query($conec, $sql) or die("Não foi possível acessar os Dados");
 
-							// Criando o Array para o campo PC
-							while ($lnstd = mysqli_fetch_array($res)) {
-								$Cod_Std  = $lnstd['cod_std'];
-							?>
-                     <!-- Deixar o estúdio pre-selecionado -->
-                     <?php if ($Cod_Std == $std) { ?>
-                        <option value="<?php echo $Cod_Std; ?>" class="campos" selected><?php echo "PC-" . $Cod_Std; ?></option>
-                     <?php } else { ?>
-								<option value="<?php echo $Cod_Std; ?>" class="campos"><?php echo "PC-" . $Cod_Std; ?></option>
+                     // Criando o Array para o campo PC
+                     while ($lnstd = mysqli_fetch_array($res)) {
+                        $Cod_Std  = $lnstd['cod_std'];
+                     ?>
+                        <!-- Deixar o estúdio pre-selecionado -->
+                        <?php if ($Cod_Std == $std) { ?>
+                           <option value="<?php echo $Cod_Std; ?>" class="campos" selected><?php echo "PC-" . $Cod_Std; ?></option>
+                        <?php } else { ?>
+                           <option value="<?php echo $Cod_Std; ?>" class="campos"><?php echo "PC-" . $Cod_Std; ?></option>
                      <?php
-                     } 
-							}
-							mysqli_free_result($res);
+                        }
+                     }
+                     mysqli_free_result($res);
                      ?>
                   </select>
                </td>
                <td align="center">
-                     <table width="100%" border="0" cellpadding="3">
+                  <table width="100%" border="0" cellpadding="3">
                      <tr>
                         <td align="center">
-                           <input type="text" id="mat_vend_input" name="mat_vend_input" size="40" maxlength="8" class="campos">
+                           <input type="text" id="mat_vend_input" name="mat_vend_input" size="40" maxlength="8" class="campos"
+                              onkeypress="fPassaAlfaNumerico('an')"
+                              onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
                            <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $matVendEsc; ?>">
                         </td>
                      </tr>
@@ -403,7 +398,7 @@
 
       <table width="100%" border="0" cellspacing="0">
          <tr>
-            <td width="82%" align="center">             
+            <td width="82%" align="center">
                <input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
                <input type='reset' name='btreset' value='Limpar'><br><br>
                <span id="msg"></span>

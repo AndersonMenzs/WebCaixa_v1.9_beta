@@ -33,7 +33,7 @@ $horaaut   = $_GET['horaaut'];
 $dtAut     = $_GET['dtAut'];
 $SgRec     = $_GET['SgRec'];
 $VrEnt     = $_GET['VrEnt'];
-$VrEntr   = number_format($VrEnt, 2, "", ".");
+$VrEntr   = number_format($VrEnt, 2, "", "");
 $Mat       = $_GET['Mat'];
 
 ?>

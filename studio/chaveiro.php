@@ -122,91 +122,148 @@
 
 	<script>
 		$(function() {
-			function setupAutocomplete(element, tipo) {
-				var $el = $(element);
-				$el.autocomplete({
-					source: function(request, response) {
-						$.ajax({
-							url: "buscar_funcionarias.php",
-							dataType: "json",
-							data: {
-								term: request.term,
-								tipo: tipo
-							},
-							success: function(data) {
-								var items = [];
+         function setupAutocomplete(element, tipo) {
+            var $el = $(element);
+            $el.autocomplete({
+               source: function(request, response) {
+                  $.ajax({
+                     url: "buscar_funcionarias.php",
+                     dataType: "json",
+                     data: {
+                        term: request.term,
+                        tipo: tipo
+                     },
+                     success: function(data) {
+                        var items = [];
 
-								// já é um array de items {label,value,mat}
-								if (Array.isArray(data)) {
-									items = data;
-								}
-								// formato retornado pelo servidor: { nomes: [...], mat_vend: [...] }
-								else if (data && Array.isArray(data.nomes)) {
-									for (var i = 0; i < data.nomes.length; i++) {
-										items.push({
-											label: data.nomes[i],
-											value: data.nomes[i],
-											mat: data.mat_vend && data.mat_vend[i] ? data.mat_vend[i] : ''
-										});
-									}
-								}
-								// fallback vazio
-								response(items);
-							},
-							error: function(xhr, status, err) {
-								console.error("Erro na requisição:", status, err);
-								response([]);
-							}
-						});
-					},
-					minLength: 2,
-					delay: 300,
-					select: function(event, ui) {
-						if (ui.item && ui.item.mat) {
-							$('#mat_vend').val(ui.item.mat);
-						}
-						$(this).val(ui.item ? ui.item.value : '');
-						return false;
-					},
-					focus: function(event, ui) {
-						$(this).val(ui.item ? ui.item.value : '');
-						return false;
-					}
-				});
+                        // já é um array de items {label,value,mat}
+                        if (Array.isArray(data)) {
+                           items = data;
+                        }
+                        // formato retornado pelo servidor: { nomes: [...], mat_vend: [...] }
+                        else if (data && Array.isArray(data.nomes)) {
+                           for (var i = 0; i < data.nomes.length; i++) {
+                              items.push({
+                                 label: data.nomes[i],
+                                 value: data.nomes[i],
+                                 mat: data.mat_vend && data.mat_vend[i] ? data.mat_vend[i] : ''
+                              });
+                           }
+                        }
+                        // fallback vazio
+                        response(items);
+                     },
+                     error: function(xhr, status, err) {
+                        console.error("Erro na requisição:", status, err);
+                        response([]);
+                     }
+                  });
+               },
+               minLength: 2,
+               delay: 300,
+               select: function(event, ui) {
+                  if (ui.item && ui.item.mat) {
+                     $('#mat_vend').val(ui.item.mat);
+                  }
+                  $(this).val(ui.item ? ui.item.value : '');
+                  return false;
+               },
+               focus: function(event, ui) {
+                  $(this).val(ui.item ? ui.item.value : '');
+                  return false;
+               }
+            });
 
-				// compatível com várias versões do jQuery UI: tenta obter a instância do widget
-				var inst = $el.autocomplete("instance") || $el.data("ui-autocomplete") || $el.data("autocomplete");
-				if (inst) {
-					inst._renderItem = function(ul, item) {
-						return $("<li>")
-							.append("<div>" + (item.label || item.value || "") + "</div>")
-							.appendTo(ul);
-					};
-				} else {
-					// fallback seguro: não quebrar se instância não for encontrada
-					console.warn("Autocomplete instance não disponível para", element);
-				}
-			}
+            // compatível com várias versões do jQuery UI: tenta obter a instância do widget
+            var inst = $el.autocomplete("instance") || $el.data("ui-autocomplete") || $el.data("autocomplete");
+            if (inst) {
+               inst._renderItem = function(ul, item) {
+                  return $("<li>")
+                     .append("<div>" + (item.label || item.value || "") + "</div>")
+                     .appendTo(ul);
+               };
+            } else {
+               // fallback seguro: não quebrar se instância não for encontrada
+               console.warn("Autocomplete instance não disponível para", element);
+            }
+         }
 
-			// Aplicar aos campos
-			setupAutocomplete("#vendedora", "vendedora");
-		});
+         function setupAutocompleteVendedora(element) {
+            var $el = $(element);
 
-		function validaCampos() {
-			var vendedora = document.getElementById('vendedora').value.trim();
-			var cliente = document.getElementById('cliente').value.trim();
-			if (vendedora.length <= 8) {
-				alert('O campo Vendedora deve ter mais que 8 letras.');
-				document.getElementById('vendedora').focus();
-				return false;
-			}
-			if (cliente.length <= 8) {
-				alert('O campo Cliente deve ter mais que 8 letras.');
-				document.getElementById('cliente').focus();
-				return false;
-			}
-			return true;
-		}
+            $el.autocomplete({
+               source: function(request, response) {
+                  $.ajax({
+                     url: "buscar_funcionarias.php",
+                     dataType: "json",
+                     data: {
+                        term: request.term
+                     },
+                     success: function(data) {
+                        var items = [];
+
+                        if (data && Array.isArray(data.nomes)) {
+                           for (var i = 0; i < data.nomes.length; i++) {
+                              items.push({
+                                 label: data.mat_vend[i] + ' - ' + data.nomes[i],
+                                 value: data.nomes[i],
+                                 mat: data.mat_vend[i],
+                                 nome: data.nomes[i]
+                              });
+                           }
+                        }
+
+                        response(items);
+                     }
+                  });
+               },
+               minLength: 2,
+               delay: 300,
+
+               select: function(event, ui) {
+                  $('#mat_vend').val(ui.item.mat); // matrícula (hidden)
+                  $('#mat_vend_input').val(ui.item.nome); // nome no campo visível
+                  $('#vendedora_hidden').val(ui.item.nome);
+                  return false;
+               },
+
+               focus: function(event, ui) {
+                  $(this).val(ui.item.nome);
+                  return false;
+               }
+            });
+
+            var inst = $el.autocomplete("instance");
+            if (inst) {
+               inst._renderItem = function(ul, item) {
+                  return $("<li>")
+                     .append("<div>" + item.label + "</div>")
+                     .appendTo(ul);
+               };
+            }
+         }
+
+         // Aplicar aos campos
+         setupAutocompleteVendedora("#mat_vend_input");
+      });
+
+      function validaCampos() {
+         var mat_vend = document.getElementById('mat_vend').value.trim();
+         var cliente = document.getElementById('cliente').value.trim();
+
+         if (mat_vend.length === 0) {
+            alert('O campo Matrícula da Vendedora é obrigatório.');
+            document.getElementById('mat_vend_input').focus();
+            return false;
+         }
+         if (cliente.length <= 8) {
+            alert('O campo Cliente deve ter mais que 8 letras.');
+            document.getElementById('cliente').focus();
+            return false;
+         }
+
+         return true;
+      }
 
 		function fPassaAlfaNumerico(tipo) {
 			return function(e) {
@@ -280,10 +337,11 @@
 				</tr>
 				<tr>
 					<td width="50%" align="center">
-						<input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
-						<input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
-							onkeypress="fPassaAlfaNumerico('an')"
-							onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+                  <input type="text" id="mat_vend_input" name="mat_vend_input" size="40" maxlength="8" class="campos"
+                     onkeypress="fPassaAlfaNumerico('an')"
+                     onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $matVendEsc; ?>">
+                  <input type="hidden" name="vendedora" id="vendedora_hidden" value="">
 					</td>
 					<td width="50%" align="center">
 						<input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"

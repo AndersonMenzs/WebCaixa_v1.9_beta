@@ -82,6 +82,9 @@
 	} elseif ($RdBook == 's') {
 		$TipoRec   = '7';
 		$SubTipo   = 'BOOK';
+	} elseif ($RdBook == 'pk') {
+		$TipoRec   = '6';
+		$SubTipo   = 'PROD';
 	}
 
 	// Variáveis

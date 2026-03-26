@@ -39,13 +39,13 @@ if (strlen($term) < 2) {
 
 try {
     // 8. Preparar consulta SQL segura
-    $sql = "SELECT mat, nome 
-        FROM pessoal 
-        WHERE 
-            TRIM(LEADING '0' FROM mat) LIKE CONCAT('%', ?, '%')
-            OR nome LIKE CONCAT('%', ?, '%')
-        ORDER BY nome 
-        LIMIT 10";
+    if ($tipo === 'matricula') {
+        // Busca por matrícula
+        $sql = "SELECT mat, nome FROM pessoal WHERE mat LIKE CONCAT(?, '%') ORDER BY mat LIMIT 10";
+    } else {
+        // Busca por nome (padrão/vendedora)
+        $sql = "SELECT mat, nome FROM pessoal WHERE nome LIKE CONCAT('%', ?, '%') ORDER BY nome LIMIT 10";
+    }
     
     $stmt = $conec->prepare($sql);
     if (!$stmt) {
@@ -53,7 +53,7 @@ try {
     }
     
     // 9. Bind parameters e executar
-    $stmt->bind_param("ss", $term, $term);
+    $stmt->bind_param("s", $term);
     if (!$stmt->execute()) {
         throw new Exception("Erro na execução: " . $stmt->error);
     }

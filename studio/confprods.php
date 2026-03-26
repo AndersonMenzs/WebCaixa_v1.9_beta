@@ -85,7 +85,7 @@
 	$Poster   = trim($_POST['ped_poster']) ?? '';
 
 	// Verificando se os campos de pct_prod estão vazios ou não
-	
+
 	if (isset($_POST['ped_prod_1']) && !empty(trim($_POST['ped_prod_1']))) {
 		$Pct_Prod = trim($_POST['ped_prod_1']);
 	} elseif (isset($_POST['ped_prod_2']) && !empty(trim($_POST['ped_prod_2']))) {
@@ -209,7 +209,24 @@
 				</tr>
 				<tr>
 					<td width="30%" align="center">
-						<font color='gold' size='5'><b><i>Produto: </i></b></font>
+						<font color='gold' size='5'>
+							<b>
+								<i>
+									<?php
+									// Verifica qual o produto foi escolhido
+									if ($RdBook <> '') {
+										echo "Book:";
+									} elseif ($Poster <> '') {
+										echo "Poster:";
+									} elseif ($Pct_Prod <> '') {
+										echo "Produtos Kit:";
+									} else {
+										echo "Produto:";
+									}
+									?>
+								</i>
+							</b>
+						</font>
 					</td>
 					<td width="70%" align="center">
 						<font color='#FFFFFF' size='5'><b><i>
@@ -223,9 +240,9 @@
 											$RdBook = 'n';
 										} elseif ($Pct_Prod <> '') {
 											echo trim($_POST['ped_prod_1']) . "<br>" . trim($_POST['ped_prod_2']) . "<br>" . trim($_POST['ped_prod_3']);
-											$RdBook = 'p';
+											$RdBook = 'pk';
 										} else {
-											echo "Produto Separado";
+											echo "Produto";
 											$RdBook = 'p';
 										}
 										?></blink>

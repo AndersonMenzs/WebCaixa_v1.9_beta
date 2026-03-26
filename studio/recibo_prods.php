@@ -5,9 +5,9 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-/*$dados = $_GET; // Captura todos os dados enviados via GET
+$dados = $_GET; // Captura todos os dados enviados via GET
 
-echo "<pre>";
+/*echo "<pre>";
 var_dump($dados);
 echo "</pre>";
 exit();*/
@@ -227,7 +227,7 @@ $Opt       = $_GET['Opt'];
 
         <?php
         // Verifica se é Book ou Poster para exibir o endereço correto
-        if ($Opt == 'BOOK' || $Opt == 'POSTER' || $Opt == 'PCT_PROD') {
+        if ($Opt == 'BOOK' || $Opt == 'POSTER' || $Opt == 'PRODUTOS KIT') {
             echo '<img src="./images/logo.png" alt="Imagem" class="imagem_via3">';
         }
         ?>
@@ -876,14 +876,14 @@ $Opt       = $_GET['Opt'];
             <!-- Terceira via -->
             <?php
             // ecibo de solicitação - verifica se a solicitação é um book e ou poster
-            if ($Opt == "BOOK" || $Opt == "POSTER" || $Opt == "PCT_PROD") {
+            if ($Opt == "BOOK" || $Opt == "POSTER" || $Opt == "PRODUTOS KIT") {
             ?>
                 <tr>
                     <td height="17" align="left" valign=bottom><br></td>
                     <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                         colspan=3 rowspan=2 align="center" valign=middle>
                         <b>
-                            <font size=5><?php echo "PEDIDO " . $Opt; ?></font>
+                            <font size=4><?php echo "PEDIDO " . $Opt; ?></font>
                         </b>
                     </td>
                     <td align="left" valign=bottom><br></td>
@@ -959,17 +959,15 @@ $Opt       = $_GET['Opt'];
                             <font size=1>DATA</font>
                         </b>
                     </td>
-                <td align="left" valign=bottom></td>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="center" valign=middle>
-                    <b>
-                        <font size=1>VENDEDORA</font>
-                    </b>
-                </td>
-                <td align="left" valign=bottom></td>
-                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-                        colspan=2 align="center" valign=middle><b>
-                            <font size=1>PEDIDO</font>
+                    <td align="left" valign=bottom></td>
+                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="center" valign=middle>
+                        <b>
+                            <font size=1>VENDEDORA</font>
                         </b>
+                    </td>
+                    <td align="left" valign=bottom></td>
+                    <td align="left" valign=bottom>
+                        <font size=1><br></font>
                     </td>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
@@ -982,14 +980,12 @@ $Opt       = $_GET['Opt'];
                     <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle sdval="45793" sdnum="1046;0;DD/MM/AA">
                         <font size=1><?php echo $data; ?></font>
                     </td>
-                <td align="left" valign=bottom></td>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="center" valign=middle>
-                    <font size=1><?php echo $Vendedora . " - " . $Mat_Vend; ?></font>
-                </td>
-                <td align="left" valign=bottom></td>
-                    <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                        <font size=1><?php echo $Tipo_ped; ?></font>
+                    <td align="left" valign=bottom></td>
+                    <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="center" valign=middle>
+                        <font size=1><?php echo $Vendedora . " - " . $Mat_Vend; ?></font>
                     </td>
+                    <td align="left" valign=bottom></td>
+                    <td align="left" valign=bottom></td>
                 </tr>
                 <tr>
                     <td height="4" align="left" valign=bottom></td>
@@ -998,46 +994,18 @@ $Opt       = $_GET['Opt'];
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
                     </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
-                    </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
-                    </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
-                    </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
-                    </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
-                    </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
-                    </td>
+                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                        colspan=9 height="15" align="left" valign=middle><b>
+                            <font size=1>PEDIDOS</font>
+                        </b></td>
                 </tr>
                 <tr>
                     <td align="left" valign=bottom>
                         <font size=1><br></font>
                     </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
-                    </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
-                    </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
-                    </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
-                    </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
-                    </td>
-                    <td align="left" valign=bottom>
-                        <font size=1><br></font>
+                    <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                        colspan=9 height="17" align="center" valign=middle>
+                        <font size=1><?php echo $Tipo_ped; ?></font>
                     </td>
                 </tr>
                 <tr>
@@ -1096,7 +1064,7 @@ $Opt       = $_GET['Opt'];
                 <tr>
                     <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 rowspan=2 height="30" align="center" valign=middle>
                         <b>
-                            <font size=5>(VIA TESOURARIA)</font>
+                            <font size=5>(VIA LABORATÓRIO)</font>
                         </b>
                     </td>
                 </tr>

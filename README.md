@@ -438,8 +438,8 @@ SELECT 'Alterações aplicadas com sucesso!' as Status;
 # Alterar o type da coluna spo e spo2 nas tabelas spool e spool2.
 
 ```sql
-ALTER TABLE spool MODIFY spo varchar(55);
-ALTER TABLE spool2 MODIFY spo2 varchar(55);
+ALTER TABLE spool MODIFY spo varchar(60);
+ALTER TABLE spool2 MODIFY spo2 varchar(60);
 ```
 
 # Consultas Autenticadas Auditoria
@@ -504,4 +504,12 @@ INSERT INTO `estudios` (`id_std`, `cod_std`, `nome_std`, `status_std`) VALUES
 (18, '222', 'Alfândega', ''),
 (19, '223', 'Caxias 3', ''),
 (20, '221', '---', 'x');
+```
+
+# Cadastramento de Vendedoras
+
+Este cadastramento só serve para informação dos contratos e recibos. foi alterado a consulta do arquico cadop.php
+
+```sql
+$sqlC = "select * from cargos where ccargo = '03' or ccargo = '04' or ccargo = '05' or ccargo = '08' order by ccargo";
 ```

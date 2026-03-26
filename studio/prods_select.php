@@ -187,7 +187,7 @@
             </tr>
             <tr>
                <td width="50%" align="center">
-                  <font color='gold' size='5'><b><i>Produtos:</i></b></font>
+                  <font color='gold' size='5'><b><i>Produtos Kit:</i></b></font>
                   <input id="rdopt_pct_prod" type="radio" name="rdopt" class="campos" value="PCT_PROD">
                </td>
                <td align="center">
@@ -260,7 +260,7 @@
             </tr>
             <tr>
                <td colspan="2" align="center">
-                  <font color='gold' size='5'><b><i>Produtos Separados:</i></b></font>
+                  <font color='gold' size='5'><b><i>Produto:</i></b></font>
                   <input id="rdopt_prod" type="radio" name="rdopt" class="campos" value="PRODUTO">
                </td>
             </tr>
