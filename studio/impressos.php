@@ -118,7 +118,7 @@ if ($permitido && isset($_POST['imprimir']) && !empty($_POST['arquivo_selecionad
 <html lang="pt-BR">
 
 <head>
-    <title>WebCaixa v1.19_beta - Impressões</title>
+    <title>WebCaixa v1.20.0_beta - Impressões</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
