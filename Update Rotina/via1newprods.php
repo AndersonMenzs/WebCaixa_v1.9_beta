@@ -19,6 +19,12 @@ include "./valor_ext.php";
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 
 	<?php
+	/*$dadps = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+	echo "<pre>";
+	print_r($dadps);
+	echo "</pre>";
+	exit;*/
+
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.8.1.2";
@@ -34,6 +40,7 @@ include "./valor_ext.php";
 	$Book      = trim($_POST['pct_book']) ?? '';
 	$Poster   = trim($_POST['ped_poster']) ?? '';
 	$Produto   = trim($_POST['ped_prod']) ?? '';
+	$RdBook  = trim($_POST['rdbook']);
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
 	$mRec    = substr($dtRec, 5, 2);
@@ -59,11 +66,30 @@ include "./valor_ext.php";
 	$VrPagF    = number_format($VrPag, 2, ',', '.');
 	$vlr_ext   = valorPorExtenso($VrPagF);
 
+	// Verificando se os campos de pct_prod estão vazios ou não
+	if (isset($_POST['ped_prod_1']) && !empty(trim($_POST['ped_prod_1']))) {
+		$Pct_Prod_1 = trim($_POST['ped_prod_1']);
+	}
+	if (isset($_POST['ped_prod_1']) && !empty(trim($_POST['ped_prod_1']))) {
+		$Pct_Prod_2 = trim($_POST['ped_prod_2']);
+	}
+	if (isset($_POST['ped_prod_3']) && !empty(trim($_POST['ped_prod_3']))) {
+		$Pct_Prod_3 = trim($_POST['ped_prod_3']);
+	}
+
 	//Condição para definir o tipo de pedido
 	if (!empty($Poster)) {
 		$Tipo_ped = $Poster;
 	} elseif (!empty($Book)) {
 		$Tipo_ped = $Book;
+	} elseif (!empty($Pct_Prod_1) || !empty($Pct_Prod_2) || !empty($Pct_Prod_3)) {
+		$Tipo_ped = [
+			$Pct_Prod_1,
+			$Pct_Prod_2,
+			$Pct_Prod_3
+		];
+
+		$Tipo_ped = implode(", ", $Tipo_ped);
 	} else {
 		$Tipo_ped = '';
 	}
@@ -81,12 +107,15 @@ include "./valor_ext.php";
 	$SgRec  = $lnRec['siglarec'] ?? '';
 
 	// Definindo o Tipo de Autenticação
-	if ($TipoRec === '6') {
+	if ($TipoRec === '6' && $RdBook == 'n') {
 		$tipo = "POSTER";
 		$Opt = "POSTER";
 	} elseif ($TipoRec === '7') {
 		$tipo = "BOOK";
 		$Opt = "BOOK";
+	} elseif ($TipoRec === '6' && $RdBook == 'pk') {
+		$tipo = "PRODUTOS KIT";
+		$Opt = "PRODUTOS KIT";
 	} else {
 		$tipo = "PRODUTO";
 		$Opt = "PRODUTO";
@@ -146,30 +175,29 @@ include "./valor_ext.php";
 
 	// Gravando a Spool
 	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
-	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool2");
 
 	// Verifica se é um book ou poster para a solicitação do pedido
-	if ($TipoRec === '6' || $TipoRec === '7') {
+	if (($TipoRec === '6' && $RdBook == 'n') || ($TipoRec === '7') || ($TipoRec === '6' && $RdBook == 'pk')) {
 
-	// Consulta o número de documento e soma os valores
-	$sqlP = "SELECT SUM(vlrec) AS vlrec FROM registro WHERE numdoc = '$NDoc' AND datarec = '$DataRec' AND estorno <> 'x' AND subtipo <> 'EST'";
-	$rsP  = mysqli_query($conec, $sqlP) or die("Erro de Banco de Dados #4. Contate seu Administrador");
-	$lnP  = mysqli_fetch_array($rsP);
-	$VlRec = $lnP['vlrec'];
-	$VlRecF    = number_format($VlRec, 2, ',', '.');
+		// Consulta o número de documento e soma os valores
+		$sqlP = "SELECT SUM(vlrec) AS vlrec FROM registro WHERE numdoc = '$NDoc' AND datarec = '$DataRec' AND estorno <> 'x' AND subtipo <> 'EST'";
+		$rsP  = mysqli_query($conec, $sqlP) or die("Erro de Banco de Dados #4. Contate seu Administrador");
+		$lnP  = mysqli_fetch_array($rsP);
+		$VlRec = $lnP['vlrec'];
+		$VlRecF    = number_format($VlRec, 2, ',', '.');
 
-	// Imprimindo o Recibo
-	$Aut1 = $Reg;
-	$Aut2 = "$Reg$PC$NDoc $dtAut" . "R$ " . "$VlRecF$FmRec_a$MatRec$Opt";
+		// Imprimindo o Recibo
+		$Aut1 = $Reg;
+		$Aut2 = "$Reg$PC$NDoc $dtAut" . "R$ " . "$VlRecF$FmRec_a$MatRec$Opt";
 
-	// Gravando a Spool
-	$sql = "insert into spool values ('$Aut1', '$Aut2')";
-	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+		// Gravando a Spool
+		$sql = "insert into spool values ('$Aut1', '$Aut2')";
+		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
 
-	// Gravando a Spool
-	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
-	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
-
+		// Gravando a Spool
+		$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
+		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool2");
 	}
 
 	// Encerrando a Conexão

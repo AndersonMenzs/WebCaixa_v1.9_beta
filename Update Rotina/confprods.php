@@ -59,6 +59,10 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
+	/*$dados = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";*/
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -83,6 +87,17 @@
 	$ValorF    = number_format($Valor, 2, ",", ".");
 	$Book      = trim($_POST['pct_book']) ?? '';
 	$Poster   = trim($_POST['ped_poster']) ?? '';
+
+	// Verificando se os campos de pct_prod estão vazios ou não
+
+	if (isset($_POST['ped_prod_1']) && !empty(trim($_POST['ped_prod_1']))) {
+		$Pct_Prod = trim($_POST['ped_prod_1']);
+	} elseif (isset($_POST['ped_prod_2']) && !empty(trim($_POST['ped_prod_2']))) {
+		$Pct_Prod = trim($_POST['ped_prod_2']);
+	} elseif (isset($_POST['ped_prod_3']) && !empty(trim($_POST['ped_prod_3']))) {
+		$Pct_Prod = trim($_POST['ped_prod_3']);
+	}
+
 	$Produto   = trim($_POST['ped_prod']) ?? '';
 	$Parcelas = trim($_POST['parcelas']);
 
@@ -162,7 +177,7 @@
 	}
 
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
-		<table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
+		<table width="80%" border="5" cellpadding="10" cellspacing="0" align="center">
 			<form name="confentr" method="post" action="geraprods.php" onSubmit='JavaScript:return checkdata()'>
 				<tr>
 					<td width="30%" align="center">
@@ -198,7 +213,24 @@
 				</tr>
 				<tr>
 					<td width="30%" align="center">
-						<font color='gold' size='5'><b><i>Produto: </i></b></font>
+						<font color='gold' size='5'>
+							<b>
+								<i>
+									<?php
+									// Verifica qual o produto foi escolhido
+									if ($RdBook <> '') {
+										echo "Book:";
+									} elseif ($Poster <> '') {
+										echo "Poster:";
+									} elseif ($Pct_Prod <> '') {
+										echo "Produtos Kit:";
+									} else {
+										echo "Produto:";
+									}
+									?>
+								</i>
+							</b>
+						</font>
 					</td>
 					<td width="70%" align="center">
 						<font color='#FFFFFF' size='5'><b><i>
@@ -210,8 +242,11 @@
 										} elseif ($Poster <> '') {
 											echo $Poster;
 											$RdBook = 'n';
+										} elseif ($Pct_Prod <> '') {
+											echo trim($_POST['ped_prod_1']) . "<br>" . trim($_POST['ped_prod_2']) . "<br>" . trim($_POST['ped_prod_3']);
+											$RdBook = 'pk';
 										} else {
-											echo "Produtos";
+											echo "Produto";
 											$RdBook = 'p';
 										}
 										?></blink>
@@ -221,7 +256,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td width="70%" align="center">
+					<td width="30%" align="center">
 						<font color='gold' size='5'><b><i>Senha: </i></b></font>
 					</td>
 					<td width="70%" align="center">
@@ -251,6 +286,9 @@
 		<input type="hidden" name="rdbook" value="<?php echo $RdBook; ?>">
 		<input type="hidden" name="ped_poster" value="<?php echo $Poster; ?>">
 		<input type="hidden" name="ped_prod" value="<?php echo $Produto; ?>">
+		<input type="hidden" name="ped_prod_1" value="<?php echo trim($_POST['ped_prod_1']); ?>">
+		<input type="hidden" name="ped_prod_2" value="<?php echo trim($_POST['ped_prod_2']); ?>">
+		<input type="hidden" name="ped_prod_3" value="<?php echo trim($_POST['ped_prod_3']); ?>">
 		<p>
 			<center>
 				<input id="ghost_click" type="submit" name="btenvia" value="Continuar">

@@ -50,6 +50,12 @@
    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
    <script>
+      function putFocus(formInst, elementInst) {
+         if (document.forms.length > 0) {
+            document.forms[formInst].elements[elementInst].focus();
+         }
+      }
+
       $(function() {
          function setupAutocomplete(element, tipo) {
             var $el = $(element);
@@ -117,82 +123,64 @@
             }
          }
 
+         function setupAutocompleteVendedora(element) {
+            var $el = $(element);
+
+            $el.autocomplete({
+               source: function(request, response) {
+                  $.ajax({
+                     url: "buscar_funcionarias.php",
+                     dataType: "json",
+                     data: {
+                        term: request.term
+                     },
+                     success: function(data) {
+                        var items = [];
+
+                        if (data && Array.isArray(data.nomes)) {
+                           for (var i = 0; i < data.nomes.length; i++) {
+                              items.push({
+                                 label: data.mat_vend[i] + ' - ' + data.nomes[i],
+                                 value: data.nomes[i],
+                                 mat: data.mat_vend[i],
+                                 nome: data.nomes[i]
+                              });
+                           }
+                        }
+
+                        response(items);
+                     }
+                  });
+               },
+               minLength: 2,
+               delay: 300,
+
+               select: function(event, ui) {
+                  $('#mat_vend').val(ui.item.mat); // matrícula (hidden)
+                  $('#mat_vend_input').val(ui.item.nome); // nome no campo visível
+                  $('#vendedora_hidden').val(ui.item.nome);
+                  return false;
+               },
+
+               focus: function(event, ui) {
+                  $(this).val(ui.item.nome);
+                  return false;
+               }
+            });
+
+            var inst = $el.autocomplete("instance");
+            if (inst) {
+               inst._renderItem = function(ul, item) {
+                  return $("<li>")
+                     .append("<div>" + item.label + "</div>")
+                     .appendTo(ul);
+               };
+            }
+         }
+
          // Aplicar aos campos
-         setupAutocomplete("#vendedora", "vendedora");
+         setupAutocompleteVendedora("#mat_vend_input");
       });
-
-      function putFocus(formInst, elementInst) {
-         if (document.forms.length > 0) {
-            document.forms[formInst].elements[elementInst].focus();
-         }
-      }
-
-      function validata(field) {
-         var valid = "/0123456789"
-         var ok = "yes";
-         var temp;
-         for (var i = 0; i < field.value.length; i++) {
-            temp = "" + field.value.substring(i, i + 1);
-            if (valid.indexOf(temp) == "-1") ok = "no";
-         }
-         if (ok == "no") {
-            alert("Entrada Incorreta!\nDigite apenas algarismos!");
-            field.value = "";
-            field.focus();
-            field.select();
-         }
-      }
-
-      function FormataData(Formulario, Campo, TeclaPres) {
-         var tecla = TeclaPres.keyCode;
-         var strCampo;
-         var vr;
-         var tam;
-         var TamanhoMaximo = 10;
-
-         eval("strCampo = document." + Formulario + "." + Campo);
-
-         vr = strCampo.value;
-         vr = vr.replace("/", "");
-         vr = vr.replace("/", "");
-         vr = vr.replace("/", "");
-         vr = vr.replace(",", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace(".", "");
-         vr = vr.replace("-", "");
-         vr = vr.replace("-", "");
-         vr = vr.replace("-", "");
-         vr = vr.replace("-", "");
-         vr = vr.replace("-", "");
-         tam = vr.length;
-
-
-         if (tam < TamanhoMaximo && tecla != 8) {
-            tam = vr.length + 1;
-         }
-
-         if (tecla == 8) {
-            tam = tam - 1;
-         }
-
-         if (tecla == 8 || tecla >= 48 && tecla <= 57 || tecla >= 96 && tecla <= 105) {
-            if (tam <= 4) {
-               strCampo.value = vr;
-            }
-            if ((tam > 4) && (tam <= 7)) {
-               strCampo.value = vr.substr(0, tam - 2) + '/' + vr.substr(tam - 2, tam);
-            }
-            if ((tam > 7) && (tam <= 10)) {
-               strCampo.value = vr.substr(0, tam - 7) + '/' + vr.substr(tam - 7, 2) + '/' + vr.substr(tam - 5, tam);
-               //         strCampo.value = vr.substr(0, tam - 8) + '/' + vr.substr(tam - 7, 2) + '/' + vr.substr(tam - 4, tam); 
-            }
-         }
-      }
 
       function validvalor(field) {
          var valid = ".0123456789"
@@ -281,12 +269,12 @@
       }
 
       function validaCampos() {
-         var vendedora = document.getElementById('vendedora').value.trim();
+         var mat_vend = document.getElementById('mat_vend').value.trim();
          var cliente = document.getElementById('cliente').value.trim();
 
-         if (vendedora.length <= 8) {
-            alert('O campo Vendedora deve ter mais que 8 letras.');
-            document.getElementById('vendedora').focus();
+         if (mat_vend.length === 0) {
+            alert('O campo Matrícula da Vendedora é obrigatório.');
+            document.getElementById('mat_vend_input').focus();
             return false;
          }
          if (cliente.length <= 8) {
@@ -316,6 +304,7 @@
 
    // inicializa variáveis usadas no form para evitar undefined
    $mat_vend = isset($mat_vend) ? $mat_vend : '';
+   $std = isset($_REQUEST['ref_std']) ? trim($_REQUEST['ref_std']) : '';
 
    // se vierem via REQUEST/POST, use-os
    if (isset($_REQUEST['mat_vend'])) $mat_vend = trim($_REQUEST['mat_vend']);
@@ -346,7 +335,7 @@
 
    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
       <table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
-         <form name="parcela" method="post" action="prods_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return checkdata()" onsubmit="return validaCampos()" autocomplete="off">
+         <form name="parcela" method="post" action="prods_tipo.php?c_s=<?php echo $lg_user; ?>" onsubmit="return validaCampos() && checkdata()" autocomplete="off">
             <tr>
                <td align="center">
                   <font color='#FFFFFF' size='5'><b><i>Ref. Estúdio</i></b></font>
@@ -368,26 +357,33 @@
                      $sql = "SELECT * FROM estudios WHERE status_std <> 'x' ORDER BY cod_std ASC";
                      $res = mysqli_query($conec, $sql) or die("Não foi possível acessar os Dados");
 
-							// Criando o Array para o campo PC
-							while ($lnstd = mysqli_fetch_array($res)) {
-								$Cod_Std  = $lnstd['cod_std'];
-							?>
-                     <!-- Deixar o estúdio pre-selecionado -->
-                     <?php if ($Cod_Std == $std) { ?>
-                        <option value="<?php echo $Cod_Std; ?>" class="campos" selected><?php echo "PC-" . $Cod_Std; ?></option>
-                     <?php } else { ?>
-								<option value="<?php echo $Cod_Std; ?>" class="campos"><?php echo "PC-" . $Cod_Std; ?></option>
+                     // Criando o Array para o campo PC
+                     while ($lnstd = mysqli_fetch_array($res)) {
+                        $Cod_Std  = $lnstd['cod_std'];
+                     ?>
+                        <!-- Deixar o estúdio pre-selecionado -->
+                        <?php if ($Cod_Std == $std) { ?>
+                           <option value="<?php echo $Cod_Std; ?>" class="campos" selected><?php echo "PC-" . $Cod_Std; ?></option>
+                        <?php } else { ?>
+                           <option value="<?php echo $Cod_Std; ?>" class="campos"><?php echo "PC-" . $Cod_Std; ?></option>
                      <?php
-                     } 
-							}
-							mysqli_free_result($res);
+                        }
+                     }
+                     mysqli_free_result($res);
                      ?>
                   </select>
                </td>
                <td align="center">
-                  <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $matVendEsc; ?>">
-                  <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos"
-                     onkeyup="this.value=this.value.toUpperCase(); validnome(this)" required>
+                  <table width="100%" border="0" cellpadding="3">
+                     <tr>
+                        <td align="center">
+                           <input type="text" id="mat_vend_input" name="mat_vend_input" size="40" maxlength="8" class="campos"
+                              onkeypress="fPassaAlfaNumerico('an')"
+                              onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+                           <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $matVendEsc; ?>">
+                        </td>
+                     </tr>
+                  </table>
                </td>
                <td align="center">
                   <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
@@ -398,9 +394,11 @@
       </table>
       <br>
 
+      <input type="hidden" name="vendedora" id="vendedora_hidden" value="">
+
       <table width="100%" border="0" cellspacing="0">
          <tr>
-            <td width="82%" align="center">             
+            <td width="82%" align="center">
                <input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
                <input type='reset' name='btreset' value='Limpar'><br><br>
                <span id="msg"></span>

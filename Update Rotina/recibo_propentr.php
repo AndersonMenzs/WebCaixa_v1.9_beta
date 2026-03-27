@@ -178,14 +178,24 @@ $Mat       = $_GET['Mat'];
 
         @media print {
 
+            html,
+            body {
+                height: 297mm;
+                width: 210mm;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                /* evita quebra */
+            }
+
             /* Remove margens padrão */
             @page {
-                margin: 0;
+                margin: 2mm;
             }
 
             body {
-                margin: 6mm;
-                padding: 0;
+                margin: 2mm;
+                padding: 2mm;
             }
 
             /* Se quiser esconder elementos que não devem aparecer */
@@ -195,8 +205,6 @@ $Mat       = $_GET['Mat'];
             .sem-imprimir {
                 display: none !important;
             }
-
-
         }
     </style>
 

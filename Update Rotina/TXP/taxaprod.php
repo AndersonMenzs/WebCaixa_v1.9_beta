@@ -106,8 +106,63 @@
                 }
             }
 
+            function setupAutocompleteVendedora(element) {
+                var $el = $(element);
+
+                $el.autocomplete({
+                    source: function(request, response) {
+                        $.ajax({
+                            url: "buscar_funcionarias.php",
+                            dataType: "json",
+                            data: {
+                                term: request.term
+                            },
+                            success: function(data) {
+                                var items = [];
+
+                                if (data && Array.isArray(data.nomes)) {
+                                    for (var i = 0; i < data.nomes.length; i++) {
+                                        items.push({
+                                            label: data.mat_vend[i] + ' - ' + data.nomes[i],
+                                            value: data.nomes[i],
+                                            mat: data.mat_vend[i],
+                                            nome: data.nomes[i]
+                                        });
+                                    }
+                                }
+
+                                response(items);
+                            }
+                        });
+                    },
+                    minLength: 2,
+                    delay: 300,
+
+                    select: function(event, ui) {
+                        $('#mat_vend').val(ui.item.mat); // matrícula (hidden)
+                        $('#mat_vend_input').val(ui.item.nome); // nome no campo visível
+                        $('#vendedora_hidden').val(ui.item.nome);
+                        return false;
+                    },
+
+                    focus: function(event, ui) {
+                        $(this).val(ui.item.nome);
+                        return false;
+                    }
+                });
+
+                var inst = $el.autocomplete("instance");
+                if (inst) {
+                    inst._renderItem = function(ul, item) {
+                        return $("<li>")
+                            .append("<div>" + item.label + "</div>")
+                            .appendTo(ul);
+                    };
+                }
+            }
+
             // Aplicar aos campos
-            setupAutocomplete("#vendedora", "vendedora");
+            setupAutocompleteVendedora("#mat_vend_input");
         });
 
         function putFocus(formInst, elementInst) {
@@ -270,13 +325,13 @@
         }
 
         function validaCampos() {
-            var vendedora = document.getElementById('vendedora').value.trim();
+            var mat_vend = document.getElementById('mat_vend').value.trim();
             var cliente = document.getElementById('cliente').value.trim();
             var dataNasc = document.getElementById('data_nasc').value.trim();
 
-            if (vendedora.length <= 8) {
-                alert('O campo Vendedora deve ter mais que 8 letras.');
-                document.getElementById('vendedora').focus();
+            if (mat_vend.length === 0) {
+                alert('O campo Matrícula da Vendedora é obrigatório.');
+                document.getElementById('mat_vend_input').focus();
                 return false;
             }
             if (cliente.length <= 8) {
@@ -307,6 +362,15 @@
     $lg_user = $_REQUEST['c_s'];
     $user = substr($lg_user, 0, 8);
     $pss  = substr($lg_user, 8, 40);
+
+    // inicializa variáveis usadas no form para evitar undefined
+    $mat_vend = isset($mat_vend) ? $mat_vend : '';
+    $std = isset($_REQUEST['ref_std']) ? trim($_REQUEST['ref_std']) : '';
+
+    // se vierem via REQUEST/POST, use-os
+    if (isset($_REQUEST['mat_vend'])) $mat_vend = trim($_REQUEST['mat_vend']);
+
+    $matVendEsc  = htmlspecialchars($mat_vend, ENT_QUOTES);
 
     // Obtendo Valor Atualizado
     include "conexao.php";
@@ -348,7 +412,11 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <input type="text" id="vendedora" name="vendedora" size="40" maxlength="50" class="campos" onkeypress="fPassaAlfaNumerico('an')" onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
+                        <input type="text" id="mat_vend_input" name="mat_vend_input" size="40" maxlength="8" class="campos"
+                            onkeypress="fPassaAlfaNumerico('an')"
+                            onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+                        <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $matVendEsc; ?>">
+                        <input type="hidden" name="vendedora" id="vendedora_hidden" value="">
                     </td>
                     <td align="center">
                         <input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos" onkeypress="fPassaAlfaNumerico('an')" onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required>
@@ -367,8 +435,10 @@
                         <input type="text" id="data_nasc" name="data_nasc" size='12' maxlength='10' class="campos" placeholder="01/01/1940" class='campos' OnKeyUp="FormataData('taxaProd', 'data_nasc', event)" required>
                     </td>
                     <td align="center">
-                        <input type="radio" name="regula" value="S" required><font color=#FFFFFF size=4> Sim</font>
-                        <input type="radio" name="regula" value="N" required checked><font color=#FFFFFF size=4> Não</font>
+                        <input type="radio" name="regula" value="S" required>
+                        <font color=#FFFFFF size=4> Sim</font>
+                        <input type="radio" name="regula" value="N" required checked>
+                        <font color=#FFFFFF size=4> Não</font>
                     </td>
                 </tr>
             </table><br>
@@ -377,7 +447,6 @@
                 <tr>
                     <td width="9%"></td>
                     <td width="82%" align="center">
-                        <input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
                         <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
                         <input type='submit' name='btenviar' value='Continuar'>&nbsp;&nbsp;
                         <input type='reset' name='btreset' value='Limpar'><br><br>

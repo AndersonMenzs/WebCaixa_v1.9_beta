@@ -134,7 +134,7 @@ ini_set('error_log', 'php_errors.log');
 	// Consultando o último recibo dentro das rotinas TXP, TXC, PROD e BOOK
 	$sql = "SELECT numdoc, datarec FROM registro 
         WHERE numdoc >= $NumDocInicial
-        AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK', 'CHV') 
+        AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK', 'CHV', 'PRODK') 
         ORDER BY numdoc DESC";
 	$rs  = mysqli_query($conec, $sql) or die('Erro #3!');
 	$ln  = mysqli_fetch_array($rs);

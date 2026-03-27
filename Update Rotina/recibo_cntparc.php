@@ -227,7 +227,7 @@ include "./dbselect.php";
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
 
         <?php
-        // Verifica se é uma quitação e pedido de venda para exibir a terceira via
+        // Verifica se é Book ou Poster para exibir o endereço correto
         if ($Rdopt == 'BOOK' OR $Rdopt == 'POSTER') {
             echo '<img src="./images/logo.png" alt="Imagem" class="imagem_via3">';
         }
@@ -1165,12 +1165,6 @@ include "./dbselect.php";
                         </b>
                     </td>
                     <td align="left" valign=bottom></td>
-                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" 
-                    colspan=2 align="center" valign=middle>
-                        <b>
-                            <font size=1>PEDIDO</font>
-                        </b>
-                    </td>
                     <td align="left" valign=bottom></td>
                 </tr>
                 <tr>
@@ -1189,33 +1183,28 @@ include "./dbselect.php";
                         </font>
                     </td>
                     <td align="left" valign=bottom></td>
-                    <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" 
-                    colspan=2 align="center" valign=middle>
-                        <font size=1>
-                            <?php echo $Pedido; ?>
-                        </font>
-                    </td>
+                    <td align="left" valign=bottom></td>
                 </tr>
                 <tr>
                     <td height="4" align="left" valign=bottom></td>
                 </tr>
                 <tr>
-                    <td align="left" valign=bottom><font size=1><br></font></td>
-                    <td align="left" valign=bottom><font size=1><br></font></td>
-                    <td align="left" valign=bottom><font size=1><br></font></td>
-                    <td align="left" valign=middle><font size=1><br></font></td>
-                    <td align="left" valign=bottom><font size=1><br></font></td>
-                    <td align="left" valign=middle><font size=1><br></font></td>
-                    <td align="left" valign=bottom><font size=1><br></font></td>
+                    <td align="left" valign=bottom>
+                        <font size=1><br></font>
+                    </td>
+                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                        colspan=9 height="15" align="left" valign=middle><b>
+                            <font size=1>PEDIDOS</font>
+                        </b></td>
                 </tr>
                 <tr>
-                    <td align="left" valign=bottom><font size=1><br></font></td>
-                    <td align="left" valign=bottom><font size=1><br></font></td>
-                    <td align="left" valign=bottom><font size=1><br></font></td>
-                    <td align="left" valign=middle><font size=1><br></font></td>
-                    <td align="left" valign=bottom><font size=1><br></font></td>
-                    <td align="left" valign=middle><font size=1><br></font></td>
-                    <td align="left" valign=bottom><font size=1><br></font></td>
+                    <td align="left" valign=bottom>
+                        <font size=1><br></font>
+                    </td>
+                    <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                        colspan=9 height="17" align="center" valign=middle>
+                        <font size=1><?php echo $Pedido; ?></font>
+                    </td>
                 </tr>
                 <tr>
                     <td height="4" align="left" valign=bottom></td>
@@ -1271,7 +1260,7 @@ include "./dbselect.php";
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="23" align="center" valign=middle>
                     <b>
-                        <font size=4>(VIA TESOURARIA)</font>
+                        <font size=4>(VIA LABORATÓRIO)</font>
                     </b>
                 </td>
             </tr>

@@ -92,7 +92,7 @@ ini_set('display_startup_errors', 1);
 	} elseif ($RdBook == 'pk') {
 		$TipoRec   = '6';
 		$SubTipo   = 'PRODK';
-	} elseif ($RdBook == '') {
+	} elseif ($RdBook == 'p') {
 		$TipoRec   = '6';
 		$SubTipo   = 'PROD';
 	}
@@ -147,7 +147,7 @@ ini_set('display_startup_errors', 1);
 				$sqlGr = "insert into registro values($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$FPag_3', '0', '$dtRec', '$hora', '$txt3', '$Mat', '', '$Mat_Vend', '$Vendedora_full', '$Cliente')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro de Banco de Dados #8. Contate seu Administrador.");
 			}
-
+			
 			// Preparando a Via Cliente 
 	?>
 			<form name="gerapropentr" method="post" action="via1newprods.php">
