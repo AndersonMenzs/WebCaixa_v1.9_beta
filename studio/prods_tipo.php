@@ -262,7 +262,7 @@ ini_set('error_log', 'php_errors.log');
 									<select name="parc_card_cred_1" id="parc_card_cred_1" class="campos">
 										<option value="0" selected>Selecione</option>
 										<?php
-										for ($i = 1; $i <= 10; $i++) {
+										for ($i = 1; $i <= 12; $i++) {
 										?>
 											<option value='<?php echo $i; ?>' class="campos">Parcelas <?php echo $i; ?>x</option>
 										<?php
@@ -309,7 +309,7 @@ ini_set('error_log', 'php_errors.log');
 									<font color='gold' size='4'><b><i>Parcela(s): </i></b></font>
 									<select name="parc_card_cred_2" id="parc_card_cred_2" class="campos">
 										<option value="0" selected>Selecione</option>
-										<?php for ($i = 1; $i <= 10; $i++) { ?>
+										<?php for ($i = 1; $i <= 12; $i++) { ?>
 											<option value='<?php echo $i; ?>' class="campos">Parcelas <?php echo $i; ?>x</option>
 										<?php } ?>
 									</select>
@@ -352,7 +352,7 @@ ini_set('error_log', 'php_errors.log');
 									<font color='gold' size='4'><b><i>Parcela(s): </i></b></font>
 									<select name="parc_card_cred_3" id="parc_card_cred_3" class="campos">
 										<option value="0" selected>Selecione</option>
-										<?php for ($i = 1; $i <= 10; $i++) { ?>
+										<?php for ($i = 1; $i <= 12; $i++) { ?>
 											<option value='<?php echo $i; ?>' class="campos">Parcelas <?php echo $i; ?>x</option>
 										<?php } ?>
 									</select>
