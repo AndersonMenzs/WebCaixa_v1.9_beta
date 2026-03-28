@@ -1,7 +1,7 @@
 <?php
 
 /*error_reporting(E_ALL);
-ini_set('display_errors', 1);*/
+*/
 
 // Variáveis de acesso (Use variáveis de ambiente se possível)
 $host = "bd_vipp.mysql.dbaas.com.br";

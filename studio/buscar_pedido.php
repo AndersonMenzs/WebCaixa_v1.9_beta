@@ -2,7 +2,7 @@
 // Retorna JSON com registros que correspondem ao número de autenticação (últimos 4 dígitos ou igual)
 header('Content-Type: application/json; charset=utf-8');
 error_reporting(E_ALL);
-ini_set('display_errors', 0);
+
 
 // Variáveis
 $Dt_Hoje = date("Y-m-d");

@@ -466,3 +466,16 @@ Stack trace:
 [27-Mar-2026 11:48:41 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
 [27-Mar-2026 12:16:24 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
 [27-Mar-2026 12:17:29 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 192
+[28-Mar-2026 12:48:37 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[28-Mar-2026 12:48:37 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[28-Mar-2026 12:51:52 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[28-Mar-2026 12:51:52 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[28-Mar-2026 13:04:09 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[28-Mar-2026 13:04:09 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[28-Mar-2026 13:06:41 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[28-Mar-2026 13:06:41 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[28-Mar-2026 13:06:41 America/Sao_Paulo] PHP Notice:  Undefined variable: Contrato in /var/www/html/caixa/studio/prods_tipo.php on line 189
+[28-Mar-2026 13:08:40 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[28-Mar-2026 13:08:40 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19
+[28-Mar-2026 13:09:40 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 18
+[28-Mar-2026 13:09:40 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/us_sist.php on line 19

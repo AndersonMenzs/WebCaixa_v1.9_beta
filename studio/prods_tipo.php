@@ -1,10 +1,6 @@
 <?php
 
 // debug
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-ini_set('display_errors', 1);
 ini_set('error_log', 'php_errors.log');
 ?>
 
@@ -149,6 +145,7 @@ ini_set('error_log', 'php_errors.log');
 	}
 
 	include "us_sist.php";
+
 	if ($ch == 'no') {
 		include "us_cad.php";
 	} ?><br>
@@ -189,7 +186,6 @@ ini_set('error_log', 'php_errors.log');
 					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i><?php echo $Ref_Std; ?></i></b></font>
 						<input type="hidden" name="ref_std" id="ref_std" value="<?php echo $Ref_Std; ?>">
-						<input type="hidden" name="txtdoc" id="txtdoc" value="<?php echo $Contrato; ?>">
 					</td>
 					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i><?php echo $Vendedora; ?></i></b></font>
