@@ -258,10 +258,30 @@
                   </table>
                </td>
             </tr>
-            <tr>
-               <td colspan="2" align="center">
+            <tr width="50%" align="center">
+               <td>
                   <font color='gold' size='5'><b><i>Produto:</i></b></font>
                   <input id="rdopt_prod" type="radio" name="rdopt" class="campos" value="PRODUTO">
+               </td>
+               <td align="center">
+                  <select name="prod" id="prod" class="campos" style="width: 300px; height: 30px;">
+                     <option value="" selected>Selecione</option>
+                     <font size="4">
+                        <?php
+
+                        // Pacotes
+                        $sql_Pct = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod NOT IN ('1','2','3','4','5','6','34','35','36','37','38','29','30','90','91') ORDER BY nome_prod ASC";
+                        $res_Pct = mysqli_query($conec, $sql_Pct) or die("File Error #1. Contate seu Administrador.");
+
+                        while ($row_Pct = mysqli_fetch_assoc($res_Pct)) {
+                        ?>
+                           <option value="<?php echo $row_Pct['nome_prod']; ?>"><?php echo $row_Pct['nome_prod']; ?></option>
+                        <?php
+                        }
+
+                        ?>
+                     </font>
+                  </select>
                </td>
             </tr>
          </table><br>
@@ -343,6 +363,7 @@
          const selectProd1 = document.getElementById('ped_prod_1');
          const selectProd2 = document.getElementById('ped_prod_2');
          const selectProd3 = document.getElementById('ped_prod_3');
+         const selectProd = document.getElementById('prod');
 
          if (!radios.length || !selectPct || !selectTam) return;
 
@@ -377,7 +398,11 @@
                   return false;
                }
             } else if (tipo === 'PRODUTO') {
-               return true;
+               if (!selectProd || selectProd.value === '' || selectProd.selectedIndex === 0) {
+                  alert('Selecione um Produto');
+                  if (selectProd) selectProd.focus();
+                  return false;
+               }
             }
 
             return true;
@@ -398,6 +423,8 @@
                if (selectProd2) selectProd2.selectedIndex = 0;
                if (selectProd3) selectProd3.disabled = true;
                if (selectProd3) selectProd3.selectedIndex = 0;
+               if (selectProd) selectProd.disabled = true;
+               if (selectProd) selectProd.selectedIndex = 0;
             } else if (tipo === 'POSTER') {
                selectPct.disabled = true;
                selectPct.selectedIndex = 0;
@@ -408,6 +435,8 @@
                if (selectProd2) selectProd2.selectedIndex = 0;
                if (selectProd3) selectProd3.disabled = true;
                if (selectProd3) selectProd3.selectedIndex = 0;
+               if (selectProd) selectProd.disabled = true;
+               if (selectProd) selectProd.selectedIndex = 0;
             } else if (tipo === 'PCT_PROD' && idRdoMarked === 'rdopt_pct_prod') {
                selectPct.disabled = true;
                selectPct.selectedIndex = 0;
@@ -416,8 +445,9 @@
                if (selectProd1) selectProd1.disabled = false;
                if (selectProd2) selectProd2.disabled = false;
                if (selectProd3) selectProd3.disabled = false;
+               if (selectProd) selectProd.disabled = true;
+               if (selectProd) selectProd.selectedIndex = 0;
             } else if (tipo === 'PRODUTO' && idRdoMarked === 'rdopt_prod') {
-               // Produtos Separados - desabilitar os 3 selects
                selectPct.disabled = true;
                selectPct.selectedIndex = 0;
                selectTam.disabled = true;
@@ -428,6 +458,7 @@
                if (selectProd2) selectProd2.selectedIndex = 0;
                if (selectProd3) selectProd3.disabled = true;
                if (selectProd3) selectProd3.selectedIndex = 0;
+               if (selectProd) selectProd.disabled = false;
             } else {
                selectPct.disabled = true;
                selectTam.disabled = true;
@@ -439,6 +470,8 @@
                if (selectProd2) selectProd2.selectedIndex = 0;
                if (selectProd3) selectProd3.disabled = true;
                if (selectProd3) selectProd3.selectedIndex = 0;
+               if (selectProd) selectProd.disabled = true;
+               if (selectProd) selectProd.selectedIndex = 0;
             }
          }
 
