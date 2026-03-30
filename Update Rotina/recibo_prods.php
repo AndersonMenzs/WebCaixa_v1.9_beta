@@ -1,16 +1,7 @@
 <?php
 
 // Debug
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-
-$dados = $_GET; // Captura todos os dados enviados via GET
-
-/*echo "<pre>";
-var_dump($dados);
-echo "</pre>";
-exit();*/
+ini_set('error_log', 'php_errors.log');
 
 $tipo      = $_GET['tipo'];
 $Tipo_ped = $_GET['tipo_ped'];
@@ -224,13 +215,7 @@ $Opt       = $_GET['Opt'];
     <div class="container">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
         <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
-
-        <?php
-        // Verifica se é Book ou Poster para exibir o endereço correto
-        if ($Opt == 'BOOK' || $Opt == 'POSTER' || $Opt == 'PRODUTOS KIT') {
-            echo '<img src="./images/logo.png" alt="Imagem" class="imagem_via3">';
-        }
-        ?>
+        <img src="./images/logo.png" alt="Imagem" class="imagem_via3">
 
         <table align="left" cellspacing="0" border="0">
             <colgroup width="100"></colgroup>
@@ -874,10 +859,6 @@ $Opt       = $_GET['Opt'];
                 </td>
             </tr>
             <!-- Terceira via -->
-            <?php
-            // ecibo de solicitação - verifica se a solicitação é um book e ou poster
-            if ($Opt == "BOOK" || $Opt == "POSTER" || $Opt == "PRODUTOS KIT") {
-            ?>
                 <tr>
                     <td height="17" align="left" valign=bottom><br></td>
                     <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
@@ -1076,10 +1057,6 @@ $Opt       = $_GET['Opt'];
                         <font size=1>------------------------------------------------------------------------------------------------------------------------------------------------------------------</font>
                     </td>
                 </tr>
-
-            <?php
-            }
-            ?>
         </table>
     </div>
 </body>

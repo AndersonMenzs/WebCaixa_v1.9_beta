@@ -1,15 +1,7 @@
 <?php
 
 // Debug
-/*error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);*/
-
-/*$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
-echo "<pre>";
-var_dump($dados);
-echo "</pre>";
-exit();*/
+ini_set('error_log', 'php_errors.log');
 
 // Variáveis do $_GET
 $Reg       = trim($_GET['Reg']);

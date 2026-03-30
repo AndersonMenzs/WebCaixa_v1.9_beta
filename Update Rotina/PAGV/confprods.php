@@ -59,10 +59,6 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
-	/*$dados = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-	echo "<pre>";
-	print_r($dados);
-	echo "</pre>";*/
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -87,6 +83,7 @@
 	$ValorF    = number_format($Valor, 2, ",", ".");
 	$Book      = trim($_POST['pct_book']) ?? '';
 	$Poster   = trim($_POST['ped_poster']) ?? '';
+	$Produto   = trim($_POST['prod']) ?? '';
 
 	// Verificando se os campos de pct_prod estão vazios ou não
 
@@ -98,7 +95,7 @@
 		$Pct_Prod = trim($_POST['ped_prod_3']);
 	}
 
-	$Produto   = trim($_POST['ped_prod']) ?? '';
+	$ProdutoK   = trim($_POST['ped_prod']) ?? '';
 	$Parcelas = trim($_POST['parcelas']);
 
 	include "conexao.php";
@@ -246,7 +243,7 @@
 											echo trim($_POST['ped_prod_1']) . "<br>" . trim($_POST['ped_prod_2']) . "<br>" . trim($_POST['ped_prod_3']);
 											$RdBook = 'pk';
 										} else {
-											echo "Produto";
+											echo $Produto;
 											$RdBook = 'p';
 										}
 										?></blink>
@@ -285,7 +282,8 @@
 		<input type="hidden" name="pct_book" value="<?php echo $Book; ?>">
 		<input type="hidden" name="rdbook" value="<?php echo $RdBook; ?>">
 		<input type="hidden" name="ped_poster" value="<?php echo $Poster; ?>">
-		<input type="hidden" name="ped_prod" value="<?php echo $Produto; ?>">
+		<input type="hidden" name="ped_prod" value="<?php echo $ProdutoK; ?>">
+		<input type="hidden" name="prod" value="<?php echo $Produto; ?>">
 		<input type="hidden" name="ped_prod_1" value="<?php echo trim($_POST['ped_prod_1']); ?>">
 		<input type="hidden" name="ped_prod_2" value="<?php echo trim($_POST['ped_prod_2']); ?>">
 		<input type="hidden" name="ped_prod_3" value="<?php echo trim($_POST['ped_prod_3']); ?>">

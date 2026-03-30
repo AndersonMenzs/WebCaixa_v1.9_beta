@@ -1,7 +1,7 @@
 <?php
 // Debug
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+
 ini_set('display_startup_errors', 1);
 ?>
 
@@ -63,7 +63,8 @@ ini_set('display_startup_errors', 1);
 	$Book    = trim($_POST['pct_book']) ?? '';
 	$RdBook  = trim($_POST['rdbook']);
 	$Poster   = trim($_POST['ped_poster']) ?? '';
-	$Produto   = trim($_POST['ped_prod']) ?? '';
+	$Produto  = trim($_POST['prod']) ?? '';
+	$ProdutoK   = trim($_POST['ped_prod']) ?? '';
 
 	// Verificando se os campos de pct_prod estão vazios ou não
 	
@@ -174,7 +175,8 @@ ini_set('display_startup_errors', 1);
 				<input type="hidden" name="rdbook" value="<?php echo $RdBook; ?>">
 				<input type="hidden" name="pct_book" value="<?php echo $Book; ?>">
 				<input type="hidden" name="ped_poster" value="<?php echo $Poster; ?>">
-				<input type="hidden" name="ped_prod" value="<?php echo $Produto; ?>">
+				<input type="hidden" name="prod" value="<?php echo $Produto; ?>">
+				<input type="hidden" name="ped_prod" value="<?php echo $ProdutoK; ?>">
 				<input type="hidden" name="ped_prod_1" value="<?php echo trim($_POST['ped_prod_1']); ?>">
 				<input type="hidden" name="ped_prod_2" value="<?php echo trim($_POST['ped_prod_2']); ?>">
 				<input type="hidden" name="ped_prod_3" value="<?php echo trim($_POST['ped_prod_3']); ?>">

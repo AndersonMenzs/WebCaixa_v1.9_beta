@@ -1,9 +1,7 @@
 <?php
 
 //debug
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('error_log', 'php_errors.log');
 
 // Pesquisando PC
 include "conexao.php";
@@ -19,11 +17,6 @@ include "./valor_ext.php";
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 
 	<?php
-	/*$dadps = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-	echo "<pre>";
-	print_r($dadps);
-	echo "</pre>";
-	exit;*/
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -39,7 +32,8 @@ include "./valor_ext.php";
 	$TipoRec   = trim($_POST['tiporec']);
 	$Book      = trim($_POST['pct_book']) ?? '';
 	$Poster   = trim($_POST['ped_poster']) ?? '';
-	$Produto   = trim($_POST['ped_prod']) ?? '';
+	$Produto   = trim($_POST['prod']) ?? '';
+	$ProdutoK   = trim($_POST['ped_prod']) ?? '';
 	$RdBook  = trim($_POST['rdbook']);
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
@@ -91,7 +85,7 @@ include "./valor_ext.php";
 
 		$Tipo_ped = implode(", ", $Tipo_ped);
 	} else {
-		$Tipo_ped = '';
+		$Tipo_ped = $Produto;
 	}
 
 	// Obtendo o código do PC
@@ -178,7 +172,7 @@ include "./valor_ext.php";
 	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool2");
 
 	// Verifica se é um book ou poster para a solicitação do pedido
-	if (($TipoRec === '6' && $RdBook == 'n') || ($TipoRec === '7') || ($TipoRec === '6' && $RdBook == 'pk')) {
+	if (($TipoRec === '6' && $RdBook == 'n') || ($TipoRec === '7') || ($TipoRec === '6' && $RdBook == 'pk' || $TipoRec === '6' && $RdBook == 'p')) {
 
 		// Consulta o número de documento e soma os valores
 		$sqlP = "SELECT SUM(vlrec) AS vlrec FROM registro WHERE numdoc = '$NDoc' AND datarec = '$DataRec' AND estorno <> 'x' AND subtipo <> 'EST'";
