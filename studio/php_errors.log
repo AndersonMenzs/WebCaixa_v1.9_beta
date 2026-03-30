@@ -503,3 +503,30 @@ Stack trace:
 [30-Mar-2026 13:31:00 America/Sao_Paulo] PHP Notice:  Undefined variable: DepCli in /var/www/html/caixa/studio/fccxant.php on line 1038
 [30-Mar-2026 13:31:00 America/Sao_Paulo] PHP Notice:  Undefined variable: CheqTotal in /var/www/html/caixa/studio/fccxant.php on line 1044
 [30-Mar-2026 13:31:00 America/Sao_Paulo] PHP Notice:  Undefined variable: CheqPre in /var/www/html/caixa/studio/fccxant.php on line 1045
+[30-Mar-2026 17:09:41 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorChav in /var/www/html/caixa/studio/fccxant.php on line 185
+[30-Mar-2026 17:09:41 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorProd in /var/www/html/caixa/studio/fccxant.php on line 205
+[30-Mar-2026 17:09:41 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorConc in /var/www/html/caixa/studio/fccxant.php on line 223
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContEnt in /var/www/html/caixa/studio/fccxant.php on line 258
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorContParc in /var/www/html/caixa/studio/fccxant.php on line 276
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropEnt in /var/www/html/caixa/studio/fccxant.php on line 294
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorPropParc in /var/www/html/caixa/studio/fccxant.php on line 312
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: PgtoTot in /var/www/html/caixa/studio/fccxant.php on line 384
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: PixQRCode in /var/www/html/caixa/studio/fccxant.php on line 430
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: PixCNPJ in /var/www/html/caixa/studio/fccxant.php on line 444
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: CardParcAdm in /var/www/html/caixa/studio/fccxant.php on line 499
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: Recl in /var/www/html/caixa/studio/fccxant.php on line 554
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fccxant.php on line 558
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fccxant.php on line 558
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: pixQRCode in /var/www/html/caixa/studio/fccxant.php on line 559
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: pixCNPJ in /var/www/html/caixa/studio/fccxant.php on line 559
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: Recl in /var/www/html/caixa/studio/fccxant.php on line 973
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: NVendas in /var/www/html/caixa/studio/fccxant.php on line 1001
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorVend in /var/www/html/caixa/studio/fccxant.php on line 1002
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorBebe in /var/www/html/caixa/studio/fccxant.php on line 1028
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: ValorResg in /var/www/html/caixa/studio/fccxant.php on line 1034
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: DepCli in /var/www/html/caixa/studio/fccxant.php on line 1038
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: CheqTotal in /var/www/html/caixa/studio/fccxant.php on line 1044
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: CheqPre in /var/www/html/caixa/studio/fccxant.php on line 1045
+[30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: rsH2 in /var/www/html/caixa/studio/fccxant.php on line 1551
+[30-Mar-2026 17:12:53 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/prods_tipo.php on line 137
+[30-Mar-2026 17:12:53 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/prods_tipo.php on line 138

@@ -162,67 +162,67 @@
 	for ($I = 0; $I <= 1; $I++) {
 		// Imprimindo os Dados
 		$traco = "------------------------------------------------";
-		shell_exec("echo Estrella Photo Studio > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
+		shell_exec("echo Estrella Photo Studio >> /backups/fechamento.txt");
+		shell_exec("echo $traco >> /backups/fechamento.txt");
 
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '* * * F E C H A M E N T O - D O - C A I X A * * ' > /dev/lp0");
-		shell_exec("echo '----------------- ( F I N A L ) --------------- ' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo Fita Numero: '$Fita/$ano' > /dev/lp0");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '* * * F E C H A M E N T O - D O - C A I X A * * ' >> /backups/fechamento.txt");
+		shell_exec("echo '----------------- ( F I N A L ) --------------- ' >> /backups/fechamento.txt");
+		shell_exec("echo $traco >> /backups/fechamento.txt");
+		shell_exec("echo Fita Numero: '$Fita/$ano' >> /backups/fechamento.txt");
 
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo PC: '$PC - $Ape' > /dev/lp0");
-		shell_exec("echo Data: '$dataFch' > /dev/lp0");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo PC: '$PC - $Ape' >> /backups/fechamento.txt");
+		shell_exec("echo Data: '$dataFch' >> /backups/fechamento.txt");
 
 		if ($dtAbre <> $DataAtual) {
-			shell_exec("echo '* * * * * CAIXA FECHADO EM: $DataFecha * * * * *' > /dev/lp0");
+			shell_exec("echo '* * * * * CAIXA FECHADO EM: $DataFecha * * * * *' >> /backups/fechamento.txt");
 		}
 
-		shell_exec("echo Hora: $hora > /dev/lp0");
-		shell_exec("echo Operador: '$userF ($app)' > /dev/lp0");
+		shell_exec("echo Hora: $hora >> /backups/fechamento.txt");
+		shell_exec("echo Operador: '$userF ($app)' >> /backups/fechamento.txt");
 
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo 'Valor de Abertura:. . . . . . . . R$ $inicial' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo 'Valor de Abertura:. . . . . . . . R$ $inicial' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
 
-		shell_exec("echo '----------------- RECEBIMENTOS -----------------' > /dev/lp0");
-		shell_exec("echo 'POR TIPO DE SERVICO' > /dev/lp0");
-		shell_exec("echo '-------------------' > /dev/lp0");
-		shell_exec("echo 'Chaveiros: . . . . . . . [$NTChav] - R$ $ValorChav' > /dev/lp0");
-		shell_exec("echo 'Taxa de Producao:. . . . [$NTxProd] - R$ $ValorProd' > /dev/lp0");
-		shell_exec("echo 'Inscricao Concurso:. . . [$NConcurso] - R$ $ValorConc' > /dev/lp0");
-		shell_exec("echo 'Contrato(Entrada): . . . [$NContEnt] - R$ $ValorContEnt' > /dev/lp0");
-		shell_exec("echo 'Contrato(Parcela): . . . [$NContParc] - R$ $ValorContParc' > /dev/lp0");
-		shell_exec("echo 'Proposta(Entrada): . . . [$NPropEnt] - R$ $ValorPropEnt' > /dev/lp0");
-		shell_exec("echo 'Proposta(Parcela): . . . [$NPropParc] - R$ $ValorPropParc' > /dev/lp0");
-		shell_exec("echo 'Produtos(Exceto Books) - [$NPRecs] - R$ $VrPRecsF' > /dev/lp0");
-		shell_exec("echo 'Books a Vista: . . . . . [$NBookRec] - R$ $VrBookRecF' > /dev/lp0");
-		//shell_exec("echo 'Resgate Cheques: . . . . [$NResgate] - R$ $ValorResg' > /dev/lp0");
-		shell_exec("echo 'Despesas:. . . . . . . . [$NumPgtos] - R$ $PgtoTot' > /dev/lp0");
-		shell_exec("echo 'Estorno: . . . . . . . . [$NEstorno] - R$ $ValorEstorno' > /dev/lp0");
+		shell_exec("echo '----------------- RECEBIMENTOS -----------------' >> /backups/fechamento.txt");
+		shell_exec("echo 'POR TIPO DE SERVICO' >> /backups/fechamento.txt");
+		shell_exec("echo '-------------------' >> /backups/fechamento.txt");
+		shell_exec("echo 'Chaveiros: . . . . . . . [$NTChav] - R$ $ValorChav' >> /backups/fechamento.txt");
+		shell_exec("echo 'Taxa de Producao:. . . . [$NTxProd] - R$ $ValorProd' >> /backups/fechamento.txt");
+		shell_exec("echo 'Inscricao Concurso:. . . [$NConcurso] - R$ $ValorConc' >> /backups/fechamento.txt");
+		shell_exec("echo 'Contrato(Entrada): . . . [$NContEnt] - R$ $ValorContEnt' >> /backups/fechamento.txt");
+		shell_exec("echo 'Contrato(Parcela): . . . [$NContParc] - R$ $ValorContParc' >> /backups/fechamento.txt");
+		shell_exec("echo 'Proposta(Entrada): . . . [$NPropEnt] - R$ $ValorPropEnt' >> /backups/fechamento.txt");
+		shell_exec("echo 'Proposta(Parcela): . . . [$NPropParc] - R$ $ValorPropParc' >> /backups/fechamento.txt");
+		shell_exec("echo 'Produtos(Exceto Books) - [$NPRecs] - R$ $VrPRecsF' >> /backups/fechamento.txt");
+		shell_exec("echo 'Books a Vista: . . . . . [$NBookRec] - R$ $VrBookRecF' >> /backups/fechamento.txt");
+		//shell_exec("echo 'Resgate Cheques: . . . . [$NResgate] - R$ $ValorResg' >> /backups/fechamento.txt");
+		shell_exec("echo 'Despesas:. . . . . . . . [$NumPgtos] - R$ $PgtoTot' >> /backups/fechamento.txt");
+		shell_exec("echo 'Estorno: . . . . . . . . [$NEstorno] - R$ $ValorEstorno' >> /backups/fechamento.txt");
 
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo 'POR FORMA DE RECEBIMENTO' > /dev/lp0");
-		shell_exec("echo '------------------------' > /dev/lp0");
-		shell_exec("echo 'Dinheiro:. . . . . . . . . . . . R$ $Dinheiro' > /dev/lp0");
-		shell_exec("echo 'Cartao de Debito:. . . . . . . . R$ $CardDeb' > /dev/lp0");
-		shell_exec("echo 'Cartao Credito (a Vista):. . . . R$ $CardVista' > /dev/lp0");
-		shell_exec("echo 'Cartao Credito (Parcelado Loja): R$ $CardParcLj' > /dev/lp0");
-		shell_exec("echo 'Cartao Credito (Parc. Admnist.): R$ $CardParcAdm' > /dev/lp0");
-		shell_exec("echo 'Pix QR Code:. . . . . . . . . .  R$ $PixQRCode' > /dev/lp0");
-		shell_exec("echo 'Pix CNPJ:. . . . . . . . . . . . R$ $PixCNPJ' > /dev/lp0");
-		//shell_exec("echo 'Cheques (A Vista): . . . . . . . R$ $CheqTotal' > /dev/lp0");
-		//shell_exec("echo 'Cheques (Pre-datados): . . . . . R$ $CheqPre' > /dev/lp0");
-		shell_exec("echo 'Deposito de Clientes:. . . . . . R$ $DepCli' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo 'Total de Recebimentos: . . . . . R$ $TotIn' > /dev/lp0");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo 'POR FORMA DE RECEBIMENTO' >> /backups/fechamento.txt");
+		shell_exec("echo '------------------------' >> /backups/fechamento.txt");
+		shell_exec("echo 'Dinheiro:. . . . . . . . . . . . R$ $Dinheiro' >> /backups/fechamento.txt");
+		shell_exec("echo 'Cartao de Debito:. . . . . . . . R$ $CardDeb' >> /backups/fechamento.txt");
+		shell_exec("echo 'Cartao Credito (a Vista):. . . . R$ $CardVista' >> /backups/fechamento.txt");
+		shell_exec("echo 'Cartao Credito (Parcelado Loja): R$ $CardParcLj' >> /backups/fechamento.txt");
+		shell_exec("echo 'Cartao Credito (Parc. Admnist.): R$ $CardParcAdm' >> /backups/fechamento.txt");
+		shell_exec("echo 'Pix QR Code:. . . . . . . . . .  R$ $PixQRCode' >> /backups/fechamento.txt");
+		shell_exec("echo 'Pix CNPJ:. . . . . . . . . . . . R$ $PixCNPJ' >> /backups/fechamento.txt");
+		//shell_exec("echo 'Cheques (A Vista): . . . . . . . R$ $CheqTotal' >> /backups/fechamento.txt");
+		//shell_exec("echo 'Cheques (Pre-datados): . . . . . R$ $CheqPre' >> /backups/fechamento.txt");
+		shell_exec("echo 'Deposito de Clientes:. . . . . . R$ $DepCli' >> /backups/fechamento.txt");
+		shell_exec("echo $traco >> /backups/fechamento.txt");
+		shell_exec("echo 'Total de Recebimentos: . . . . . R$ $TotIn' >> /backups/fechamento.txt");
 
 		if ($IncSobra > 0.009) {
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo '------------ INCORPORACAO DE SALDO ------------' > /dev/lp0");
-			shell_exec("echo 'Sobra Incorporada ao Caixa:. . . R$ $IncSobraF' > /dev/lp0");
-			shell_exec("echo '\n' > /dev/lp0");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
+			shell_exec("echo '------------ INCORPORACAO DE SALDO ------------' >> /backups/fechamento.txt");
+			shell_exec("echo 'Sobra Incorporada ao Caixa:. . . R$ $IncSobraF' >> /backups/fechamento.txt");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
 		}
 
 		// Gerando a Retificação
@@ -232,9 +232,9 @@
 		$regs = mysqli_num_rows($rs);
 
 		if ($regs > 0) {
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo '---------- RETIFICACAO DE LANCAMENTO ----------' > /dev/lp0");
-			shell_exec("echo '            (NA FORMA DE PAGAMENTO)' > /dev/lp0");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
+			shell_exec("echo '---------- RETIFICACAO DE LANCAMENTO ----------' >> /backups/fechamento.txt");
+			shell_exec("echo '            (NA FORMA DE PAGAMENTO)' >> /backups/fechamento.txt");
 
 			while ($ln = mysqli_fetch_array($rs)) {
 				$cashi    = $ln['cashi'];
@@ -257,7 +257,7 @@
 
 				if ($cashi > 0) {
 					$De = 'Dinheiro';
-					shell_exec("echo $traco > /dev/lp0");
+					shell_exec("echo $traco >> /backups/fechamento.txt");
 
 					$Dif = $cashi;
 				} else if ($cdebi > 0) {
@@ -302,120 +302,120 @@
 
 				$DifF = number_format($Dif, 2, ",", ".");
 
-				shell_exec("echo 'DE:    $De' > /dev/lp0");
-				shell_exec("echo 'PARA:  $Para' > /dev/lp0");
-				shell_exec("echo 'VALOR: R$ $DifF' > /dev/lp0");
-				shell_exec("echo '\n' > /dev/lp0");
+				shell_exec("echo 'DE:    $De' >> /backups/fechamento.txt");
+				shell_exec("echo 'PARA:  $Para' >> /backups/fechamento.txt");
+				shell_exec("echo 'VALOR: R$ $DifF' >> /backups/fechamento.txt");
+				shell_exec("echo '\n' >> /backups/fechamento.txt");
 			}
 		}
 
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '------------------ PAGAMENTOS ------------------' > /dev/lp0");
-		shell_exec("echo DESPESAS > /dev/lp0");
-		shell_exec("echo -------- > /dev/lp0");
-		shell_exec("echo 'de Pessoal:. . . . . . . . . . . R$ $DDPtot' > /dev/lp0");
-		shell_exec("echo 'Material de Consumo: . . . . . . R$ $MCStot' > /dev/lp0");
-		shell_exec("echo 'Material de Divulgacao:. . . . . R$ $MDVtot' > /dev/lp0");
-		shell_exec("echo 'Material de Producao:. . . . . . R$ $MPDtot' > /dev/lp0");
-		shell_exec("echo 'Reembolso de Clientes: . . . . . R$ $RCLtot' > /dev/lp0");
-		shell_exec("echo 'Servicos Prestados:. . . . . . . R$ $SRVtot' > /dev/lp0");
-		shell_exec("echo 'Vale Transporte: . . . . . . . . R$ $VTRtot' > /dev/lp0");
-		shell_exec("echo 'Outros:. . . . . . . . . . . . . R$ $OUTtot' > /dev/lp0");
-		shell_exec("echo 'T O T A L: . . . . . . . . . . . R$ $PgtoTot' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo RECOLHIMENTOS > /dev/lp0");
-		shell_exec("echo ------------- > /dev/lp0");
-		shell_exec("echo 'Total Recolhido: . . . . . . . . R$ $Recolh' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo 'Pagamentos + Recolhimentos:. . . R$ $TotPgto' > /dev/lp0");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '------------------ PAGAMENTOS ------------------' >> /backups/fechamento.txt");
+		shell_exec("echo DESPESAS >> /backups/fechamento.txt");
+		shell_exec("echo -------- >> /backups/fechamento.txt");
+		shell_exec("echo 'de Pessoal:. . . . . . . . . . . R$ $DDPtot' >> /backups/fechamento.txt");
+		shell_exec("echo 'Material de Consumo: . . . . . . R$ $MCStot' >> /backups/fechamento.txt");
+		shell_exec("echo 'Material de Divulgacao:. . . . . R$ $MDVtot' >> /backups/fechamento.txt");
+		shell_exec("echo 'Material de Producao:. . . . . . R$ $MPDtot' >> /backups/fechamento.txt");
+		shell_exec("echo 'Reembolso de Clientes: . . . . . R$ $RCLtot' >> /backups/fechamento.txt");
+		shell_exec("echo 'Servicos Prestados:. . . . . . . R$ $SRVtot' >> /backups/fechamento.txt");
+		shell_exec("echo 'Vale Transporte: . . . . . . . . R$ $VTRtot' >> /backups/fechamento.txt");
+		shell_exec("echo 'Outros:. . . . . . . . . . . . . R$ $OUTtot' >> /backups/fechamento.txt");
+		shell_exec("echo 'T O T A L: . . . . . . . . . . . R$ $PgtoTot' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo RECOLHIMENTOS >> /backups/fechamento.txt");
+		shell_exec("echo ------------- >> /backups/fechamento.txt");
+		shell_exec("echo 'Total Recolhido: . . . . . . . . R$ $Recolh' >> /backups/fechamento.txt");
+		shell_exec("echo $traco >> /backups/fechamento.txt");
+		shell_exec("echo 'Pagamentos + Recolhimentos:. . . R$ $TotPgto' >> /backups/fechamento.txt");
 
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '---------------- SALDO DE CAIXA ----------------' > /dev/lp0");
-		shell_exec("echo 'Valor Real: . . . . . . . . . R$ $FechamentoF' > /dev/lp0");
-		shell_exec("echo 'Gaveta: . . . . . . . . . . . R$ $GavAut' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '---------------- SALDO DE CAIXA ----------------' >> /backups/fechamento.txt");
+		shell_exec("echo 'Valor Real: . . . . . . . . . R$ $FechamentoF' >> /backups/fechamento.txt");
+		shell_exec("echo 'Gaveta: . . . . . . . . . . . R$ $GavAut' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo $traco >> /backups/fechamento.txt");
 
-		shell_exec("echo 'Diferenca do Caixa:. . . R$ $DifCx $cd' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
+		shell_exec("echo 'Diferenca do Caixa:. . . R$ $DifCx $cd' >> /backups/fechamento.txt");
+		shell_exec("echo $traco >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
 
 		// Emitindo Comprovante de Sobra ou Falta
 		if ($Diferenca > 0) {
-			shell_exec("echo $traco > /dev/lp0");
-			shell_exec("echo Estrella Photo Studio > /dev/lp0");
-			shell_exec("echo $traco > /dev/lp0");
+			shell_exec("echo $traco >> /backups/fechamento.txt");
+			shell_exec("echo Estrella Photo Studio >> /backups/fechamento.txt");
+			shell_exec("echo $traco >> /backups/fechamento.txt");
 
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo '- - - - - DOCUMENTO DE SOBRA DE CAIXA - - - - -' > /dev/lp0");
-			shell_exec("echo $traco > /dev/lp0");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
+			shell_exec("echo '- - - - - DOCUMENTO DE SOBRA DE CAIXA - - - - -' >> /backups/fechamento.txt");
+			shell_exec("echo $traco >> /backups/fechamento.txt");
 
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo PC: '$PC - $Ape' > /dev/lp0");
-			shell_exec("echo Data: '$dataFch' > /dev/lp0");
-			shell_exec("echo Hora: $hora > /dev/lp0");
-			shell_exec("echo '\n' > /dev/lp0");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
+			shell_exec("echo PC: '$PC - $Ape' >> /backups/fechamento.txt");
+			shell_exec("echo Data: '$dataFch' >> /backups/fechamento.txt");
+			shell_exec("echo Hora: $hora >> /backups/fechamento.txt");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
 
-			shell_exec("echo 'Saldo de Fechamento:. . . . . R$ $FechamentoF' > /dev/lp0");
-			shell_exec("echo 'Valor Informado:. . . . . . . R$ $GavAut' > /dev/lp0");
-			shell_exec("echo $traco > /dev/lp0");
-			shell_exec("echo 'Sobra de Numerario: . . . . . R$ $DifCx' > /dev/lp0");
+			shell_exec("echo 'Saldo de Fechamento:. . . . . R$ $FechamentoF' >> /backups/fechamento.txt");
+			shell_exec("echo 'Valor Informado:. . . . . . . R$ $GavAut' >> /backups/fechamento.txt");
+			shell_exec("echo $traco >> /backups/fechamento.txt");
+			shell_exec("echo 'Sobra de Numerario: . . . . . R$ $DifCx' >> /backups/fechamento.txt");
 
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo ---------------------------------------- > /dev/lp0");
-			shell_exec("echo Assinatura da Auditora > /dev/lp0");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
+			shell_exec("echo ---------------------------------------- >> /backups/fechamento.txt");
+			shell_exec("echo Assinatura da Auditora >> /backups/fechamento.txt");
 		} else if ($Diferenca < 0) {
-			shell_exec("echo $traco > /dev/lp0");
-			shell_exec("echo '* * * * * - Estrella Photo Studio - * * * * *' > /dev/lp0");
-			shell_exec("echo $traco > /dev/lp0");
+			shell_exec("echo $traco >> /backups/fechamento.txt");
+			shell_exec("echo '* * * * * - Estrella Photo Studio - * * * * *' >> /backups/fechamento.txt");
+			shell_exec("echo $traco >> /backups/fechamento.txt");
 
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo '- - - - - DOCUMENTO DE FALTA DE CAIXA - - - - -' > /dev/lp0");
-			shell_exec("echo $traco > /dev/lp0");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
+			shell_exec("echo '- - - - - DOCUMENTO DE FALTA DE CAIXA - - - - -' >> /backups/fechamento.txt");
+			shell_exec("echo $traco >> /backups/fechamento.txt");
 
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo PC: '$PC - $Ape' > /dev/lp0");
-			shell_exec("echo Data: '$dataFch' > /dev/lp0");
-			shell_exec("echo Hora: $hora > /dev/lp0");
-			shell_exec("echo '\n' > /dev/lp0");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
+			shell_exec("echo PC: '$PC - $Ape' >> /backups/fechamento.txt");
+			shell_exec("echo Data: '$dataFch' >> /backups/fechamento.txt");
+			shell_exec("echo Hora: $hora >> /backups/fechamento.txt");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
 
-			shell_exec("echo 'Saldo de Fechamento:. . . . . R$ $FechamentoF' > /dev/lp0");
-			shell_exec("echo 'Valor Informado:. . . . . . . R$ $GavAut' > /dev/lp0");
-			shell_exec("echo $traco > /dev/lp0");
-			shell_exec("echo 'Falta de Numerario: . . . . . R$ $DifCx' > /dev/lp0");
+			shell_exec("echo 'Saldo de Fechamento:. . . . . R$ $FechamentoF' >> /backups/fechamento.txt");
+			shell_exec("echo 'Valor Informado:. . . . . . . R$ $GavAut' >> /backups/fechamento.txt");
+			shell_exec("echo $traco >> /backups/fechamento.txt");
+			shell_exec("echo 'Falta de Numerario: . . . . . R$ $DifCx' >> /backups/fechamento.txt");
 
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo ---------------------------------------- > /dev/lp0");
-			shell_exec("echo Assinatura da Aux. Administrativa > /dev/lp0");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
+			shell_exec("echo ---------------------------------------- >> /backups/fechamento.txt");
+			shell_exec("echo Assinatura da Aux. Administrativa >> /backups/fechamento.txt");
 
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo ---------------------------------------- > /dev/lp0");
-			shell_exec("echo Assinatura da Encarregada > /dev/lp0");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
+			shell_exec("echo ---------------------------------------- >> /backups/fechamento.txt");
+			shell_exec("echo Assinatura da Encarregada >> /backups/fechamento.txt");
 
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo ---------------------------------------- > /dev/lp0");
-			shell_exec("echo Assinatura da Auditora > /dev/lp0");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
+			shell_exec("echo ---------------------------------------- >> /backups/fechamento.txt");
+			shell_exec("echo Assinatura da Auditora >> /backups/fechamento.txt");
 		}
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
 
-		shell_exec("echo $traco > /dev/lp0");
+		shell_exec("echo $traco >> /backups/fechamento.txt");
 
 		if ($Diferenca > 0) {
-			shell_exec("echo '----- HOUVE SOBRA DE R$ $DifCx -----' > /dev/lp0");
+			shell_exec("echo '----- HOUVE SOBRA DE R$ $DifCx -----' >> /backups/fechamento.txt");
 		} else if ($Diferenca < 0) {
-			shell_exec("echo '----- HOUVE FALTA DE R$ $DifCx -----' > /dev/lp0");
+			shell_exec("echo '----- HOUVE FALTA DE R$ $DifCx -----' >> /backups/fechamento.txt");
 		}
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '================================================' > /dev/lp0");
-		shell_exec("echo '===                                          ===' > /dev/lp0");
-		shell_exec("echo '===            H-I-S-T-O-R-I-C-O             ===' > /dev/lp0");
-		shell_exec("echo '===                                          ===' > /dev/lp0");
-		shell_exec("echo '================================================' > /dev/lp0");
+		shell_exec("echo $traco >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '================================================' >> /backups/fechamento.txt");
+		shell_exec("echo '===                                          ===' >> /backups/fechamento.txt");
+		shell_exec("echo '===            H-I-S-T-O-R-I-C-O             ===' >> /backups/fechamento.txt");
+		shell_exec("echo '===                                          ===' >> /backups/fechamento.txt");
+		shell_exec("echo '================================================' >> /backups/fechamento.txt");
 
-		shell_exec("echo '        OPERADORES CADASTRADOS NO SISTEMA' > /dev/lp0");
-		shell_exec("echo '        ---------- ----------- -- -------' > /dev/lp0");
+		shell_exec("echo '        OPERADORES CADASTRADOS NO SISTEMA' >> /backups/fechamento.txt");
+		shell_exec("echo '        ---------- ----------- -- -------' >> /backups/fechamento.txt");
 
 		// Obtendo a Relação de Operadores Cadastrados
 		$sqlH2 = "select * from operador where dataop = '$dtAbre' ";
@@ -437,17 +437,17 @@
 			$Resp   = $lnH2['resp'];
 			$RespF  = substr($Resp, 0, 1) . "." . substr($Resp, 1, 3) . "." . substr($Resp, 4, 3) . "-" . substr($Resp, 7, 1);
 
-			shell_exec("echo 'FUNC. CADASTRADO: $MatOpF $Compl' > /dev/lp0");
-			shell_exec("echo 'NA FUNCAO: $Cargo' > /dev/lp0");
-			shell_exec("echo 'AS: $Tempo' hs > /dev/lp0");
-			shell_exec("echo 'CADASTRADO POR: $RespF' > /dev/lp0");
-			shell_exec("echo '                - - - X - - -' > /dev/lp0");
+			shell_exec("echo 'FUNC. CADASTRADO: $MatOpF $Compl' >> /backups/fechamento.txt");
+			shell_exec("echo 'NA FUNCAO: $Cargo' >> /backups/fechamento.txt");
+			shell_exec("echo 'AS: $Tempo' hs >> /backups/fechamento.txt");
+			shell_exec("echo 'CADASTRADO POR: $RespF' >> /backups/fechamento.txt");
+			shell_exec("echo '                - - - X - - -' >> /backups/fechamento.txt");
 		}
 
 		mysqli_free_result($rsH2);
 
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
+		shell_exec("echo $traco >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
 
 		// Obtendo a Relação de Recuperação de Senhas
 		$sqlR  = "select * from restsenha where datar = '$dtAbre' ";
@@ -466,26 +466,26 @@
 				$DataRF = substr($DataR, 8, 2) . "/" . substr($DataR, 5, 2) . "/" . substr($DataR, 0, 4);
 				$HoraR  = $lnR['horar'];
 
-				shell_exec("echo '        SOLICITACOES DE SENHA PROVISORIA' > /dev/lp0");
-				shell_exec("echo '        ------------ -- ----- ----------' > /dev/lp0");
+				shell_exec("echo '        SOLICITACOES DE SENHA PROVISORIA' >> /backups/fechamento.txt");
+				shell_exec("echo '        ------------ -- ----- ----------' >> /backups/fechamento.txt");
 
-				shell_exec("echo 'SOLICITANTE: $UserRF     CPF: $CpfRF' > /dev/lp0");
-				shell_exec("echo 'DATA: $DataRF             HORA: $HoraR' > /dev/lp0");
-				shell_exec("echo 'AUTORIZADO POR: $AudRF' > /dev/lp0");
+				shell_exec("echo 'SOLICITANTE: $UserRF     CPF: $CpfRF' >> /backups/fechamento.txt");
+				shell_exec("echo 'DATA: $DataRF             HORA: $HoraR' >> /backups/fechamento.txt");
+				shell_exec("echo 'AUTORIZADO POR: $AudRF' >> /backups/fechamento.txt");
 			}
 
 			mysqli_free_result($rsR);
 		}
 
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo Visto do Caixa: --------------------------- > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo Visto do Caixa: --------------------------- >> /backups/fechamento.txt");
+		shell_exec("echo $traco >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
 
-		shell_exec("echo '- - - TERMINO DA FITA NUMERO - $Fita/$ano - - -' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
+		shell_exec("echo '- - - TERMINO DA FITA NUMERO - $Fita/$ano - - -' >> /backups/fechamento.txt");
+		shell_exec("echo $traco >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
 
 		// Concurso Bebê Estrella
 		$sqlRf = "select dtopen from caixa where dtclose <> '0000-00-00' order by dtopen desc ";
@@ -500,11 +500,11 @@
 
 		if ($regRel > 0) {
 			// Cabeçalho
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo '============================================' > /dev/lp0");
-			shell_exec("echo 'RECIBOS BEBE ESTRELLA  -  DATA: $dtRefB' > /dev/lp0");
-			shell_exec("echo '\tRECIBO   -   NASCIMENTO' > /dev/lp0");
-			shell_exec("echo '-------------------------------------------' > /dev/lp0");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
+			shell_exec("echo '============================================' >> /backups/fechamento.txt");
+			shell_exec("echo 'RECIBOS BEBE ESTRELLA  -  DATA: $dtRefB' >> /backups/fechamento.txt");
+			shell_exec("echo '\tRECIBO   -   NASCIMENTO' >> /backups/fechamento.txt");
+			shell_exec("echo '-------------------------------------------' >> /backups/fechamento.txt");
 
 
 			while ($lnRel  = mysqli_fetch_array($rsRel)) {
@@ -512,10 +512,10 @@
 				$NasB = $lnRel['dtnasc'];
 				$DtNascB = substr($NasB, 8, 2) . "/" . substr($NasB, 5, 2) . "/" . substr($NasB, 0, 4);
 
-				shell_exec("echo '\t$RecB   -   $DtNascB' > /dev/lp0");
+				shell_exec("echo '\t$RecB   -   $DtNascB' >> /backups/fechamento.txt");
 			}
-			shell_exec("echo '============================================' > /dev/lp0");
-			shell_exec("echo '\n' > /dev/lp0");
+			shell_exec("echo '============================================' >> /backups/fechamento.txt");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
 		}
 
 		// Imprimindo Recolhimentos
@@ -527,15 +527,15 @@
 		$DataAb = substr($dtClose, 8, 2) . "/" . substr($dtClose, 5, 2) . "/" . substr($dtClose, 0, 4);
 
 
-		shell_exec("echo '==============================================' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '             ESTUDIO: PC-$PC' > /dev/lp0");
-		shell_exec("echo '       RECOLHIMENTOS EM $DataAb' > /dev/lp0");
-		shell_exec("echo '       ------------- -- ----------' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '          CAPA DE LOTE(R) - $horaNorm'-'$Dinheiro'-'$horaInv' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo ' HORA\t\tENVELOPE\tVALOR\tMATRIC' > /dev/lp0");
+		shell_exec("echo '==============================================' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '             ESTUDIO: PC-$PC' >> /backups/fechamento.txt");
+		shell_exec("echo '       RECOLHIMENTOS EM $DataAb' >> /backups/fechamento.txt");
+		shell_exec("echo '       ------------- -- ----------' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '          CAPA DE LOTE(R) - $horaNorm'-'$Dinheiro'-'$horaInv' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo ' HORA\t\tENVELOPE\tVALOR\tMATRIC' >> /backups/fechamento.txt");
 
 		if ($regRec > 0) {
 			$sqlDep = "select hrdep, envelope, valor, matreceb from depositos where dtdep = '$dtClose' ";
@@ -552,27 +552,27 @@
 				$ACount = $ACount + 1;
 				$AcRec  = $AcRec + $Vlr;
 
-				shell_exec("echo '$Hora\t\t$Nvlp\t\t$Vlr\t\t$Mtrc' > /dev/lp0");
+				shell_exec("echo '$Hora\t\t$Nvlp\t\t$Vlr\t\t$Mtrc' >> /backups/fechamento.txt");
 			}
 			$TRec  = number_format($AcRec, 2, ",", ".");
-			shell_exec("echo '\n' > /dev/lp0");
-			shell_exec("echo 'QUANT. DE RECOLHIMENTOS: $ACount - R$ $TRec' > /dev/lp0");
+			shell_exec("echo '\n' >> /backups/fechamento.txt");
+			shell_exec("echo 'QUANT. DE RECOLHIMENTOS: $ACount - R$ $TRec' >> /backups/fechamento.txt");
 		} else {
-			shell_exec("echo ' *** NAO HOUVE DEPOSITOS NESTA DATA ***' > /dev/lp0");
+			shell_exec("echo ' *** NAO HOUVE DEPOSITOS NESTA DATA ***' >> /backups/fechamento.txt");
 		}
-		shell_exec("echo '\n' > /dev/lp0");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
 
-		shell_exec("echo '   ***  $horaInv$horaNorm-$Entradas-$horaInv$horaNorm ***' > /dev/lp0");
-		shell_exec("echo '==============================================' > /dev/lp0");
+		shell_exec("echo '   ***  $horaInv$horaNorm-$Entradas-$horaInv$horaNorm ***' >> /backups/fechamento.txt");
+		shell_exec("echo '==============================================' >> /backups/fechamento.txt");
 
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
+		shell_exec("echo '\n' >> /backups/fechamento.txt");
 	}
 	mysqli_free_result($rs);
 	$SisRot = "S-7.5.3";
