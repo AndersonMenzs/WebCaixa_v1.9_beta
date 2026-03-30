@@ -36,13 +36,6 @@ error_reporting(E_ALL);
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
-
-	$dados = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-	echo "<pre>";
-	print_r($dados);
-	echo "</pre>";
-	echo "<br>";
-
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R4.1.2";
@@ -68,7 +61,6 @@ error_reporting(E_ALL);
 
 	if (strlen($VrEnt) < 7) {
 		$VrEntrF   = "R$ " . $VrEntr;
-		echo $VrEntr;
 	} else {
 		$VrEntrF   = "R$" . $VrEntr;
 	}
@@ -76,23 +68,13 @@ error_reporting(E_ALL);
 
 	// Pesquisando PC
 	include "conexao.php";
-
-	// COnsultando a Matrícula
-	include "dblog.php";
-
-	// Consultando
-	$sql = "SELECT nome FROM pessoal WHERE mat = '$Mat'";
-	$rs  = mysqli_query($conec, $sql) or die("Não foi possível acessar os Dados");
-	$ln  = mysqli_fetch_array($rs);
-	$Colaborador = $ln['nome'];
-
 	include "dbselect.php";
 
 	$sqlPC = "select pc from inicial";
 	$rsPC  = mysqli_query($conec, $sqlPC) or die("Não foi possível acessar o PC");
 	$lnPC  = mysqli_fetch_array($rsPC);
 	$PC  = $lnPC['pc'];
-
+	
 	$sql = "SELECT * FROM registro WHERE reg = '$Aut' AND datarec = '$DataAtual'";
 	$rs = mysqli_query($conec, $sql) or die("Nao foi possivel acessar o Registro");
 	$regs = mysqli_num_rows($rs);
@@ -140,6 +122,8 @@ error_reporting(E_ALL);
 			$FmRec = array_unique($FmRec);
 
 			// Se tiver mais de uma forma, define como pagamento dividido
+
+			// Se houver mais de uma forma diferente
 			if (count($FmRec) > 1) {
 				$FmRec_a = 'DIV';
 			} elseif (in_array("DIN", $FmRec)) {
@@ -190,52 +174,54 @@ error_reporting(E_ALL);
 	$Aut1 = $Aut;
 	$Aut2 = "$Aut$PC$horaaut$NDoc $dtAut$VrEntrF$TipoRec$FmRec_a$MatRec";
 	$AutR = "$Aut$PC$horaaut$NDoc $dtAut$VrEntrF$TipoRec$FmRec_a$MatRdz";
-
+	//shell_exec("echo $Aut2 > /dev/lp0");
+	
 	// Gravando a Spool
 	include "dbselect.php";
 	$sql = "insert into spool2 values ('$Aut1', '$AutR')";
 	$rs  = mysqli_query($conec, $sql) or die("File via1est Error #1. Contate seu Administrador.");
 
-	// Preparando o comprovante de estorno 
+	// Preparando Ficha Cliente 
 	?>
-	<br><br><br><br>
-	<font size='6'><b>
-			<center>Clique <font color='gold'>
-					<blink>no Botão Abaixo</blink>
-					<font color='#FFFFFF'> <br>
-						<p>para <font color='gold'>
-								<blink>Retornar</blink>
-								<font color='#FFFFFF'> ao Menu Principal.</center>
-		</b></font>
-	</p><br>
-	<center>
-		<input id="ghost_click" type="submit" name="btimprime" value="Fim de Operação">
-	</center><br>
-	<center>
-		<font color='#FFFFFF' size='3'><span id="msg"></span></font>
-	</center>
+	<form name="via1entr" method="post" action="via3est.php">
+		<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+		<input type="hidden" name="txtaut" value="<?php echo $Aut; ?>">
+		<input type="hidden" name="txtpc" value="<?php echo $PC; ?>">
+		<input type="hidden" name="horaaut" value="<?php echo $horaaut; ?>">
+		<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
+		<input type="hidden" name="dtaut" value="<?php echo $dtAut; ?>">
+		<input type="hidden" name="txtvalor" value="<?php echo $VrEnt; ?>">
+		<input type="hidden" name="siglarec" value="<?php echo $TipoRec; ?>">
+		<input type="hidden" name="formapag" value="<?php echo $FmRec_a; ?>">
+		<input type="hidden" name="txtmat" value="<?php echo $MatRec; ?>">
+		<br><br><br><br>
+		<font size='6'><b>
+				<center>Clique <font color='gold'>
+						<blink>no Botão Abaixo</blink>
+						<font color='#FFFFFF'> <br>
+							<p>para <font color='gold'>
+									<blink>Retornar</blink>
+									<font color='#FFFFFF'> ao Menu Principal.</center>
+			</b></font>
+		</p><br>
+		<center>
+			<input id="ghost_click" type="submit" name="btimprime" value="Fim de Operação">
+		</center><br>
+		<center>
+			<font color='#FFFFFF' size='3'><span id="msg"></span></font>
+		</center>
+	</form><?php
 
-	<?php
-
-	// Encerrando a Conexão	
-	$SisRot = "S-7.4.1.2";
-	include "rodape.php"; ?>
+			// Encerrando a Conexão
+			/* mysqli_free_result($rs);
+			mysqli_free_result($rsPC);
+			mysqli_free_result($rsRec);
+			mysqli_free_result($rsFm);
+			mysqli_free_result($rsApe); */
+			$SisRot = "S-7.4.1.2";
+			include "rodape.php"; ?>
 
 	<script src="./js/ghost_click.js"></script>
-
-
-	<script>
-		function imprimirERedirecionar() {
-			// Monta a URL com os dados
-			var url = './est_comprovante.php?aut=<?php echo urlencode($Aut); ?>' +
-				'&Ref_Std=<?php echo urlencode($Ref_Std); ?>' +
-				'&Mat=<?php echo urlencode($Mat); ?>';
-			window.open(url, '_blank');
-			setTimeout(function() {
-				window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';
-			}, 1000);
-		}
-	</script>
 
 </body>
 

@@ -28,6 +28,7 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
+	
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R4.1.1";

@@ -59,7 +59,6 @@
 	$NumDocE = $lnD['numdoc'];
 
 	// Obtendo Dados
-	//$sqlE = "select * from registro where reg = '$Aut' and tiporec > '0' and estorno <> 'x' and numdoc = '$NumDocE' and datarec = $DataAtual";
 	$sqlE = "select reg, numdoc, tiporec, datarec, horarec, operador, vlrec from registro where reg >= '$Aut' and tiporec > '0' and estorno <> 'x' and numdoc = '$NumDocE' and datarec
 = '$DataAtual'";
 	$rsE  = mysqli_query($conec, $sqlE);

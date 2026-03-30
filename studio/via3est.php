@@ -8,7 +8,7 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
-	// Importando os Dados do Formul�rio
+	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R4.1.3";
 	$lg_user   = trim($_POST['txtuser']);

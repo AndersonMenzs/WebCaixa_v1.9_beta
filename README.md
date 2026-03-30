@@ -213,35 +213,35 @@ INSERT INTO tiporef VALUES ('0', 'Selecione', '---', '---'), ('1', 'Salário', '
 Ao inserir as linhas já estarão seguindo a sequência da coluna reg atual 
 
 ```sql
-INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'CI2112600000',  '0',  '---',  '0',  '0',  CURDATE(),  '00:00',  0.00,  '00000359',  '',  '00000000',  '',  '';
+INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'CI2222600000',  '0',  '---',  '0',  '0',  CURDATE(),  '00:00',  0.00,  '00000359',  '',  '00000000',  '',  '';
 ```
 
 ```sql
-INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'RC2112600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
+INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'RC2222600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
 ```
 
 ```sql
-INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'MC2112600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
+INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'MC2222600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
 ```
 
 ```sql
-INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'MD2112600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
+INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'MD2222600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
 ```
 
 ```sql
-INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'MP2112600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
+INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'MP2222600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
 ```
 
 ```sql
-INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'VT2112600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
+INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'VT2222600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
 ```
 
 ```sql
-INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'SP2112600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
+INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'SP2222600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
 ```
 
 ```sql
-INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'OT2112600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
+INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'OT2222600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
 ```
 
 A coluna numdoc segue no seguinte padrão
