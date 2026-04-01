@@ -178,10 +178,10 @@ $autenticacao    = trim($_GET['Aut']);
             <?= $autenticacao ?>
         </div>
     </div>
-    <hr>
+   <!-- <hr> -->
 
     <!-- VIA 2: Estúdio -->
-    <div class="container">
+    <!-- <div class="container">
         <div class="header">
             <div class="logo">
                 <img src="./images/logo.png" alt="Estrella Photo Studio">
@@ -211,7 +211,7 @@ $autenticacao    = trim($_GET['Aut']);
             <strong>Autenticação:</strong><br>
             <?= $autenticacao ?>
         </div>
-    </div>
+    </div> -->
 
 </body>
 

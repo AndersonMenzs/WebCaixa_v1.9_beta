@@ -1,7 +1,7 @@
 <?php
 
 //Debug
-//ini_set('error_log', 'php_errors.log');
+ini_set('error_log', 'php_errors.log');
 ?>
 
 <html>
@@ -12,7 +12,7 @@
 	// Inserindo Cabeçalho
 	include "../cabecprs.php";
 	include "./valor_ext.php";
-	
+
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R4.1.2";
@@ -64,7 +64,7 @@
 	$lnPC  = mysqli_fetch_array($rsPC);
 	$PC  = $lnPC['pc'];
 
-	$sql = "SELECT * FROM registro WHERE reg = '$Aut' AND datarec = '$DataAtual'";
+	$sql = "SELECT * FROM registro WHERE reg >= '$Aut' AND numdoc = '$NDoc' AND datarec = '$DataAtual'";
 	$rs = mysqli_query($conec, $sql) or die("Nao foi possivel acessar o Registro");
 	$regs = mysqli_num_rows($rs);
 
@@ -78,6 +78,7 @@
 		$lnFm  = mysqli_fetch_assoc($rsFm);
 
 		$FmRec = $lnFm['siglapag'];
+
 	} elseif ($regs > 1) {
 		// Quando há mais de uma forma de pagamento
 		$FPag = array();
@@ -146,7 +147,6 @@
 		$ModPag = '';
 	}
 
-
 	// Ajustando a Matrícula
 	$MatRec = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 	$MatRdz = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1); ?>
@@ -156,7 +156,7 @@
 			<center><u><i>Sistema de Autenticação</i></u></center>
 		</b>
 	</font>
-	<?php	
+	<?php
 
 	// Imprimindo o Recibo
 	$Aut1 = $Aut;
@@ -183,7 +183,7 @@
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
-			var url = './est_comprovante.php?aut=<?php echo urlencode($Aut); ?>' +
+			var url = './est_comprov.php?aut=<?php echo urlencode($Aut); ?>' +
 				'&PC=<?php echo urlencode($PC); ?>' +
 				'&Aut=<?php echo urlencode($Aut); ?>' +
 				'&ModPag=<?php echo urlencode($ModPag); ?>' +

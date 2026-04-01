@@ -101,86 +101,75 @@
 
 	<script>
 		$(function() {
-			function setupAutocomplete(element, tipo, matFieldId) {
-				var $el = $(element);
+			function setupAutocompleteVendedora(inputSelector, hiddenSelector) {
+				var $el = $(inputSelector);
 				$el.autocomplete({
 					source: function(request, response) {
 						$.ajax({
 							url: "buscar_funcionarias.php",
 							dataType: "json",
 							data: {
-								term: request.term,
-								tipo: tipo
+								term: request.term
 							},
 							success: function(data) {
 								var items = [];
-
-								// já é um array de items {label,value,mat}
-								if (Array.isArray(data)) {
-									items = data;
-								}
-								// formato retornado pelo servidor: { nomes: [...], mat_vend: [...] }
-								else if (data && Array.isArray(data.nomes)) {
+								if (data && Array.isArray(data.nomes)) {
 									for (var i = 0; i < data.nomes.length; i++) {
 										items.push({
-											label: data.nomes[i],
+											label: data.mat_vend[i] + ' - ' + data.nomes[i],
 											value: data.nomes[i],
-											mat: data.mat_vend && data.mat_vend[i] ? data.mat_vend[i] : ''
+											mat: data.mat_vend[i],
+											nome: data.nomes[i]
 										});
 									}
 								}
-								// fallback vazio
 								response(items);
-							},
-							error: function(xhr, status, err) {
-								console.error("Erro na requisição:", status, err);
-								response([]);
 							}
 						});
 					},
 					minLength: 2,
 					delay: 300,
 					select: function(event, ui) {
-						if (ui.item && ui.item.mat && matFieldId) {
-							$(matFieldId).val(ui.item.mat);
-						}
-						$(this).val(ui.item ? ui.item.value : '');
+						$(hiddenSelector).val(ui.item.mat); // matrícula (hidden)
+						$el.val(ui.item.nome); // nome no campo visível
 						return false;
 					},
 					focus: function(event, ui) {
-						$(this).val(ui.item ? ui.item.value : '');
+						$el.val(ui.item.nome);
 						return false;
 					}
 				});
-
-				// compatível com várias versões do jQuery UI: tenta obter a instância do widget
-				var inst = $el.autocomplete("instance") || $el.data("ui-autocomplete") || $el.data("autocomplete");
+				var inst = $el.autocomplete("instance");
 				if (inst) {
 					inst._renderItem = function(ul, item) {
 						return $("<li>")
-							.append("<div>" + (item.label || item.value || "") + "</div>")
+							.append("<div>" + item.label + "</div>")
 							.appendTo(ul);
 					};
-				} else {
-					// fallback seguro: não quebrar se instância não for encontrada
-					console.warn("Autocomplete instance não disponível para", element);
 				}
 			}
 
-			// Aplicar aos campos
-			setupAutocomplete("#colab", "colab", "#mat_vend");
-			setupAutocomplete("#colab_vl_trans", "colab", "#mat_vend_vl_trans");
-			setupAutocomplete("#colab_serv_prest", "colab", "#mat_vend_serv_prest");
+			// Aplicar autocomplete para cada campo de colaborador
+			setupAutocompleteVendedora("#mat_vend_input_dp", "#mat_vend_dp");
+			setupAutocompleteVendedora("#mat_vend_input_vt", "#mat_vend_vt");
+			setupAutocompleteVendedora("#mat_vend_input_srv", "#mat_vend_srv");
 		});
 
 		function validaCampos() {
-			var vendedora = document.getElementById('vendedora').value.trim();
+			var mat_vend = document.getElementById('mat_vend').value.trim();
 			var cliente = document.getElementById('cliente').value.trim();
-			if (vendedora.length <= 8) {
-				alert('O campo Colaborador(a) deve ter mais que 8 letras.');
-				document.getElementById('vendedora').focus();
+
+			if (mat_vend.length === 0) {
+				alert('O campo Matrícula da Vendedora é obrigatório.');
+				document.getElementById('mat_vend_input').focus();
 				return false;
 			}
+			if (cliente.length <= 8) {
+				alert('O campo Cliente deve ter mais que 8 letras.');
+				document.getElementById('cliente').focus();
+				return false;
+			}
+
 			return true;
 		}
 
@@ -229,12 +218,22 @@
 			if (tablaValeTrans) tablaValeTrans.style.display = 'none';
 			if (tabelaServPrest) tabelaServPrest.style.display = 'none';
 
+			// Remove required de todos os campos de colaborador
+			var camposColab = [
+				document.getElementById('mat_vend_input_dp'),
+				document.getElementById('mat_vend_input_vt'),
+				document.getElementById('mat_vend_input_srv')
+			];
+			camposColab.forEach(function(c) { if (c) c.removeAttribute('required'); });
+
 			// Mostre a tabela correta
 			if (selectedValue === '1' || optionClass.includes('despesa-dp')) {
 				if (tabelaDP) tabelaDP.style.display = 'table';
 				if (tabelaRemb) tabelaRemb.style.display = 'none';
 				if (tablaValeTrans) tablaValeTrans.style.display = 'none';
 				if (tabelaServPrest) tabelaServPrest.style.display = 'none';
+				var colabDP = document.getElementById('mat_vend_input_dp');
+				if (colabDP) colabDP.setAttribute('required', 'required');
 			} else if (selectedValue === '5' || optionClass.includes('reembolso-cli')) {
 				if (tabelaRemb) tabelaRemb.style.display = 'table';
 				if (tabelaDP) tabelaDP.style.display = 'none';
@@ -245,32 +244,45 @@
 				if (tabelaDP) tabelaDP.style.display = 'none';
 				if (tabelaRemb) tabelaRemb.style.display = 'none';
 				if (tabelaServPrest) tabelaServPrest.style.display = 'none';
+				var colabVT = document.getElementById('mat_vend_input_vt');
+				if (colabVT) colabVT.setAttribute('required', 'required');
 			} else if (selectedValue === '6' || optionClass.includes('serv_prest-dp')) {
 				if (tabelaServPrest) tabelaServPrest.style.display = 'table';
 				if (tabelaDP) tabelaDP.style.display = 'none';
 				if (tabelaRemb) tabelaRemb.style.display = 'none';
 				if (tablaValeTrans) tablaValeTrans.style.display = 'none';
+				var colabSrv = document.getElementById('mat_vend_input_srv');
+				if (colabSrv) colabSrv.setAttribute('required', 'required');
 			}
 
 			// Opcional: Limpar campos quando mudar de tabela
 			if (selectedValue !== '1' && selectedValue !== '5' && selectedValue !== '7' && selectedValue !== '6') {
 				// Limpa campos se não for nenhum dos três tipos especiais
 				if (tabelaDP) {
-					tabelaDP.querySelector('#colab').value = '';
-					tabelaDP.querySelector('#mat_vend').value = '';
-					tabelaDP.querySelector('#lsref_desp').selectedIndex = 0;
+					var colabDP = tabelaDP.querySelector('#mat_vend_input_dp');
+					var matDP = tabelaDP.querySelector('#mat_vend_dp');
+					var refDP = tabelaDP.querySelector('#lsref_desp');
+					if (colabDP) colabDP.value = '';
+					if (matDP) matDP.value = '';
+					if (refDP) refDP.selectedIndex = 0;
 				}
 				if (tabelaRemb) {
-					tabelaRemb.querySelector('#cliente').value = '';
-					tabelaRemb.querySelector('#lsref_remb').selectedIndex = 0;
+					var cliente = tabelaRemb.querySelector('#cliente');
+					var refRemb = tabelaRemb.querySelector('#lsref_remb');
+					if (cliente) cliente.value = '';
+					if (refRemb) refRemb.selectedIndex = 0;
 				}
 				if (tablaValeTrans) {
-					tablaValeTrans.querySelector('#colab_vl_trans').value = '';
-					tablaValeTrans.querySelector('#mat_vend_vl_trans').value = '';
+					var colabVT = tablaValeTrans.querySelector('#mat_vend_input_vt');
+					var matVT = tablaValeTrans.querySelector('#mat_vend_vt');
+					if (colabVT) colabVT.value = '';
+					if (matVT) matVT.value = '';
 				}
 				if (tabelaServPrest) {
-					tabelaServPrest.querySelector('#colab_serv_prest').value = '';
-					tabelaServPrest.querySelector('#mat_vend_serv_prest').value = '';
+					var colabSrv = tabelaServPrest.querySelector('#mat_vend_input_srv');
+					var matSrv = tabelaServPrest.querySelector('#mat_vend_srv');
+					if (colabSrv) colabSrv.value = '';
+					if (matSrv) matSrv.value = '';
 				}
 			}
 		}
@@ -384,7 +396,7 @@
 
 		$Cx  = $numerario + $cashin - $cashout + $Creditos - $Depsto - $DespTot;
 		$SdCaixa = number_format($Cx, 2, ".", "");
-		
+
 	?>
 
 		<table width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
@@ -486,10 +498,15 @@
 					</select>
 				</td>
 				<td width="50%" align="center">
-					<input type="hidden" name="mat_vend_dp" id="mat_vend" value="<?php echo $mat_vend; ?>">
+					<!--<input type="hidden" name="mat_vend_dp" id="mat_vend" value="<?php echo $mat_vend; ?>">
 					<input type="text" name="colab_dp" id="colab" size="40" maxlength="50" class="campos"
 						onkeypress="fPassaAlfaNumerico('an')"
-						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus>
+						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus> -->
+
+					<input type="text" id="mat_vend_input_dp" name="colab_dp" size="40" maxlength="8" class="campos"
+						onkeypress="fPassaAlfaNumerico('an')"
+						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+					<input type="hidden" name="mat_colab_dp" id="mat_vend_dp" value="<?php echo $matVendEsc; ?>">
 				</td>
 			</tr>
 		</table>
@@ -542,10 +559,15 @@
 
 			<tr>
 				<td width="50%" align="center">
-					<input type="hidden" name="mat_vend_vt" id="mat_vend_vl_trans" value="<?php echo $mat_vend; ?>">
+					<!--<input type="hidden" name="mat_vend_vt" id="mat_vend_vl_trans" value="<?php echo $mat_vend; ?>">
 					<input type="text" name="colab_vt" id="colab_vl_trans" size="40" maxlength="50" class="campos"
 						onkeypress="fPassaAlfaNumerico('an')"
-						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus>
+						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus>-->
+
+					<input type="text" id="mat_vend_input_vt" name="colab_vt" size="40" maxlength="8" class="campos"
+						onkeypress="fPassaAlfaNumerico('an')"
+						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+					<input type="hidden" name="mat_colab_vt" id="mat_vend_vt" value="<?php echo $matVendEsc; ?>">
 				</td>
 			</tr>
 		</table>
@@ -559,10 +581,15 @@
 
 			<tr>
 				<td width="50%" align="center">
-					<input type="hidden" name="mat_vend_srv" id="mat_vend_serv_prest" value="<?php echo $mat_vend; ?>">
+					<!-- <input type="hidden" name="mat_vend_srv" id="mat_vend_serv_prest" value="<?php echo $mat_vend; ?>">
 					<input type="text" name="colab_srv" id="colab_serv_prest" size="40" maxlength="50" class="campos"
 						onkeypress="fPassaAlfaNumerico('an')"
-						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus>
+						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' autofocus> -->
+
+					<input type="text" id="mat_vend_input_srv" name="colab_srv" size="40" maxlength="8" class="campos"
+						onkeypress="fPassaAlfaNumerico('an')"
+						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+					<input type="hidden" name="mat_colab_srv" id="mat_vend_srv" value="<?php echo $matVendEsc; ?>">
 				</td>
 			</tr>
 		</table>

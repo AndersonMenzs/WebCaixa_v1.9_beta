@@ -264,6 +264,7 @@
 
          return true;
       }
+      
       function fPassaAlfaNumerico(tipo) {
          return function(e) {
             let char = String.fromCharCode(e.which);
