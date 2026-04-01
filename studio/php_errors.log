@@ -530,3 +530,19 @@ Stack trace:
 [30-Mar-2026 17:09:42 America/Sao_Paulo] PHP Notice:  Undefined variable: rsH2 in /var/www/html/caixa/studio/fccxant.php on line 1551
 [30-Mar-2026 17:12:53 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/prods_tipo.php on line 137
 [30-Mar-2026 17:12:53 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /var/www/html/caixa/studio/prods_tipo.php on line 138
+[30-Mar-2026 19:34:12 America/Sao_Paulo] PHP Notice:  Undefined variable: Ref_Std in /var/www/html/caixa/studio/via1newest.php on line 237
+[30-Mar-2026 19:35:37 America/Sao_Paulo] PHP Notice:  Undefined variable: Ref_Std in /var/www/html/caixa/studio/via1newest.php on line 230
+[30-Mar-2026 19:35:37 America/Sao_Paulo] PHP Notice:  Undefined variable: Colaboradra in /var/www/html/caixa/studio/via1newest.php on line 232
+[30-Mar-2026 19:38:21 America/Sao_Paulo] PHP Notice:  Undefined variable: Ref_Std in /var/www/html/caixa/studio/via1newest.php on line 188
+[30-Mar-2026 19:38:21 America/Sao_Paulo] PHP Notice:  Undefined variable: Colaboradra in /var/www/html/caixa/studio/via1newest.php on line 190
+[30-Mar-2026 19:46:49 America/Sao_Paulo] PHP Notice:  Undefined variable: Ref_Std in /var/www/html/caixa/studio/via1newest.php on line 188
+[30-Mar-2026 20:01:44 America/Sao_Paulo] PHP Notice:  Array to string conversion in /var/www/html/caixa/studio/via1newest.php on line 171
+[30-Mar-2026 20:01:44 America/Sao_Paulo] PHP Notice:  Undefined variable: Ref_Std in /var/www/html/caixa/studio/via1newest.php on line 192
+[30-Mar-2026 20:09:11 America/Sao_Paulo] PHP Notice:  Undefined variable: Ref_Std in /var/www/html/caixa/studio/via1newest.php on line 192
+[30-Mar-2026 20:14:06 America/Sao_Paulo] PHP Notice:  Undefined variable: Ref_Std in /var/www/html/caixa/studio/via1newest.php on line 192
+[30-Mar-2026 20:16:30 America/Sao_Paulo] PHP Notice:  Undefined variable: Ref_Std in /var/www/html/caixa/studio/via1newest.php on line 192
+[30-Mar-2026 20:18:28 America/Sao_Paulo] PHP Notice:  Undefined variable: Ref_Std in /var/www/html/caixa/studio/via1newest.php on line 194
+[30-Mar-2026 20:19:00 America/Sao_Paulo] PHP Notice:  Undefined variable: Ref_Std in /var/www/html/caixa/studio/via1newest.php on line 194
+[30-Mar-2026 20:23:32 America/Sao_Paulo] PHP Notice:  Undefined variable: ModPag in /var/www/html/caixa/studio/via1newest.php on line 188
+[30-Mar-2026 20:23:32 America/Sao_Paulo] PHP Notice:  Undefined variable: Ref_Std in /var/www/html/caixa/studio/via1newest.php on line 194
+[30-Mar-2026 20:29:03 America/Sao_Paulo] PHP Notice:  Undefined variable: Ref_Std in /var/www/html/caixa/studio/via1newest.php on line 195

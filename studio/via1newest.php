@@ -1,48 +1,18 @@
 <?php
 
 //Debug
-
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+ini_set('error_log', 'php_errors.log');
 ?>
 
 <html>
 
-<head>
-	<title>WebCaixa v1.20.0_beta</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<style type="text/css">
-		body {
-			margin-top: 3%;
-			margin-left: 5%;
-			margin-right: 5%;
-			border: 3px solid gray;
-			padding: 10px 10px 10px 10px;
-			font-family: sans-serif;
-		}
-
-		.campos {
-			background-color: #C0C0C0;
-			font: 12px sans-serif;
-			color: #000000;
-		}
-	</style>
-
+<body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
+
 	// Inserindo Cabeçalho
 	include "../cabecprs.php";
-	?>
-</head>
-
-<body background="../images/bg1.jpg" text="#FFFFFF">
-	<?php
-
-	$dados = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-	echo "<pre>";
-	print_r($dados);
-	echo "</pre>";
-	echo "<br>";
-
+	include "./valor_ext.php";
+	
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R4.1.2";
@@ -58,17 +28,18 @@ error_reporting(E_ALL);
 	$mRec    = substr($dtRec, 5, 2);
 	$dRec    = substr($dtRec, 8, 2);
 	$dtAut     = $dRec . $mRec . $aRec;
+	$Data = date('d/m/Y', strtotime($dtRec));
 	$hora      = trim($_POST['txthora']);
 	$h1 = substr($hora, 0, 2);
 	$h2 = substr($hora, 3, 2);
 	$horaaut   = $h1 . $h2;
 	$VrEnt     = trim($_POST['txtvalor']);
 	$VrEntr    = number_format($VrEnt, 2, ',', '');
+	$Valor_ext    = valorPorExtenso($VrEntr);
 	$DataAtual = date("Y-m-d");
 
 	if (strlen($VrEnt) < 7) {
 		$VrEntrF   = "R$ " . $VrEntr;
-		echo $VrEntr;
 	} else {
 		$VrEntrF   = "R$" . $VrEntr;
 	}
@@ -84,7 +55,7 @@ error_reporting(E_ALL);
 	$sql = "SELECT nome FROM pessoal WHERE mat = '$Mat'";
 	$rs  = mysqli_query($conec, $sql) or die("Não foi possível acessar os Dados");
 	$ln  = mysqli_fetch_array($rs);
-	$Colaborador = $ln['nome'];
+	$Colab = $ln['nome'];
 
 	include "dbselect.php";
 
@@ -141,6 +112,7 @@ error_reporting(E_ALL);
 
 			// Se tiver mais de uma forma, define como pagamento dividido
 			if (count($FmRec) > 1) {
+				$ModPag = "DIVERSOS";
 				$FmRec_a = 'DIV';
 			} elseif (in_array("DIN", $FmRec)) {
 				$ModPag = "DINHEIRO";
@@ -184,7 +156,7 @@ error_reporting(E_ALL);
 			<center><u><i>Sistema de Autenticação</i></u></center>
 		</b>
 	</font>
-	<?php
+	<?php	
 
 	// Imprimindo o Recibo
 	$Aut1 = $Aut;
@@ -196,24 +168,11 @@ error_reporting(E_ALL);
 	$sql = "insert into spool2 values ('$Aut1', '$AutR')";
 	$rs  = mysqli_query($conec, $sql) or die("File via1est Error #1. Contate seu Administrador.");
 
-	// Preparando o comprovante de estorno 
+	// Remover ponto do valor
+	$VrEntrF = str_replace(",", "", $VrEntr);
+	// Gerando código de autenticação
+	$Aut = $Aut . $PC . $horaaut . $NDoc . " " . $dtAut . " R$ " . $VrEntrF . $TipoRec . $FmRec_a . $MatRec;
 	?>
-	<br><br><br><br>
-	<font size='6'><b>
-			<center>Clique <font color='gold'>
-					<blink>no Botão Abaixo</blink>
-					<font color='#FFFFFF'> <br>
-						<p>para <font color='gold'>
-								<blink>Retornar</blink>
-								<font color='#FFFFFF'> ao Menu Principal.</center>
-		</b></font>
-	</p><br>
-	<center>
-		<input id="ghost_click" type="submit" name="btimprime" value="Fim de Operação">
-	</center><br>
-	<center>
-		<font color='#FFFFFF' size='3'><span id="msg"></span></font>
-	</center>
 
 	<?php
 
@@ -221,18 +180,24 @@ error_reporting(E_ALL);
 	$SisRot = "S-7.4.1.2";
 	include "rodape.php"; ?>
 
-	<script src="./js/ghost_click.js"></script>
-
-
 	<script>
 		function imprimirERedirecionar() {
 			// Monta a URL com os dados
 			var url = './est_comprovante.php?aut=<?php echo urlencode($Aut); ?>' +
+				'&PC=<?php echo urlencode($PC); ?>' +
+				'&Aut=<?php echo urlencode($Aut); ?>' +
+				'&ModPag=<?php echo urlencode($ModPag); ?>' +
+				'&FmRec_a=<?php echo urlencode($FmRec_a); ?>' +
+				'&Data=<?php echo urlencode($Data); ?>' +
+				'&VrEntr=<?php echo urlencode($VrEntr); ?>' +
+				'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
+				'&txtdoc=<?php echo urlencode($NDoc); ?>' +
 				'&Ref_Std=<?php echo urlencode($Ref_Std); ?>' +
-				'&Mat=<?php echo urlencode($Mat); ?>';
+				'&Mat=<?php echo urlencode($Mat); ?>' +
+				'&Colab=<?php echo urlencode($Colab); ?>';
 			window.open(url, '_blank');
 			setTimeout(function() {
-				window.location.href = './servrec.php?c_s=<?php echo $lg_user; ?>';
+				window.location.href = './index.php?c_s=<?php echo $lg_user; ?>';
 			}, 1000);
 		}
 	</script>

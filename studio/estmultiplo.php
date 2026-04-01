@@ -38,7 +38,7 @@
 	$rsr  = mysqli_query($conec, $sqlr) or die("Erro de Banco de Dados #M2. Contate seu Administrador.");
 	$regsr = mysqli_num_rows($rsr);
 
-	
+
 	while ($lnr = mysqli_fetch_array($rsr)) {
 		$Reg     = $lnr['reg'];
 		$dtReceb = $lnr['datarec'];
@@ -71,7 +71,7 @@
 
 	// Preparando a Via Cliente 
 	?>
-	<form name="geracntentr" method="post" action="via1est.php">
+	<form name="geracntentr" method="post" action="via1newest.php">
 		<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 		<input type="hidden" name="txtaut" value="<?php echo $Aut; ?>">
 		<input type="hidden" name="tiporec" value="<?php echo $TipoRec; ?>">
@@ -81,22 +81,22 @@
 		<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
 		<input type="hidden" name="txtvalor" value="<?php echo $VrEntrAC; ?>">
 		<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
-		<font size='6'><b>
-				<center>Coloque a <font color='gold'>
-						<blink>Via do Cliente</blink>
-						<font color='#FFFFFF'> na Autenticadora
-							e <br>
-							<p>Clique no <font color='gold'>
-									<blink>botão Abaixo</blink>
-									<font color='#FFFFFF'>.</center>
-			</b></font>
+		<p>
+			<font size='6'><b>
+					<center>Verifique se a impressora do <font color='gold'>
+							<blink>Caixa</blink>
+							<font color='#FFFFFF'> está ligada e com papel.
+								<p>Logo após clique no <font color='gold'>
+										<blink>botão abaixo</blink>
+										<font color='#FFFFFF'>.</center>
+				</b></font>
 		</p><br>
 		<center>
 			<input id="ghost_click" type="submit" name="btimprime" value="Autenticar">
 		</center><br>
-				<center>
-					<font color='#FFFFFF' size='3'><span id="msg"></span></font>
-				</center>
+		<center>
+			<font color='#FFFFFF' size='3'><span id="msg"></span></font>
+		</center>
 	</form>
 </body>
 

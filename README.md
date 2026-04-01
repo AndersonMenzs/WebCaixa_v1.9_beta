@@ -96,7 +96,7 @@ CHANGE COLUMN `tiporec` `tiporec` CHAR(2) NULL DEFAULT NULL;
 
 ```sql
 ALTER TABLE `studio`.`registro` 
-CHANGE COLUMN `numdoc` `numdoc` CHAR(8) NULL;
+CHANGE COLUMN `numdoc` `numdoc` CHAR(15) NULL;
 ``` 
 
 - Inserir uma linha na tabela registro para gerar o número do recibo após este alteração. Lembrando que o número do recibo precisa ser iniciado do código da empresa seguidos por 5 zeros.
@@ -207,7 +207,18 @@ CREATE TABLE tiporef (
 Inserir linhas na tabela tiporef
 
 ```sql
-INSERT INTO tiporef VALUES ('0', 'Selecione', '---', '---'), ('1', 'Salário', 'SAL', 'DDP'), ('2', 'Adiantamento Salarial', 'ADS', 'DDP'), ('3', 'Férias', 'FER', 'DDP'), ('4', 'Premiação', 'PREM', 'DDP'), ('5', 'Taxa Produção', 'TXP', 'RCL'), ('6', 'Contrato Entrada', 'CNTE', 'RCL'), ('7', 'Cancelamento de Venda', 'CVD', 'RCL'), ('8', 'Devolução PIX', 'DVP', 'RCL'), ('9', 'Carnê', 'CAR', 'RCL');
+INSERT INTO tiporef 
+        VALUES 
+        ('0', 'Selecione', '---', '---'), 
+        ('1', 'Salário', 'SAL', 'DDP'), 
+        ('2', 'Adiantamento Salarial', 'ADS', 'DDP'), 
+        ('3', 'Férias', 'FER', 'DDP'), 
+        ('4', 'Premiação', 'PREM', 'DDP'), 
+        ('5', 'Taxa Produção', 'TXP', 'RCL'), 
+        ('6', 'Contrato Entrada', 'CNTE', 'RCL'), 
+        ('7', 'Cancelamento de Venda', 'CVD', 'RCL'), 
+        ('8', 'Devolução PIX', 'DVP', 'RCL'), 
+        ('9', 'Carnê', 'CAR', 'RCL');
 ```
 
 Ao inserir as linhas já estarão seguindo a sequência da coluna reg atual 
@@ -242,6 +253,10 @@ INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec 
 
 ```sql
 INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'OT2222600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
+```
+
+```sql
+INSERT INTO registro SELECT IFNULL((SELECT MAX(reg) FROM registro WHERE datarec = CURDATE()), 0) + 1, 'EST2222600000', '0', '---', '0', '0', CURDATE(), '00:00', 0.00, '00000359', '', '00000000', '', '';
 ```
 
 A coluna numdoc segue no seguinte padrão

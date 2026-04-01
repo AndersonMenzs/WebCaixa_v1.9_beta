@@ -1,33 +1,24 @@
 <?php
 
-/*$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
-echo "<pre>";
-	print_r($dados);
-	echo "</pre>";
-	exit();*/
-
 // Importando os Dados do Formulário
 $empresa        = "ESTRELLA PHOTO STUDIO";
 $tipoDocumento  = "Comprovante de Estorno";
 
-$protocolo      = trim($_GET['UlDoc_est']);
+$protocolo      = trim($_GET['txtdoc']);
 $dataDocumento  = trim($_GET['Data']);
 
 $origem         = "PC-" . trim($_GET['PC']);
-$destino_1        = trim($_GET['Tes']);
-$destino_2        = trim($_GET['std']);
-
-$assunto        = "Comprovante de Estorno de " . trim($_GET['Aut']); // tipo de pagamento estornado
-
-//$nomeFuncionario = trim($_GET['colab']);
+$destino_1        = "Tesouraria";   
+$assunto        = "Comprovante de Estorno";
 
 // fotmatar a matrícula com hífen (1.234.567-8)
-$matricula       = trim($_GET['mat_vend']);
+$matricula       = trim($_GET['Mat']);
 $matricula       = substr($matricula, 0, 1) . "." . substr($matricula, 1, 3) . "." . substr($matricula, 4, 3) . "-" . substr($matricula, 7, 1);
-$tipoEstorno    = trim($_GET['TipoRef']);
 
-$valor           = trim($_GET['Valor']);
+$nomeFuncionario = trim($_GET['Colab']);
+$valor           = trim($_GET['VrEntr']);
 $valorExtenso    = trim($_GET['Valor_ext']);
+$ModPag          = trim($_GET['ModPag']);
 
 $autenticacao    = trim($_GET['Aut']);
 ?>
@@ -36,7 +27,7 @@ $autenticacao    = trim($_GET['Aut']);
 
 <head>
     <meta charset="UTF-8">
-    <title>EST - <?php echo $nomeFuncionario; ?></title>
+    <title>EST - <?php echo $protocolo; ?></title>
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -154,8 +145,7 @@ $autenticacao    = trim($_GET['Aut']);
     </style>
 </head>
 
-<!--<body onload="window.print()">-->
-    <body>
+<body onload="window.print()">
     <!-- VIA 1: Tesouraria -->
     <div class="container vias-separadas">
         <div class="header">
@@ -168,18 +158,12 @@ $autenticacao    = trim($_GET['Aut']);
             </div>
         </div>
         <div class="linha">
-            <strong>Protocolo:</strong> <?= $protocolo ?><br>
+            <strong>Protocolo:</strong> <?= "EST-" . $protocolo ?><br>
             <strong>Data:</strong> <?= $dataDocumento ?><br>
             <strong>Origem:</strong> <?= $origem ?><br>
-            <strong>Destino:</strong> <?= $destino_1 ?>
-        </div>
-        <div class="linha">
-            <strong>Tipo de Estorno:</strong> <?= $tipoEstorno ?>
-        </div>
-        <div class="linha">
-            <strong>Valor:</strong> R$ <?= number_format($valor, 2, ',', '.') ?> (<?= $valorExtenso ?>)
-        </div>
-        <div class="linha">
+            <strong>Destino:</strong> <?= $destino_1 ?><br>
+            <strong>Valor:</strong> R$ <?= number_format($valor, 2, ',', '.') ?> (<?= $valorExtenso ?>)<br>
+            <strong>F. de Pagamento:</strong> <?= $ModPag ?><br>
             <strong>Funcionaria:</strong> <?= $matricula . " - " . $nomeFuncionario ?><br>
         </div>
         <div class="texto">
@@ -208,18 +192,12 @@ $autenticacao    = trim($_GET['Aut']);
             </div>
         </div>
         <div class="linha">
-            <strong>Protocolo:</strong> <?= $protocolo ?><br>
+            <strong>Protocolo:</strong> <?= "EST-" . $protocolo ?><br>
             <strong>Data:</strong> <?= $dataDocumento ?><br>
             <strong>Origem:</strong> <?= $origem ?><br>
-            <strong>Destino:</strong> <?= $destino_1 ?>
-        </div>
-        <div class="linha">
-            <strong>Tipo de Estorno:</strong> <?= $tipoEstorno ?>
-        </div>
-        <div class="linha">
-            <strong>Valor:</strong> R$ <?= number_format($valor, 2, ',', '.') ?> (<?= $valorExtenso ?>)
-        </div>
-        <div class="linha">
+            <strong>Destino:</strong> <?= $destino_1 ?><br>
+            <strong>Valor:</strong> R$ <?= number_format($valor, 2, ',', '.') ?> (<?= $valorExtenso ?>)<br>
+            <strong>F. de Pagamento:</strong> <?= $ModPag ?><br>
             <strong>Funcionaria:</strong> <?= $matricula . " - " . $nomeFuncionario ?><br>
         </div>
         <div class="texto">
