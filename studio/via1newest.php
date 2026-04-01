@@ -1,7 +1,7 @@
 <?php
 
 //Debug
-ini_set('error_log', 'php_errors.log');
+//ini_set('error_log', 'php_errors.log');
 ?>
 
 <html>
