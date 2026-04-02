@@ -98,7 +98,7 @@
 			      include "dblog.php";
 
 			   // Criando a Instrução SQL de Consulta
-			      $sqlC = "select * from cargos where ccargo = '03' or ccargo = '04' or ccargo = '05' or ccargo = '08' order by ccargo";
+			      $sqlC = "SELECT * FROM cargos WHERE ccargo IN (03, 04, 05, 08, 15, 18, 19) ORDER BY ncargo";
 
 			   // Consultando os Registros
 			      $rsC = mysqli_query($conec, $sqlC) or die("Não foi possível acessar os Dados");
@@ -145,7 +145,7 @@
 				       include "dblog.php";
 
 				    // Criando a Instrução SQL de Consulta
-				       $sqlC = "select * from cargos where ccargo = '03' or ccargo = '04' or ccargo = '05' order by ccargo";
+				       $sqlC = "SELECT * FROM cargos WHERE ccargo IN (03, 04, 05, 15, 18, 19) ORDER BY ncargo";
 
 				    // Consultando os Registros
 				       $rsC = mysqli_query($conec, $sqlC) or die("Não foi possível acessar os Dados");

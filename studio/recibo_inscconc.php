@@ -330,7 +330,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle><b>
-                        <font size=1>VENDEDORA</font>
+                        <font size=1>COLABORADORA</font>
                     </b></td>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
@@ -638,7 +638,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle><b>
-                        <font size=1>VENDEDORA</font>
+                        <font size=1>COLABORADORA</font>
                     </b></td>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
@@ -936,7 +936,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle><b>
-                        <font size=1>VENDEDORA</font>
+                        <font size=1>COLABORADORA</font>
                     </b></td>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
@@ -1234,7 +1234,7 @@ $idade     = $_GET['Idade'];
                 </td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=2 align="center" valign=middle><b>
-                        <font size=1>VENDEDORA</font>
+                        <font size=1>COLABORADORA</font>
                     </b></td>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>

@@ -358,7 +358,7 @@
                   <font color='#FFFFFF' size='5'><b><i>Contrato</i></b></font>
                </td>
                <td align="center">
-                  <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
+                  <font color='#FFFFFF' size='5'><b><i>Colaboradora</i></b></font>
                </td>
                <td align="center">
                   <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>

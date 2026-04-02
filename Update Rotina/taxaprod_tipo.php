@@ -271,7 +271,7 @@
             <table width="80%" border="5" cellpadding="10" cellspacing="0" align="center">
                 <tr>
                     <td width="40%" align="center">
-                        <font color='#FFFFFF' size='5'><b><i>Vendedora</i></b></font>
+                        <font color='#FFFFFF' size='5'><b><i>Colaboradora</i></b></font>
                     </td>
                     <td width="40%" align="center">
                         <font color='#FFFFFF' size='5'><b><i>Cliente</i></b></font>

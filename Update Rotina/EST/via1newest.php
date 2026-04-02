@@ -1,41 +1,18 @@
 <?php
 
 //Debug
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+ini_set('error_log', 'php_errors.log');
 ?>
 
 <html>
 
-<head>
-	<title>WebCaixa v1.20.0_beta</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<style type="text/css">
-		body {
-			margin-top: 3%;
-			margin-left: 5%;
-			margin-right: 5%;
-			border: 3px solid gray;
-			padding: 10px 10px 10px 10px;
-			font-family: sans-serif;
-		}
-
-		.campos {
-			background-color: #C0C0C0;
-			font: 12px sans-serif;
-			color: #000000;
-		}
-	</style>
-
+<body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
+
 	// Inserindo Cabeçalho
 	include "../cabecprs.php";
-	?>
-</head>
+	include "./valor_ext.php";
 
-<body background="../images/bg1.jpg" text="#FFFFFF">
-	<?php
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R4.1.2";
@@ -51,12 +28,14 @@ error_reporting(E_ALL);
 	$mRec    = substr($dtRec, 5, 2);
 	$dRec    = substr($dtRec, 8, 2);
 	$dtAut     = $dRec . $mRec . $aRec;
+	$Data = date('d/m/Y', strtotime($dtRec));
 	$hora      = trim($_POST['txthora']);
 	$h1 = substr($hora, 0, 2);
 	$h2 = substr($hora, 3, 2);
 	$horaaut   = $h1 . $h2;
 	$VrEnt     = trim($_POST['txtvalor']);
 	$VrEntr    = number_format($VrEnt, 2, ',', '');
+	$Valor_ext    = valorPorExtenso($VrEntr);
 	$DataAtual = date("Y-m-d");
 
 	if (strlen($VrEnt) < 7) {
@@ -68,14 +47,24 @@ error_reporting(E_ALL);
 
 	// Pesquisando PC
 	include "conexao.php";
+
+	// COnsultando a Matrícula
+	include "dblog.php";
+
+	// Consultando
+	$sql = "SELECT nome FROM pessoal WHERE mat = '$Mat'";
+	$rs  = mysqli_query($conec, $sql) or die("Não foi possível acessar os Dados");
+	$ln  = mysqli_fetch_array($rs);
+	$Colab = $ln['nome'];
+
 	include "dbselect.php";
 
 	$sqlPC = "select pc from inicial";
 	$rsPC  = mysqli_query($conec, $sqlPC) or die("Não foi possível acessar o PC");
 	$lnPC  = mysqli_fetch_array($rsPC);
 	$PC  = $lnPC['pc'];
-	
-	$sql = "SELECT * FROM registro WHERE reg = '$Aut' AND datarec = '$DataAtual'";
+
+	$sql = "SELECT * FROM registro WHERE reg >= '$Aut' AND numdoc = '$NDoc' AND datarec = '$DataAtual'";
 	$rs = mysqli_query($conec, $sql) or die("Nao foi possivel acessar o Registro");
 	$regs = mysqli_num_rows($rs);
 
@@ -89,6 +78,7 @@ error_reporting(E_ALL);
 		$lnFm  = mysqli_fetch_assoc($rsFm);
 
 		$FmRec = $lnFm['siglapag'];
+
 	} elseif ($regs > 1) {
 		// Quando há mais de uma forma de pagamento
 		$FPag = array();
@@ -122,9 +112,8 @@ error_reporting(E_ALL);
 			$FmRec = array_unique($FmRec);
 
 			// Se tiver mais de uma forma, define como pagamento dividido
-
-			// Se houver mais de uma forma diferente
 			if (count($FmRec) > 1) {
+				$ModPag = "DIVERSOS";
 				$FmRec_a = 'DIV';
 			} elseif (in_array("DIN", $FmRec)) {
 				$ModPag = "DINHEIRO";
@@ -158,7 +147,6 @@ error_reporting(E_ALL);
 		$ModPag = '';
 	}
 
-
 	// Ajustando a Matrícula
 	$MatRec = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 	$MatRdz = substr($Mat, 1, 6) . "-" . substr($Mat, 7, 1); ?>
@@ -174,54 +162,45 @@ error_reporting(E_ALL);
 	$Aut1 = $Aut;
 	$Aut2 = "$Aut$PC$horaaut$NDoc $dtAut$VrEntrF$TipoRec$FmRec_a$MatRec";
 	$AutR = "$Aut$PC$horaaut$NDoc $dtAut$VrEntrF$TipoRec$FmRec_a$MatRdz";
-	//shell_exec("echo $Aut2 > /dev/lp0");
-	
+
 	// Gravando a Spool
 	include "dbselect.php";
 	$sql = "insert into spool2 values ('$Aut1', '$AutR')";
 	$rs  = mysqli_query($conec, $sql) or die("File via1est Error #1. Contate seu Administrador.");
 
-	// Preparando Ficha Cliente 
+	// Remover ponto do valor
+	$VrEntrF = str_replace(",", "", $VrEntr);
+	// Gerando código de autenticação
+	$Aut = $Aut . $PC . $horaaut . $NDoc . " " . $dtAut . " R$ " . $VrEntrF . $TipoRec . $FmRec_a . $MatRec;
 	?>
-	<form name="via1entr" method="post" action="via3est.php">
-		<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-		<input type="hidden" name="txtaut" value="<?php echo $Aut; ?>">
-		<input type="hidden" name="txtpc" value="<?php echo $PC; ?>">
-		<input type="hidden" name="horaaut" value="<?php echo $horaaut; ?>">
-		<input type="hidden" name="txtdoc" value="<?php echo $NDoc; ?>">
-		<input type="hidden" name="dtaut" value="<?php echo $dtAut; ?>">
-		<input type="hidden" name="txtvalor" value="<?php echo $VrEnt; ?>">
-		<input type="hidden" name="siglarec" value="<?php echo $TipoRec; ?>">
-		<input type="hidden" name="formapag" value="<?php echo $FmRec_a; ?>">
-		<input type="hidden" name="txtmat" value="<?php echo $MatRec; ?>">
-		<br><br><br><br>
-		<font size='6'><b>
-				<center>Clique <font color='gold'>
-						<blink>no Botão Abaixo</blink>
-						<font color='#FFFFFF'> <br>
-							<p>para <font color='gold'>
-									<blink>Retornar</blink>
-									<font color='#FFFFFF'> ao Menu Principal.</center>
-			</b></font>
-		</p><br>
-		<center>
-			<input id="ghost_click" type="submit" name="btimprime" value="Fim de Operação">
-		</center><br>
-		<center>
-			<font color='#FFFFFF' size='3'><span id="msg"></span></font>
-		</center>
-	</form><?php
 
-			// Encerrando a Conexão
-			/* mysqli_free_result($rs);
-			mysqli_free_result($rsPC);
-			mysqli_free_result($rsRec);
-			mysqli_free_result($rsFm);
-			mysqli_free_result($rsApe); */
-			$SisRot = "S-7.4.1.2";
-			include "rodape.php"; ?>
+	<?php
 
-	<script src="./js/ghost_click.js"></script>
+	// Encerrando a Conexão	
+	$SisRot = "S-7.4.1.2";
+	include "rodape.php"; ?>
+
+	<script>
+		function imprimirERedirecionar() {
+			// Monta a URL com os dados
+			var url = './est_comprov.php?aut=<?php echo urlencode($Aut); ?>' +
+				'&PC=<?php echo urlencode($PC); ?>' +
+				'&Aut=<?php echo urlencode($Aut); ?>' +
+				'&ModPag=<?php echo urlencode($ModPag); ?>' +
+				'&FmRec_a=<?php echo urlencode($FmRec_a); ?>' +
+				'&Data=<?php echo urlencode($Data); ?>' +
+				'&VrEntr=<?php echo urlencode($VrEntr); ?>' +
+				'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
+				'&txtdoc=<?php echo urlencode($NDoc); ?>' +
+				'&Ref_Std=<?php echo urlencode($Ref_Std); ?>' +
+				'&Mat=<?php echo urlencode($Mat); ?>' +
+				'&Colab=<?php echo urlencode($Colab); ?>';
+			window.open(url, '_blank');
+			setTimeout(function() {
+				window.location.href = './index.php?c_s=<?php echo $lg_user; ?>';
+			}, 1000);
+		}
+	</script>
 
 </body>
 
