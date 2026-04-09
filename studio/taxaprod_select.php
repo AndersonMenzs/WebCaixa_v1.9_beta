@@ -356,6 +356,24 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
     <?php
+
+    $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+    echo "<pre>";
+    print_r($dados);
+    echo "</pre>";
+    //exit;
+
+    // Condição para enviar para a Taxa Procução Normal
+    if (isset($dados['ref_taxprod']) && $dados['ref_taxprod'] === 'normal') {
+
+        // Recebendo dados
+        $Sis     = "S7";
+        $Rot     = "S7R2.1";
+        $lg_user = $_REQUEST['c_s'];
+        $user = substr($lg_user, 0, 8);
+        $pss  = substr($lg_user, 8, 40);
+    }
+
     // Obtendo o Login
     $Sis     = "S7";
     $Rot     = "S7R2.1";
@@ -424,23 +442,21 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <font color='#FFFFFF' size='5'><b><i>Data Nascimento</i></b></font>
+                        <font color='#FFFFFF' size='5'><b><i>Data Nasc.</i></b></font>
                     </td>
                     <td align="center">
-                        <font color='#FFFFFF' size='5'><b><i>Produção</i></b></font>
+                        <font color='#FFFFFF' size='5'><b><i>Mulher Aghata?</i></b></font>
                     </td>
                 </tr>
                 <tr>
                     <td align="center">
-                        <input type="text" id="data_nasc" name="data_nasc" class="campos" placeholder="01/01/1940" class='campos' style="font-size: 16px; width: 300px;" OnKeyUp="FormataData('taxaProd', 'data_nasc', event)" required>
+                        <input type="text" id="data_nasc" name="data_nasc" size='12' maxlength='10' class="campos" placeholder="01/01/1940" class='campos' OnKeyUp="FormataData('taxaProd', 'data_nasc', event)" required>
                     </td>
                     <td align="center">
-                        <select name="ref_taxprod" id="ref_taxprod" class="campos" style="font-size: 16px; width: 300px;" required>
-                            <option value="normal" selected>Normal</option>
-                            <option value="agatha" disabled>Mulher Aghata</option>
-                            <option value="gratuidade">Cliente Sênior</option>
-                            <option value="rev_estrella">Revelação Estrella</option>
-                        </select>
+                        <input type="radio" name="regula" value="S" required>
+                        <font color=#FFFFFF size=4> Sim</font>
+                        <input type="radio" name="regula" value="N" required checked>
+                        <font color=#FFFFFF size=4> Não</font>
                     </td>
                 </tr>
             </table><br>

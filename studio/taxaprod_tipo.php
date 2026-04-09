@@ -124,6 +124,7 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
     <?php
+
     // Obtendo o Login
     $Sis     = "S7";
     $Rot     = "S7R2.1";
@@ -137,7 +138,7 @@
     $Vendedora = trim($_POST['vendedora']);
     $Cliente    = trim($_POST['cliente']);
     $DataNasc    = trim($_POST['data_nasc']);
-    $Regula    = trim($_POST['regula']);
+    $Regula    = trim($_POST['ref_taxprod']);
     
     // Obtendo Valor Atualizado de idades
     include "config.php";
@@ -170,13 +171,18 @@
 
     // CORREÇÃO: Lógica simplificada e correta para gratuidade
     $Gratuidade = false;
-    if ($idade >= $Senior) {
-        // Para $Senior+ anos: SEMPRE gratuidade (S ou N)
+    if ($idade >= $Senior && $Regula == 'gratuidade') {
+        // Para $Senior+ anos: SEMPRE gratuidade
         $VrProd = 0.00;
         $VrProdF = number_format($VrProd, 2, ',', '.');
         $Gratuidade = true;
-    } elseif ($idade >= $Aghata && $Regula == 'S') {
-        // Para $Aghata-49 anos: gratuidade APENAS se 'S'
+    } elseif ($idade >= $Aghata && $Regula == 'aghata') {
+        // Para $Aghata-35 anos: gratuidade APENAS se 'aghata' for selecionado
+        $VrProd = 0.00;
+        $VrProdF = number_format($VrProd, 2, ',', '.');
+        $Gratuidade = true;
+    } elseif ($Regula == 'rev_estrella') {
+        // Para Revelação Estrella: gratuidade APENAS se 'rev_estrella' for selecionado
         $VrProd = 0.00;
         $VrProdF = number_format($VrProd, 2, ',', '.');
         $Gratuidade = true;
@@ -237,7 +243,7 @@
             <td>
                 <?php
                 // CORREÇÃO: Exibição correta dos tipos de cliente
-                if ($idade >= $Senior) {
+                if ($Gratuidade && $Regula == 'gratuidade') {
                 ?>
                     <center>
                         <font color='lime' size='7'>
@@ -247,12 +253,22 @@
                         </font>
                     </center>
                 <?php
-                } elseif ($Gratuidade && $Regula == 'S') {
+                } elseif ($Gratuidade && $Regula == 'aghata') {
                 ?>
                     <center>
                         <font color='lime' size='7'>
                             <b>
                                 <i>Cliente Mulher Aghata</i>
+                            </b>
+                        </font>
+                    </center>
+                <?php
+                } elseif ($Gratuidade && $Regula == 'rev_estrella') {
+                ?>
+                    <center>
+                        <font color='lime' size='7'>
+                            <b>
+                                <i>Cliente Revelação Estrella</i>
                             </b>
                         </font>
                     </center>
