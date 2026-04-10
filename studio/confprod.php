@@ -37,10 +37,6 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	print_r($dados);
-	echo "</pre>";
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -137,6 +133,7 @@
 	<?php
 	// Verificando se a cliente é maior que 60 anos
 	if ($Gratuidade && $Regula == 'gratuidade') {
+		$Regula = 'Cliente Sênior';
 	?>
 		<center>
 			<font color='lime' size='7'>
@@ -147,6 +144,7 @@
 		</center>
 	<?php
 	} elseif ($Gratuidade && $Regula == 'aghata') {
+		$Regula = 'Cliente Aghata';
 	?>
 		<center>
 			<font color='lime' size='7'>
@@ -157,6 +155,7 @@
 		</center>
 	<?php
 	} elseif ($Gratuidade && $Regula == 'rev_estrella') {
+		$Regula = 'Cliente Revelação Estrella';
 	?>
 		<center>
 			<font color='lime' size='7'>

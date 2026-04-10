@@ -139,7 +139,7 @@
     $Cliente    = trim($_POST['cliente']);
     $DataNasc    = trim($_POST['data_nasc']);
     $Regula    = trim($_POST['ref_taxprod']);
-    
+
     // Obtendo Valor Atualizado de idades
     include "config.php";
 
@@ -207,9 +207,9 @@
     $ln  = mysqli_fetch_array($rs);
     $NumDoc = $ln['numdoc'];
     $DataRec = $ln['datarec'];
-    
+
     // Condição para usar o próximo número do recibo
-    if ($DataHj >= $DataRec) {        
+    if ($DataHj >= $DataRec) {
         $NumDoc = $NumDoc + 1;
     } else {
         echo "Entre em contato com o administrador do sistema.";
@@ -321,13 +321,15 @@
                     </td>
                     <?php
                     // CORREÇÃO: Mostrar opção "Amizade Premiada?" apenas para clientes de $Aghata-49 anos com Regula = 'N'
-                    if (($idade >= $Aghata && $idade < $Senior && $Regula == 'N') || $idade < $Aghata) {
+                    // if (($idade >= $Aghata && $idade < $Senior && $Regula == 'N') || $idade < $Aghata) {
+                    echo $Regula . "-" . $semGratuidade;
+                    if (($Regula == 'normal' || $semGratuidade == true) && ($Regula == 'rev_estrella' || $semGratuidade == "")) {
                     ?>
                         <td align="center">
                             <font color='gold' size='5'>
                                 <b>
                                     <i>
-                                        <blink>Amizade Premiada?</blink>
+                                        <blink>Difusão Por Amizade?</blink>
                                     </i>
                                 </b>
                             </font>
@@ -350,7 +352,8 @@
                     </td>
                     <?php
                     // CORREÇÃO: Mostrar radio buttons apenas para clientes de $Aghata-49 anos com Regula = 'N'
-                    if (($idade >= $Aghata && $idade < $Senior && $Regula == 'N') || $idade < $Aghata) {
+                    //if (($idade >= $Aghata && $idade < $Senior && $Regula == 'N') || $idade < $Aghata) {
+                    if (($Regula == 'normal' || $semGratuidade == true) && ($Regula == 'rev_estrella' || $semGratuidade == "")) {
                     ?>
                         <td rowspan="4" align="center">
                             <font color='lime' size='5'><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -481,7 +484,7 @@
                         <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
                         <input type='submit' name='btenviar' value='Continuar'>
                         &nbsp;&nbsp;
-                        <?php 
+                        <?php
                         if (!$Gratuidade) {
                         ?>
                             <input type='reset' name='btreset' value='Limpar'><br><br>

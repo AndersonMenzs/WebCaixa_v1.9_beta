@@ -62,9 +62,11 @@ include "./valor_ext.php";
 	// CORREÇÃO: Calcular gratuidade se não foi passada
 	if ($temGratuidade == 'N') {
 		// Recalcula a gratuidade baseado nas regras
-		if ($Idade >= $Senior) {
+		if ($Idade >= $Senior && $Regula === 'Cliente Sênior') {
 			$temGratuidade = 'S';
-		} elseif ($Idade >= $Aghata && $Regula == 'S') {
+		} elseif ($Idade >= $Aghata && $Regula === 'Cliente Aghata') {
+			$temGratuidade = 'S';
+		} elseif ($Regula === 'Cliente Revelação Estrella') {
 			$temGratuidade = 'S';
 		}
 	}
