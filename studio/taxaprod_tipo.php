@@ -124,7 +124,6 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
     <?php
-
     // Obtendo o Login
     $Sis     = "S7";
     $Rot     = "S7R2.1";
@@ -139,7 +138,7 @@
     $Cliente    = trim($_POST['cliente']);
     $DataNasc    = trim($_POST['data_nasc']);
     $Regula    = trim($_POST['ref_taxprod']);
-
+    
     // Obtendo Valor Atualizado de idades
     include "config.php";
 
@@ -188,7 +187,6 @@
         $Gratuidade = true;
     }
     // Para outros casos: mantém o valor normal
-
     // Obtendo Valor Anterior
     $sqlA  = "select * from taxas where codigo = 'TXP' and vltx <> $VrProd order by datalt desc";
     $rsA   = mysqli_query($conec, $sqlA) or die("Erro de Banco de Dados #2");
@@ -207,9 +205,9 @@
     $ln  = mysqli_fetch_array($rs);
     $NumDoc = $ln['numdoc'];
     $DataRec = $ln['datarec'];
-
+    
     // Condição para usar o próximo número do recibo
-    if ($DataHj >= $DataRec) {
+    if ($DataHj >= $DataRec) {        
         $NumDoc = $NumDoc + 1;
     } else {
         echo "Entre em contato com o administrador do sistema.";
@@ -321,15 +319,13 @@
                     </td>
                     <?php
                     // CORREÇÃO: Mostrar opção "Amizade Premiada?" apenas para clientes de $Aghata-49 anos com Regula = 'N'
-                    // if (($idade >= $Aghata && $idade < $Senior && $Regula == 'N') || $idade < $Aghata) {
-                    echo $Regula . "-" . $semGratuidade;
-                    if (($Regula == 'normal' || $semGratuidade == true) && ($Regula == 'rev_estrella' || $semGratuidade == "")) {
+                    if ($Regula === 'normal') {
                     ?>
                         <td align="center">
                             <font color='gold' size='5'>
                                 <b>
                                     <i>
-                                        <blink>Difusão Por Amizade?</blink>
+                                        <blink>Amizade Premiada?</blink>
                                     </i>
                                 </b>
                             </font>
@@ -352,8 +348,7 @@
                     </td>
                     <?php
                     // CORREÇÃO: Mostrar radio buttons apenas para clientes de $Aghata-49 anos com Regula = 'N'
-                    //if (($idade >= $Aghata && $idade < $Senior && $Regula == 'N') || $idade < $Aghata) {
-                    if (($Regula == 'normal' || $semGratuidade == true) && ($Regula == 'rev_estrella' || $semGratuidade == "")) {
+                    if ($Regula === 'normal') {
                     ?>
                         <td rowspan="4" align="center">
                             <font color='lime' size='5'><b><i>Não </i></b></font><input type='radio' name='rdtaxa' value='N' checked>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -376,7 +371,7 @@
                     <td align="center">
                         <?php
                         // CORREÇÃO: Verificação consistente para gratuidade
-                        if ($Gratuidade) {
+                        if ($Gratuidade || $Regula != 'normal') {
                         ?>
                             <font color='lime' size='5'><b><i>GRATUIDADE</i></b></font>
                             <input type="hidden" name="lsPr1" value="99">
@@ -405,7 +400,7 @@
                     <td align="center">
                         <font size="5"><b><i>R$ </i></b></font>
                         <?php
-                        if ($Gratuidade) {
+                        if ($Gratuidade || $Regula != 'normal') {
                         ?>
                             <font size='5'><b><i>0,00</i></b></font>
                             <input type="hidden" name="txt1" value="0.00">
@@ -421,7 +416,7 @@
 
                 <?php
                 // CORREÇÃO: Mostrar campos adicionais APENAS para quem NÃO tem gratuidade
-                if (!$Gratuidade) {
+                if ($Regula === 'normal') {
                 ?>
                     <tr>
                         <td align="center">
@@ -473,7 +468,12 @@
                         </td>
                     </tr>
                 <?php
-                }
+                } elseif ($Regula == 'gratuidade' || $Regula == 'aghata' || $Regula == 'rev_estrella') {
+                ?>
+                    <tr></tr>
+                    <tr></tr>
+                <?php                    
+                } 
                 ?>
             </table><br>
 
@@ -484,8 +484,8 @@
                         <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
                         <input type='submit' name='btenviar' value='Continuar'>
                         &nbsp;&nbsp;
-                        <?php
-                        if (!$Gratuidade) {
+                        <?php 
+                        if ($Regula === 'normal') {
                         ?>
                             <input type='reset' name='btreset' value='Limpar'><br><br>
                         <?php
