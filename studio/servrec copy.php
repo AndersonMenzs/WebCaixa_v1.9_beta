@@ -119,7 +119,7 @@
 
         <table border='0' cellpadding='10' cellspacing='0' align="center">
             <tr>
-                <td>
+                <td width="50%">
                     <table border='10' cellpadding='10' cellspacing='0'>
                         <tr>
                             <td align='center'>
@@ -130,13 +130,34 @@
                                 <a href="contrparc.php?c_s=<?php echo $lg_user ?>"><img src="./images/contrparc.gif"
                                         width="150" border="0" align="top"></a>
                             </td>
-                        
+                        </tr>
+
+                        <tr>
                             <td align='center'>
                                 <a href="propentr.php?c_s=<?php echo $lg_user; ?>"><img src="./images/propentr.gif"
                                         width="150" border="0" align="top"></a>
                             </td>
+                            <!--<td align='center'>
+                                <a href="chaveiro.php?c_s=<?php echo $lg_user; ?>"><img src="./images/chaveiro.gif"
+                                        width="148" border="0" align="top"></a>
+                            </td> -->
                         </tr>
 
+                        <tr>
+                            <!-- Usar essa linha somente para um ícone -->
+                            <!--<td align='center' colspan='2'>
+                                <a href="ped.php?c_s=<?php echo $lg_user; ?>"><img src="./images/sol.gif" width="150"
+                                        border="0" align="top"></a>
+                            </td>-->
+                            <!--<td align='center'>
+                                <a href="propparc.php?c_s=<?php echo $lg_user; ?>"><img src="./images/propparc.gif"
+                                        width="150" border="0" align="top"></a>
+                            </td>-->
+                        </tr>
+                    </table>
+                </td>
+                <td width="50%">
+                    <table border='10' cellpadding='10' cellspacing='0' align="right">
                         <tr>
                             <td align='center'>
                                 <a href="taxaprod.php?c_s=<?php echo $lg_user; ?>"><img src="./images/txprod.gif"
@@ -146,10 +167,18 @@
                                 <a href="inscconcur.php?c_s=<?php echo $lg_user; ?>"><img src="./images/inscconc.gif"
                                         width="150" border="0" align="top"></a>
                             </td>
+                        </tr>
+
+                        <tr>
                             <td align='center'>
                                 <a href="prods.php?c_s=<?php echo $lg_user; ?>"><img src="./images/pgtos.gif" width="150"
                                         border="0" align="top"></a>
                             </td>
+                            <!--<td align='center'>-->
+                                <!--<a href="consulta_carne.php?c_s=<?php echo $lg_user; ?>">-->
+                                <!--<a href="#">
+                                    <img id="img_carne" src="./images/carne.jpg" width="130" border="3" align="top"></a>
+                            </td>-->
                         </tr>
                     </table>
                 </td>

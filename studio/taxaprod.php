@@ -413,7 +413,7 @@
                     <td align="center">
                         <select name="ref_taxprod" id="ref_taxprod" class="campos" style="font-size: 16px; width: 300px;" required>
                             <option value="normal" selected>Normal</option>
-                            <option value="aghata" disabled>Cliente Aghata</option>
+                            <option value="aghata">Cliente Aghata</option>
                             <option value="gratuidade">Cliente Sênior</option>
                             <option value="rev_estrella">Revelação Estrella</option>
                         </select>
