@@ -34,8 +34,8 @@
 	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	print_r($dados);
-	echo "</pre>";
-	exit();*/
+	echo "</pre>";*/
+	//exit();
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -69,6 +69,7 @@
 	$UltDoc_ci = '';
 	$UltDoc_rc = '';
 	$UltDoc_mc = '';
+	$UltDoc_md = '';
 	$UltDoc_mp = '';
 	$UltDoc_vt = '';
 	$UltDoc_sp = '';
@@ -116,116 +117,173 @@
 			}
 			$Reg  = $Reg + 1;
 
-			// Recebendo o próximo número de registro CI
-			$sqlr_ci = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
-			$rsr_ci  = mysqli_query($conec, $sqlr_ci) or die(" Não foi possível acessar os Dados");
-			$regsr_ci = mysqli_num_rows($rsr_ci);
-			$lnr_ci = mysqli_fetch_array($rsr_ci);
-			$UltDoc_ci = $lnr_ci['numdoc'];
+			if ($TipoDoc == 'DDP') {
+				$TipoDoc = 'CI';
 
-			if ($regsr_ci > 0) {
-				$codigo_atual = $UltDoc_ci;
-				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2);
-				$novo_numero = intval($numero) + 1;
-				$UltDoc_ci = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+				// Recebendo o próximo número de registro CI
+				$sqlr_ci = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
+				$rsr_ci  = mysqli_query($conec, $sqlr_ci) or die(" Não foi possível acessar os Dados");
+				$regsr_ci = mysqli_num_rows($rsr_ci);
+				$lnr_ci = mysqli_fetch_array($rsr_ci);
+				$UltDoc_ci = $lnr_ci['numdoc'];
+
+				if ($regsr_ci > 0) {
+					$codigo_atual = $UltDoc_ci;
+					$prefixo = substr($codigo_atual, 0, 2);
+					$numero = substr($codigo_atual, 2);
+					$novo_numero = intval($numero) + 1;
+					$UltDoc_ci = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+				}
 			}
 
-			// Recebendo o próximo número de registro Reembolso Cliente
-			$sql_rc = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
-			$rsr  = mysqli_query($conec, $sql_rc) or die(" Não foi possível acessar os Dados");
-			$regsr_rc = mysqli_num_rows($rsr);
-			$lnr_rc = mysqli_fetch_array($rsr);
-			$UltDoc_rc = $lnr_rc['numdoc'];
+			if ($TipoDoc == 'RCL') {
+				$TipoDoc = 'RC';
 
-			if ($regsr_rc > 0) {
-				$codigo_atual = $UltDoc_rc;
-				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2);
-				$novo_numero = intval($numero) + 1;
-				$UltDoc_rc = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+				// Recebendo o próximo número de registro Reembolso Cliente
+				$sql_rc = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
+				$rsr  = mysqli_query($conec, $sql_rc) or die(" Não foi possível acessar os Dados");
+				$regsr_rc = mysqli_num_rows($rsr);
+				$lnr_rc = mysqli_fetch_array($rsr);
+				$UltDoc_rc = $lnr_rc['numdoc'];
+
+				if ($regsr_rc > 0) {
+					$codigo_atual = $UltDoc_rc;
+					$prefixo = substr($codigo_atual, 0, 2);
+					$numero = substr($codigo_atual, 2);
+					$novo_numero = intval($numero) + 1;
+					$UltDoc_rc = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+				}
 			}
 
 			// Recebendo o próximo número de registro Material de Consumo
 			if ($TipoDoc == 'MCS') {
-				$TipoDoc_mc = 'MC';				
+				$TipoDoc_mc = 'MC';
+
+				$sql_mc = "select numdoc from registro where numdoc like '$TipoDoc_mc%' order by numdoc desc";
+				$rsr  = mysqli_query($conec, $sql_mc) or die(" Não foi possível acessar os Dados");
+				$regsr_mc = mysqli_num_rows($rsr);
+				$lnr_mc = mysqli_fetch_array($rsr);
+				$UltDoc_mc = $lnr_mc['numdoc'];
+
+				if ($regsr_mc > 0) {
+					$codigo_atual = $UltDoc_mc;
+					$prefixo = substr($codigo_atual, 0, 2);
+					$numero = substr($codigo_atual, 2);
+					$novo_numero = intval($numero) + 1;
+					$UltDoc_mc = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+				}
+				//echo $UltDoc_mc;			
 			}
 
-			$sql_mc = "select numdoc from registro where numdoc like '$TipoDoc_mc%' order by reg desc";
-			$rsr  = mysqli_query($conec, $sql_mc) or die(" Não foi possível acessar os Dados");
-			$regsr_mc = mysqli_num_rows($rsr);
-			$lnr_mc = mysqli_fetch_array($rsr);
-			$UltDoc_mc = $lnr_mc['numdoc'];
+			// Recebendo o próximo número de registro Material de Divulgação
+			if ($TipoDoc == 'MDV') {
+				$TipoDoc_md = 'MD';
 
-			if ($regsr_mc > 0) {
-				$codigo_atual = $UltDoc_mc;
-				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2);
-				$novo_numero = intval($numero) + 1;
-				$UltDoc_mc = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
-			};
-//echo $UltDoc_mc;
-			// Recebendo o próximo número de registro Material de Produção
-			$sqlr_mp = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
-			$rsr_mp  = mysqli_query($conec, $sqlr_mp) or die(" Não foi possível acessar os Dados");
-			$regsr_mp = mysqli_num_rows($rsr_mp);
-			$lnr_mp = mysqli_fetch_array($rsr_mp);
-			$UltDoc_mp = $lnr_mp['numdoc'];
+				$sql_md = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
+				$rsr  = mysqli_query($conec, $sql_md) or die(" Não foi possível acessar os Dados");
+				$regsr_md = mysqli_num_rows($rsr);
+				$lnr_md = mysqli_fetch_array($rsr);
+				$UltDoc_md = $lnr_md['numdoc'];
 
-			if ($regsr_mp > 0) {
-				$codigo_atual = $UltDoc_mp;
-				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2);
-				$novo_numero = intval($numero) + 1;
-				$UltDoc_mp = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+				if ($regsr_md > 0) {
+					$codigo_atual = $UltDoc_md;
+					$prefixo = substr($codigo_atual, 0, 2);
+					$numero = substr($codigo_atual, 2);
+					$novo_numero = intval($numero) + 1;
+					$UltDoc_md = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+				}
+				//echo $UltDoc_md;			
 			}
-//echo $UltDoc_mp;
-			// Recebendo o próximo número de registro Vale Transporte
-			$sqlr_vt = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
-			$rsr_vt  = mysqli_query($conec, $sqlr_vt) or die(" Não foi possível acessar os Dados");
-			$regsr_vt = mysqli_num_rows($rsr_vt);
-			$lnr_vt = mysqli_fetch_array($rsr_vt);
-			$UltDoc_vt = $lnr_vt['numdoc'];
 
-			if ($regsr_vt > 0) {
-				$codigo_atual = $UltDoc_vt;
-				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2);
-				$novo_numero = intval($numero) + 1;
-				$UltDoc_vt = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
-			}
-//echo $UltDoc_vt;
-			// Recebendo o próximo número de registro Serviços Prestados
-			$sqlr_sp = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
-			$rsr_sp  = mysqli_query($conec, $sqlr_sp) or die(" Não foi possível acessar os Dados");
-			$regsr_sp = mysqli_num_rows($rsr_sp);
-			$lnr_sp = mysqli_fetch_array($rsr_sp);
-			$UltDoc_sp = $lnr_sp['numdoc'];
+			if ($TipoDoc == 'MPD') {
+				$TipoDoc_mp = 'MP';
 
-			if ($regsr_sp > 0) {
-				$codigo_atual = $UltDoc_sp;
-				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2);
-				$novo_numero = intval($numero) + 1;
-				$UltDoc_sp = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
-			}
-//echo $UltDoc_sp;
-			// Recebendo o próximo número de registro Outros
-			$sqlr_out = "select numdoc from registro where numdoc like '$TipoDoc%' order by reg desc";
-			$rsr_out  = mysqli_query($conec, $sqlr_out) or die(" Não foi possível acessar os Dados");
-			$regsr_out = mysqli_num_rows($rsr_out);
-			$lnr_out = mysqli_fetch_array($rsr_out);
-			$UltDoc_out = $lnr_out['numdoc'];
+				// Recebendo o próximo número de registro Material de Produção
+				$sqlr_mp = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
+				$rsr_mp  = mysqli_query($conec, $sqlr_mp) or die(" Não foi possível acessar os Dados");
+				$regsr_mp = mysqli_num_rows($rsr_mp);
+				$lnr_mp = mysqli_fetch_array($rsr_mp);
+				$UltDoc_mp = $lnr_mp['numdoc'];
 
-			if ($regsr_out > 0) {
-				$codigo_atual = $UltDoc_out;
-				$prefixo = substr($codigo_atual, 0, 2);
-				$numero = substr($codigo_atual, 2);
-				$novo_numero = intval($numero) + 1;
-				$UltDoc_out = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+				if ($regsr_mp > 0) {
+					$codigo_atual = $UltDoc_mp;
+					$prefixo = substr($codigo_atual, 0, 2);
+					$numero = substr($codigo_atual, 2);
+					$novo_numero = intval($numero) + 1;
+					$UltDoc_mp = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+				}
+				//echo $UltDoc_mp;
 			}
-//echo $UltDoc_out;
-//exit();
+
+			if ($TipoDoc == 'VTR') {
+				$TipoDoc_vt = 'VT';
+
+				// Recebendo o próximo número de registro Vale Transporte
+				$sqlr_vt = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
+				$rsr_vt  = mysqli_query($conec, $sqlr_vt) or die(" Não foi possível acessar os Dados");
+				$regsr_vt = mysqli_num_rows($rsr_vt);
+				$lnr_vt = mysqli_fetch_array($rsr_vt);
+				$UltDoc_vt = $lnr_vt['numdoc'];
+
+				if ($regsr_vt > 0) {
+					$codigo_atual = $UltDoc_vt;
+					$prefixo = substr($codigo_atual, 0, 2);
+					$numero = substr($codigo_atual, 2);
+					$novo_numero = intval($numero) + 1;
+					$UltDoc_vt = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+				}
+				//echo $UltDoc_vt;
+			}
+
+			if ($TipoDoc == 'SRV') {
+				$TipoDoc_sp = 'SP';
+
+				// Recebendo o próximo número de registro Serviços Prestados
+				$sqlr_sp = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
+				$rsr_sp  = mysqli_query($conec, $sqlr_sp) or die(" Não foi possível acessar os Dados");
+				$regsr_sp = mysqli_num_rows($rsr_sp);
+				$lnr_sp = mysqli_fetch_array($rsr_sp);
+				$UltDoc_sp = $lnr_sp['numdoc'];
+
+				if ($regsr_sp > 0) {
+					$codigo_atual = $UltDoc_sp;
+					$prefixo = substr($codigo_atual, 0, 2);
+					$numero = substr($codigo_atual, 2);
+					$novo_numero = intval($numero) + 1;
+					$UltDoc_sp = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+				}
+				//echo $UltDoc_sp;
+			}
+
+			if ($TipoDoc == 'OUT') {
+				$TipoDoc = 'OT';
+
+				// Recebendo o próximo número de registro Outros
+				$sqlr_out = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
+				$rsr_out  = mysqli_query($conec, $sqlr_out) or die(" Não foi possível acessar os Dados");
+				$regsr_out = mysqli_num_rows($rsr_out);
+				$lnr_out = mysqli_fetch_array($rsr_out);
+				$UltDoc_out = $lnr_out['numdoc'];
+
+				if ($regsr_out > 0) {
+					$codigo_atual = $UltDoc_out;
+					$prefixo = substr($codigo_atual, 0, 2);
+					$numero = substr($codigo_atual, 2);
+					$novo_numero = intval($numero) + 1;
+					$UltDoc_out = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+				}
+				//echo $UltDoc_out;
+			}
+
+			echo "UltDoc_ci: " . $UltDoc_ci . "<br>";
+			echo "UltDoc_rc: " . $UltDoc_rc . "<br>";
+			echo "UltDoc_mc: " . $UltDoc_mc . "<br>";
+			echo "UltDoc_md: " . $UltDoc_md . "<br>";
+			echo "UltDoc_mp: " . $UltDoc_mp . "<br>";
+			echo "UltDoc_vt: " . $UltDoc_vt . "<br>";
+			echo "UltDoc_sp: " . $UltDoc_sp . "<br>";
+			echo "UltDoc_out: " . $UltDoc_out . "<br>";
+			//exit();
 			// Condições para atribuir o número do documento correto
 			if ($TipoDesp == '1') {
 
@@ -270,7 +328,7 @@
 			}
 
 			// Preparando a Via Cliente 
-			?>
+	?>
 			<form name="geraprod" method="post" action="via1newpag.php">
 				<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 				<input type="hidden" name="txtsen" value="<?php echo $PC; ?>">

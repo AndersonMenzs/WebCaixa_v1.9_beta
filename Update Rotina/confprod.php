@@ -37,6 +37,13 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
+
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
+	//exit;
+
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1";
@@ -64,6 +71,7 @@
 	$Regula    = trim($_POST['regula']);
 	$Senior    = trim($_POST['senior']);
 	$Aghata    = trim($_POST['aghata']);
+	$Gratuidade = true;
 
 	// Calculando quantos anos tem
 	$partes = explode('/', $DataNasc);
@@ -125,32 +133,46 @@
 	<font color="gold" size="6">
 		<br><b>
 			<center><u><i>Recebimento da Taxa de Produção</i></u></center>
-			<?php
-			// Verificando se a cliente é maior que 60 anos
-			if ($Idade >= $Senior) {
-			?>
-				<center>
-					<font color='lime' size='7'>
-						<b>
-							<i>Cliente Senior</i>
-						</b>
-					</font>
-				</center>
-			<?php
-			} else if ($Regula == 'S') {
-			?>
-				<center>
-					<font color='lime' size='7'>
-						<b>
-							<i>Cliente Mulher Aghata</i>
-						</b>
-					</font>
-				</center>
-			<?php
-			}
-			?>
 		</b>
 	</font>
+	<br>
+	<?php
+	// Verificando se a cliente é maior que 60 anos
+	if ($Gratuidade && $Regula == 'gratuidade') {
+		$Regula = 'Cliente Sênior';
+	?>
+		<center>
+			<font color='lime' size='7'>
+				<b>
+					<i>Cliente Sênior</i>
+				</b>
+			</font>
+		</center>
+	<?php
+	} elseif ($Gratuidade && $Regula == 'aghata') {
+		$Regula = 'Cliente Aghata';
+	?>
+		<center>
+			<font color='lime' size='7'>
+				<b>
+					<i>Cliente Mulher Aghata</i>
+				</b>
+			</font>
+		</center>
+	<?php
+	} elseif ($Gratuidade && $Regula == 'rev_estrella') {
+		$Regula = 'Cliente Revelação Estrella';
+	?>
+		<center>
+			<font color='lime' size='7'>
+				<b>
+					<i>Cliente Revelação Estrella</i>
+				</b>
+			</font>
+		</center>
+	<?php
+	}
+	?>
 	<br>
 	<?php
 

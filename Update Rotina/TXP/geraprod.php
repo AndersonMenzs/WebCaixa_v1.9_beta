@@ -28,6 +28,13 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
+
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
+	//exit;
+
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1.1";
@@ -84,11 +91,14 @@
 
 	// CORREÇÃO: Lógica corrigida para TipoRec e SubTipo baseado nas regras de gratuidade
 	$temGratuidade = false;
-	if ($Idade >= $Senior) {
+	if ($Idade >= $Senior && $Regula === 'Cliente Sênior' || $Regula != 'normal') {
 		// Para $Senior+ anos: SEMPRE gratuidade (S ou N)
 		$temGratuidade = true;
-	} elseif ($Idade >= $Aghata && $Regula == 'S') {
+	} elseif ($Idade >= $Aghata && $Regula === 'Cliente Aghata') {
 		// Para $Aghata-49 anos: gratuidade APENAS se 'S'
+		$temGratuidade = true;
+	} elseif ($Regula === 'Cliente Revelação Estrella') {
+		// Para Revelação Estrella: gratuidade APENAS se 'S'
 		$temGratuidade = true;
 	}
 
@@ -100,7 +110,7 @@
 		$TipoRec   = '1';
 		$SubTipo   = 'TXP';
 	}
-
+	
 	// Conexão
 	include "conexao.php";
 	include "dbselect.php";

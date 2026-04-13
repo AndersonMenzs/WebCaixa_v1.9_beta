@@ -34,7 +34,8 @@ $Mat       = $_GET['Mat'];
 $Mat_Vend  = $_GET['mat_vend'];
 $Nasc      = $_GET['DataNasc'];
 //$Nasc      = date('d/m/Y', strtotime($Nasc));
-$idade     = $_GET['Idade'];
+$idade     = $_GET['Idade'];    
+$Regula    = $_GET['Regula'];
 ?>
 
 <!DOCTYPE html>
@@ -310,9 +311,8 @@ $idade     = $_GET['Idade'];
                     <font size=3><b>GRATUIDADE</b></font>
                 </td>
                 <td height="4" align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
-                <td align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=6 rowspan=2 align="center" valign=middle>
+                    <font size=3><b><i><?php echo $Regula; ?></i></b></font>      
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
@@ -477,18 +477,15 @@ $idade     = $_GET['Idade'];
                     <font size=3><b>GRATUIDADE</b></font>
                 </td>
                 <td height="4" align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
-                <td align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=6 rowspan=2 align="center" valign=middle>
+                    <font size=3><b><i><?php echo $Regula; ?></i></b></font>      
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
                 <td height="4" align="left" valign=bottom></td>
                 <td colspan=2 align="center" valign=middle></td>
                 <td align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle>
-                    <font size=1></font>
-                </td>
+                <td colspan=2 align="center" valign=middle></td>
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
@@ -631,15 +628,8 @@ $idade     = $_GET['Idade'];
                     <font size=3><b>GRATUIDADE</b></font>
                 </td>
                 <td height="4" align="left" valign=bottom></td>
-                <td colspan=2 align="center" valign=middle><b>
-                        <font size=1></font>
-                    </b></td>
-                <td align="left" valign=bottom><b>
-                        <font size=1></font>
-                    </b></td>
-                <td colspan=2 align="center" valign=middle><b>
-                        <font size=1></font>
-                    </b></td>
+                <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=6 rowspan=2 align="center" valign=middle>
+                    <font size=3><b><i><?php echo $Regula; ?></i></b></font>      
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>

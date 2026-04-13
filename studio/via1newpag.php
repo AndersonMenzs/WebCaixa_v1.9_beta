@@ -46,7 +46,7 @@
 	echo "<pre>";
 	print_r($dados);
 	echo "</pre>";
-	exit();
+	//exit();
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -310,9 +310,20 @@
 		<script>
 			function imprimirERedirecionar() {
 				// Monta a URL com os dados
-				//var url = './serv_desp.php?tipo=<?php echo urlencode($tipo); ?>' +
-				//	'&NomeDesc=<?php echo urlencode($NomeDesc); ?>';
-				//window.open(url, '_blank');
+				var url = './mp_mc_desp.php?tipo=<?php echo urlencode($tipo); ?>' +
+					'&UlDoc_sp=<?php echo urlencode($UltDoc_sp); ?>' +
+					'&Aut=<?php echo urlencode($Aut); ?>' +
+					'&Data=<?php echo urlencode($Data); ?>' +
+					'&PC=<?php echo urlencode($PC); ?>' +
+					'&Tes=<?php echo urlencode($Tes); ?>' +
+					'&Assunto=<?php echo urlencode($Assunto); ?>' +
+					'&colab=<?php echo urlencode($colab); ?>' +
+					'&mat_vend=<?php echo urlencode($mat_vend); ?>' +
+					'&Valor=<?php echo urlencode($Valor); ?>' +
+					'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
+					'&TipoRef=<?php echo urlencode($TipoRef); ?>' +
+					'&NomeDesc=<?php echo urlencode($NomeDesc); ?>';
+				window.open(url, '_blank');
 				setTimeout(function() {
 					window.location.href = './index.php?c_s=<?php echo $lg_user; ?>';
 				}, 1000);

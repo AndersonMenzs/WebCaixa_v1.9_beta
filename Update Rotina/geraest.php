@@ -28,6 +28,7 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
+	
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R4.1.1";
@@ -72,7 +73,7 @@
 			mysqli_free_result($rso);
 
 			// Gravando o Registro
-			$sqlr = "select * from registro where reg = $Aut and numdoc = '$NDoc' and datarec = '$dtComp' ";
+			$sqlr = "select * from registro where reg >= $Aut and numdoc = '$NDoc' and datarec = '$dtComp' ";
 			$rsr  = mysqli_query($conec, $sqlr) or die("Não foi possível acessar os Dados");
 			$regsr = mysqli_num_rows($rsr);
 			$lnr = mysqli_fetch_array($rsr);

@@ -14,6 +14,12 @@ include "./valor_ext.php";
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
 
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
+	//exit;
+
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1.2";
@@ -62,9 +68,11 @@ include "./valor_ext.php";
 	// CORREÇÃO: Calcular gratuidade se não foi passada
 	if ($temGratuidade == 'N') {
 		// Recalcula a gratuidade baseado nas regras
-		if ($Idade >= $Senior) {
+		if ($Idade >= $Senior && $Regula === 'Cliente Sênior') {
 			$temGratuidade = 'S';
-		} elseif ($Idade >= $Aghata && $Regula == 'S') {
+		} elseif ($Idade >= $Aghata && $Regula === 'Cliente Aghata') {
+			$temGratuidade = 'S';
+		} elseif ($Regula === 'Cliente Revelação Estrella') {
 			$temGratuidade = 'S';
 		}
 	}

@@ -1,4 +1,4 @@
-<?php
+	<?php
 //Debug
 
 ini_set('display_startup_errors', 1);
