@@ -38,12 +38,6 @@
 
 	<?php
 
-	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	print_r($dados);
-	echo "</pre>";
-	//exit;
-
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.1.1";

@@ -138,9 +138,6 @@
 
     include "config.php";
 
-    $Senior = 55;
-    $Aghata = 35;
-
     $idade = 0;
     if (!empty($DataNasc) && strpos($DataNasc, '/') !== false) {
         $partes = explode('/', $DataNasc);
