@@ -30,12 +30,11 @@
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
 
-	// Recebe dados do POST
-	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	print_r($dados);
-	echo "</pre>";*/
-	//exit();
+	echo "</pre>";
+	exit();
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -117,6 +116,7 @@
 			}
 			$Reg  = $Reg + 1;
 
+			// Comunicação Interna
 			if ($TipoDoc == 'DDP') {
 				$TipoDoc = 'CI';
 
@@ -136,6 +136,7 @@
 				}
 			}
 
+			// Reembolso de Cliente
 			if ($TipoDoc == 'RCL') {
 				$TipoDoc = 'RC';
 
@@ -155,11 +156,11 @@
 				}
 			}
 
-			// Recebendo o próximo número de registro Material de Consumo
+			// Material de Consumo
 			if ($TipoDoc == 'MCS') {
-				$TipoDoc_mc = 'MC';
+				$TipoDoc = 'MC';
 
-				$sql_mc = "select numdoc from registro where numdoc like '$TipoDoc_mc%' order by numdoc desc";
+				$sql_mc = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
 				$rsr  = mysqli_query($conec, $sql_mc) or die(" Não foi possível acessar os Dados");
 				$regsr_mc = mysqli_num_rows($rsr);
 				$lnr_mc = mysqli_fetch_array($rsr);
@@ -175,9 +176,9 @@
 				//echo $UltDoc_mc;			
 			}
 
-			// Recebendo o próximo número de registro Material de Divulgação
+			// Material de Divulgação
 			if ($TipoDoc == 'MDV') {
-				$TipoDoc_md = 'MD';
+				$TipoDoc = 'MD';
 
 				$sql_md = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
 				$rsr  = mysqli_query($conec, $sql_md) or die(" Não foi possível acessar os Dados");
@@ -195,8 +196,9 @@
 				//echo $UltDoc_md;			
 			}
 
+			// Material de Produção
 			if ($TipoDoc == 'MPD') {
-				$TipoDoc_mp = 'MP';
+				$TipoDoc = 'MP';
 
 				// Recebendo o próximo número de registro Material de Produção
 				$sqlr_mp = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
@@ -215,8 +217,9 @@
 				//echo $UltDoc_mp;
 			}
 
+			// Vale Transporte
 			if ($TipoDoc == 'VTR') {
-				$TipoDoc_vt = 'VT';
+				$TipoDoc = 'VT';
 
 				// Recebendo o próximo número de registro Vale Transporte
 				$sqlr_vt = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
@@ -235,8 +238,9 @@
 				//echo $UltDoc_vt;
 			}
 
+			// Serviços Prestados
 			if ($TipoDoc == 'SRV') {
-				$TipoDoc_sp = 'SP';
+				$TipoDoc = 'SP';
 
 				// Recebendo o próximo número de registro Serviços Prestados
 				$sqlr_sp = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
@@ -255,6 +259,7 @@
 				//echo $UltDoc_sp;
 			}
 
+			// Outros
 			if ($TipoDoc == 'OUT') {
 				$TipoDoc = 'OT';
 
@@ -284,6 +289,7 @@
 			echo "UltDoc_sp: " . $UltDoc_sp . "<br>";
 			echo "UltDoc_out: " . $UltDoc_out . "<br>";
 			//exit();
+
 			// Condições para atribuir o número do documento correto
 			if ($TipoDesp == '1') {
 

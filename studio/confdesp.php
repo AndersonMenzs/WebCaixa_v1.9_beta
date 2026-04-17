@@ -39,10 +39,10 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
 
-	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 	echo "<pre>";
 	print_r($dados);
-	echo "</pre>";*/
+	echo "</pre>";
 	//exit();
 
 	// Importando os Dados do Formulário
@@ -69,8 +69,11 @@
 	$mat_vend =
 		$_POST['mat_colab_dp'] ??
 		$_POST['mat_colab_vt'] ??
-		$_POST['mat_colab_srv'] ?? 'A';
+		$_POST['mat_colab_srv'] ?? '';
 	$cliente	= trim($_POST['cliente']);
+
+	echo "Colab: " . $colab . "<br>Mat: " . $mat_vend;
+	exit;
 
 	include "conexao.php";
 	include "dbselect.php";

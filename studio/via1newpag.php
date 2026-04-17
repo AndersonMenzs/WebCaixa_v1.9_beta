@@ -46,7 +46,7 @@
 	echo "<pre>";
 	print_r($dados);
 	echo "</pre>";
-	//exit();
+	exit();
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
