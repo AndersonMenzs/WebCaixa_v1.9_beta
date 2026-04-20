@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>WebCaixa v1.20.0_beta</title>
+	<title>WebCaixa v1.19_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -1111,7 +1111,19 @@
 			shell_exec("echo '\n' >> /backups/fcx_$dtAbre.txt");
 			shell_exec("echo '\n' >> /backups/fcx_$dtAbre.txt");
 
-			include "autentics.php";
+			//include "autentics.php";
+
+			// Imprimindo Cabeçalho da Spool de Impressão
+			shell_exec("echo '--- A U T E N T I C A C O E S - D O - D I A ---' >> /backups/fcx_$dtAbre.txt");
+			shell_exec("echo '-----------------------------------------------' >> /backups/fcx_$dtAbre.txt");
+
+			$SqlSp = "select * from spool2 order by rec";
+			$rsSp  = mysqli_query($conec, $SqlSp) or die("Não foi possível obter dados da spool");
+			while ($lnSp  = mysqli_fetch_array($rsSp)) {
+				$Spo = $lnSp['spo2'];
+				shell_exec("echo '$Spo' >> /backups/fcx_$dtAbre.txt");
+			}
+
 			shell_exec("echo $traco >> /backups/fcx_$dtAbre.txt");
 			if ($Diferenca > 0) {
 				shell_exec("echo '----- HOUVE SOBRA DE R$ $DifCx -----' >> /backups/fcx_$dtAbre.txt");

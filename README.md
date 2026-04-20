@@ -391,7 +391,7 @@ INSERT INTO studio.produtos VALUES
 Algumas colunas de algumas tabelas precisam ser alteradas para os valores de 7 caracteres para serem inseridos no banco de dados.
 
 ```sql
-ALTER TABLE registro MODIFY numdoc CHAR(12);
+ALTER TABLE registro MODIFY numdoc CHAR(15);
 ```
 # Alteração na tabela caixa no campo type decimal (Fechamento Caixa)
 
