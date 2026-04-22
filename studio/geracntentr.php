@@ -1,9 +1,7 @@
 <?php
 
-//Debug
-
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Debug
+ini_set('error_log', 'php_errors.log');
 
 ?>
 <html>
