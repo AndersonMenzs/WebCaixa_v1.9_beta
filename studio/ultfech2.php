@@ -156,10 +156,10 @@
                             <font>
                     </td>
 
-                    <form name="datafech" method="post" action="ultfech3.php?c_s=<?php echo $lg_user; ?>">
+                    <form name="datafech" method="post" action="impultfech3.php?c_s=<?php echo $lg_user; ?>">
                         <td align='center'>
                             <input type="submit" name="datafech" id="datafech" value="<?php echo $datafech; ?>">
-                            <!-- <a href="" name="datafech" style="text-decoration: none"><font color="gold" size="4"><b><i><?php echo $datafech; ?></font></b></i></a> -->
+                            <!-- <a href="" name="datafech" style="text-decoration: none"><font color="gold" size="4"><b><i><?php //echo $datafech; ?></font></b></i></a> -->
 
                         </td>
                     </form>
