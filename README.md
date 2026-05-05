@@ -537,3 +537,9 @@ Alterado para comportar os produtos kit na rotina pagamento a vista.
 ```sql
 ALTER TABLE registro MODIFY subtipo CHAR(5);
 ```
+
+# Alteração e adição de cargo "PRESTADOR DE SERVIÇOS"
+
+```sql
+insert into cargos (ccargo, ncargo) value ('32', 'PRESTADOR DE SERVIÇOS');
+```
