@@ -31,11 +31,10 @@ function moeda($valor)
 	return number_format((float) $valor, 2, ',', '.');
 }
 
-// Recebendo os dados do formulário
-
+// Verificando se os dados do formulário foram enviados
 $Sis     = "S7";
 $Rot       = "S7R5.3";
-$lg_user   = trim($_POST['txtuser']);
+$lg_user   = trim($_POST['user_pss']);
 $user    = substr($lg_user, 0, 8);
 $userF = substr($user, 0, 1) . "." . substr($user, 1, 3) . "." . substr($user, 4, 3) . "-" . substr($user, 7, 1);
 $pss     = substr($lg_user, 8, 40);
@@ -389,7 +388,7 @@ while ($lnTT = mysqli_fetch_array($rsTT)) {
 	</style>
 </head>
 
-<body lang="pt-BR" link="#000080" vlink="#800000" dir="ltr">
+<body lang="pt-BR" link="#000080" vlink="#800000" dir="ltr" onload="window.print();">
 	<div class="container">
 		<div class="page">
 			<div class="row">
@@ -2139,6 +2138,12 @@ while ($lnTT = mysqli_fetch_array($rsTT)) {
 			</p>
 		</div>
 	</div>
+
+	<script>
+	setTimeout(function() {
+				window.location.href = 'index.php?c_s=<?php echo $lg_user; ?>';
+			}, 1000);
+	</script>
 </body>
 
 </html>
