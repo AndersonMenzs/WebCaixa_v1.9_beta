@@ -1101,6 +1101,8 @@
 			<p>
 				<center>
 					<input type="submit" name="btimprime" value="Imprimir" autofocus>
+					<!-- Voltar para o Menu Principal tipo submit  -->
+					<input type="submit" name="btvoltar" value="Voltar" formaction="index.php?c_s=<?= $lg_user ?>">
 				</center>
 			</p>
 		</form>
