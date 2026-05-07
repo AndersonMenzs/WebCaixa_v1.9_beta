@@ -166,7 +166,7 @@ $DifCxFmt          = moeda($DifCx);
 
 		@page {
 			size: A4 portrait;
-			margin: 6mm
+			margin: 12mm;
 		}
 
 		html,
@@ -189,7 +189,7 @@ $DifCxFmt          = moeda($DifCx);
 			box-sizing: border-box;
 			background: #fff;
 			box-shadow: 0 0 12px rgba(0, 0, 0, .18);
-			overflow: hidden;
+			overflow: visible;
 		}
 
 		table {
@@ -362,25 +362,52 @@ $DifCxFmt          = moeda($DifCx);
 			html,
 			body {
 				background: #fff;
+				width: auto;
+				height: auto;
+			}
+
+			body {
+				box-sizing: border-box;
+				padding: 10mm;
+			}
+
+			.container {
+				width: 100%;
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
 			}
 
 			.page {
-				width: auto;
-				min-height: auto;
+				width: 100%;
+				min-height: 0;
 				margin: 0;
 				padding: 0;
 				box-shadow: none;
+				overflow: visible;
 			}
 
 			body {
 				-webkit-print-color-adjust: exact;
 				print-color-adjust: exact;
 			}
+
+			table {
+				page-break-inside: auto;
+			}
+
+			tr,
+			td,
+			.bloco-4,
+			.bloco-full {
+				break-inside: avoid;
+				page-break-inside: avoid;
+			}
 		}
 	</style>
 </head>
 
-<body lang="pt-BR" link="#000080" vlink="#800000" dir="ltr">
+<body lang="pt-BR" link="#000080" vlink="#800000" dir="ltr" onload="window.print()">
 	<div class="container">
 		<div class="page">
 			<div class="row">

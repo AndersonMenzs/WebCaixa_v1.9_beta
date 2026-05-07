@@ -861,7 +861,7 @@
 			</tr>
 		</table>
 
-		<form name="impfechparc" method="post" action="impfechparc.php">
+		<form name="impfechparc" method="post" action="impfechparc.php" target="_blank">
 			<input type="hidden" name="txtuser" value="<?= $lg_user ?>">
 			<input type="hidden" name="tipofech" value="<?= $TipoFech ?>">
 			<input type="hidden" name="fita" value="<?= $Fita ?>">
