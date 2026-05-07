@@ -57,55 +57,35 @@ $Mat       = $_GET['Mat'];
             height: fit-content;
         }
 
-        .imagem_via1 {
-            position: absolute;
-            top: -1px;
-            /* Ajuste a posição vertical */
-            left: 5px;
-            /* Ajuste a posição horizontal */
-            width: 50px;
-            /* Tamanho pequeno */
-            height: auto;
-            z-index: 2;
-            /* Opcional: transparência */
-            pointer-events: none;
-            /* Para não bloquear clique na tabela */
+        .endereco_box {
+            display: inline-block;
+            height: 65px;
+            position: relative;
+            width: 350px;
         }
 
-        .imagem_via2 {
-            position: absolute;
-            top: 310px;
-            /* ajuste para a posição desejada */
-            left: 5px;
-            /* ajuste para a posição desejada */
-            width: 50px;
+        .endereco_logo {
             height: auto;
-            z-index: 2;
+            left: 0;
             pointer-events: none;
+            position: absolute;
+            top: 7px;
+            width: 50px;
+            z-index: 2;
         }
 
         .imagem_end_1 {
-            position: absolute;
-            top: 45px;
-            left: 25px;
-            width: 260px;
-            /* Largura original */
-            height: 55px;
-            /* Altura original */
+            margin-left: 55px;
+            width: 285px;
+            height: 65px;
             object-fit: contain;
-            /* Mantém a proporção da imagem */
         }
 
         .imagem_end_2 {
-            position: absolute;
-            top: 123px;
-            left: 25px;
-            width: 260px;
-            /* Largura original */
-            height: 520px;
-            /* Altura original */
+            margin-left: 55px;
+            width: 285px;
+            height: 65px;
             object-fit: contain;
-            /* Mantém a proporção da imagem */
         }
 
         .texto {
@@ -180,8 +160,6 @@ $Mat       = $_GET['Mat'];
 
 <body onload="window.print()">
     <div class="container">
-        <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
-        <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
         <table align="left" cellspacing="0" border="0">
             <colgroup width="100"></colgroup>
             <colgroup span="2" width="100"></colgroup>
@@ -258,8 +236,7 @@ $Mat       = $_GET['Mat'];
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=4 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1">
-                    </font>
+                    <font size=1><span class="endereco_box"><img src="./images/logo.png" alt="Logo" class="endereco_logo"><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1"></span></font>
                 </td>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>
@@ -577,8 +554,7 @@ $Mat       = $_GET['Mat'];
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=4 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_2">
-                    </font>
+                    <font size=1><span class="endereco_box"><img src="./images/logo.png" alt="Logo" class="endereco_logo"><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_2"></span></font>
                 </td>
                 <td align="left" valign=bottom>
                     <font size=1><br></font>

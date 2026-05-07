@@ -78,68 +78,42 @@ include "./dbselect.php";
             height: fit-content;
         }
 
-        .imagem_via1 {
-            position: absolute;
-            top: -1px;
-            /* Ajuste a posição vertical */
-            left: 5px;
-            /* Ajuste a posição horizontal */
-            width: 50px;
-            /* Tamanho pequeno */
-            height: auto;
-            z-index: 2;
-            /* Opcional: transparência */
-            pointer-events: none;
-            /* Para não bloquear clique na tabela */
+        .endereco_box {
+            display: block;
+            height: 65px;
+            margin: 0 auto;
+            position: relative;
+            width: 350px;
         }
 
-        .imagem_via2 {
-            position: absolute;
-            top: 340px;
-            left: 5px;
-            width: 50px;
+        .endereco_logo {
             height: auto;
-            z-index: 2;
+            left: 0;
             pointer-events: none;
-        }
-
-        .imagem_via3 {
             position: absolute;
-            top: 653px;
-            left: 5px;
+            top: 7px;
             width: 50px;
-            height: auto;
             z-index: 2;
-            pointer-events: none;
         }
 
         .imagem_end_1 {
-            position: absolute;
-            top: 60px;
-            left: 22px;
-            width: 260px;
-            /* Largura original */
-            height: 55px;
-            /* Altura original */
+            margin-left: 55px;
+            width: 285px;
+            height: 65px;
             object-fit: contain;
-            /* Mantém a proporção da imagem */
         }
 
         .imagem_end_2 {
-            position: absolute;
-            top: 170px;
-            left: 22px;
-            width: 260px;
-            height: 520px;
+            margin-left: 55px;
+            width: 285px;
+            height: 65px;
             object-fit: contain;
         }
 
         .imagem_end_3 {
-            position: absolute;
-            top: 473px;
-            left: 22px;
-            width: 260px;
-            height: 520px;
+            margin-left: 55px;
+            width: 285px;
+            height: 65px;
             object-fit: contain;
         }
 
@@ -213,18 +187,9 @@ include "./dbselect.php";
 
 </head>
 
-<body onload="window.print()">
+<!--<body onload="window.print()">-->
+    <body>
     <div class="container">
-        <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
-        <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
-
-        <?php
-        // Verifica se é Book ou Poster para exibir o endereço correto
-        if ($Rdopt == 'BOOK' OR $Rdopt == 'POSTER') {
-            echo '<img src="./images/logo.png" alt="Imagem" class="imagem_via3">';
-        }
-        ?>
-
         <table cellspacing="0" border="0">
             <colgroup width="100"></colgroup>
             <colgroup span="2" width="100"></colgroup>
@@ -303,13 +268,10 @@ include "./dbselect.php";
                 <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle></td>
-                <td style="border-top: 1px solid #000000" align="center" valign=middle></td>
-                <td style="border-top: 1px solid #000000" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1">
-                    </font>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                    colspan=4 rowspan=5 height="60" align="center" valign=middle>
+                    <font size=1><span class="endereco_box"><img src="./images/logo.png" alt="Logo" class="endereco_logo"><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1"></span></font>
                 </td>
-                <td style="border-top: 1px solid #000000;border-right: 1px solid #000000" align="center" valign=middle></td>
                 <td align="left" valign=bottom></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <b>
@@ -330,10 +292,6 @@ include "./dbselect.php";
                 </td>
             </tr>
             <tr>
-                <td style="border-left: 1px solid #000000" align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td style="border-right: 1px solid #000000" align="center" valign=middle></td>
                 <td align="left" valign=bottom></td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <font size=1><?php echo $data; ?></font>
@@ -346,17 +304,11 @@ include "./dbselect.php";
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <font size=1><?php echo "R$ " . $VrPrestF; ?></font>
                 </td>
-            <tr>
-                <td style="border-left: 1px solid #000000" height="4" align="left" valign=bottom></td>
-                <td align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td style="border-right: 1px solid #000000" height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td style="border-left: 1px solid #000000" align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td style="border-right: 1px solid #000000" align="center" valign=middle></td>
+                <td colspan=10 height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
                 <td align="left" valign=bottom></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <b>
@@ -392,10 +344,6 @@ include "./dbselect.php";
                 <?php
                 if ($QtdeParc > 0) {
                 ?>
-                    <td style="border-left: 1px solid #000000" align="center" valign=middle></td>
-                    <td align="center" valign=middle></td>
-                    <td align="center" valign=middle></td>
-                    <td style="border-right: 1px solid #000000" align="center" valign=middle></td>
                     <td align="left" valign=bottom></td>
                     <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                         <font size=1>
@@ -435,16 +383,10 @@ include "./dbselect.php";
                 <td align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td style="border-left: 1px solid #000000" height="4" align="left" valign=bottom></td>
-                <td align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td style="border-right: 1px solid #000000" height="4" align="left" valign=bottom></td>
+                <td style="border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td style="border-left: 1px solid #000000" align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td style="border-right: 1px solid #000000" align="center" valign=middle></td>
+                <td style="border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 align="center" valign=middle></td>
                 <td align="left" valign=bottom></td>
                 <?php
 
@@ -535,10 +477,7 @@ include "./dbselect.php";
                 }
                 ?>
             <tr>
-                <td style="border-left: 1px solid #000000" align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td style="border-right: 1px solid #000000" align="center" valign=middle></td>
+                <td style="border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 align="center" valign=middle></td>
                 <td align="left" valign=bottom></td>
 
                 <?php
@@ -719,13 +658,10 @@ include "./dbselect.php";
                 <td height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000" align="center" valign=middle></td>
-                <td style="border-top: 1px solid #000000" align="center" valign=middle></td>
-                <td style="border-top: 1px solid #000000" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_2">
-                    </font>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                    colspan=4 rowspan=5 height="60" align="center" valign=middle>
+                    <font size=1><span class="endereco_box"><img src="./images/logo.png" alt="Logo" class="endereco_logo"><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_2"></span></font>
                 </td>
-                <td style="border-top: 1px solid #000000;border-right: 1px solid #000000" align="center" valign=middle></td>
                 <td align="left" valign=bottom></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <b>
@@ -746,10 +682,6 @@ include "./dbselect.php";
                 </td>
             </tr>
             <tr>
-                <td style="border-left: 1px solid #000000" align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td style="border-right: 1px solid #000000" align="center" valign=middle></td>
                 <td align="left" valign=bottom></td>
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <font size=1><?php echo $data; ?></font>
@@ -762,17 +694,11 @@ include "./dbselect.php";
                 <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <font size=1><?php echo "R$ " . $VrPrestF; ?></font>
                 </td>
-            <tr>
-                <td style="border-left: 1px solid #000000" height="4" align="left" valign=bottom></td>
-                <td align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td style="border-right: 1px solid #000000" height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td style="border-left: 1px solid #000000" align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td style="border-right: 1px solid #000000" align="center" valign=middle></td>
+                <td colspan=10 height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
                 <td align="left" valign=bottom></td>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                     <b>
@@ -808,10 +734,6 @@ include "./dbselect.php";
                 <?php
                 if ($QtdeParc > 0) {
                 ?>
-                    <td style="border-left: 1px solid #000000" align="center" valign=middle></td>
-                    <td align="center" valign=middle></td>
-                    <td align="center" valign=middle></td>
-                    <td style="border-right: 1px solid #000000" align="center" valign=middle></td>
                     <td align="left" valign=bottom></td>
                     <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                         <font size=1>
@@ -851,16 +773,10 @@ include "./dbselect.php";
                 <td align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td style="border-left: 1px solid #000000" height="4" align="left" valign=bottom></td>
-                <td align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td style="border-right: 1px solid #000000" height="4" align="left" valign=bottom></td>
+                <td style="border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 height="4" align="left" valign=bottom></td>
             </tr>
             <tr>
-                <td style="border-left: 1px solid #000000" align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td style="border-right: 1px solid #000000" align="center" valign=middle></td>
+                <td style="border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 align="center" valign=middle></td>
                 <td align="left" valign=bottom></td>
                 <?php
 
@@ -951,10 +867,7 @@ include "./dbselect.php";
                 }
                 ?>
             <tr>
-                <td style="border-left: 1px solid #000000" align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td align="center" valign=middle></td>
-                <td style="border-right: 1px solid #000000" align="center" valign=middle></td>
+                <td style="border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 align="center" valign=middle></td>
                 <td align="left" valign=bottom></td>
 
                 <?php
@@ -1139,8 +1052,7 @@ include "./dbselect.php";
                 <tr>
                     <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                         colspan=4 rowspan=5 height="60" align="center" valign=middle>
-                        <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_3">
-                        </font>
+                        <font size=1><span class="endereco_box"><img src="./images/logo.png" alt="Logo" class="endereco_logo"><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_3"></span></font>
                     </td>
                     <td align="left" valign=bottom></td>
                     <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
