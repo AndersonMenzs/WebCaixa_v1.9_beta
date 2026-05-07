@@ -187,8 +187,7 @@ include "./dbselect.php";
 
 </head>
 
-<!--<body onload="window.print()">-->
-    <body>
+<body onload="window.print()">
     <div class="container">
         <table cellspacing="0" border="0">
             <colgroup width="100"></colgroup>
