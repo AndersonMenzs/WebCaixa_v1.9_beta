@@ -101,6 +101,7 @@
 
 							// Obtendo a Relação
 							// Conectando ao Banco de Dados
+							include "conexao.php";
 							include "dblog.php";
 
 							// Criando a Instrução SQL de Consulta
@@ -151,10 +152,11 @@
 							<?php
 
 							// Conectando ao Banco de Dados
+							include "conexao.php";
 							include "dblog.php";
 
 							// Criando a Instrução SQL de Consulta
-							$sqlC = "SELECT * FROM cargos WHERE ccargo IN (03, 04, 05, 15, 18, 19) ORDER BY ncargo";
+							$sqlC = "SELECT * FROM cargos WHERE ccargo IN (03, 04, 05, 15, 18, 19, 32) ORDER BY ncargo";
 
 							// Consultando os Registros
 							$rsC = mysqli_query($conec, $sqlC) or die("Não foi possível acessar os Dados");
