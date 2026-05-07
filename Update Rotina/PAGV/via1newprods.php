@@ -35,6 +35,9 @@ include "./valor_ext.php";
 	$Produto   = trim($_POST['prod']) ?? '';
 	$ProdutoK   = trim($_POST['ped_prod']) ?? '';
 	$RdBook  = trim($_POST['rdbook']);
+	$Qtde_Book = isset($_POST['qtde_book']) ? trim($_POST['qtde_book']) : '';
+	$Qtde_Poster = isset($_POST['qtde_poster']) ? trim($_POST['qtde_poster']) : '';
+	$Qtde_Produto = isset($_POST['qtde_prod']) ? trim($_POST['qtde_prod']) : '';
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
 	$mRec    = substr($dtRec, 5, 2);
@@ -59,33 +62,55 @@ include "./valor_ext.php";
 	$VrPag     = $txt1 + $txt2 + $txt3;
 	$VrPagF    = number_format($VrPag, 2, ',', '.');
 	$vlr_ext   = valorPorExtenso($VrPagF);
+	$Pct_Prod_1 = '';
+	$Pct_Prod_2 = '';
+	$Pct_Prod_3 = '';
+	$ProdutosTop = array();
+	$ProdutosKit = array();
 
 	// Verificando se os campos de pct_prod estão vazios ou não
 	if (isset($_POST['ped_prod_1']) && !empty(trim($_POST['ped_prod_1']))) {
+		$Qtde_Prod_1 = isset($_POST['qtde_kit_1']) ? trim($_POST['qtde_kit_1']) : '';
 		$Pct_Prod_1 = trim($_POST['ped_prod_1']);
+		$ProdutosKit[] = ($Qtde_Prod_1 <> '' ? $Qtde_Prod_1 . " x " : "") . $Pct_Prod_1;
 	}
-	if (isset($_POST['ped_prod_1']) && !empty(trim($_POST['ped_prod_1']))) {
+	if (isset($_POST['ped_prod_2']) && !empty(trim($_POST['ped_prod_2']))) {
+		$Qtde_Prod_2 = isset($_POST['qtde_kit_2']) ? trim($_POST['qtde_kit_2']) : '';
 		$Pct_Prod_2 = trim($_POST['ped_prod_2']);
+		$ProdutosKit[] = ($Qtde_Prod_2 <> '' ? $Qtde_Prod_2 . " x " : "") . $Pct_Prod_2;
 	}
 	if (isset($_POST['ped_prod_3']) && !empty(trim($_POST['ped_prod_3']))) {
+		$Qtde_Prod_3 = isset($_POST['qtde_kit_3']) ? trim($_POST['qtde_kit_3']) : '';
 		$Pct_Prod_3 = trim($_POST['ped_prod_3']);
+		$ProdutosKit[] = ($Qtde_Prod_3 <> '' ? $Qtde_Prod_3 . " x " : "") . $Pct_Prod_3;
+	}
+
+	$TipoTop = isset($_POST['tipo_top']) ? (int) trim($_POST['tipo_top']) : 0;
+	if ($TipoTop > 10) {
+		$TipoTop = 10;
+	}
+
+	for ($i = 1; $i <= $TipoTop; $i++) {
+		if (isset($_POST['ped_top_book' . $i]) && trim($_POST['ped_top_book' . $i]) <> '') {
+			$qtdeTop = isset($_POST['qtde_top' . $i]) ? trim($_POST['qtde_top' . $i]) : '';
+			$produtoTop = trim($_POST['ped_top_book' . $i]);
+			$ProdutosTop[] = ($qtdeTop <> '' ? $qtdeTop . " x " : "") . $produtoTop;
+		}
 	}
 
 	//Condição para definir o tipo de pedido
-	if (!empty($Poster)) {
-		$Tipo_ped = $Poster;
+	if (!empty($Book) && !empty($Poster)) {
+		$Tipo_ped = ($Qtde_Book <> '' ? $Qtde_Book . " x " : "") . $Book . ", " . ($Qtde_Poster <> '' ? $Qtde_Poster . " x " : "") . $Poster;
+	} elseif (!empty($Poster)) {
+		$Tipo_ped = ($Qtde_Poster <> '' ? $Qtde_Poster . " x " : "") . $Poster;
 	} elseif (!empty($Book)) {
-		$Tipo_ped = $Book;
-	} elseif (!empty($Pct_Prod_1) || !empty($Pct_Prod_2) || !empty($Pct_Prod_3)) {
-		$Tipo_ped = [
-			$Pct_Prod_1,
-			$Pct_Prod_2,
-			$Pct_Prod_3
-		];
-
-		$Tipo_ped = implode(", ", $Tipo_ped);
+		$Tipo_ped = ($Qtde_Book <> '' ? $Qtde_Book . " x " : "") . $Book;
+	} elseif (count($ProdutosTop) > 0) {
+		$Tipo_ped = implode(", ", $ProdutosTop);
+	} elseif (count($ProdutosKit) > 0) {
+		$Tipo_ped = implode(", ", $ProdutosKit);
 	} else {
-		$Tipo_ped = $Produto;
+		$Tipo_ped = ($Qtde_Produto <> '' ? $Qtde_Produto . " x " : "") . $Produto;
 	}
 
 	// Obtendo o código do PC
@@ -101,7 +126,10 @@ include "./valor_ext.php";
 	$SgRec  = $lnRec['siglarec'] ?? '';
 
 	// Definindo o Tipo de Autenticação
-	if ($TipoRec === '6' && $RdBook == 'n') {
+	if (!empty($Book) && !empty($Poster)) {
+		$tipo = "BOOK/POSTER";
+		$Opt = "BOOK/POSTER";
+	} elseif ($TipoRec === '6' && $RdBook == 'n') {
 		$tipo = "POSTER";
 		$Opt = "POSTER";
 	} elseif ($TipoRec === '7') {
@@ -109,7 +137,11 @@ include "./valor_ext.php";
 		$Opt = "BOOK";
 	} elseif ($TipoRec === '6' && $RdBook == 'pk') {
 		$tipo = "PRODUTOS KIT";
-		$Opt = "PRODUTOS KIT";
+		$Opt = "PRODUTOSKIT";
+	} elseif ($TipoTop > 0) {
+		$tipo = "TOP's";
+		$Opt = "TOPs";
+		$SgRec = "TOP";
 	} else {
 		$tipo = "PRODUTO";
 		$Opt = "PRODUTO";
@@ -165,11 +197,11 @@ include "./valor_ext.php";
 
 	// Gravando a Spool
 	$sql = "insert into spool values ('$Aut1', '$Aut2')";
-	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool #1");
 
 	// Gravando a Spool
 	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
-	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool2");
+	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool2 #1");
 
 	// Verifica se é um book ou poster para a solicitação do pedido
 	if (($TipoRec === '6' && $RdBook == 'n') || ($TipoRec === '7') || ($TipoRec === '6' && $RdBook == 'pk' || $TipoRec === '6' && $RdBook == 'p')) {
@@ -187,11 +219,11 @@ include "./valor_ext.php";
 
 		// Gravando a Spool
 		$sql = "insert into spool values ('$Aut1', '$Aut2')";
-		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool #2");
 
 		// Gravando a Spool
 		$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
-		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool2");
+		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool2 #2");
 	}
 
 	// Encerrando a Conexão

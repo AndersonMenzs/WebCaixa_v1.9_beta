@@ -81,21 +81,119 @@
 	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
 	$Valor     = $txt1 + $txt2 + $txt3;
 	$ValorF    = number_format($Valor, 2, ",", ".");
-	$Book      = trim($_POST['pct_book']) ?? '';
-	$Poster   = trim($_POST['ped_poster']) ?? '';
-	$Produto   = trim($_POST['prod']) ?? '';
+	$Book = '';
+	$Poster = '';
+	$Produto = '';
+	$ProdutoK = '';
+	$Pct_Prod = '';
+	$RdBook = '';
+	$RdPoster = '';
+	$RdTops = '';
+	$RdKit = '';
+	$RdProduto = '';
+	$TipoTop = isset($_POST['tipo_top']) ? (int) trim($_POST['tipo_top']) : 0;
+	$TotalKit = isset($_POST['qtde_tkit_1']) ? (int) trim($_POST['qtde_tkit_1']) : 0;
+	$ItensProdutos = array();
+	$TopsItens = array();
+	$KitItens = array();
+	$RadioSelecionado = isset($_POST['rdopt_radio']) ? trim($_POST['rdopt_radio']) : '';
 
-	// Verificando se os campos de pct_prod estão vazios ou não
-
-	if (isset($_POST['ped_prod_1']) && !empty(trim($_POST['ped_prod_1']))) {
-		$Pct_Prod = trim($_POST['ped_prod_1']);
-	} elseif (isset($_POST['ped_prod_2']) && !empty(trim($_POST['ped_prod_2']))) {
-		$Pct_Prod = trim($_POST['ped_prod_2']);
-	} elseif (isset($_POST['ped_prod_3']) && !empty(trim($_POST['ped_prod_3']))) {
-		$Pct_Prod = trim($_POST['ped_prod_3']);
+	if ($RadioSelecionado == '' && isset($_POST['rdopt_tops']) && trim($_POST['rdopt_tops']) <> '') {
+		$RadioSelecionado = trim($_POST['rdopt_tops']);
 	}
 
-	$ProdutoK   = trim($_POST['ped_prod']) ?? '';
+	if ($RadioSelecionado == '' && isset($_POST['rdopt_kit']) && trim($_POST['rdopt_kit']) <> '') {
+		$RadioSelecionado = trim($_POST['rdopt_kit']);
+	}
+
+	if ($RadioSelecionado == '' && isset($_POST['rdopt_produto']) && trim($_POST['rdopt_produto']) <> '') {
+		$RadioSelecionado = trim($_POST['rdopt_produto']);
+	}
+
+	if (isset($_POST['rdopt_book']) && trim($_POST['rdopt_book']) <> '') {
+		$Qtde_Book = isset($_POST['qtde_book']) ? trim($_POST['qtde_book']) : '';
+		$Book = isset($_POST['ped_book']) ? trim($_POST['ped_book']) : '';
+		$RdBook = 's';
+		$ItensProdutos[] = $Qtde_Book . " x " . $Book;
+	}
+
+	if (isset($_POST['rdopt_poster']) && trim($_POST['rdopt_poster']) <> '') {
+		$Qtde_Poster = isset($_POST['qtde_poster']) ? trim($_POST['qtde_poster']) : '';
+		$Poster = isset($_POST['ped_poster']) ? trim($_POST['ped_poster']) : '';
+		$RdPoster = 'n';
+		$ItensProdutos[] = $Qtde_Poster . " x " . $Poster;
+	}
+
+	if ($RadioSelecionado == 'TOPS') {
+		$RdTops = 't';
+		if ($TipoTop < 1) {
+			$TipoTop = 1;
+		} elseif ($TipoTop > 10) {
+			$TipoTop = 10;
+		}
+
+		for ($i = 1; $i <= $TipoTop; $i++) {
+			$qtde = isset($_POST['qtde_top' . $i]) ? trim($_POST['qtde_top' . $i]) : '';
+			$produtoTop = isset($_POST['ped_top_book' . $i]) ? trim($_POST['ped_top_book' . $i]) : '';
+
+			if ($qtde <> '' && $produtoTop <> '') {
+				$TopsItens[$i] = array('qtde' => $qtde, 'produto' => $produtoTop);
+				$ItensProdutos[] = $qtde . " x " . $produtoTop;
+			}
+		}
+
+		if (count($TopsItens) > 0) {
+			$ProdutosTop = array();
+			foreach ($TopsItens as $itemTop) {
+				$ProdutosTop[] = $itemTop['produto'];
+			}
+			$Produto = implode(", ", $ProdutosTop);
+		}
+	}
+
+	if ($RadioSelecionado == 'KIT') {
+		$RdKit = 'pk';
+		if ($TotalKit < 1) {
+			$TotalKit = 1;
+		} elseif ($TotalKit > 3) {
+			$TotalKit = 3;
+		}
+
+		for ($i = 1; $i <= $TotalKit; $i++) {
+			$qtde = isset($_POST['qtde_kit_' . $i]) ? trim($_POST['qtde_kit_' . $i]) : '';
+			$produtoKit = isset($_POST['ped_tkit_' . $i]) ? trim($_POST['ped_tkit_' . $i]) : '';
+
+			if ($qtde <> '' && $produtoKit <> '') {
+				$KitItens[$i] = array('qtde' => $qtde, 'produto' => $produtoKit);
+				if ($Pct_Prod == '') {
+					$Pct_Prod = $produtoKit;
+				}
+				$ItensProdutos[] = $qtde . " x " . $produtoKit;
+			}
+		}
+	}
+
+	if ($RadioSelecionado == 'PRODUTO') {
+		$Qtde_Produto = isset($_POST['qtde_prod']) ? trim($_POST['qtde_prod']) : '';
+		$Produto = isset($_POST['ped_prod']) ? trim($_POST['ped_prod']) : '';
+		$RdProduto = 'p';
+		$ItensProdutos[] = $Qtde_Produto . " x " . $Produto;
+	}
+
+	if ($RdKit <> '') {
+		$ProdutoK = $Pct_Prod;
+	}
+
+	if ($RdBook <> '') {
+		$RdTipoProduto = 's';
+	} elseif ($RdPoster <> '') {
+		$RdTipoProduto = 'n';
+	} elseif ($RdKit <> '') {
+		$RdTipoProduto = 'pk';
+	} else {
+		$RdTipoProduto = 'p';
+	}
+
 	$Parcelas = trim($_POST['parcelas']);
 
 	include "conexao.php";
@@ -215,13 +313,17 @@
 								<i>
 									<?php
 									// Verifica qual o produto foi escolhido
-									if ($RdBook <> '') {
+									if ($RdBook <> '' && $RdPoster <> '') {
+										echo "Book e Poster:";
+									} elseif ($RdBook <> '') {
 										echo "Book:";
-									} elseif ($Poster <> '') {
+									} elseif ($RdPoster <> '') {
 										echo "Poster:";
-									} elseif ($Pct_Prod <> '') {
+									} elseif ($RdTops <> '') {
+										echo "Top's:";
+									} elseif ($RdKit <> '') {
 										echo "Produtos Kit:";
-									} else {
+									} elseif ($RdProduto <> '') {
 										echo "Produto:";
 									}
 									?>
@@ -233,19 +335,7 @@
 						<font color='#FFFFFF' size='5'><b><i>
 									<blink>
 										<?php
-										if ($Book <> '') {
-											echo $Book;
-											$RdBook = 's';
-										} elseif ($Poster <> '') {
-											echo $Poster;
-											$RdBook = 'n';
-										} elseif ($Pct_Prod <> '') {
-											echo trim($_POST['ped_prod_1']) . "<br>" . trim($_POST['ped_prod_2']) . "<br>" . trim($_POST['ped_prod_3']);
-											$RdBook = 'pk';
-										} else {
-											echo $Produto;
-											$RdBook = 'p';
-										}
+										echo implode("<br>", $ItensProdutos);
 										?></blink>
 								</i>
 							</b>
@@ -279,14 +369,25 @@
 		<input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
 		<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 		<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
+		<input type="hidden" name="qtde_book" value="<?php echo isset($Qtde_Book) ? $Qtde_Book : ''; ?>">
 		<input type="hidden" name="pct_book" value="<?php echo $Book; ?>">
-		<input type="hidden" name="rdbook" value="<?php echo $RdBook; ?>">
+		<input type="hidden" name="rdbook" value="<?php echo $RdTipoProduto; ?>">
+		<input type="hidden" name="qtde_poster" value="<?php echo isset($Qtde_Poster) ? $Qtde_Poster : ''; ?>">
 		<input type="hidden" name="ped_poster" value="<?php echo $Poster; ?>">
 		<input type="hidden" name="ped_prod" value="<?php echo $ProdutoK; ?>">
+		<input type="hidden" name="qtde_prod" value="<?php echo isset($Qtde_Produto) ? $Qtde_Produto : ''; ?>">
 		<input type="hidden" name="prod" value="<?php echo $Produto; ?>">
-		<input type="hidden" name="ped_prod_1" value="<?php echo trim($_POST['ped_prod_1']); ?>">
-		<input type="hidden" name="ped_prod_2" value="<?php echo trim($_POST['ped_prod_2']); ?>">
-		<input type="hidden" name="ped_prod_3" value="<?php echo trim($_POST['ped_prod_3']); ?>">
+		<input type="hidden" name="tipo_top" value="<?php echo $TipoTop; ?>">
+		<input type="hidden" name="qtde_tkit_1" value="<?php echo $TotalKit; ?>">
+		<?php for ($i = 1; $i <= 10; $i++) { ?>
+			<input type="hidden" name="qtde_top<?php echo $i; ?>" value="<?php echo isset($TopsItens[$i]) ? $TopsItens[$i]['qtde'] : ''; ?>">
+			<input type="hidden" name="ped_top_book<?php echo $i; ?>" value="<?php echo isset($TopsItens[$i]) ? $TopsItens[$i]['produto'] : ''; ?>">
+		<?php } ?>
+		<?php for ($i = 1; $i <= 3; $i++) { ?>
+			<input type="hidden" name="qtde_kit_<?php echo $i; ?>" value="<?php echo isset($KitItens[$i]) ? $KitItens[$i]['qtde'] : ''; ?>">
+			<input type="hidden" name="ped_tkit_<?php echo $i; ?>" value="<?php echo isset($KitItens[$i]) ? $KitItens[$i]['produto'] : ''; ?>">
+			<input type="hidden" name="ped_prod_<?php echo $i; ?>" value="<?php echo isset($KitItens[$i]) ? $KitItens[$i]['produto'] : ''; ?>">
+		<?php } ?>
 		<p>
 			<center>
 				<input id="ghost_click" type="submit" name="btenvia" value="Continuar">

@@ -59,79 +59,42 @@ $Opt       = $_GET['Opt'];
             height: fit-content;
         }
 
-        .imagem_via1 {
-            position: absolute;
-            top: -1px;
-            /* Ajuste a posição vertical */
-            left: 5px;
-            /* Ajuste a posição horizontal */
-            width: 50px;
-            /* Tamanho pequeno */
-            height: auto;
-            z-index: 2;
-            /* Opcional: transparência */
-            pointer-events: none;
-            /* Para não bloquear clique na tabela */
+        .endereco_box {
+            display: inline-block;
+            height: 65px;
+            position: relative;
+            width: 350px;
         }
 
-        .imagem_via2 {
-            position: absolute;
-            top: 310px;
-            /* ajuste para a posição desejada */
-            left: 5px;
-            /* ajuste para a posição desejada */
-            width: 50px;
+        .endereco_logo {
             height: auto;
-            z-index: 2;
+            left: 0;
             pointer-events: none;
-        }
-
-        .imagem_via3 {
             position: absolute;
-            top: 575px;
-            /* ajuste para a posição desejada */
-            left: 5px;
-            /* ajuste para a posição desejada */
+            top: 7px;
             width: 50px;
-            height: auto;
             z-index: 2;
-            pointer-events: none;
         }
 
         .imagem_end_1 {
-            position: absolute;
-            top: 38px;
-            left: 10px;
+            margin-left: 55px;
             width: 285px;
-            /* Largura original */
             height: 65px;
-            /* Altura original */
             object-fit: contain;
-            /* Mantém a proporção da imagem */
         }
 
         .imagem_end_2 {
-            position: absolute;
-            top: 125px;
-            left: 10px;
+            margin-left: 55px;
             width: 285px;
-            /* Largura original */
-            height: 520px;
-            /* Altura original */
+            height: 65px;
             object-fit: contain;
-            /* Mantém a proporção da imagem */
         }
 
         .imagem_end_3 {
-            position: absolute;
-            top: 165px;
-            left: 10px;
+            margin-left: 55px;
             width: 285px;
-            /* Largura original */
-            height: 972px;
-            /* Altura original */
+            height: 65px;
             object-fit: contain;
-            /* Mantém a proporção da imagem */
         }
 
         .texto {
@@ -178,6 +141,14 @@ $Opt       = $_GET['Opt'];
             display: none;
         }
 
+        .descricao-pedido {
+            display: inline-block;
+            line-height: 1.35;
+            padding: 2px 0;
+            white-space: normal;
+            word-break: normal;
+        }
+
         @media print {
 
             html,
@@ -213,10 +184,6 @@ $Opt       = $_GET['Opt'];
 
 <body onload="window.print()">
     <div class="container">
-        <img src="./images/logo.png" alt="Imagem" class="imagem_via1">
-        <img src="./images/logo.png" alt="Imagem" class="imagem_via2">
-        <img src="./images/logo.png" alt="Imagem" class="imagem_via3">
-
         <table align="left" cellspacing="0" border="0">
             <colgroup width="100"></colgroup>
             <colgroup span="2" width="100"></colgroup>
@@ -301,7 +268,7 @@ $Opt       = $_GET['Opt'];
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=4 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1">
+                    <font size=1><span class="endereco_box"><img src="./images/logo.png" alt="Logo" class="endereco_logo"><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_1"></span>
                     </font>
                 </td>
                 <td align="left" valign=bottom>
@@ -488,6 +455,21 @@ $Opt       = $_GET['Opt'];
             <tr>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=14 height="15" align="left" valign=middle><b>
+                        <font size=1>DESCRIÇÃO</font>
+                    </b></td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                    colspan=14 height="28" align="center" valign=middle>
+                    <font size=1><span class="descricao-pedido"><?php echo $Tipo_ped; ?></span></font>
+                </td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                    colspan=14 height="15" align="left" valign=middle><b>
                         <font size=1>RECEBEMOS</font>
                     </b></td>
             </tr>
@@ -618,10 +600,11 @@ $Opt       = $_GET['Opt'];
             </tr>
             <tr>
                 <td height="4" align="left" valign=bottom></td>
+            </tr>
             <tr>
                 <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=4 rowspan=5 height="60" align="center" valign=middle>
-                    <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_2">
+                    <font size=1><span class="endereco_box"><img src="./images/logo.png" alt="Logo" class="endereco_logo"><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_2"></span>
                     </font>
                 </td>
                 <td align="left" valign=bottom>
@@ -806,6 +789,21 @@ $Opt       = $_GET['Opt'];
             <tr>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                     colspan=14 height="15" align="left" valign=middle><b>
+                        <font size=1>DESCRIÇÃO</font>
+                    </b></td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                    colspan=14 height="28" align="center" valign=middle>
+                    <font size=1><span class="descricao-pedido"><?php echo $Tipo_ped; ?></span></font>
+                </td>
+            </tr>
+            <tr>
+                <td height="4" align="left" valign=bottom></td>
+            </tr>
+            <tr>
+                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+                    colspan=14 height="15" align="left" valign=middle><b>
                         <font size=1>RECEBEMOS</font>
                     </b></td>
             </tr>
@@ -929,7 +927,7 @@ $Opt       = $_GET['Opt'];
                 <tr>
                     <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
                         colspan=4 rowspan=5 height="60" align="center" valign=middle>
-                        <font size=1><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_3">
+                        <font size=1><span class="endereco_box"><img src="./images/logo.png" alt="Logo" class="endereco_logo"><img src="./images/endereco_pc<?php echo $PC; ?>.png" class="imagem_end_3"></span>
                         </font>
                     </td>
                     <td align="left" valign=bottom>
@@ -985,8 +983,8 @@ $Opt       = $_GET['Opt'];
                         <font size=1><br></font>
                     </td>
                     <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-                        colspan=9 height="17" align="center" valign=middle>
-                        <font size=1><?php echo $Tipo_ped; ?></font>
+                        colspan=9 height="28" align="center" valign=middle>
+                        <font size=1><span class="descricao-pedido"><?php echo $Tipo_ped; ?></span></font>
                     </td>
                 </tr>
                 <tr>
