@@ -34,6 +34,11 @@ ini_set('display_startup_errors', 1);
 
 <body background="../images/bg1.jpg" text="#FFFFFF">
 	<?php
+	$dados = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
+	//exit;
 	
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -173,13 +178,24 @@ ini_set('display_startup_errors', 1);
 				<input type="hidden" name="dtrec" value="<?php echo $dtRec; ?>">
 				<input type="hidden" name="txthora" value="<?php echo $hora; ?>">
 				<input type="hidden" name="rdbook" value="<?php echo $RdBook; ?>">
+				<input type="hidden" name="qtde_book" value="<?php echo isset($_POST['qtde_book']) ? trim($_POST['qtde_book']) : ''; ?>">
 				<input type="hidden" name="pct_book" value="<?php echo $Book; ?>">
+				<input type="hidden" name="qtde_poster" value="<?php echo isset($_POST['qtde_poster']) ? trim($_POST['qtde_poster']) : ''; ?>">
 				<input type="hidden" name="ped_poster" value="<?php echo $Poster; ?>">
+				<input type="hidden" name="qtde_prod" value="<?php echo isset($_POST['qtde_prod']) ? trim($_POST['qtde_prod']) : ''; ?>">
 				<input type="hidden" name="prod" value="<?php echo $Produto; ?>">
 				<input type="hidden" name="ped_prod" value="<?php echo $ProdutoK; ?>">
-				<input type="hidden" name="ped_prod_1" value="<?php echo trim($_POST['ped_prod_1']); ?>">
-				<input type="hidden" name="ped_prod_2" value="<?php echo trim($_POST['ped_prod_2']); ?>">
-				<input type="hidden" name="ped_prod_3" value="<?php echo trim($_POST['ped_prod_3']); ?>">
+				<input type="hidden" name="tipo_top" value="<?php echo isset($_POST['tipo_top']) ? trim($_POST['tipo_top']) : ''; ?>">
+				<input type="hidden" name="qtde_tkit_1" value="<?php echo isset($_POST['qtde_tkit_1']) ? trim($_POST['qtde_tkit_1']) : ''; ?>">
+				<?php for ($i = 1; $i <= 10; $i++) { ?>
+					<input type="hidden" name="qtde_top<?php echo $i; ?>" value="<?php echo isset($_POST['qtde_top' . $i]) ? trim($_POST['qtde_top' . $i]) : ''; ?>">
+					<input type="hidden" name="ped_top_book<?php echo $i; ?>" value="<?php echo isset($_POST['ped_top_book' . $i]) ? trim($_POST['ped_top_book' . $i]) : ''; ?>">
+				<?php } ?>
+				<?php for ($i = 1; $i <= 3; $i++) { ?>
+					<input type="hidden" name="qtde_kit_<?php echo $i; ?>" value="<?php echo isset($_POST['qtde_kit_' . $i]) ? trim($_POST['qtde_kit_' . $i]) : ''; ?>">
+					<input type="hidden" name="ped_tkit_<?php echo $i; ?>" value="<?php echo isset($_POST['ped_tkit_' . $i]) ? trim($_POST['ped_tkit_' . $i]) : ''; ?>">
+					<input type="hidden" name="ped_prod_<?php echo $i; ?>" value="<?php echo isset($_POST['ped_prod_' . $i]) ? trim($_POST['ped_prod_' . $i]) : ''; ?>">
+				<?php } ?>
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
 				<p>
 					<font size='6'><b>
