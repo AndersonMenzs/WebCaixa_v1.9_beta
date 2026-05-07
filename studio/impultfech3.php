@@ -34,26 +34,37 @@ function moeda($valor)
 // Verificando se os dados do formulário foram enviados
 $Sis     = "S7";
 $Rot       = "S7R5.3";
-$lg_user   = trim($_POST['user_pss']);
+$lg_user   = trim($_POST['user_pss'] ?? $_POST['txtuser'] ?? $_REQUEST['c_s'] ?? '');
 $user    = substr($lg_user, 0, 8);
 $userF = substr($user, 0, 1) . "." . substr($user, 1, 3) . "." . substr($user, 4, 3) . "-" . substr($user, 7, 1);
 $pss     = substr($lg_user, 8, 40);
 $horaNorm  = date("Hi");
 $horaInv   = date("iH");
-$fech_data = trim($_POST['datafech']);
-$fech_data_registro = date_format(date_create_from_format('d/m/Y', $fech_data), 'Y-m-d');
-$fech_data_oper = date_format(date_create_from_format('d/m/Y', $fech_data), 'Y-m-d');
-$fech_data_safe = date_format(date_create_from_format('d/m/Y', $fech_data), 'Y-m-d');
-$fech_data_recolh = date_format(date_create_from_format('d/m/Y', $fech_data), 'Y-m-d');
-$fech_data_spo = date_format(date_create_from_format('d/m/Y', $fech_data), 'dmy');
+$fech_data = trim($_POST['datafech'] ?? $_GET['datafech'] ?? '');
+$fech_data_obj = date_create_from_format('d/m/Y', $fech_data);
+
+if (!$fech_data_obj) {
+	die("Data de fechamento inválida para reimpressão.");
+}
+
+$fech_data_registro = date_format($fech_data_obj, 'Y-m-d');
+$fech_data_oper = date_format($fech_data_obj, 'Y-m-d');
+$fech_data_safe = date_format($fech_data_obj, 'Y-m-d');
+$fech_data_recolh = date_format($fech_data_obj, 'Y-m-d');
+$fech_data_spo = date_format($fech_data_obj, 'dmy');
 
 // Obtendo os Dados da Spool de Fechamento
 include "conexao.php";
 include "dbselect.php";
 
-$sql = "select * from antfech where datafecha = '$fech_data'";
+$fech_data_sql = mysqli_real_escape_string($conec, $fech_data);
+$sql = "select * from antfech where datafecha = '$fech_data_sql'";
 $rs  = mysqli_query($conec, $sql) or die("Não foi possível Reimprimir o Fechamento do Caixa");
 $ln = mysqli_fetch_array($rs);
+
+if (!$ln) {
+	die("Fechamento não encontrado para a data informada.");
+}
 
 $Fita         = $ln['fita'];
 $ano          = $ln['ano'];
@@ -119,6 +130,8 @@ $CardDeb      = $ln['carddeb'];
 $CardVista    = $ln['cardvista'];
 $CardParcLj   = $ln['cardparclj'];
 $CardParcAdm  = $ln['cardparcadm'];
+$PixQRCode    = '0,00';
+$PixCNPJ      = '0,00';
 $CheqTotal    = $ln['cheqtotal'];
 $CheqPre      = $ln['cheqpre'];
 $DDPtot       = $ln['DDPtot'];
@@ -132,6 +145,10 @@ $OUTtot       = $ln['OUTtot'];
 $Diferenca    = $ln['diferenca'];
 $TipoFech     = "Reimpressão";
 $Reimp = "(R)";
+$PgtoServicos = $PgtoTot;
+$Entradas = 0;
+$Errlanc = [];
+$Recolhimentos = [];
 
 // Obtendo o Total Arrecadado
 $sqlTT = "select vlrec from registro where datarec = '$fech_data_registro' and tiporec <> '8' ";
@@ -174,7 +191,7 @@ while ($lnTT = mysqli_fetch_array($rsTT)) {
 
 		@page {
 			size: A4 portrait;
-			margin: 6mm
+			margin: 12mm;
 		}
 
 		html,
@@ -197,7 +214,7 @@ while ($lnTT = mysqli_fetch_array($rsTT)) {
 			box-sizing: border-box;
 			background: #fff;
 			box-shadow: 0 0 12px rgba(0, 0, 0, .18);
-			overflow: hidden;
+			overflow: visible;
 		}
 
 		table {
@@ -360,7 +377,7 @@ while ($lnTT = mysqli_fetch_array($rsTT)) {
 
 		@media screen {
 			.page {
-				transform: scale(1.4);
+				transform: scale(1.3);
 				transform-origin: top center;
 			}
 		}
@@ -370,19 +387,46 @@ while ($lnTT = mysqli_fetch_array($rsTT)) {
 			html,
 			body {
 				background: #fff;
+				width: auto;
+				height: auto;
+			}
+
+			body {
+				box-sizing: border-box;
+				padding: 10mm;
+			}
+
+			.container {
+				width: 100%;
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
 			}
 
 			.page {
-				width: auto;
-				min-height: auto;
+				width: 100%;
+				min-height: 0;
 				margin: 0;
 				padding: 0;
 				box-shadow: none;
+				overflow: visible;
 			}
 
 			body {
 				-webkit-print-color-adjust: exact;
 				print-color-adjust: exact;
+			}
+
+			table {
+				page-break-inside: auto;
+			}
+
+			tr,
+			td,
+			.bloco-4,
+			.bloco-full {
+				break-inside: avoid;
+				page-break-inside: avoid;
 			}
 		}
 	</style>
@@ -2133,17 +2177,12 @@ while ($lnTT = mysqli_fetch_array($rsTT)) {
 			<p align="center" style="line-height: 100%; margin-bottom: 0in"><br /></p>
 			<p align="center" style="margin-bottom: 0in; line-height: 100%">
 				<font class="fonte-rel">
-					<font size="1" class="fs-6"><?= $Reimp ?><?= $horaNorm ?>-<?= $Dinheiro ?>-<? $horaInv ?> <?= $horaInv ?><?= $horaNorm ?>-<?= $Entradas ?>-<?= $horaInv ?><?= $horaNorm ?></font>
+					<font size="1" class="fs-6"><?= $Reimp ?><?= $horaNorm ?>-<?= $Dinheiro ?>-<?= $horaInv ?> <?= $horaInv ?><?= $horaNorm ?>-<?= $Entradas ?>-<?= $horaInv ?><?= $horaNorm ?></font>
 				</font>
 			</p>
 		</div>
 	</div>
 
-	<script>
-	setTimeout(function() {
-				window.location.href = 'index.php?c_s=<?php echo $lg_user; ?>';
-			}, 1000);
-	</script>
 </body>
 
 </html>

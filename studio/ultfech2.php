@@ -23,16 +23,24 @@
     // Obtendo o Login
     $Sis     = "S7";
     $Rot     = "S7R5.2";
-    $user = substr(100000000 + trim($_POST['txtmat']), 1, 8);
-    $pass = strtolower(trim($_POST['txtsen']));
+    $txtmat = trim($_POST['txtmat'] ?? '');
+    $txtsen = trim($_POST['txtsen'] ?? '');
+    $c_s = trim($_REQUEST['c_s'] ?? '');
+
+    $user = substr(100000000 + $txtmat, 1, 8);
+    $pass = strtolower($txtsen);
     $pss  = sha1($pass);
     $lg_user = $user . $pss;
-    $userpss = substr($_GET['c_s'], 0, 48);
+    $userpss = substr($c_s, 0, 48);
 
     if ($user == '' or $user == 0) {
-        $lg_user = $_REQUEST['c_s'];
+        $lg_user = $c_s;
         $user = substr($lg_user, 0, 8);
         $pss     = substr($lg_user, 8, 40);
+    }
+
+    if ($userpss == '') {
+        $userpss = $lg_user;
     }
 
     include "us_sist.php";
@@ -93,9 +101,9 @@
 
             <?php
 
-            $k = 0;
+            $K = 0;
 
-            while ($lnP  = mysqli_fetch_array($rsP) and $K <= 5) {
+            while ($lnP  = mysqli_fetch_array($rsP) and $K < 5) {
                 $K = $K + 1;
 
                 $Fita = $lnP['fita'];
@@ -157,7 +165,7 @@
                             <font>
                     </td>
 
-                    <form name="datafech" method="post" action="impultfech3.php?c_s=<?php echo $lg_user; ?>">
+                    <form name="datafech" method="post" target="_blank" action="impultfech3.php?c_s=<?php echo $lg_user; ?>" onsubmit="setTimeout(function(){ window.location.href='index.php?c_s=<?php echo $lg_user; ?>'; }, 300);">
                         <td align='center'>
                             <input type="submit" name="datafech" id="datafech" value="<?php echo $datafech; ?>">
                             <input type="hidden" name='user_pss' id='user_pss' value="<?php echo $userpss; ?>">
