@@ -17,11 +17,6 @@ include "./valor_ext.php";
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 
 	<?php
-	$dados = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-	echo "<pre>";
-	print_r($dados);
-	echo "</pre>";
-	//exit;
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -132,8 +127,8 @@ include "./valor_ext.php";
 
 	// Definindo o Tipo de Autenticação
 	if (!empty($Book) && !empty($Poster)) {
-		$tipo = "BOOK / POSTER";
-		$Opt = "BOOK / POSTER";
+		$tipo = "BOOK/POSTER";
+		$Opt = "BOOK/POSTER";
 	} elseif ($TipoRec === '6' && $RdBook == 'n') {
 		$tipo = "POSTER";
 		$Opt = "POSTER";
@@ -142,7 +137,11 @@ include "./valor_ext.php";
 		$Opt = "BOOK";
 	} elseif ($TipoRec === '6' && $RdBook == 'pk') {
 		$tipo = "PRODUTOS KIT";
-		$Opt = "PRODUTOS KIT";
+		$Opt = "PRODUTOSKIT";
+	} elseif ($TipoTop > 0) {
+		$tipo = "TOP's";
+		$Opt = "TOPs";
+		$SgRec = "TOP";
 	} else {
 		$tipo = "PRODUTO";
 		$Opt = "PRODUTO";
@@ -198,11 +197,11 @@ include "./valor_ext.php";
 
 	// Gravando a Spool
 	$sql = "insert into spool values ('$Aut1', '$Aut2')";
-	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool #1");
 
 	// Gravando a Spool
 	$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
-	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool2");
+	$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool2 #1");
 
 	// Verifica se é um book ou poster para a solicitação do pedido
 	if (($TipoRec === '6' && $RdBook == 'n') || ($TipoRec === '7') || ($TipoRec === '6' && $RdBook == 'pk' || $TipoRec === '6' && $RdBook == 'p')) {
@@ -220,11 +219,11 @@ include "./valor_ext.php";
 
 		// Gravando a Spool
 		$sql = "insert into spool values ('$Aut1', '$Aut2')";
-		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
+		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool #2");
 
 		// Gravando a Spool
 		$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
-		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool2");
+		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool2 #2");
 	}
 
 	// Encerrando a Conexão
