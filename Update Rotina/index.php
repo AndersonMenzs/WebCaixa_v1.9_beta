@@ -1,13 +1,19 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+?>
+
 <html>
 
 <head>
-	<title>WebCaixa v1.20.0_beta</title>
+	<title>WebCaixa v1.20.3_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
-			margin-top: 2%;
-			margin-left: 2%;
-			margin-right: 2%;
+			margin-left: 1%;
+			margin-right: 1%;
 			border: 3px solid gray;
 			padding: 10px 10px 10px 10px;
 			font-family: sans-serif;
@@ -18,42 +24,18 @@
 			font: 12px sans-serif;
 			color: #000000;
 		}
-
-		center {
-			text-align: center;
-		}
-
-		table {
-			width: 100%;
-			border-collapse: collapse;
-		}
-
-		td {
-			padding: 5px;
-		}
-
-		blink {
-			text-decoration: underline;
-		}
-
-		@keyframes blink-slow {
-			0% {
-				opacity: 1;
-			}
-
-			50% {
-				opacity: 0;
-			}
-
-			100% {
-				opacity: 1;
-			}
-		}
-
-		.blink-slow {
-			animation: blink-slow 1.5s linear infinite;
-		}
 	</style>
+
+
+	<script>
+		function click() {
+			if (event.button == 2 || event.button == 3) {
+				oncontextmenu = 'return false';
+			}
+		}
+		document.onmousedown = click
+		document.oncontextmenu = new Function("return false;")
+	</script>
 
 	<script>
 		function F5(event) {
@@ -68,339 +50,199 @@
 		document.onkeydown = F5;
 	</script>
 
+	<SCRIPT LANGUAGE="JavaScript">
+		function putFocus(formInst, elementInst) {
+			if (document.forms.length > 0) {
+				document.forms[formInst].elements[elementInst].focus();
+			}
+		}
+	</script>
+
+	<Script>
+		function validate(field) {
+			var valid = "0123456789"
+			var ok = "yes";
+			var temp;
+			for (var i = 0; i < field.value.length; i++) {
+				temp = "" + field.value.substring(i, i + 1);
+				if (valid.indexOf(temp) == "-1") ok = "no";
+			}
+			if (ok == "no") {
+				alert("Entrada Incorreta! \n  Digite apenas algarismos!");
+				field.focus();
+				field.select();
+			}
+		}
+	</script>
+
 	<script language="JavaScript">
-		<!--
 		javascript: window.history.forward(1);
-		//
-		-->
-	</script><?php
+	</script>
 
-				include "../cabecprs.php";
+	<script type="text/javascript" src="java_log.js" charset="utf-8">
+	</script>
 
-				// Autorizando o Login
-				$Sis         = "S7";
-				$lg_user     = $_REQUEST['c_s'];
-				$user      = substr($lg_user, 0, 8);
-				$pss       = substr($lg_user, 8, 40);
-				$contadig  = substr($lg_user, 48, 1);
-				$compSenha = strlen($contadig);
-				$geracod   = date('smi') + date('ssi');
-				$geracodF  = 1000000 + $geracod;
-				$Codigo    = substr($geracodF, 1, 6);
-
-				if ($compSenha == '0') {
-					$contadig = 1;
-				}
-
-				if ($contadig == '0' or $contadig == '6') {
-					$AtuSen = 'no';
-				} else {
-					$AtuSen = 'ok';
-				}
-
-				$lg_user = $user . $pss;
-				$dataatual = date('Y-m-d');
-				$Mes     = date('m');
-
-				$ch      = '';
-				$chI     = '';
-				$chF     = '';
-				$Versao  = "WebCaixa v1.20.0_beta";
-
-				// Verificando Cadastramentos
-				include "conexao.php";
-				include "dbselect.php";
-
-				$sqlAt  = "update operador set dataop = '$dataatual' where mat = '$user' ";
-				$rsAt   = mysqli_query($conec, $sqlAt) or die("Erro de Acesso #1. Contate seu Administrador.");
-
-				$sqlI = "select mat from inicial";
-				$sqlO = "select mat from operador";
-
-				$rsI  = mysqli_query($conec, $sqlI) or die("Erro de Acesso #2. Contate seu Administrador.");
-				$rsO  = mysqli_query($conec, $sqlO) or die("Erro de Acesso #3. Contate seu Administrador.");
-
-				$regI = mysqli_num_rows($rsI);
-				$regO = mysqli_num_rows($rsO);
-
-				if ($regI == 0 and $regO == 0) {
-					$chI = 'no';
-				} else {
-					$chI = 'ok';
-				}
-
-				if ($regI == 0) {
-					$ini = 'no';
-				} else {
-					$ini = 'ok';
-				}
-
-				// Verificando Fechamento Anterior
-				$sqlF = "select dtopen, dtclose from caixa order by dtopen desc";
-				$rsF  = mysqli_query($conec, $sqlF) or die("Erro de Acesso #4. Contate seu Administrador.");
-				$regF = mysqli_num_rows($rsF);
-				$lnF  = mysqli_fetch_array($rsF);
-				$abre  = $lnF['dtopen'];
-				$fecha = $lnF['dtclose'];
-
-				if ($regF > 0 and  $abre <> $dataatual and $fecha == NULL) {
-					$chF = 'no';
-				} ?>
+	<?php
+	include "cabecprs.php";
+	?>
 </head>
 
-<body background="../images/bg1.jpg" text="#FFFFFF">
+<body background="./images/bg1.jpg" text="#FFFFFF" link='aqua' alink='aqua' vlink='aqua' onLoad="putFocus(0,0);" onselectstart="return false">
 	<?php
-	include "us_sist.php";
+	// Preparando Áreas
+	$dataAtual = date('Y-m-d');
+	$horaAtual = date('H');
+	$minAtual  = date('i');
+	$tmpAtual  = $horaAtual * 60 + $minAtual;
 
-	if ($ch == 'no') {
-		include "us_cad.php";
+	$DataC = date('dmY');
+	$HoraC = date('hiih');
+	$CodeC = $DataC + $HoraC;
+
+	// Acessando o Banco de Dados
+	include "./conexao.php";
+	include "./dbselect.php";
+
+	// Excluindo Usuários Inativos
+	$sqlI = "SELECT mat, dataop FROM operador WHERE cargo <> 'Adm' AND cargo <> 'aud' ";
+	$rsI  = mysqli_query($conec, $sqlI) or die("Erro de Acesso #1. Contate seu Administrador.");
+
+	while ($lnI = mysqli_fetch_array($rsI)) {
+		$MatI  = $lnI['mat'];
+		$dtOpI = $lnI['dataop'];
+
+		include "./inatuser.php";
 	}
-	?>
 
-	<center>
-		<font face="arial" color="gold" size="6"><b><i><u>SISTEMA DO CAIXA</u></i></b></font>
-	</center>
-	<center>
-		<font size="4" color="lime"><b><i>(Versão: <?php echo "$Versao"; ?>)</i></b></font>
-	</center><br>
-	<?php
+	// Consultando o Último Acesso
+	$sql = "select * from datafix";
+	$rs  = mysqli_query($conec, $sql) or die("Erro de Acesso #2. Contate seu Administrador.");
+	$ln  = mysqli_fetch_array($rs);
+	$dataComp = $ln['dataf'];
+	$horaComp = $ln['horaf'];
+	$minComp  = $ln['minf'];
+	$tmpComp = $horaComp * 60 + $minComp;
 
-	include "sitcaixa.php";
-
-	if ($chF == 'no' and $AtuSen == 'ok') {
-		$abY    = substr($abre, 0, 4);
-		$abM    = substr($abre, 5, 2);
-		$abD    = substr($abre, 8, 2);
-		$dtabre = "$abD/$abM/$abY"; ?>
-
+	// Verificando Alteração da Data/Hora
+	if ($dataAtual > $dataComp or $dataAtual == $dataComp and $tmpAtual >= $tmpComp) {
+		// Atualizando a Data de Acesso
+		$sql = "update datafix set dataf = '$dataAtual',
+					horaf = '$horaAtual',
+					minf  = '$minAtual' ";
+		$rs  = mysqli_query($conec, $sql) or die("Não foi Possível Alterar os Dados"); ?>
 		<br>
+		<table width="75%" border="5" cellpadding="6" cellspacing="0" align="center">
+			<tr>
+				<td colspan="2">
+					<font color="#FFFFFF">
+						<center>
+							<h1><i><b>Identificação de Usuário</b></i></h1>
+						</center>
+					</font>
+				</td>
+				<td rowspan="3" colspan="2">
+					<font color="red">
+						<center>
+							<font size='6'><i><b><u>Verifique se Data &amp; Hora estão corretas!</u><br>
+										<font size='7' color="lime"><?php echo "$data<br><font color='yellow'>$hora<br><font color='brown'>$diaSem"; ?>
+									</b></i>
+						</center>
+					</font>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<h2><i><b>
+								<font color="gold">&nbsp;&nbsp;&nbsp;Login:</font>
+							</b></i></h1>
+				</td>
+				<td>
+					<form name="userlog" method="post" action="menu.php" OnSubmit="JavaScript:return checklog()" autocomplete="off">
+						<input type="text" name="idinc" size="8" maxlength="8" class="campos" onKeyUp="validate(this)">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<h2><i><b>
+								<font color="gold">&nbsp;&nbsp;&nbsp;Senha:</font>
+							</b></i></h1>
+				</td>
+				<td>
+					<input type="password" name="idpass" size="6" maxlength="6" class="campos">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<center>
+						<input type="submit" value="Login">
+					</center>
+				</td>
+				<td>
+					<center>
+						<input type="Reset" value="Limpar">
+						</form>
+				</td>
+				<td>
+					<center>
+						<p>
+							<font size='4'><a href="senhaprov.php">Esqueci Minha Senha</a></font>
+						</p>
+				</td>
+				</td>
+				<td>
+					<center>
+						<p>
+							<font size='4'><a href="cadastra.php">Cadastramento Emergencial</a></font>
+						</p>
+				</td>
+			</tr>
+		</table>
+
+		<p>
+			<center>
+				<font size='5' color='#FFFFFF'><b>Caso a data esteja <font color="red"><u>incorreta</u>
+							<font color="#FFFFFF">
+								ou a Hora <font color="orange"><u>muito adiantada</u>
+									<font color="#FFFFFF"> ou <font color="orange"><u>atrasada</u>
+											<font color="#FFFFFF"> Ligue <font color="red"><b>(21) 2121-5278<font color="#FFFFFF"> ou <font color="red">(21) 99212-0108<font color="#FFFFFF">.</b></font>
+			</center>
+		</p><br><br><?php
+				} else { ?>
+		<br><br><br>
 		<font size="6">
 			<b><i>
-					<center>Você <font color="gold">"<blink><u>Não Fechou o Caixa</u></blink>"<font color="#FFFFFF"> do Dia <font color="gold">"<blink><u><?php echo $dtabre; ?></u></blink>"<font color="#FFFFFF">!</center>
-				</i></b>
-		</font><br>
+					<center>
+						<font color="gold">
+							<blink>DATA DO SISTEMA ALTERADA</blink>
+							<font color="#FFFFFF"><br><br>
 
-		<form name="frmfecha" method="post" action="fechacaixa.php">
-			<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-			<input type="hidden" name="dtabre" value="<?php echo $abre; ?>">
-			<input type="hidden" name="txtcod" value="<?php echo $Codigo; ?>">
-			<table width="100%" border="0" cellpadding="10" cellspacing="0">
-				<tr>
-					<td width='20%'>
-						<a href="http://localhost/caixa/"><img src="./images/voltar.gif"></a>
-					</td>
-					<td width='60%' align='center'>
-						<input type="submit" name="btenv" value="Fechar o Caixa">&nbsp;&nbsp;&nbsp;&nbsp;
-					</td>
-					<td width='20%' align='right'>
-						<a href="http://localhost/caixa/"><img src="./images/voltar.gif"></a>
-					</td>
-			</table>
-		</form>
-	<?php
-	} else if ($chI == 'no' and $ch == 'ok' and $AtuSen = 'ok') { ?>
-		<table width='20%' border='0' cellpadding='7' cellspacing='0' align='center'>
-			<tr>
-				<td width="35%"></td>
-				<td width="35%">
-					<a href="acaud.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-					<font size='4'><b><i>- Auditoria </i></b></font>
-				</td>
-				<td width="30%"></td>
-			</tr>
+								<form name="relog" method="post" action="relog.php">
+									<table border="5" cellpadding="10" cellspacing="0" align="center">
+										<tr>
+											<td align="center">
+												<font color='gold' size='5'><b><i>Código Gerado:&nbsp;&nbsp;
+															<font color='gold' size='5'><b><i><?php echo $CodeC; ?></i></b></font>
+															<input type="hidden" name="txtcod" value="<?php echo $CodeC; ?>">
+											</td>
+										</tr>
 
-			<tr>
-				<td width="35%"></td>
-				<td width="35%">
-					<a href="sair.php"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-					<font size='4'><b><i>- Sair do Sistema</i></b></font>
-				</td>
-				<td width="30%"></td>
-			</tr>
-		</table>
-	<?php
-	} else if ($chI == 'ok' and ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok')) { ?>
-		<table width='35%' border='0' cellpadding='5' cellspacing='0' align='center'>
-			<?php
-			if ($ch == 'ok' and $AtuSen == 'ok') { ?>
-				<tr>
-					<td width="35%">
-					<td width="35%">
-						<a href="acaud.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Auditoria </i></b></font>
-					</td>
-					<td width="30%"></td>
-				</tr>
-			<?php
-			}
+										<tr>
+											<td align="center">
+												<font color='gold' size='5'><b><i>Contra-Senha</i></b></font>
+												<input type="text" name="contrasenha" size="6" maxlength="6" class="campos" OnKeyUp="validate(this)">
+											</td>
+										</tr>
 
-			if (($ch == 'ok' or $ch == 'ok-enc') and $AtuSen == 'ok') { ?>
-				<tr>
-					<td width="35%">
-					<td width="35%">
-						<a href="cadop.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Cadastramento </i></b></font>
-					</td>
-					<td width="30%"></td>
-				</tr>
-
-				<tr>
-					<td width="35%">
-					<td width="35%">
-						<a href="opercst.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Pesquisar Matrícula &amp; CPF</i></b></font>
-					</td>
-					<td width="30%"></td>
-				</tr>
-			<?php
-			}
-
-			if ($ini == 'ok' and ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and ($chcx == 'x' or $chcx == 'a') and $AtuSen == 'ok') {
-
-				$sql = "DELETE FROM spool2";
-				$rs = mysqli_query($conec, $sql) or die("Erro ao acessar o banco de dados. Entre em contato com o administrador.");
-				//mysqli_free_result($rs);
-
-			?>
-
-				<tr>
-					<td width="35%">
-					<td width="35%">
-						<a href="abrecaixa.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Abertura do Caixa</i></b></font>
-					</td>
-					<td width="30%"></td>
-				</tr>
-			<?php
-			}
-
-			if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $chcx == 'f' and $AtuSen == 'ok') { ?>
-				<tr>
-					<td width="35%">
-					<td width="35%">
-						<a href="consulta.php?c_s=<?php echo $lg_user ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Consultas</i></b></font>
-					</td>
-					<td width="30%"></td>
-				</tr>
-			<?php
-			}
-
-			if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $chcx == 'f' and $AtuSen == 'ok') { ?>
-				<tr>
-					<td width="35%">
-					<td width="35%">
-						<a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Recebimentos</i></b></font>
-					</td>
-					<td width="30%"></td>
-				</tr>
-			<?php
-			}
-
-			if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $chcx == 'f' and $AtuSen == 'ok') { ?>
-				<tr>
-					<td width="35%"></td>
-					<td width="35%">
-						<a href="pgtos.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Despesas &amp; Recolhimentos</i></b></font>
-					</td>
-
-					
-				</tr>
-			<?php
-			}
-
-			if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $chcx == 'f' and $AtuSen == 'ok') { ?>
-				<tr>
-					<td width="35%">
-					<td width="35%">
-						<a href="estorno.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Estornos</i></b></font>
-					</td>
-					<td width="30%"></td>
-				</tr>
-			<?php
-			}
-
-			if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $chcx == 'f' and $AtuSen == 'ok') { ?>
-				<tr>
-					<td width="35%">
-					<td width="35%">
-						<a href="impressos.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Impressões de Documentos</i></b></font>
-					</td>
-					<td width="30%"></td>
-				</tr>
-			<?php
-			}
-
-			if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $chcx == 'f' and $AtuSen == 'ok') { ?>
-				<tr>
-					<td width="35%">
-					<td width="35%">
-						<a href="fecha.php?c_s=<?php echo $lg_user . $abre; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Fechamento do Caixa</i></b></font>
-					</td>
-					<td width="30%"></td>
-				</tr>
-			<?php
-			}
-			if ($ch == 'ok-enc' and $AtuSen == 'ok') { ?>
-				<tr>
-					<td width="35%">
-					<td width="35%">
-						<a href="acenc.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Encarregadas</i></b></font>
-					</td>
-					<td width="30%"></td>
-				</tr>
-			<?php
-			}
-
-			if ($chI == 'ok' and ($ch == 'ok' or $ch == 'ok-enc' or $ch == 'ok-cai')) { ?>
-				<tr>
-					<td width="35%">
-					<td width="35%">
-						<a href="senha.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-						<font size='4'><b><i>- Alteração de Senha </i></b></font>
-					</td>
-					<td width="30%"></td>
-				</tr>
-			<?php
-			} ?>
-			<tr>
-				<td width="35%">
-				<td width="35%">
-					<a href="sair.php"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-					<font size='4'><b><i>- Sair do Sistema</i></b></font>
-				</td>
-				<td width="30%"></td>
-			</tr>
-		</table>
-	<?php
-	} else { ?><br>
-		<font size="6" color="#FFFFFF"><b><i>
-					<center>Usuário <font color="gold">
-							<blink>Não Autorizado</blink>
-							<font color="#FFFFFF"><br>
-
-								<font color="#FFFFFF">ou<br>Senha <font color="gold">
-										<blink>Incorreta</blink>
-										<font color="#FFFFFF">!!!</center>
-				</i></b></font><br>
-		<center><a href="http://localhost/caixa"><img src="./images/voltar.gif"></a></center><br>
-	<?php
-	}
-
-	// Encerrando
-	mysqli_free_result($rsI);
-	mysqli_free_result($rsO);
-	mysqli_free_result($rsF);
-
-	$SisRot = "S-7";
-	include "../rodapext.php"; ?>
-
+										<tr>
+											<td align="center">
+												<input type="submit" name="btenviar" value="Continuar">&nbsp;&nbsp;
+												<input type="reset" name="btreset" value="Limpar">
+											</td>
+									</table>
+								</form>
+							<?php
+						}
+						include "rod_index.php"; ?>
 </body>
 
 </html>
