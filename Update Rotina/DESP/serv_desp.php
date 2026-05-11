@@ -1,7 +1,7 @@
 <?php
 
-$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
-/*echo "<pre>";
+/*$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
+echo "<pre>";
 print_r($dados);
 echo "</pre>";
 exit();*/

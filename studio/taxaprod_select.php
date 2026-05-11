@@ -357,10 +357,10 @@
 
     <?php
 
-    $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+    /*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     echo "<pre>";
     print_r($dados);
-    echo "</pre>";
+    echo "</pre>";*/
     //exit;
 
     // Condição para enviar para a Taxa Procução Normal
