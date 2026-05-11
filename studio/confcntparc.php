@@ -73,6 +73,16 @@
 	$user    = substr($lg_user, 0, 8);
 	$pss     = substr($lg_user, 8, 40);
 
+	function moedaParaFloat($valor) {
+		$valor = trim((string) $valor);
+		$valor = str_replace(['R$', ' '], '', $valor);
+		if (strpos($valor, ',') !== false) {
+			$valor = str_replace('.', '', $valor);
+			$valor = str_replace(',', '.', $valor);
+		}
+		return (float) $valor;
+	}
+
 	$NumDoc    = trim($_POST['txtdoc']);
 	$NumDocF = 10000000 + $NumDoc;
 	$NDoc      = substr($NumDocF, 1, 7);
@@ -81,26 +91,26 @@
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
 
-	$VrPrest    = trim($_POST['txtvalor']);
+	$VrPrest    = moedaParaFloat($_POST['txtvalor'] ?? 0);
 	$VrPrestF   = number_format($VrPrest, 2, ',', '.');
 	$PIni      = trim($_POST['txtparc_ini']);
 	$PUlt      = trim($_POST['txtparc_ult']);
 	$QtdeParc  = $PUlt - $PIni + 1;
-	$ParcialF   = trim($_POST['parcial']);
+	$ParcialF   = moedaParaFloat($_POST['parcial'] ?? 0);
 	$Parcial  = number_format($ParcialF, 2, ',', '.');
 	$VrPrestForm  = $VrPrest * $QtdeParc;
 	$VrPrestFormF  = number_format($VrPrestForm, 2, ',', '.');
 	$FPag_1      = trim($_POST['lsPr1']);
 	$FPag_2      = trim($_POST['lsPr2']);
 	$FPag_3      = trim($_POST['lsPr3']);
-	$txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
-	$txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
-	$txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
+	$txt1 = moedaParaFloat($_POST['txt1'] ?? 0);
+	$txt2 = moedaParaFloat($_POST['txt2'] ?? 0);
+	$txt3 = moedaParaFloat($_POST['txt3'] ?? 0);
 	$Parc_card_cred = trim($_POST['parc_card_cred']);;
 
 	$ref_std = trim($_POST['ref_std']);
 	$Rdopt = trim($_POST['rdopt']);
-	$Pedido = trim($_POST['pct_book']) ? trim($_POST['pct_book']) : trim($_POST['ped_poster']);
+	$Pedido = trim($_POST['pct_book'] ?? '') ? trim($_POST['pct_book']) : trim($_POST['ped_poster'] ?? '');
 
 	include "conexao.php";
 	include "dbselect.php";
@@ -241,14 +251,16 @@
 					</td>
 				</tr>
 
-				<tr>
-					<td width="45%" align="right">
-						<font color='gold' size='5'><b><i>Parcial </i></b></font>
-					</td>
-					<td width="55%" align="center">
-						<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $ParcialF; ?></i></b></font>
-					</td>
-				</tr>
+				<?php if ($ParcialF > 0) { ?>
+					<tr>
+						<td width="45%" align="right">
+							<font color='gold' size='5'><b><i>Parcial </i></b></font>
+						</td>
+						<td width="55%" align="center">
+							<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $Parcial; ?></i></b></font>
+						</td>
+					</tr>
+				<?php } ?>
 
 				<tr>
 					<td width="45%" align="right">
@@ -332,6 +344,12 @@
 			<input type="hidden" name="parc_card_cred" value="<?php echo $Parc_card_cred; ?>">
 			<input type="hidden" name="rdopt" value="<?php echo $Rdopt; ?>">
 			<input type="hidden" name="pedido" value="<?php echo $Pedido; ?>">
+			<?php if (isset($_POST['chk_quitacao'])) { ?>
+				<input type="hidden" name="chk_quitacao" value="<?php echo trim($_POST['chk_quitacao']); ?>">
+			<?php } ?>
+			<?php if (isset($_POST['total_parcelas_contrato'])) { ?>
+				<input type="hidden" name="total_parcelas_contrato" value="<?php echo trim($_POST['total_parcelas_contrato']); ?>">
+			<?php } ?>
 			<p>
 				<center>
 					<input id="ghost_click" type="submit" name="btenvia" value="Continuar">

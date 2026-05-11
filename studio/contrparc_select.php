@@ -83,6 +83,16 @@
     $user    = substr($lg_user, 0, 8);
     $pss     = substr($lg_user, 8, 40);
 
+    function moedaParaFloat($valor) {
+        $valor = trim((string) $valor);
+        $valor = str_replace(['R$', ' '], '', $valor);
+        if (strpos($valor, ',') !== false) {
+            $valor = str_replace('.', '', $valor);
+            $valor = str_replace(',', '.', $valor);
+        }
+        return (float) $valor;
+    }
+
     $NumDoc    = trim($_POST['txtdoc']);
     $NumDocF = 10000000 + $NumDoc;
     $NDoc      = substr($NumDocF, 1, 7);
@@ -91,23 +101,25 @@
     $Vendedora = trim($_POST['vendedora']);
     $Cliente    = trim($_POST['cliente']);
 
-    $VrPrest    = trim($_POST['txtvalor']);
+    $VrPrest    = moedaParaFloat($_POST['txtvalor'] ?? 0);
     $VrPrestF   = number_format($VrPrest, 2, ',', '.');
     $PIni      = trim($_POST['txtparc_ini']);
     $PUlt      = trim($_POST['txtparc_ult']);
     $QtdeParc  = $PUlt - $PIni + 1;
-    $Parcial   = trim($_POST['parcial']);
+    $Parcial   = moedaParaFloat($_POST['parcial'] ?? 0);
     $ParcialF  = number_format($Parcial, 2, ',', '.');
     $VrPrestForm  = $VrPrest * $QtdeParc;
     $VrPrestFormF  = number_format($VrPrestForm, 2, ',', '.');
     $FPag_1      = trim($_POST['lsPr1']);
     $FPag_2      = trim($_POST['lsPr2']);
     $FPag_3      = trim($_POST['lsPr3']);
-    $txt1 = isset($_POST['txt1']) ? (float) trim($_POST['txt1']) : 0;
-    $txt2 = isset($_POST['txt2']) ? (float) trim($_POST['txt2']) : 0;
-    $txt3 = isset($_POST['txt3']) ? (float) trim($_POST['txt3']) : 0;
+    $txt1 = moedaParaFloat($_POST['txt1'] ?? 0);
+    $txt2 = moedaParaFloat($_POST['txt2'] ?? 0);
+    $txt3 = moedaParaFloat($_POST['txt3'] ?? 0);
     $Parc_card_cred = trim($_POST['parc_card_cred_1']) + trim($_POST['parc_card_cred_2']) + trim($_POST['parc_card_cred_3']);
     $ref_std = trim($_POST['ref_std']);
+    $Quitacao = isset($_POST['chk_quitacao']) && $_POST['chk_quitacao'] == '1';
+    $TotalParcelasContrato = isset($_POST['total_parcelas_contrato']) ? trim($_POST['total_parcelas_contrato']) : '';
 
     include "us_sist.php";
     if ($ch == 'no') {
@@ -132,7 +144,38 @@
 
     <?php
 
-    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
+    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
+        if (!$Quitacao) { ?>
+        <form name="frmest" id="frmest" method="post" action="confcntparc.php" autocomplete="off">
+            <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+            <input type="hidden" name="ref_std" value="<?php echo $ref_std; ?>">
+            <input type="hidden" name="txtdoc" value="<?php echo $NumDoc; ?>">
+            <input type="hidden" name="mat_vend" value="<?php echo $Mat_Vend; ?>">
+            <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
+            <input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
+            <input type="hidden" name="txtvalor" value="<?php echo $VrPrest; ?>">
+            <input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
+            <input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
+            <input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
+            <input type="hidden" name="lsPr2" value="<?php echo $FPag_2; ?>">
+            <input type="hidden" name="lsPr3" value="<?php echo $FPag_3; ?>">
+            <input type="hidden" name="txt1" value="<?php echo $txt1; ?>">
+            <input type="hidden" name="txt2" value="<?php echo $txt2; ?>">
+            <input type="hidden" name="txt3" value="<?php echo $txt3; ?>">
+            <input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
+            <input type="hidden" name="parcial" value="<?php echo $Parcial; ?>">
+            <input type="hidden" name="parc_card_cred" value="<?php echo $Parc_card_cred; ?>">
+            <input type="hidden" name="rdopt" value="NORMAL">
+            <input type="hidden" name="pct_book" value="">
+            <input type="hidden" name="ped_poster" value="">
+        </form>
+        <script>
+            document.forms['frmest'].submit();
+        </script>
+        <noscript>
+            <center><input type="submit" form="frmest" value="Continuar"></center>
+        </noscript>
+        <?php } else { ?>
         <form name="frmest" method="post" action="confcntparc.php" onsubmit="return checkdata()" autocomplete="off">
             <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
                 <?php
@@ -204,12 +247,6 @@
                         </select>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="2" align="center">
-                        <font color='gold' size='5'><b><i>Nenhuma das opções acima:</i></b></font>
-                        <input id="rdopt_normal" type="radio" name="rdopt" class="campos" value="NORMAL">
-                    </td>
-                </tr>
             </table><br>
 
             <table id="tab_ped" name="tab_ped" width="70%" border="5" cellpadding="10" cellspacing="0" align="center" style="display:none;">
@@ -253,6 +290,8 @@
             <input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
             <input type="hidden" name="parcial" value="<?php echo $Parcial; ?>">
             <input type="hidden" name="parc_card_cred" value="<?php echo $Parc_card_cred; ?>">
+            <input type="hidden" name="chk_quitacao" value="1">
+            <input type="hidden" name="total_parcelas_contrato" value="<?php echo $TotalParcelasContrato; ?>">
 
 
             <table width="100%" border="0" cellspacing="0">
@@ -266,6 +305,7 @@
                 </tr>
             </table>
         </form><?php
+        }
             } else { ?>
         <br><br><br><br><br>
         <font size='6'><b>
@@ -281,7 +321,9 @@
             // Encerrando as Conexões
             $SisRot = "S-7.1";
             include "./rodape.php";
-            mysqli_close($conec); ?>
+            if (isset($conec)) {
+                mysqli_close($conec);
+            } ?>
 
     <!-- script para controlar habilitação/desabilitação dos selects e validação -->
     <script>
@@ -297,7 +339,7 @@
 
                 // Verificar se algum radio está marcado
                 if (!rdoMarked) {
-                    alert('Selecione um tipo: Books, Poster ou Nenhuma das Opções Acima');
+                    alert('Selecione um tipo: Books ou Poster');
                     return false;
                 }
 
@@ -316,8 +358,6 @@
                         selectTam.focus();
                         return false;
                     }
-                } else if (tipo === 'NORMAL') {
-                    return true;
                 }
 
                 return true;
@@ -335,11 +375,6 @@
                     selectPct.disabled = true;
                     selectPct.selectedIndex = 0;
                     selectTam.disabled = false;
-                } else if (tipo === 'NORMAL') {
-                    selectPct.disabled = true;
-                    selectPct.selectedIndex = 0;
-                    selectTam.disabled = true;
-                    selectTam.selectedIndex = 0;
                 } else {
                     selectPct.disabled = true;
                     selectTam.disabled = true;

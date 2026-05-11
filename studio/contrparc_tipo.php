@@ -19,7 +19,6 @@
 			color: #000000;
 		}
 
-		/* Estilo para o autocomplete */
 		.ui-autocomplete {
 			max-height: 200px;
 			overflow-y: auto;
@@ -36,6 +35,11 @@
 		.ui-menu-item:hover {
 			background-color: #f0f0f0;
 			cursor: pointer;
+		}
+
+		.quitacao-label {
+			color: #ffcc00;
+			font-weight: bold;
 		}
 	</style>
 
@@ -70,16 +74,41 @@
 				field.select();
 			}
 		}
+
+		function checkdata() {
+			// Validação básica antes de enviar
+			var txtvalor = document.getElementById('txtvalor');
+			var vlr_recebido = document.getElementById('vlr_recebido');
+			var txtparc = document.getElementById('txtparc');
+
+			if (!txtvalor.value || parseFloat(txtvalor.value.replace('.', '').replace(',', '.')) <= 0) {
+				alert('Informe o valor da prestação!');
+				txtvalor.focus();
+				return false;
+			}
+
+			if (!vlr_recebido.value || parseFloat(vlr_recebido.value.replace('.', '').replace(',', '.')) <= 0) {
+				alert('Informe o valor recebido!');
+				vlr_recebido.focus();
+				return false;
+			}
+
+			if (!txtparc.value || parseInt(txtparc.value) <= 0) {
+				alert('Informe o número da prestação!');
+				txtparc.focus();
+				return false;
+			}
+
+			return true;
+		}
 	</script>
 
 	<script>
 		function FormataValor(Formulario, Campo, TeclaPres) {
 			try {
-				// normaliza evento/tecla
 				var evt = TeclaPres || window.event || {};
 				var tecla = evt.keyCode || evt.which || 0;
 
-				// obtém form de forma segura
 				var form = null;
 				if (typeof Formulario === 'string') {
 					form = document.forms[Formulario] || document.querySelector('form[name="' + Formulario + '"]');
@@ -87,7 +116,6 @@
 					form = document.forms[0];
 				}
 
-				// obtém campo de forma segura (por name ou id)
 				var strCampo = null;
 				if (form) {
 					strCampo = form.elements[Campo] || form[Campo];
@@ -97,22 +125,18 @@
 				}
 
 				if (!strCampo) {
-					// elemento não encontrado — evita erro
-					// console.warn('FormataValor: campo não encontrado', Formulario, Campo);
 					return false;
 				}
 
-				// limpa formato atual e monta novo valor
 				var vr = String(strCampo.value || '');
 				vr = vr.replace(/[\/\.,\-\s]/g, '');
 
 				var tam = vr.length;
-				var TamanhoMaximo = 12; // permite entradas maiores, ex: 9999.99 => mais caracteres
+				var TamanhoMaximo = 12;
 
 				if (tam < TamanhoMaximo && tecla !== 8) tam = vr.length + 1;
 				if (tecla === 8) tam = tam - 1;
 
-				// aceita backspace e números (teclado normal e numpad)
 				if (tecla === 8 || (tecla >= 48 && tecla <= 57) || (tecla >= 96 && tecla <= 105)) {
 					if (tam <= 3) {
 						strCampo.value = vr;
@@ -122,8 +146,6 @@
 				}
 				return true;
 			} catch (e) {
-				// evita quebrar a página
-				// console.error('FormataValor error', e);
 				return false;
 			}
 		}
@@ -134,19 +156,19 @@
 	include "../cabecprs.php";
 	?>
 
-   <!-- Adicionando jQuery UI para o autocomplete -->
-   <link rel="stylesheet" href="./css/themes.css">
-   <script src="./js/jquery.js"></script>
-   <script src="./js/ui.js"></script>
-
-	<script type="text/javascript" src="val_parcela.js" charset="utf-8">
-	</script>
+	<link rel="stylesheet" href="./css/themes.css">
+	<script src="./js/jquery.js"></script>
+	<script src="./js/ui.js"></script>
+	<script type="text/javascript" src="val_parcela.js" charset="utf-8"></script>
 
 </head>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
+	// Conectando ao Banco de Dados
+	include "conexao.php";
+	include "dbselect.php";
 
 	// Obtendo o Login
 	$Sis     = "S7";
@@ -161,30 +183,42 @@
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
 
-	// Converter para centavos diretamente, evitando imprecisão de ponto flutuante
-	// Remove separadores de milhar (.) e converte vírgula em ponto decimal
+	// Verifica se é quitação
+	$chk_quitacao = isset($_POST['chk_quitacao']) ? $_POST['chk_quitacao'] : 0;
+	$total_parcelas_contrato = isset($_POST['total_parcelas_contrato']) ? intval($_POST['total_parcelas_contrato']) : 0;
+
+	// Converter para centavos
 	$valor_str = str_replace(',', '.', str_replace('.', '', $_POST['txtvalor'] ?? '0'));
 	$vlr_recebido_str = str_replace(',', '.', str_replace('.', '', $_POST['vlr_recebido'] ?? '0'));
 
-	// Converte para centavos usando intval + arredondamento seguro
 	$valC = intval(round(floatval($valor_str) * 100));
 	$recC = intval(round(floatval($vlr_recebido_str) * 100));
 	$txtparc = intval($_POST['txtparc'] ?? 0);
-	
-	// Limita o número de parcelas a 12
+
 	if ($txtparc > 12) {
 		$txtparc = 12;
 	}
 
-	$parcelasPlenas = $valC > 0 ? intdiv($recC, $valC) : 0;
-	$parcialC = $recC - ($parcelasPlenas * $valC);
+	// Lógica de cálculo com suporte a quitação
+	if ($chk_quitacao == 1 && $total_parcelas_contrato > 0) {
+		// Modo quitação: calcula da parcela inicial até o total
+		$PIni = $txtparc;
+		$PUlt = $total_parcelas_contrato;
+		$parcelasPlenas = $PUlt - $PIni + 1;
+		$parcialC = 0;
+		$Parcial = "0,00";
+	} else {
+		// Modo normal
+		$parcelasPlenas = $valC > 0 ? intdiv($recC, $valC) : 0;
+		$parcialC = $recC - ($parcelasPlenas * $valC);
+		$PIni = $txtparc;
+		$PUlt = $parcelasPlenas > 0 ? ($txtparc + $parcelasPlenas - 1) : ($txtparc - 1);
+		$Parcial = number_format($parcialC / 100, 2, '.', ',');
+	}
 
-	$PIni = $txtparc;
-	$PUlt = $parcelasPlenas > 0 ? ($txtparc + $parcelasPlenas - 1) : ($txtparc - 1);
-
-	// próxima parcela caso haja parcial (ex: se PIni..PUlt = 1..5, próxima = 6)
 	$nextParc = $PUlt + 1;
-	$Parcial = number_format($parcialC / 100, 2, '.', ',');
+	$mostraParcial = ($chk_quitacao != 1 && $parcialC > 0);
+	$mostraParcelas = ($txtparc > 0);
 
 	include "us_sist.php";
 	if ($ch == 'no') {
@@ -228,20 +262,20 @@
 				<tr>
 					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i><?php echo $ref_std; ?></i></b></font>
-						<input type="hidden" name="txtdoc" id="txtdoc" value="<?php echo $Contrato; ?>">
+						<input type="hidden" name="ref_std" value="<?php echo $ref_std; ?>">
 					</td>
 					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i><?php echo $Contrato; ?></i></b></font>
-						<input type="hidden" name="txtdoc" id="txtdoc" value="<?php echo $Contrato; ?>">
+						<input type="hidden" name="txtdoc" value="<?php echo $Contrato; ?>">
 					</td>
 					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i><?php echo $Vendedora; ?></i></b></font>
-						<input type="hidden" name="mat_vend" id="mat_vend" value="<?php echo $mat_vend; ?>">
-						<input type="hidden" name="vendedora" id="vendedora" value="<?php echo $Vendedora; ?>">
+						<input type="hidden" name="mat_vend" value="<?php echo $mat_vend; ?>">
+						<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 					</td>
 					<td align="center">
 						<font color='#FFFFFF' size='4'><b><i><?php echo $Cliente; ?></i></b></font>
-						<input type="hidden" name="cliente" id="cliente" value="<?php echo $Cliente; ?>">
+						<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 					</td>
 				</tr>
 			</table>
@@ -258,17 +292,14 @@
 					<td width="10%" align="center">
 						<font color='gold' size='4'><b><i>Nº Prestação</i></b></font>
 					</td>
-					<td width="12%" align="center">
-						<font color='gold' size='4'>
-							<b>
-								<i>
-									<span id="labelQtdPrestacoes">Parcela(s)</span>
-								</i>
-							</b>
-						</font>
+					<td width="8%" align="center">
+						<font color='gold' size='4'><b><i>Quitação?</i></b></font>
 					</td>
-					<td width="12%" align="center">
-						<font color='gold' size='4'><b><i><span id="labelParcial"><?php echo ($parcialC > 0) ? 'Parcial . ' . $parcialC . 'ª Parcela' : 'Parcial'; ?></span></i></b></font>
+					<td width="8%" align="center" id="colParcelasHeader" style="<?php echo $mostraParcelas ? '' : 'display:none;'; ?>">
+						<font color='gold' size='4'><b><i><span id="labelQtdPrestacoes">Parcela(s)</span></i></b></font>
+					</td>
+					<td width="12%" align="center" id="colParcialHeader" style="<?php echo $mostraParcial ? '' : 'display:none;'; ?>">
+						<font color='gold' size='4'><b><i><span id="labelParcial"><?php echo ($parcialC > 0) ? 'Parcial da Próxima' : 'Parcial'; ?></span></i></b></font>
 					</td>
 					<td width="20%" align="center">
 						<font color='gold' size='4'><b><i>Forma Pagamento</i></b></font>
@@ -288,8 +319,12 @@
 					</td>
 					<td rowspan="3" align="center">
 						<input type="text" name="txtparc" id="txtparc" size="4" maxlength="2" class="campos" onkeyup="validate(this)" onchange="validateParcelas(this)">
+						<input type="hidden" name="total_parcelas_contrato" id="total_parcelas_contrato" value="">
 					</td>
 					<td rowspan="3" align="center">
+						<input type="checkbox" name="chk_quitacao" id="chk_quitacao" value="1" onchange="toggleQuitacao(this)">
+					</td>
+					<td rowspan="3" align="center" id="colParcelasValor" style="<?php echo $mostraParcelas ? '' : 'display:none;'; ?>">
 						<input type="hidden" name="txtparc_ini" id="txtparc_ini" value="<?php echo $PIni; ?>">
 						<input type="hidden" name="txtparc_ult" id="txtparc_ult" value="<?php echo $PUlt; ?>">
 						<font color='#FFFFFF' size='4'><b><i>
@@ -298,28 +333,20 @@
 									<span id="PUlt" style="<?php echo ($parcelasPlenas > 1) ? '' : 'display:none;'; ?>"><?php echo $PUlt; ?></span>
 								</i></b></font>
 					</td>
-					<td rowspan="3" align="center">
+					<td rowspan="3" align="center" id="colParcialValor" style="<?php echo $mostraParcial ? '' : 'display:none;'; ?>">
 						<input type="hidden" name="parcial" id="parcial" value="<?php echo $Parcial; ?>">
 						<font color='#FFFFFF' size='4'><b><i><span id="Parcial"><?php echo $Parcial; ?></span></i></b></font>
 					</td>
-
 					<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-					<input type="hidden" name="ref_std" value="<?php echo $ref_std; ?>">
-
 					<td align="center">
 						<select name="lsPr1" id="lsPr1" class="campos" onchange="mostrarTabelaParcelas(this)">
 							<?php
-							// Obtendo a Relação
-							// Conectando ao Banco de Dados
+							// Conectando ao Banco de dados
+							include "conexao.php";
 							include "dbselect.php";
 
-							// Criando a Instrução SQL de Consulta
 							$sqlpr = "select * from formapag where codpag <= 31 or codpag >= 70 and codpag <> 99 order by codpag";
-
-							// Consultando os Registros
 							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
-
-							// Criando o Array para o campo PC
 							while ($lnpr = mysqli_fetch_array($rspr)) {
 								$CodPag  = $lnpr['codpag'];
 								$ModPag  = $lnpr['modpag'];
@@ -330,7 +357,6 @@
 							mysqli_free_result($rspr);
 							?>
 						</select>
-
 						<table width="100%" name="tb_parc_cred_1" id="tb_parc_cred_1" style="display: none;">
 							<tr>
 								<td align="center">
@@ -338,119 +364,107 @@
 									<font color='gold' size='4'><b><i>Parcela(s): </i></b></font>
 									<select name="parc_card_cred_1" id="parc_card_cred_1" class="campos">
 										<option value="0" selected>Selecione</option>
-										<?php
-										for ($i = 1; $i <= 12; $i++) {
-										?>
-											<option value='<?php echo $i; ?>' class="campos">Parcelas <?php echo $i; ?>x</option>
-										<?php
-										}
-										?>
-									</select>
-								</td>
-							</tr>
-						</table>
-					</td>
-					<td align="center">
-						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
-						<input type="text" name="txt1" id="txt1" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt1', event); validate(this)">
-					</td>
-				</tr>
-				<tr>
-					<td align="center">
-						<select name="lsPr2" id="lsPr2" class="campos" onchange="mostrarTabelaParcelas(this)">
-							<?php
-							// Obtendo a Relação
-							// Conectando ao Banco de Dados
-							include "dbselect.php";
-
-							// Criando a Instrução SQL de Consulta
-							$sqlpr = "select * from formapag where codpag <= 31 or codpag >= 70 and codpag <> 99 order by codpag";
-
-							// Consultando os Registros
-							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
-
-							// Criando o Array para o campo PC
-							while ($lnpr = mysqli_fetch_array($rspr)) {
-								$CodPag  = $lnpr['codpag'];
-								$ModPag  = $lnpr['modpag'];
-							?>
-								<option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
-							<?php
-							}
-							mysqli_free_result($rspr);
-							?>
-						</select>
-						<table width="100%" name="tb_parc_cred_2" id="tb_parc_cred_2" style="display: none;">
-							<tr>
-								<td align="center">
-									<br>
-									<font color='gold' size='4'><b><i>Parcela(s): </i></b></font>
-									<select name="parc_card_cred_2" id="parc_card_cred_2" class="campos">
-										<option value="0" selected>Selecione</option>
 										<?php for ($i = 1; $i <= 12; $i++) { ?>
 											<option value='<?php echo $i; ?>' class="campos">Parcelas <?php echo $i; ?>x</option>
 										<?php } ?>
 									</select>
 								</td>
-							</tr>
-						</table>
-					</td>
-					<td align="center">
-						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
-						<input type="text" name="txt2" id="txt2" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt2', event); validate(this)">
 					</td>
 				</tr>
-				<tr>
-					<td align="center">
-						<select name="lsPr3" id="lsPr3" class="campos" onchange="mostrarTabelaParcelas(this)">
-							<?php
-							// Obtendo a Relação
-							// Conectando ao Banco de Dados
-							include "dbselect.php";
+			</table>
+			</td>
+			<td align="center">
+				<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
+				<input type="text" name="txt1" id="txt1" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt1', event); validate(this)">
+			</td>
+			</tr>
+			<tr>
+				<td align="center">
+					<select name="lsPr2" id="lsPr2" class="campos" onchange="mostrarTabelaParcelas(this)">
+						<?php
+						// Conectando ao Banco de dados
+						include "conexao.php";
+						include "dbselect.php";
 
-							// Criando a Instrução SQL de Consulta
-							$sqlpr = "select * from formapag where codpag <= 31 or codpag >= 70 and codpag <> 99 order by codpag";
+						$sqlpr = "select * from formapag where codpag <= 31 or codpag >= 70 and codpag <> 99 order by codpag";
+						$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+						while ($lnpr = mysqli_fetch_array($rspr)) {
+							$CodPag  = $lnpr['codpag'];
+							$ModPag  = $lnpr['modpag'];
+						?>
+							<option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
+						<?php
+						}
+						mysqli_free_result($rspr);
+						?>
+					</select>
+					<table width="100%" name="tb_parc_cred_2" id="tb_parc_cred_2" style="display: none;">
+						<tr>
+							<td align="center">
+								<br>
+								<font color='gold' size='4'><b><i>Parcela(s): </i></b></font>
+								<select name="parc_card_cred_2" id="parc_card_cred_2" class="campos">
+									<option value="0" selected>Selecione</option>
+									<?php for ($i = 1; $i <= 12; $i++) { ?>
+										<option value='<?php echo $i; ?>' class="campos">Parcelas <?php echo $i; ?>x</option>
+									<?php } ?>
+								</select>
+							</td>
+				</td>
+			</tr>
+			</table>
+			</td>
+			<td align="center">
+				<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
+				<input type="text" name="txt2" id="txt2" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt2', event); validate(this)">
+			</td>
+			</tr>
+			<tr>
+				<td align="center">
+					<select name="lsPr3" id="lsPr3" class="campos" onchange="mostrarTabelaParcelas(this)">
+						<?php
+						// Conectando ao Banco de dados
+						include "conexao.php";
+						include "dbselect.php";
 
-							// Consultando os Registros
-							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
-
-							// Criando o Array para o campo PC
-							while ($lnpr = mysqli_fetch_array($rspr)) {
-								$CodPag  = $lnpr['codpag'];
-								$ModPag  = $lnpr['modpag'];
-							?>
-								<option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
-							<?php
-							}
-							mysqli_free_result($rspr);
-							?>
-						</select>
-						<table width="100%" name="tb_parc_cred_3" id="tb_parc_cred_3" style="display: none;">
-							<tr>
-								<td align="center">
-									<br>
-									<font color='gold' size='4'><b><i>Parcela(s): </i></b></font>
-									<select name="parc_card_cred_3" id="parc_card_cred" class="campos">
-										<option value="0" selected>Selecione</option>
-										<?php for ($i = 1; $i <= 12; $i++) { ?>
-											<option value='<?php echo $i; ?>' class="campos">Parcelas <?php echo $i; ?>x</option>
-										<?php } ?>
-									</select>
-								</td>
-							</tr>
-						</table>
-					</td>
-					<td align="center">
-						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
-						<input type="text" name="txt3" id="txt3" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt3', event); validate(this)">
-					</td>
-				</tr>
+						$sqlpr = "select * from formapag where codpag <= 31 or codpag >= 70 and codpag <> 99 order by codpag";
+						$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+						while ($lnpr = mysqli_fetch_array($rspr)) {
+							$CodPag  = $lnpr['codpag'];
+							$ModPag  = $lnpr['modpag'];
+						?>
+							<option value="<?php echo $CodPag; ?>" class="campos"><?php echo "$ModPag"; ?></option>
+						<?php
+						}
+						mysqli_free_result($rspr);
+						?>
+					</select>
+					<table width="100%" name="tb_parc_cred_3" id="tb_parc_cred_3" style="display: none;">
+						<tr>
+							<td align="center">
+								<br>
+								<font color='gold' size='4'><b><i>Parcela(s): </i></b></font>
+								<select name="parc_card_cred_3" id="parc_card_cred_3" class="campos">
+									<option value="0" selected>Selecione</option>
+									<?php for ($i = 1; $i <= 12; $i++) { ?>
+										<option value='<?php echo $i; ?>' class="campos">Parcelas <?php echo $i; ?>x</option>
+									<?php } ?>
+								</select>
+							</td>
+				</td>
+			</tr>
+			</table>
+			</td>
+			<td align="center">
+				<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
+				<input type="text" name="txt3" id="txt3" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'txt3', event); validate(this)">
+			</td>
+			</tr>
 			</table><br>
 
 			<table width="100%" border="0" cellspacing="0">
 				<tr>
 					<td width="9%"></td>
-					</td>
 					<td width="82%" align="center">
 						<input type="submit" name="btenviar" value="Continuar">&nbsp;&nbsp;
 						<input type="reset" name="btreset" value="Limpar">
@@ -511,22 +525,153 @@
 			return (cents / 100).toFixed(2).replace('.', ',');
 		}
 
+		function setParcialColumnVisible(visible) {
+			var header = document.getElementById('colParcialHeader');
+			var valor = document.getElementById('colParcialValor');
+			var display = visible ? '' : 'none';
+			if (header) header.style.display = display;
+			if (valor) valor.style.display = display;
+		}
+
+		function setParcelasColumnVisible(visible) {
+			var header = document.getElementById('colParcelasHeader');
+			var valor = document.getElementById('colParcelasValor');
+			var display = visible ? '' : 'none';
+			if (header) header.style.display = display;
+			if (valor) valor.style.display = display;
+		}
+
+		function toggleQuitacao(checkbox) {
+			var txtparc = document.getElementById('txtparc');
+			var txtvalor = document.getElementById('txtvalor');
+			var vlr_recebido = document.getElementById('vlr_recebido');
+			var labelParcial = document.getElementById('labelParcial');
+			var labelQtdPrestacoes = document.getElementById('labelQtdPrestacoes');
+			var totalParcelasHidden = document.getElementById('total_parcelas_contrato');
+
+			if (checkbox.checked) {
+				// Desabilita campos
+				txtparc.readOnly = false; // Mantém editável para informar a parcela inicial
+				txtvalor.readOnly = true;
+				vlr_recebido.readOnly = false; // Permite informar o valor total da quitação
+				txtvalor.style.backgroundColor = '#f0f0f0';
+
+				setParcelasColumnVisible(parseInt(txtparc.value || '0', 10) > 0);
+				setParcialColumnVisible(false);
+				if (labelQtdPrestacoes) {
+					labelQtdPrestacoes.textContent = 'Quitação do contrato';
+					labelQtdPrestacoes.style.color = '#ffcc00';
+				}
+
+				// Solicita o total de parcelas do contrato
+				var totalParcelas = prompt('Informe o número TOTAL de parcelas a ser quitadas:', '10');
+				if (totalParcelas && parseInt(totalParcelas) > 0) {
+					totalParcelasHidden.value = totalParcelas;
+					calcularQuitacao();
+				} else {
+					checkbox.checked = false;
+					toggleQuitacao(checkbox);
+				}
+			} else {
+				// Reativa os campos
+				txtvalor.readOnly = false;
+				txtvalor.style.backgroundColor = '';
+
+				if (labelParcial) {
+					labelParcial.textContent = 'Parcial';
+					labelParcial.style.color = '';
+				}
+				if (labelQtdPrestacoes) {
+					labelQtdPrestacoes.textContent = 'Parcela(s)';
+					labelQtdPrestacoes.style.color = '';
+				}
+
+				totalParcelasHidden.value = '';
+
+				// Recalcula normalmente
+				atualizaParcelas();
+			}
+		}
+
+		function calcularQuitacao() {
+			var txtparc = document.getElementById('txtparc');
+			var totalParcelasHidden = document.getElementById('total_parcelas_contrato');
+			var inicioParc = parseInt(txtparc.value, 10);
+			var totalParcelas = parseInt(totalParcelasHidden.value, 10);
+
+			if (!inicioParc || inicioParc <= 0) {
+				alert('Informe o número da parcela inicial para quitar o restante!');
+				document.getElementById('chk_quitacao').checked = false;
+				toggleQuitacao(document.getElementById('chk_quitacao'));
+				return;
+			}
+
+			if (!totalParcelas || totalParcelas <= 0) {
+				alert('Informe o número total de parcelas do contrato!');
+				document.getElementById('chk_quitacao').checked = false;
+				toggleQuitacao(document.getElementById('chk_quitacao'));
+				return;
+			}
+
+			if (inicioParc > totalParcelas) {
+				alert('A parcela inicial não pode ser maior que o total de parcelas!');
+				document.getElementById('chk_quitacao').checked = false;
+				toggleQuitacao(document.getElementById('chk_quitacao'));
+				return;
+			}
+
+			var ultimaParcela = totalParcelas;
+			var parcelasRestantes = ultimaParcela - inicioParc + 1;
+
+			// Atualiza a exibição
+			setParcelasColumnVisible(true);
+			document.getElementById('PIni').textContent = inicioParc;
+			document.getElementById('PUlt').textContent = ultimaParcela;
+			document.getElementById('Psep').style.display = 'inline';
+			document.getElementById('PUlt').style.display = 'inline';
+			setParcialColumnVisible(false);
+			document.getElementById('Parcial').textContent = '';
+
+			// Atualiza os campos hidden
+			var hidIni = document.getElementById('txtparc_ini');
+			var hidUlt = document.getElementById('txtparc_ult');
+			var hidPar = document.getElementById('parcial');
+			if (hidIni) hidIni.value = inicioParc;
+			if (hidUlt) hidUlt.value = ultimaParcela;
+			if (hidPar) hidPar.value = '0,00';
+
+			// Atualiza label
+			var labelQtdPrestacoes = document.getElementById('labelQtdPrestacoes');
+			if (labelQtdPrestacoes) {
+				labelQtdPrestacoes.textContent = parcelasRestantes + ' parcela(s) restante(s)';
+			}
+		}
+
 		function atualizaParcelas() {
+			// Verifica se o checkbox de quitação está marcado
+			var quitacaoCheckbox = document.getElementById('chk_quitacao');
+			if (quitacaoCheckbox && quitacaoCheckbox.checked) {
+				calcularQuitacao();
+				return;
+			}
+
 			var valParcelaCents = parseCurrencyToCents(document.getElementById('txtvalor').value);
 			var recebidoCents = parseCurrencyToCents(document.getElementById('vlr_recebido').value);
 			var inicioParc = parseInt((document.getElementById('txtparc').value || '0'), 10) || 0;
+			setParcelasColumnVisible(inicioParc > 0);
 
 			if (valParcelaCents <= 0 || recebidoCents <= 0 || inicioParc <= 0) {
-				// limpa exibição se dados inválidos
-				document.getElementById('PIni').textContent = '';
+				document.getElementById('PIni').textContent = inicioParc > 0 ? inicioParc : '';
 				document.getElementById('PUlt').textContent = '';
+				document.getElementById('Psep').style.display = 'none';
+				document.getElementById('PUlt').style.display = 'none';
 				document.getElementById('Parcial').textContent = '';
+				setParcialColumnVisible(false);
 
-				// limpar hidden também
 				var hidIni = document.getElementById('txtparc_ini');
 				var hidUlt = document.getElementById('txtparc_ult');
 				var hidPar = document.getElementById('parcial');
-				if (hidIni) hidIni.value = '';
+				if (hidIni) hidIni.value = inicioParc > 0 ? inicioParc : '';
 				if (hidUlt) hidUlt.value = '';
 				if (hidPar) hidPar.value = '';
 				return;
@@ -536,7 +681,7 @@
 			var parcialCents = recebidoCents - (parcelasPlenas * valParcelaCents);
 
 			var pIni = inicioParc;
-			var pUlt = parcelasPlenas > 0 ? (inicioParc + parcelasPlenas - 1) : (inicioParc - 1); // se 0, nenhuma plena
+			var pUlt = parcelasPlenas > 0 ? (inicioParc + parcelasPlenas - 1) : (inicioParc - 1);
 
 			var PIniEl = document.getElementById('PIni');
 			var PUltEl = document.getElementById('PUlt');
@@ -545,8 +690,7 @@
 			if (PIniEl) PIniEl.textContent = pIni;
 
 			if (PUltEl && PsepEl) {
-				PUltEl.textContent = pUlt; // atualiza sempre o valor
-				// mostrar 'a' e o PUlt somente quando houver mais de uma prestação plena
+				PUltEl.textContent = pUlt;
 				if (parcelasPlenas > 1) {
 					PsepEl.style.display = 'inline';
 					PUltEl.style.display = 'inline';
@@ -556,17 +700,16 @@
 				}
 			}
 
-			document.getElementById('Parcial').textContent = 'R$ ' + formatCentsToBR(parcialCents);
+			setParcialColumnVisible(parcialCents > 0);
+			document.getElementById('Parcial').textContent = parcialCents > 0 ? 'R$ ' + formatCentsToBR(parcialCents) : '';
 
-			// atualizar hidden inputs do formulário para serem enviados
 			var hidIni = document.getElementById('txtparc_ini');
 			var hidUlt = document.getElementById('txtparc_ult');
-			var hidPar = document.getElementById('parcial'); // já existe no HTML
+			var hidPar = document.getElementById('parcial');
 			if (hidIni) hidIni.value = pIni;
 			if (hidUlt) hidUlt.value = (parcelasPlenas > 0 ? pUlt : '');
-			if (hidPar) hidPar.value = formatCentsToBR(parcialCents); // formato BR (ex: "50,00")
+			if (hidPar) hidPar.value = formatCentsToBR(parcialCents);
 
-			// Atualizar o label da quantidade de prestações
 			var labelQtdPrestacoes = document.getElementById('labelQtdPrestacoes');
 			if (labelQtdPrestacoes) {
 				if (parcelasPlenas === 1) {
@@ -576,7 +719,6 @@
 				}
 			}
 
-			// Atualizar o label do cabeçalho Parcial quando houver valor parcial
 			var labelParcial = document.getElementById('labelParcial');
 			if (labelParcial) {
 				if (parcialCents > 0) {
@@ -588,17 +730,8 @@
 			}
 		}
 
-		// ligar eventos
-		['txtvalor', 'vlr_recebido', 'txtparc'].forEach(function(id) {
-			var el = document.getElementById(id);
-			if (!el) return;
-			el.addEventListener('input', atualizaParcelas);
-			el.addEventListener('blur', atualizaParcelas);
-		});
-
 		// Event listeners
 		document.addEventListener('DOMContentLoaded', function() {
-			// Campos de cálculo
 			['txtvalor', 'vlr_recebido', 'txtparc'].forEach(function(id) {
 				var el = document.getElementById(id);
 				if (el) {
@@ -607,10 +740,8 @@
 				}
 			});
 
-			// Inicializa parcelas
 			atualizaParcelas();
 
-			// Inicializa selects de cartão de crédito
 			for (var i = 1; i <= 3; i++) {
 				var select = document.getElementById('lsPr' + i);
 				if (select) {
@@ -621,20 +752,15 @@
 
 		function mostrarTabelaParcelas(selectElement) {
 			if (!selectElement || !selectElement.id) return;
-
 			var index = selectElement.id.replace('lsPr', '');
 			var targetTable = document.getElementById('tb_parc_cred_' + index);
-
 			if (targetTable) {
-				// TABELA deve usar 'table' ou 'table-row-group', NÃO 'block'
 				targetTable.style.display = (selectElement.value === '31') ? 'table' : 'none';
 			}
 		}
 	</script>
 
 	<?php
-
-	// Encerrando as Conexões
 	$SisRot = "S-7.2.3";
 	include "rodape.php";
 	mysqli_close($conec); ?>
