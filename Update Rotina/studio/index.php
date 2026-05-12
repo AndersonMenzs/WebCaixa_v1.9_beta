@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>WebCaixa v1.20.6_beta</title>
+	<title>WebCaixa v1.20.7_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -105,7 +105,7 @@
 				$ch      = '';
 				$chI     = '';
 				$chF     = '';
-				$Versao  = "WebCaixa v1.20.6_beta";
+				$Versao  = "WebCaixa v1.20.7_beta";
 
 				// Verificando Cadastramentos
 				include "conexao.php";

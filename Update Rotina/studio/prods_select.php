@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>WebCaixa v1.20.6_beta</title>
+    <title>WebCaixa v1.20.7_beta</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style type="text/css">
         body {
@@ -257,7 +257,7 @@
                         <select name="tipo_top" id="tipo_top" class="campos" style="width: 60px; height: 30px;">
                             <option value="" selected>0</option>
                             <?php
-                            for ($i = 1; $i <= 10; $i++) { ?>
+                            for ($i = 1; $i <= 6; $i++) { ?>
                                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                             <?php
                             } ?>

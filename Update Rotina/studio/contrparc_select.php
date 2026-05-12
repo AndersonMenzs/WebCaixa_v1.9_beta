@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>WebCaixa v1.20.6_beta</title>
+    <title>WebCaixa v1.20.7_beta</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style type="text/css">
         body {
@@ -93,6 +93,10 @@
         return (float) $valor;
     }
 
+    function moedaParaCentavos($valor) {
+        return (int) round(moedaParaFloat($valor) * 100);
+    }
+
     $NumDoc    = trim($_POST['txtdoc']);
     $NumDocF = 10000000 + $NumDoc;
     $NDoc      = substr($NumDocF, 1, 7);
@@ -120,6 +124,23 @@
     $ref_std = trim($_POST['ref_std']);
     $Quitacao = isset($_POST['chk_quitacao']) && $_POST['chk_quitacao'] == '1';
     $TotalParcelasContrato = isset($_POST['total_parcelas_contrato']) ? trim($_POST['total_parcelas_contrato']) : '';
+    $ValorQuitacaoCents = moedaParaCentavos($_POST['txtvalor'] ?? 0) * (int) $QtdeParc;
+    $ValorRecebidoCents = moedaParaCentavos($_POST['vlr_recebido'] ?? 0);
+    $ValorPagamentosCents = moedaParaCentavos($_POST['txt1'] ?? 0) + moedaParaCentavos($_POST['txt2'] ?? 0) + moedaParaCentavos($_POST['txt3'] ?? 0);
+
+    if ($Quitacao && $Parcial > 0) {
+        $SisRot = "S-7.1";
+        include "./rodape.php";
+        echo "<script>alert('Quitação não pode conter parcial. Ajuste o valor recebido.'); window.history.back();</script>";
+        exit;
+    }
+
+    if ($Quitacao && $ValorQuitacaoCents > 0 && ($ValorRecebidoCents != $ValorQuitacaoCents || $ValorPagamentosCents != $ValorQuitacaoCents)) {
+        $SisRot = "S-7.1";
+        include "./rodape.php";
+        echo "<script>alert('Valor recebido incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
+        exit;
+    }
 
     include "us_sist.php";
     if ($ch == 'no') {

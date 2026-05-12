@@ -11,7 +11,7 @@ include 'dbselect.php';
 <html>
 
 <head>
-	<title>WebCaixa v1.20.6_beta</title>
+	<title>WebCaixa v1.20.7_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -83,6 +83,40 @@ include 'dbselect.php';
 	$ModPag    = trim($_POST['modpgto'] ?? '');
 	$Rdopt     = trim($_POST['rdopt'] ?? '');
 	$Pedido    = trim($_POST['pedido'] ?? '');
+	$Quitacao  = isset($_POST['chk_quitacao']) && $_POST['chk_quitacao'] == '1';
+
+	function moedaParaFloat($valor) {
+		$valor = trim((string) $valor);
+		$valor = str_replace(['R$', ' '], '', $valor);
+		if (strpos($valor, ',') !== false) {
+			$valor = str_replace('.', '', $valor);
+			$valor = str_replace(',', '.', $valor);
+		}
+		return (float) $valor;
+	}
+
+	function moedaParaCentavos($valor) {
+		return (int) round(moedaParaFloat($valor) * 100);
+	}
+
+	if ($Quitacao && moedaParaFloat($Parcial) > 0) {
+		$SisRot = "S-7.2.2.1.1";
+		include "./rodape.php";
+		echo "<script>alert('Quitação não pode conter parcial. Ajuste o valor recebido.'); window.history.back();</script>";
+		mysqli_close($conec);
+		exit;
+	}
+
+	$ValorQuitacaoCents = moedaParaCentavos($VrPrest) * (int) $QtdeParc;
+	$ValorRecebidoCents = (int) round($VrRec * 100);
+
+	if ($Quitacao && $ValorQuitacaoCents > 0 && $ValorRecebidoCents != $ValorQuitacaoCents) {
+		$SisRot = "S-7.2.2.1.1";
+		include "./rodape.php";
+		echo "<script>alert('Valor recebido incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
+		mysqli_close($conec);
+		exit;
+	}
 
 	$Estorno = '';
 	$hora    = date('H:i');
