@@ -41,6 +41,13 @@
 			color: #ffcc00;
 			font-weight: bold;
 		}
+
+		/* Padroniza o tamanho do checkbox para ficar do tamanho do campo de texto */
+		input[type="checkbox"] {
+			width: 1.5em;
+			height: 1.5em;
+			vertical-align: middle;
+		}
 	</style>
 
 	<script>
