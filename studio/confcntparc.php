@@ -83,6 +83,10 @@
 		return (float) $valor;
 	}
 
+	function moedaParaCentavos($valor) {
+		return (int) round(moedaParaFloat($valor) * 100);
+	}
+
 	$NumDoc    = trim($_POST['txtdoc']);
 	$NumDocF = 10000000 + $NumDoc;
 	$NDoc      = substr($NumDocF, 1, 7);
@@ -111,6 +115,23 @@
 	$ref_std = trim($_POST['ref_std']);
 	$Rdopt = trim($_POST['rdopt']);
 	$Pedido = trim($_POST['pct_book'] ?? '') ? trim($_POST['pct_book']) : trim($_POST['ped_poster'] ?? '');
+	$Quitacao = isset($_POST['chk_quitacao']) && $_POST['chk_quitacao'] == '1';
+	$ValorQuitacaoCents = moedaParaCentavos($_POST['txtvalor'] ?? 0) * (int) $QtdeParc;
+	$ValorPagamentosCents = moedaParaCentavos($_POST['txt1'] ?? 0) + moedaParaCentavos($_POST['txt2'] ?? 0) + moedaParaCentavos($_POST['txt3'] ?? 0);
+
+	if ($Quitacao && $ParcialF > 0) {
+		$SisRot = "S-7.2.2.1";
+		include "./rodape.php";
+		echo "<script>alert('Quitação não pode conter parcial. Ajuste o valor recebido.'); window.history.back();</script>";
+		exit;
+	}
+
+	if ($Quitacao && $ValorQuitacaoCents > 0 && $ValorPagamentosCents != $ValorQuitacaoCents) {
+		$SisRot = "S-7.2.2.1";
+		include "./rodape.php";
+		echo "<script>alert('Valor recebido incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
+		exit;
+	}
 
 	include "conexao.php";
 	include "dbselect.php";

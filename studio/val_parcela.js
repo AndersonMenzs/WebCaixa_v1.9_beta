@@ -182,6 +182,31 @@ function checkdata() {
 		return false;
 	}
 
+	const chkQuitacao = document.getElementById('chk_quitacao');
+	if (chkQuitacao && chkQuitacao.checked) {
+		const qtdeQuitacao = parseInt((document.getElementById('total_parcelas_contrato') || {}).value || '0', 10) || 0;
+		const valorQuitacao = parseCurrencyToCents(form.txtvalor.value) * qtdeQuitacao;
+		const parcial = parseCurrencyToCents((document.getElementById('parcial') || {}).value || '');
+
+		if (qtdeQuitacao <= 0) {
+			alert('Informe a quantidade de prestações a serem quitadas!');
+			form.txtparc.focus();
+			return false;
+		}
+
+		if (taxa !== valorQuitacao || soma !== valorQuitacao) {
+			alert('Valor recebido incorreto para quitação.\nO valor correto é R$ ' + formatCentsToBR(valorQuitacao) + '.');
+			form.vlr_recebido.focus();
+			return false;
+		}
+
+		if (parcial > 0) {
+			alert('Quitação não pode conter parcial. Ajuste o valor recebido.');
+			form.vlr_recebido.focus();
+			return false;
+		}
+	}
+
 	return true;
 }
 
@@ -197,4 +222,8 @@ function parseCurrencyToCents(str) {
 
 	const num = parseFloat(str);
 	return isNaN(num) ? 0 : Math.round(num * 100);
+}
+
+function formatCentsToBR(cents) {
+	return (cents / 100).toFixed(2).replace('.', ',');
 }

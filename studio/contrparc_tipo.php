@@ -87,6 +87,12 @@
 			var txtvalor = document.getElementById('txtvalor');
 			var vlr_recebido = document.getElementById('vlr_recebido');
 			var txtparc = document.getElementById('txtparc');
+			var chkQuitacao = document.getElementById('chk_quitacao');
+			var parcial = document.getElementById('parcial');
+			var qtdeQuitacao = document.getElementById('total_parcelas_contrato');
+			var txt1 = document.getElementById('txt1');
+			var txt2 = document.getElementById('txt2');
+			var txt3 = document.getElementById('txt3');
 
 			if (!txtvalor.value || parseFloat(txtvalor.value.replace('.', '').replace(',', '.')) <= 0) {
 				alert('Informe o valor da prestação!');
@@ -104,6 +110,41 @@
 				alert('Informe o número da prestação!');
 				txtparc.focus();
 				return false;
+			}
+
+			if (chkQuitacao && chkQuitacao.checked && parcial) {
+				var valorPrestacaoCents = parseCurrencyToCents(txtvalor.value);
+				var valorRecebidoCents = parseCurrencyToCents(vlr_recebido.value);
+				var qtdeParcelas = parseInt(qtdeQuitacao ? qtdeQuitacao.value : '0', 10) || 0;
+				var valorQuitacaoCents = valorPrestacaoCents * qtdeParcelas;
+				var valorPagamentosCents = parseCurrencyToCents(txt1 ? txt1.value : '') +
+					parseCurrencyToCents(txt2 ? txt2.value : '') +
+					parseCurrencyToCents(txt3 ? txt3.value : '');
+
+				if (qtdeParcelas <= 0) {
+					alert('Informe a quantidade de prestações a serem quitadas!');
+					return false;
+				}
+
+				if (valorRecebidoCents !== valorQuitacaoCents) {
+					alert('Valor recebido incorreto para quitação. O valor correto é R$ ' + formatCentsToBR(valorQuitacaoCents) + '.');
+					vlr_recebido.focus();
+					return false;
+				}
+
+				if (valorPagamentosCents !== valorQuitacaoCents) {
+					alert('Valor informado na forma de pagamento incorreto para quitação. O valor correto é R$ ' + formatCentsToBR(valorQuitacaoCents) + '.');
+					if (txt1) txt1.focus();
+					return false;
+				}
+
+				var parcialCents = parseCurrencyToCents(parcial.value);
+				if (parcialCents > 0) {
+					alert('Quitação não pode ter valor parcial. Ajuste o recebimento antes de continuar.');
+					vlr_recebido.focus();
+					return false;
+				}
+				parcial.value = '0,00';
 			}
 
 			return true;
@@ -166,7 +207,7 @@
 	<link rel="stylesheet" href="./css/themes.css">
 	<script src="./js/jquery.js"></script>
 	<script src="./js/ui.js"></script>
-	<script type="text/javascript" src="val_parcela.js" charset="utf-8"></script>
+	<script type="text/javascript" src="val_parcela.js?v=20260512_quitacao" charset="utf-8"></script>
 
 </head>
 
@@ -192,7 +233,7 @@
 
 	// Verifica se é quitação
 	$chk_quitacao = isset($_POST['chk_quitacao']) ? $_POST['chk_quitacao'] : 0;
-	$total_parcelas_contrato = isset($_POST['total_parcelas_contrato']) ? intval($_POST['total_parcelas_contrato']) : 0;
+	$qtde_parcelas_quitacao = isset($_POST['total_parcelas_contrato']) ? intval($_POST['total_parcelas_contrato']) : 0;
 
 	// Converter para centavos
 	$valor_str = str_replace(',', '.', str_replace('.', '', $_POST['txtvalor'] ?? '0'));
@@ -207,11 +248,11 @@
 	}
 
 	// Lógica de cálculo com suporte a quitação
-	if ($chk_quitacao == 1 && $total_parcelas_contrato > 0) {
-		// Modo quitação: calcula da parcela inicial até o total
+	if ($chk_quitacao == 1 && $qtde_parcelas_quitacao > 0) {
+		// Modo quitação: calcula a parcela final pela quantidade informada.
 		$PIni = $txtparc;
-		$PUlt = $total_parcelas_contrato;
-		$parcelasPlenas = $PUlt - $PIni + 1;
+		$parcelasPlenas = $qtde_parcelas_quitacao;
+		$PUlt = $txtparc + $parcelasPlenas - 1;
 		$parcialC = 0;
 		$Parcial = "0,00";
 	} else {
@@ -554,7 +595,7 @@
 			var vlr_recebido = document.getElementById('vlr_recebido');
 			var labelParcial = document.getElementById('labelParcial');
 			var labelQtdPrestacoes = document.getElementById('labelQtdPrestacoes');
-			var totalParcelasHidden = document.getElementById('total_parcelas_contrato');
+			var qtdeParcelasHidden = document.getElementById('total_parcelas_contrato');
 
 			if (checkbox.checked) {
 				// Desabilita campos
@@ -570,10 +611,10 @@
 					labelQtdPrestacoes.style.color = '#ffcc00';
 				}
 
-				// Solicita o total de parcelas do contrato
-				var totalParcelas = prompt('Informe o número TOTAL de parcelas a ser quitadas:', '10');
-				if (totalParcelas && parseInt(totalParcelas) > 0) {
-					totalParcelasHidden.value = totalParcelas;
+				// Solicita a quantidade de prestações que serão quitadas.
+				var qtdeParcelas = prompt('Informe a quantidade de prestações a serem quitadas:', '1');
+				if (qtdeParcelas && parseInt(qtdeParcelas, 10) > 0) {
+					qtdeParcelasHidden.value = parseInt(qtdeParcelas, 10);
 					calcularQuitacao();
 				} else {
 					checkbox.checked = false;
@@ -593,7 +634,7 @@
 					labelQtdPrestacoes.style.color = '';
 				}
 
-				totalParcelasHidden.value = '';
+				qtdeParcelasHidden.value = '';
 
 				// Recalcula normalmente
 				atualizaParcelas();
@@ -602,9 +643,9 @@
 
 		function calcularQuitacao() {
 			var txtparc = document.getElementById('txtparc');
-			var totalParcelasHidden = document.getElementById('total_parcelas_contrato');
+			var qtdeParcelasHidden = document.getElementById('total_parcelas_contrato');
 			var inicioParc = parseInt(txtparc.value, 10);
-			var totalParcelas = parseInt(totalParcelasHidden.value, 10);
+			var qtdeParcelas = parseInt(qtdeParcelasHidden.value, 10);
 
 			if (!inicioParc || inicioParc <= 0) {
 				alert('Informe o número da parcela inicial para quitar o restante!');
@@ -613,29 +654,27 @@
 				return;
 			}
 
-			if (!totalParcelas || totalParcelas <= 0) {
-				alert('Informe o número total de parcelas do contrato!');
+			if (!qtdeParcelas || qtdeParcelas <= 0) {
+				alert('Informe a quantidade de prestações a serem quitadas!');
 				document.getElementById('chk_quitacao').checked = false;
 				toggleQuitacao(document.getElementById('chk_quitacao'));
 				return;
 			}
 
-			if (inicioParc > totalParcelas) {
-				alert('A parcela inicial não pode ser maior que o total de parcelas!');
-				document.getElementById('chk_quitacao').checked = false;
-				toggleQuitacao(document.getElementById('chk_quitacao'));
-				return;
-			}
-
-			var ultimaParcela = totalParcelas;
-			var parcelasRestantes = ultimaParcela - inicioParc + 1;
+			var ultimaParcela = inicioParc + qtdeParcelas - 1;
+			var parcelasRestantes = qtdeParcelas;
 
 			// Atualiza a exibição
 			setParcelasColumnVisible(true);
 			document.getElementById('PIni').textContent = inicioParc;
 			document.getElementById('PUlt').textContent = ultimaParcela;
-			document.getElementById('Psep').style.display = 'inline';
-			document.getElementById('PUlt').style.display = 'inline';
+			if (parcelasRestantes > 1) {
+				document.getElementById('Psep').style.display = 'inline';
+				document.getElementById('PUlt').style.display = 'inline';
+			} else {
+				document.getElementById('Psep').style.display = 'none';
+				document.getElementById('PUlt').style.display = 'none';
+			}
 			setParcialColumnVisible(false);
 			document.getElementById('Parcial').textContent = '';
 
@@ -650,7 +689,7 @@
 			// Atualiza label
 			var labelQtdPrestacoes = document.getElementById('labelQtdPrestacoes');
 			if (labelQtdPrestacoes) {
-				labelQtdPrestacoes.textContent = parcelasRestantes + ' parcela(s) restante(s)';
+				labelQtdPrestacoes.textContent = parcelasRestantes === 1 ? 'Prestação Recebida' : 'Prestações Recebidas';
 			}
 		}
 
