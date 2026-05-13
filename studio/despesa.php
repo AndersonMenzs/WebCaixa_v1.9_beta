@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>WebCaixa v1.20.7_beta</title>
+	<title>WebCaixa v1.20.9_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -25,10 +25,10 @@
 	include "../cabecprs.php";
 	?>
 
-   <!-- Adicionando jQuery UI para o autocomplete -->
-   <link rel="stylesheet" href="./css/themes.css">
-   <script src="./js/jquery.js"></script>
-   <script src="./js/ui.js"></script>
+	<!-- Adicionando jQuery UI para o autocomplete -->
+	<link rel="stylesheet" href="./css/themes.css">
+	<script src="./js/jquery.js"></script>
+	<script src="./js/ui.js"></script>
 
 	<script>
 		function putFocus(formInst, elementInst) {
@@ -468,51 +468,99 @@
 		</table>
 
 		<br>
+		<?php
 
-		<table id="tb_despesas_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
-			<tr>
-				<td width="50%" align="center">
-					<font color='gold' size='5'><b><i>Reterente</i></b></font>
-				</td>
-				<td width="50%" align="center">
-					<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
-				</td>
-			</tr>
+		if ($ch == 'ok-enc' or $ch == 'ok') {
+		?>
+			<table id="tb_despesas_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
+				<tr>
+					<td width="50%" align="center">
+						<font color='gold' size='5'><b><i>Referente</i></b></font>
+					</td>
+					<td width="50%" align="center">
+						<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
+					</td>
+				</tr>
 
-			<tr>
-				<td width="50%" align="center">
-					<select name="lsref_desp" id="lsref_desp" class="campos">
-						<?php
-						// Criando a Instrução SQL de Consulta
-						$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' ORDER BY codref";
-						$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+				<tr>
+					<td width="50%" align="center">
+						<select name="lsref_desp" id="lsref_desp" class="campos">
+							<?php
+							// Criando a Instrução SQL de Consulta
+							$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' ORDER BY codref";
+							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
 
-						while ($lnpr = mysqli_fetch_array($rspr)) {
-							$CodRef_Desp  = $lnpr['codref'];
-							$TipoRef_Desp = $lnpr['nomeref'];
-						?>
-							<option value="<?php echo $TipoRef_Desp; ?>" class="campos">
-								<?php echo "$TipoRef_Desp"; ?>
-							</option>
-						<?php
-						}
-						mysqli_free_result($rspr);
-						?>
-					</select>
-				</td>
-				<td width="50%" align="center">
-					<input type="text" id="mat_vend_input_dp" name="colab_dp" size="40" maxlength="8" class="campos"
-						onkeypress="fPassaAlfaNumerico('an')"
-						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
-					<input type="hidden" name="mat_colab_dp" id="mat_vend_dp" value="<?php echo $matVendEsc; ?>">
-				</td>
-			</tr>
-		</table>
+							while ($lnpr = mysqli_fetch_array($rspr)) {
+								$CodRef_Desp  = $lnpr['codref'];
+								$TipoRef_Desp = $lnpr['nomeref'];
+							?>
+								<option value="<?php echo $TipoRef_Desp; ?>" class="campos">
+									<?php echo "$TipoRef_Desp"; ?>
+								</option>
+							<?php
+							}
+							mysqli_free_result($rspr);
+							?>
+						</select>
+					</td>
+					<td width="50%" align="center">
+						<input type="text" id="mat_vend_input_dp" name="colab_dp" size="40" maxlength="8" class="campos"
+							onkeypress="fPassaAlfaNumerico('an')"
+							onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+						<input type="hidden" name="mat_colab_dp" id="mat_vend_dp" value="<?php echo $matVendEsc; ?>">
+					</td>
+				</tr>
+			</table>
+		<?php
+		} elseif ($ch == 'ok-cai') {
+		?>
+			<table id="tb_despesas_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
+				<tr>
+					<td width="50%" align="center">
+						<font color='gold' size='5'><b><i>Referente</i></b></font>
+					</td>
+					<td width="50%" align="center">
+						<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
+					</td>
+				</tr>
+
+				<tr>
+					<td width="50%" align="center">
+						<select name="lsref_desp" id="lsref_desp" class="campos">
+							<?php
+							// Criando a Instrução SQL de Consulta
+							$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' AND codref IN (0,2,4) ORDER BY codref";
+							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+
+							while ($lnpr = mysqli_fetch_array($rspr)) {
+								$CodRef_Desp  = $lnpr['codref'];
+								$TipoRef_Desp = $lnpr['nomeref'];
+							?>
+								<option value="<?php echo $TipoRef_Desp; ?>" class="campos">
+									<?php echo "$TipoRef_Desp"; ?>
+								</option>
+							<?php
+							}
+							mysqli_free_result($rspr);
+							?>
+						</select>
+					</td>
+					<td width="50%" align="center">
+						<input type="text" id="mat_vend_input_dp" name="colab_dp" size="40" maxlength="8" class="campos"
+							onkeypress="fPassaAlfaNumerico('an')"
+							onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+						<input type="hidden" name="mat_colab_dp" id="mat_vend_dp" value="<?php echo $matVendEsc; ?>">
+					</td>
+				</tr>
+			</table>
+		<?php
+		}
+		?>
 
 		<table id="tb_reembolso_cli" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
 			<tr>
 				<td width="50%" align="center">
-					<font color='gold' size='5'><b><i>Reterente</i></b></font>
+					<font color='gold' size='5'><b><i>Referente</i></b></font>
 				</td>
 				<td width="50%" align="center">
 					<font color='gold' size='5'><b><i>Cliente</i></b></font>
