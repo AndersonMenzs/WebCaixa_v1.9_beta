@@ -191,7 +191,7 @@
                                 include "dbselect.php";
 
                                 // Pacotes
-                                $sql_Pct = "SELECT * FROM produtos WHERE cod_prod IN ('1','2','3','5','90','91') ORDER BY nome_prod ASC";
+                                $sql_Pct = "SELECT * FROM produtos WHERE cod_prod IN ('1','2','3','4','5','6','7','8','9','10') ORDER BY nome_prod ASC";
                                 $res_Pct = mysqli_query($conec, $sql_Pct) or die("File Error #1. Contate seu Administrador.");
 
                                 while ($row_Pct = mysqli_fetch_assoc($res_Pct)) {
@@ -230,7 +230,7 @@
                             <font size="4">
                                 <?php
                                 // Tamanhos
-                                $sql_Tam = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod IN ('29','30') ORDER BY nome_prod ASC";
+                                $sql_Tam = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod IN ('11','12') ORDER BY nome_prod ASC";
                                 $res_Tam = mysqli_query($conec, $sql_Tam) or die("File Error #2. Contate seu Administrador.");
 
                                 while ($row_Tam = mysqli_fetch_assoc($res_Tam)) {
@@ -257,7 +257,7 @@
                         <select name="tipo_top" id="tipo_top" class="campos" style="width: 60px; height: 30px;">
                             <option value="" selected>0</option>
                             <?php
-                            for ($i = 1; $i <= 6; $i++) { ?>
+                            for ($i = 1; $i <= 4; $i++) { ?>
                                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                             <?php
                             } ?>
@@ -285,7 +285,7 @@
                                 include "dbselect.php";
 
                                 // Pacotes
-                                $sql_Pct = "SELECT * FROM produtos WHERE cod_prod IN ('1','2','3','5','90','91') ORDER BY nome_prod ASC";
+                                $sql_Pct = "SELECT * FROM produtos WHERE cod_prod IN ('1','2','3','4') ORDER BY nome_prod ASC";
                                 $res_Pct = mysqli_query($conec, $sql_Pct) or die("File Error #1. Contate seu Administrador.");
 
                                 while ($row_Pct = mysqli_fetch_assoc($res_Pct)) {
@@ -342,7 +342,7 @@
                                         <font size="4">
                                             <?php
                                             // Tamanhos
-                                            $sql_Tam = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod NOT IN ('1','2','3','4','5','6','34','35','36','37','38','29','30','90','91') ORDER BY nome_prod ASC";
+                                            $sql_Tam = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod NOT IN ('1','2','3','4','5','6','7','8','9','10','11','12') ORDER BY nome_prod ASC";
                                             $res_Tam = mysqli_query($conec, $sql_Tam) or die("File Error #2. Contate seu Administrador.");
 
                                             while ($row_Tam = mysqli_fetch_assoc($res_Tam)) {
@@ -385,7 +385,7 @@
                                 <?php
 
                                 // Pacotes
-                                $sql_Pct = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod NOT IN ('1','2','3','4','5','6','34','35','36','37','38','29','30','90','91') ORDER BY nome_prod ASC";
+                                $sql_Pct = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod NOT IN ('1','2','3','4','5','6','7','8','9','10','11','12') ORDER BY nome_prod ASC";
                                 $res_Pct = mysqli_query($conec, $sql_Pct) or die("File Error #1. Contate seu Administrador.");
 
                                 while ($row_Pct = mysqli_fetch_assoc($res_Pct)) {
