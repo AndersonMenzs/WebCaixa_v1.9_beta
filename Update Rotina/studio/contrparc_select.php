@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>WebCaixa v1.20.9_beta</title>
+    <title>WebCaixa v1.20.10_beta</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style type="text/css">
         body {
@@ -207,12 +207,19 @@
 
                 ?>
 
-                <tr width="50%" align="center">
+                <tr width="30%" align="center">
                     <td>
                         <font color='gold' size='5'><b><i>Book:</i></b></font>
-                        <input id="rdopt_book" type="radio" name="rdopt" class="campos" value="BOOK">
+                        <input id="rdopt_book" type="checkbox" name="rdopt_book" class="campos" value="BOOK" style="margin-left: 30px;">
                     </td>
                     <td align="center">
+                        <font size="4" color='gold'><b><i>Qtde: </i></b></font>
+                        <select name="qtde_book" id="qtde_book" class="campos" style="width: 60px; height: 30px; margin-right: 22px;">
+                            <option value="" selected>0</option>
+                            <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                            <?php } ?>
+                        </select>
                         <font size="4" color='gold'>
                             <b>
                                 <i>Pacote: </i>
@@ -224,7 +231,7 @@
                                 <?php
 
                                 // Pacotes
-                                $sql_Pct = "SELECT * FROM produtos WHERE cod_prod IN ('1','2','3','5','90','91') ORDER BY nome_prod ASC";
+                                $sql_Pct = "SELECT * FROM produtos WHERE cod_prod IN ('1','2','3','5','6','7','8','9','10') ORDER BY nome_prod ASC";
                                 $res_Pct = mysqli_query($conec, $sql_Pct) or die("File Error #1. Contate seu Administrador.");
 
                                 while ($row_Pct = mysqli_fetch_assoc($res_Pct)) {
@@ -239,11 +246,18 @@
                     </td>
                 </tr>
                 <tr>
-                    <td width="50%" align="center">
+                    <td width="30%" align="center">
                         <font color='gold' size='5'><b><i>Poster:</i></b></font>
-                        <input id="rdopt_poster" type="radio" name="rdopt" class="campos" value="POSTER">
+                        <input id="rdopt_poster" type="checkbox" name="rdopt_poster" class="campos" value="POSTER" style="margin-left: 12px;">
                     </td>
                     <td align="center">
+                        <font size="4" color='gold'><b><i>Qtde: </i></b></font>
+                        <select name="qtde_poster" id="qtde_poster" class="campos" style="width: 60px; height: 30px; margin-right: 22px;">
+                            <option value="" selected>0</option>
+                            <?php for ($i = 1; $i <= 10; $i++) { ?>
+                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                            <?php } ?>
+                        </select>
                         <font size="4" color='gold'>
                             <b>
                                 <i>Pacote: </i>
@@ -254,7 +268,7 @@
                             <font size="4">
                                 <?php
                                 // Tamanhos
-                                $sql_Tam = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod IN ('29','30') ORDER BY nome_prod ASC";
+                                $sql_Tam = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod IN ('11','12') ORDER BY nome_prod ASC";
                                 $res_Tam = mysqli_query($conec, $sql_Tam) or die("File Error #2. Contate seu Administrador.");
 
                                 while ($row_Tam = mysqli_fetch_assoc($res_Tam)) {
@@ -349,31 +363,41 @@
     <!-- script para controlar habilitação/desabilitação dos selects e validação -->
     <script>
         (function() {
-            const radios = Array.from(document.querySelectorAll('input[name="rdopt"]'));
+            const chkBook = document.getElementById('rdopt_book');
+            const chkPoster = document.getElementById('rdopt_poster');
+            const marcadores = [chkBook, chkPoster].filter(Boolean);
+            const qtdeBook = document.getElementById('qtde_book');
+            const qtdePoster = document.getElementById('qtde_poster');
             const selectPct = document.getElementById('pct_book');
             const selectTam = document.getElementById('ped_poster');
 
-            if (!radios.length || !selectPct || !selectTam) return;
+            if (!marcadores.length || !qtdeBook || !qtdePoster || !selectPct || !selectTam) return;
 
             window.checkdata = function() {
-                const rdoMarked = radios.find(r => r.checked);
-
-                // Verificar se algum radio está marcado
-                if (!rdoMarked) {
+                if (!chkBook.checked && !chkPoster.checked) {
                     alert('Selecione um tipo: Books ou Poster');
                     return false;
                 }
 
-                const tipo = rdoMarked.value;
-
-                // Validar seleção conforme tipo marcado
-                if (tipo === 'BOOK') {
+                if (chkBook.checked) {
+                    if (qtdeBook.value === '' || qtdeBook.selectedIndex === 0) {
+                        alert('Informe a quantidade de Books');
+                        qtdeBook.focus();
+                        return false;
+                    }
                     if (selectPct.value === '' || selectPct.selectedIndex === 0) {
                         alert('Selecione um Pacote de Books');
                         selectPct.focus();
                         return false;
                     }
-                } else if (tipo === 'POSTER') {
+                }
+
+                if (chkPoster.checked) {
+                    if (qtdePoster.value === '' || qtdePoster.selectedIndex === 0) {
+                        alert('Informe a quantidade de Posters');
+                        qtdePoster.focus();
+                        return false;
+                    }
                     if (selectTam.value === '' || selectTam.selectedIndex === 0) {
                         alert('Selecione um Tamanho do Poster');
                         selectTam.focus();
@@ -385,28 +409,24 @@
             };
 
             function atualizarSelects() {
-                const rdoMarked = radios.find(r => r.checked);
-                const tipo = rdoMarked ? rdoMarked.value : '';
+                qtdeBook.disabled = !chkBook.checked;
+                selectPct.disabled = !chkBook.checked;
+                qtdePoster.disabled = !chkPoster.checked;
+                selectTam.disabled = !chkPoster.checked;
 
-                if (tipo === 'BOOK') {
-                    selectPct.disabled = false;
-                    selectTam.disabled = true;
-                    selectTam.selectedIndex = 0;
-                } else if (tipo === 'POSTER') {
-                    selectPct.disabled = true;
+                if (!chkBook.checked) {
+                    qtdeBook.selectedIndex = 0;
                     selectPct.selectedIndex = 0;
-                    selectTam.disabled = false;
-                } else {
-                    selectPct.disabled = true;
-                    selectTam.disabled = true;
-                    selectPct.selectedIndex = 0;
+                }
+
+                if (!chkPoster.checked) {
+                    qtdePoster.selectedIndex = 0;
                     selectTam.selectedIndex = 0;
                 }
             }
 
-            // Listener para cada radio button
-            radios.forEach(function(radio) {
-                radio.addEventListener('change', atualizarSelects);
+            marcadores.forEach(function(marcador) {
+                marcador.addEventListener('change', atualizarSelects);
             });
 
             // Aplicar estado inicial
