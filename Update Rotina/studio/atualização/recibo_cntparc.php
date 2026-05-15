@@ -161,14 +161,6 @@ include "./dbselect.php";
             display: none;
         }
 
-        .descricao-pedido {
-            display: inline-block;
-            line-height: 1.35;
-            padding: 2px 0;
-            white-space: normal;
-            word-break: normal;
-        }
-
         @media print {
 
             /* Remove margens padrão */
@@ -535,23 +527,6 @@ include "./dbselect.php";
                 <td style="border-top: 1px solid #000000" align="center" valign=middle></td>
                 <td height="4" align="left" valign=bottom></td>
             </tr>
-            <?php if ($Pedido <> '') { ?>
-            <tr>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="11" align="left" valign=middle>
-                    <b>
-                        <font size=1>DESCRIÇÃO</font>
-                    </b>
-                </td>
-            </tr>
-            <tr>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="24" align="center" valign=middle>
-                    <font size=1><span class="descricao-pedido"><?php echo $Pedido; ?></span></font>
-                </td>
-            </tr>
-            <tr>
-                <td height="4" align="left" valign=bottom></td>
-            </tr>
-            <?php } ?>
             <tr>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="11" align="left" valign=middle>
                     <b>
@@ -942,23 +917,6 @@ include "./dbselect.php";
                 <td style="border-top: 1px solid #000000" align="center" valign=middle></td>
                 <td height="4" align="left" valign=bottom></td>
             </tr>
-            <?php if ($Pedido <> '') { ?>
-            <tr>
-                <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="11" align="left" valign=middle>
-                    <b>
-                        <font size=1>DESCRIÇÃO</font>
-                    </b>
-                </td>
-            </tr>
-            <tr>
-                <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="24" align="center" valign=middle>
-                    <font size=1><span class="descricao-pedido"><?php echo $Pedido; ?></span></font>
-                </td>
-            </tr>
-            <tr>
-                <td height="4" align="left" valign=bottom></td>
-            </tr>
-            <?php } ?>
             <tr>
                 <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=14 height="11" align="left" valign=middle>
                     <b>
@@ -1019,7 +977,7 @@ include "./dbselect.php";
             <?php
 
             // Verifica se é uma quitação e pedido de venda para exibir a terceira via  
-            if ($Rdopt == 'BOOK' OR $Rdopt == 'POSTER' OR $Rdopt == 'BOOK/POSTER') {
+            if ($Rdopt == 'BOOK' OR $Rdopt == 'POSTER') {
             ?>
                 <!-- Primeira via -->
                 <tr>

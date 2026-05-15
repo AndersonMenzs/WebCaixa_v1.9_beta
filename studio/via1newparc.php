@@ -92,7 +92,7 @@ include "./valor_ext.php";
 	$tipo_2 = "PEDIDO";
 
 	// Verifica se é um pedido
-	if ($Rdopt == 'BOOK' or $Rdopt == 'POSTER') {
+	if ($Rdopt == 'BOOK' or $Rdopt == 'POSTER' or $Rdopt == 'BOOK/POSTER') {
 
 		// Obtendo Dados da solicitação do pedido
 		$sqlE = "select * from registro where reg = '$Aut' and (tiporec = 3 or tiporec = 4 or tiporec = 6 or tiporec = 7) and estorno <> 'x' and datarec = $DataAtual";
@@ -211,7 +211,7 @@ include "./valor_ext.php";
 		$FmRec_a = "CPL";
 	}
 
-	if ($Rdopt == 'BOOK' or $Rdopt == 'POSTER') {
+	if ($Rdopt == 'BOOK' or $Rdopt == 'POSTER' or $Rdopt == 'BOOK/POSTER') {
 		// Imprimindo o Recibo
 		$MatRec = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
 		$VrRecF    = number_format($VrRec, 2, ',', '.');
@@ -282,7 +282,7 @@ include "./valor_ext.php";
 				'&parc_card_cred=<?php echo urlencode($Parc_Card_Cred); ?>';
 
 			// Verifica se o $Rdopt tem algum valor antes de adicioná-lo à URL
-			<?php if ($Rdopt == 'BOOK' || $Rdopt == 'POSTER') { ?>
+			<?php if ($Rdopt == 'BOOK' || $Rdopt == 'POSTER' || $Rdopt == 'BOOK/POSTER') { ?>
 				url += '&rdopt=<?php echo urlencode($Rdopt); ?>';
 				url += '&pedido=<?php echo urlencode($Pedido); ?>';
 				url += '&tipo_2=<?php echo urlencode($tipo_2); ?>';

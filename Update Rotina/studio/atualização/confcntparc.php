@@ -113,32 +113,8 @@
 	$Parc_card_cred = trim($_POST['parc_card_cred']);;
 
 	$ref_std = trim($_POST['ref_std']);
-	$Rdopt = trim($_POST['rdopt'] ?? '');
-	$ItensPedido = array();
-
-	if (isset($_POST['rdopt_book']) && trim($_POST['rdopt_book']) <> '') {
-		$Qtde_Book = trim($_POST['qtde_book'] ?? '');
-		$Pct_Book = trim($_POST['pct_book'] ?? '');
-		if ($Qtde_Book <> '' && $Pct_Book <> '') {
-			$ItensPedido[] = $Qtde_Book . " x " . $Pct_Book;
-		}
-	}
-
-	if (isset($_POST['rdopt_poster']) && trim($_POST['rdopt_poster']) <> '') {
-		$Qtde_Poster = trim($_POST['qtde_poster'] ?? '');
-		$Ped_Poster = trim($_POST['ped_poster'] ?? '');
-		if ($Qtde_Poster <> '' && $Ped_Poster <> '') {
-			$ItensPedido[] = $Qtde_Poster . " x " . $Ped_Poster;
-		}
-	}
-
-	if (count($ItensPedido) > 1) {
-		$Rdopt = 'BOOK/POSTER';
-	} elseif (count($ItensPedido) == 1) {
-		$Rdopt = isset($_POST['rdopt_book']) && trim($_POST['rdopt_book']) <> '' ? 'BOOK' : 'POSTER';
-	}
-
-	$Pedido = implode(", ", $ItensPedido);
+	$Rdopt = trim($_POST['rdopt']);
+	$Pedido = trim($_POST['pct_book'] ?? '') ? trim($_POST['pct_book']) : trim($_POST['ped_poster'] ?? '');
 	$Quitacao = isset($_POST['chk_quitacao']) && $_POST['chk_quitacao'] == '1';
 	$ValorQuitacaoCents = moedaParaCentavos($_POST['txtvalor'] ?? 0) * (int) $QtdeParc;
 	$ValorPagamentosCents = moedaParaCentavos($_POST['txt1'] ?? 0) + moedaParaCentavos($_POST['txt2'] ?? 0) + moedaParaCentavos($_POST['txt3'] ?? 0);
@@ -344,7 +320,7 @@
 				</tr>
 
 				<?php
-				if ($Rdopt <> 'NORMAL' && $Pedido <> '') { 
+				if ($Rdopt <> 'NORMAL') { 
 					?>
 					<tr>
 						<td width="45%" align="right">
