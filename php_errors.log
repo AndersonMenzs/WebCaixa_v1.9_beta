@@ -1,0 +1,11 @@
+[15-May-2026 16:12:23 UTC] PHP Warning:  include(../cabecprs.php): Failed to open stream: No such file or directory in /var/www/html/caixa/studio/fccxant.php on line 43
+[15-May-2026 16:12:23 UTC] PHP Warning:  include(): Failed opening '../cabecprs.php' for inclusion (include_path='.:/usr/share/php') in /var/www/html/caixa/studio/fccxant.php on line 43
+[15-May-2026 16:12:23 UTC] PHP Warning:  Undefined array key "txtuser" in /var/www/html/caixa/studio/fccxant.php on line 48
+[15-May-2026 16:12:23 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/caixa/studio/fccxant.php on line 48
+[15-May-2026 16:12:23 UTC] PHP Warning:  Undefined array key "txtcash" in /var/www/html/caixa/studio/fccxant.php on line 56
+[15-May-2026 16:12:23 UTC] PHP Deprecated:  trim(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/html/caixa/studio/fccxant.php on line 56
+[15-May-2026 16:12:23 UTC] PHP Fatal error:  Uncaught TypeError: number_format(): Argument #1 ($num) must be of type int|float, string given in /var/www/html/caixa/studio/fccxant.php:57
+Stack trace:
+#0 /var/www/html/caixa/studio/fccxant.php(57): number_format()
+#1 {main}
+  thrown in /var/www/html/caixa/studio/fccxant.php on line 57
