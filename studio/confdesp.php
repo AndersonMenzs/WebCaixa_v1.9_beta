@@ -51,12 +51,13 @@
 	$ValorF    = number_format($Valor, 2, ',', '.');
 	$lsPr      = trim($_POST['lsPr']);
 	$TipoPag   = trim($_POST['lsPr']);
-	$lsref_desp	= trim($_POST['lsref_desp']);
-	$lsref_remb	= trim($_POST['lsref_remb']);
-	$TipoRef = ($lsref_desp != 'Selecione' and $lsPr == '1') ? $lsref_desp : (($lsref_remb != 'Selecione' and $lsPr == '5') ? $lsref_remb : '');
-	$TipoDoc = ($lsref_desp != 'Selecione' and $lsPr == '1') ? 'DDP' : (($lsref_remb != 'Selecione' and $lsPr == '5') ? 'RCL' : ($lsPr == '7' ? 'VTR' : ($lsPr == '6' ? 'SRV' : ($lsPr == '4' ? 'MPD' : ($lsPr == '2' ? 'MCS' : ($lsPr == '3' ? 'MDV' : ($lsPr == '8' ? 'OUT' : '')))))));
-	$cliente	= trim($_POST['cliente']);
-
+	$lsref_desp	= trim($_POST['lsref_desp'] ?? '');
+	$lsref_remb	= trim($_POST['lsref_remb'] ?? '');
+	$TipoRef = ($lsref_remb != 'Selecione' and $lsPr == '5') ? $lsref_remb : '';
+	$TipoDoc = ($lsPr == '1') ? 'DDP' : (($lsref_remb != 'Selecione' and $lsPr == '5') ? 'RCL' : ($lsPr == '7' ? 'VTR' : ($lsPr == '6' ? 'SRV' : ($lsPr == '4' ? 'MPD' : ($lsPr == '2' ? 'MCS' : ($lsPr == '3' ? 'MDV' : ($lsPr == '8' ? 'OUT' : '')))))));
+	$cliente	= trim($_POST['cliente'] ?? '');
+echo $lsref_desp;
+exit;
 	// Verifica se o tipo de despesa é 2, 3, 4 ou 8 para obter a matrícula e o nome do colaborador
 	if ($TipoPag == '2' or $TipoPag == '3' or $TipoPag == '4' or $TipoPag == '8') {
 
@@ -73,11 +74,18 @@
 		mysqli_free_result($rs);
 	}
 
-	$colab = $_POST['colab_dp'] ?: $_POST['colab_vt'] ?: $_POST['colab_srv'] ?: $colab_mcdpo;
-	$mat_vend = $_POST['mat_colab_dp'] ?: $_POST['mat_colab_vt'] ?: $_POST['mat_colab_srv'] ?: $mat_vend_mcdpo;
+	$colab = ($lsPr == '1') ? '' : (($_POST['colab_dp'] ?? '') ?: ($_POST['colab_vt'] ?? '') ?: ($_POST['colab_srv'] ?? '') ?: ($colab_mcdpo ?? ''));
+	$mat_vend = ($lsPr == '1') ? '' : (($_POST['mat_colab_dp'] ?? '') ?: ($_POST['mat_colab_vt'] ?? '') ?: ($_POST['mat_colab_srv'] ?? '') ?: ($mat_vend_mcdpo ?? ''));
 
 	include "conexao.php";
 	include "dbselect.php";
+
+	// Obtendo o código do estúdio
+	$sql = "SELECT pc FROM antfech";
+	$rs  = mysqli_query($conec, $sql);
+	$ln  = mysqli_fetch_array($rs);
+	$PC = $ln['pc'];
+	mysqli_free_result($rs);
 
 	// Obtendo Dados
 	$sql = "select * from pgtos where codpag = '$TipoPag' ";
@@ -118,7 +126,7 @@
 					</td>
 					<td width="50%" align="center">
 						<?php
-						if ($lsPr == '1' or $lsPr == '5') {
+						if ($lsPr == '5') {
 						?>
 							<font color='#FFFFFF' size='5'><b><i>
 										<blink><?php echo $NomeDesc . " - " . $TipoRef; ?></blink>
@@ -159,7 +167,7 @@
 		<input type="hidden" name="txtcod2" value="<?php echo $Cod2; ?>">
 		<input type="hidden" name="txttipodesp" value="<?php echo $TipoPag; ?>">
 		<input type="hidden" name="txtvalor" value="<?php echo $Valor; ?>">
-		<input type="hidden" name="txtmodpag" value="<?php echo 0; ?>">
+		<input type="hidden" name="pc" value="<?php echo $PC; ?>">
 		<input type="hidden" name="colab" value="<?php echo $colab; ?>">
 		<input type="hidden" name="mat_vend" value="<?php echo $mat_vend; ?>">
 		<input type="hidden" name="cliente" value="<?php echo $cliente; ?>">

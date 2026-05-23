@@ -228,15 +228,13 @@
 				if (c) c.removeAttribute('required');
 			});
 
-			// Mostre a tabela correta
-			if (selectedValue === '1' || optionClass.includes('despesa-dp')) {
-				if (tabelaDP) tabelaDP.style.display = 'table';
-				if (tabelaRemb) tabelaRemb.style.display = 'none';
-				if (tablaValeTrans) tablaValeTrans.style.display = 'none';
-				if (tabelaServPrest) tabelaServPrest.style.display = 'none';
-				var colabDP = document.getElementById('mat_vend_input_dp');
-				if (colabDP) colabDP.setAttribute('required', 'required');
-			} else if (selectedValue === '5' || optionClass.includes('reembolso-cli')) {
+				// Mostre a tabela correta
+				if (selectedValue === '1' || optionClass.includes('despesa-dp')) {
+					if (tabelaDP) tabelaDP.style.display = 'table';
+					if (tabelaRemb) tabelaRemb.style.display = 'none';
+					if (tablaValeTrans) tablaValeTrans.style.display = 'none';
+					if (tabelaServPrest) tabelaServPrest.style.display = 'none';
+				} else if (selectedValue === '5' || optionClass.includes('reembolso-cli')) {
 				if (tabelaRemb) tabelaRemb.style.display = 'table';
 				if (tabelaDP) tabelaDP.style.display = 'none';
 				if (tablaValeTrans) tablaValeTrans.style.display = 'none';
@@ -474,40 +472,31 @@
 		?>
 			<table id="tb_despesas_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
-					<td width="50%" align="center">
+					<td width="100%" align="center">
 						<font color='gold' size='5'><b><i>Referente</i></b></font>
-					</td>
-					<td width="50%" align="center">
-						<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
 					</td>
 				</tr>
 
 				<tr>
-					<td width="50%" align="center">
+					<td width="100%" align="center">
 						<select name="lsref_desp" id="lsref_desp" class="campos">
-							<?php
-							// Criando a Instrução SQL de Consulta
-							$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' ORDER BY codref";
-							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+						<?php
+						// Criando a Instrução SQL de Consulta
+						$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' ORDER BY codref";
+						$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
 
-							while ($lnpr = mysqli_fetch_array($rspr)) {
-								$CodRef_Desp  = $lnpr['codref'];
-								$TipoRef_Desp = $lnpr['nomeref'];
-							?>
-								<option value="<?php echo $TipoRef_Desp; ?>" class="campos">
-									<?php echo "$TipoRef_Desp"; ?>
-								</option>
-							<?php
-							}
-							mysqli_free_result($rspr);
-							?>
-						</select>
-					</td>
-					<td width="50%" align="center">
-						<input type="text" id="mat_vend_input_dp" name="colab_dp" size="40" maxlength="8" class="campos"
-							onkeypress="fPassaAlfaNumerico('an')"
-							onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
-						<input type="hidden" name="mat_colab_dp" id="mat_vend_dp" value="<?php echo $matVendEsc; ?>">
+						while ($lnpr = mysqli_fetch_array($rspr)) {
+							$CodRef_Desp  = $lnpr['codref'];
+							$TipoRef_Desp = $lnpr['nomeref'];
+						?>
+							<option value="<?php echo $TipoRef_Desp; ?>" class="campos">
+								<?php echo "$TipoRef_Desp"; ?>
+							</option>
+						<?php
+						}
+						mysqli_free_result($rspr);
+					?>
+					</select>
 					</td>
 				</tr>
 			</table>
@@ -529,7 +518,7 @@
 						<select name="lsref_desp" id="lsref_desp" class="campos">
 							<?php
 							// Criando a Instrução SQL de Consulta
-							$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' AND codref IN (0,2,4) ORDER BY codref";
+							$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' ORDER BY codref";
 							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
 
 							while ($lnpr = mysqli_fetch_array($rspr)) {

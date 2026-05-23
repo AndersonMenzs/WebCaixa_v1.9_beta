@@ -1,34 +1,34 @@
 <?php
 
-/*$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
-echo "<pre>";
-	print_r($dados);
-	echo "</pre>";
-	exit();*/
-
 // Importando os Dados do Formulário
 $empresa        = "ESTRELLA PHOTO STUDIO";
 $tipoDocumento  = "Comunicação Interna";
 
-$protocolo      = trim($_GET['UlDoc_ci']);
+//$protocolo      = trim($_GET['UlDoc_ci']);
+$protocolo      = "CI-22226-00001";
 $dataDocumento  = trim($_GET['Data']);
 
 $origem         = "PC-" . trim($_GET['PC']);
 $destino        = trim($_GET['Tes']);
 
-$assunto        = "Comprovante de Recebimento de " . trim($_GET['TipoRef']);
+//$assunto        = "Comprovante de Recebimento de " . trim($_GET['TipoRef']);
+//$assunto        = "Despesa 71";
 
-$nomeFuncionario = trim($_GET['colab']);
+//$nomeFuncionario = trim($_GET['colab']);
+$nomeFuncionario = "(colaboradora)";
 
 // fotmatar a matrícula com hífen (1.234.567-8)
-$matricula       = trim($_GET['mat_vend']);
-$matricula       = substr($matricula, 0, 1) . "." . substr($matricula, 1, 3) . "." . substr($matricula, 4, 3) . "-" . substr($matricula, 7, 1);
-$tipoDespesa    = trim($_GET['TipoRef']);
+//$matricula       = trim($_GET['mat_vend']);
+//$matricula       = substr($matricula, 0, 1) . "." . substr($matricula, 1, 3) . "." . substr($matricula, 4, 3) . "-" . substr($matricula, 7, 1);
+$matricula       = "0.000.000-0";
+//$tipoDespesa    = trim($_GET['TipoRef']);
+$tipoDespesa    = "(71)";
 
 $valor           = trim($_GET['Valor']);
 $valorExtenso    = trim($_GET['Valor_ext']);
 
-$autenticacao    = trim($_GET['Aut']);
+//$autenticacao    = trim($_GET['Aut']);
+$autenticacao    = "000122215070 220526 R$ 10000DDPDIN000035-9";
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -154,7 +154,6 @@ $autenticacao    = trim($_GET['Aut']);
 </head>
 
 <body onload="window.print()">
-
     <div class="container">
 
         <div class="header">
@@ -175,22 +174,18 @@ $autenticacao    = trim($_GET['Aut']);
             <strong>Para:</strong> <?= $destino ?>
         </div>
 
-        <div class="linha">
+        <!--<div class="linha">
             <strong>Assunto:</strong> <?= $assunto ?>
-        </div>
+        </div>-->
 
         <div class="texto">
-            Eu, <strong><i><?= $nomeFuncionario ?></i></strong>, funcionário(a) registrado(a)
-            sob matrícula <strong><i><?= $matricula ?></i></strong> da unidade
-            <strong><i><?= $origem ?></i></strong>, confirmo ter recebido o valor de
-            <strong><i>R$ <?= number_format($valor, 2, ',', '.') . " (" . $valorExtenso . ")" ?></i></strong>
-            referente a(o) <strong><i><?= $tipoDespesa ?></i></strong>,
-            conforme acordo e políticas internas da empresa.
+            Comprovante de despesa de código <strong><i><?= $tipoDespesa ?></i></strong> no valor de
+            <strong><i>R$ <?= number_format($valor, 2, ',', '.') . " (" . $valorExtenso . ")" ?></i></strong>.
         </div>
 
         <div class="assinatura">
             <div class="linha-ass"></div>
-            Assinatura do Funcionário(a)
+            Assinatura da Encarregada
         </div>
 
         <div class="rodape">

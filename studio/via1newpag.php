@@ -75,6 +75,7 @@
 	$ValorF   = "R$ " . $VrF;
 	$Mat       = trim($_POST['txtmat']);
 	$FmRec  = "DIN";
+	$UltDoc_dp = trim($_POST['ultdoc_dp']) ? trim($_POST['ultdoc_dp']) : "0";
 	$UltDoc_ci = trim($_POST['ultdoc_ci']) ? trim($_POST['ultdoc_ci']) : "0";
 	$UltDoc_rc = trim($_POST['ultdoc_rc']) ? trim($_POST['ultdoc_rc']) : "0";
 	$UltDoc_md = trim($_POST['ultdoc_md']) ? trim($_POST['ultdoc_md']) : "0";
@@ -91,6 +92,7 @@
 	$NomeDesc = trim($_POST['nomedesc']);
 
 	// Formatando o número do documento cd CI2222600000 para CI-22226-00000
+	$UltDoc_dp = substr($UltDoc_dp, 0, 2) . "-" . substr($UltDoc_dp, 2, 5) . "-" . substr($UltDoc_dp, 7);
 	$UltDoc_ci = substr($UltDoc_ci, 0, 2) . "-" . substr($UltDoc_ci, 2, 5) . "-" . substr($UltDoc_ci, 7);
 	$UltDoc_rc = substr($UltDoc_rc, 0, 2) . "-" . substr($UltDoc_rc, 2, 5) . "-" . substr($UltDoc_rc, 7);
 	$UltDoc_md = substr($UltDoc_md, 0, 2) . "-" . substr($UltDoc_md, 2, 5) . "-" . substr($UltDoc_md, 7);
@@ -129,6 +131,7 @@
 	}
 
 	// Remover hifen do $UltDoc_ci
+	$UltDoc_dp_h = str_replace("-", "", $UltDoc_dp);
 	$UltDoc_ci_h = str_replace("-", "", $UltDoc_ci);
 	$UltDoc_rc_h = str_replace("-", "", $UltDoc_rc);
 	$UltDoc_mp_h = str_replace("-", "", $UltDoc_mp);
@@ -138,7 +141,9 @@
 	$UltDoc_out_h = str_replace("-", "", $UltDoc_out);
 
 	// Gerando o código de autenticação
-	if ($TipoDoc == 'CI') {
+	if ($TipoDoc == 'DP') {
+		$Aut = $Reg . $PC . $horaaut . $UltDoc_dp_h . " " . $dtAut . " R$ " . $Vr . $SgRec . $FmRec . $MatRec;
+	} elseif ($TipoDoc == 'CI') {
 		$Aut = $Reg . $PC . $horaaut . $UltDoc_ci_h . " " . $dtAut . " R$ " . $Vr . $SgRec . $FmRec . $MatRec;
 	} elseif ($TipoDoc == 'RC') {
 		$Aut = $Reg . $PC . $horaaut . $UltDoc_rc_h . " " . $dtAut . " R$ " . $Vr . $SgRec . $FmRec . $MatRec;
@@ -180,14 +185,11 @@
 			function imprimirERedirecionar() {
 				// Monta a URL com os dados
 				var url = './ci_desp.php?tipo=<?php echo urlencode($tipo); ?>' +
-					'&UlDoc_ci=<?php echo urlencode($UltDoc_ci); ?>' +
+					'&UlDoc_dp=<?php echo urlencode($UltDoc_rc); ?>' +
 					'&Aut=<?php echo urlencode($Aut); ?>' +
 					'&Data=<?php echo urlencode($Data); ?>' +
 					'&PC=<?php echo urlencode($PC); ?>' +
 					'&Tes=<?php echo urlencode($Tes); ?>' +
-					'&Assunto=<?php echo urlencode($Assunto); ?>' +
-					'&colab=<?php echo urlencode($colab); ?>' +
-					'&mat_vend=<?php echo urlencode($mat_vend); ?>' +
 					'&Valor=<?php echo urlencode($Valor); ?>' +
 					'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
 					'&TipoRef=<?php echo urlencode($TipoRef); ?>';
