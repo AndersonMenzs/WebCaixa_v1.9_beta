@@ -8,7 +8,7 @@ ini_set('error_log', 'php_errors.log');
 <html>
 
 <head>
-	<title>WebCaixa v1.20.10_beta</title>
+	<title>WebCaixa v1.20.12_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -43,10 +43,30 @@ ini_set('error_log', 'php_errors.log');
 	include "../cabecprs.php";
 
 	// Obtendo o Login
-	$Sis       = "S7";
-	$Rot       = "S7R5.2.1.1";
-	$lg_user   = trim($_POST['txtuser']);
-	$user    = substr($lg_user, 0, 8);
+		$Sis       = "S7";
+		$Rot       = "S7R5.2.1.1";
+		$lg_user   = trim($_POST['txtuser']);
+		?>
+		<script>
+			(function() {
+				var sairUrl = 'sair.php?c_s=<?php echo rawurlencode($lg_user); ?>';
+
+				if (window.history && window.history.pushState) {
+					window.history.replaceState({
+						fechamento: true
+					}, document.title, window.location.href);
+					window.history.pushState({
+						fechamento: true
+					}, document.title, window.location.href);
+
+					window.addEventListener('popstate', function() {
+						window.location.replace(sairUrl);
+					});
+				}
+			})();
+		</script>
+		<?php
+		$user    = substr($lg_user, 0, 8);
 	$mat1  = substr($user, 0, 1);
 	$mat2  = substr($user, 1, 3);
 	$mat3  = substr($user, 4, 3);
@@ -68,6 +88,8 @@ ini_set('error_log', 'php_errors.log');
 	$hora      = date("H:i");
 	$horaNorm  = date("Hi");
 	$horaInv   = date("iH");
+
+	$TipoFech = "Final";
 
 	include "us_sist.php";
 	if ($ch == 'no') {
@@ -224,23 +246,6 @@ ini_set('error_log', 'php_errors.log');
 			$ValorConc = '0,00';
 		}
 
-		// Totalizando Taxa Bebê Estrella
-		/*$sqlR  = "SELECT numdoc FROM registro where tiporec='A' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc, numdoc";
-		$rsR   = mysqli_query($conec, $sqlR) or die('File fccxant Error #9. Contate seu Administrador.');
-		$NBebe = mysqli_num_rows($rsR);
-
-		$sqlR  = "SELECT vlrec FROM registro where tiporec='A' and estorno <> 'x' and datarec = '$dtOpen' ";
-		$rsR   = mysqli_query($conec, $sqlR) or die('File fccxant Error #10. Contate seu Administrador.');
-		
-		while ($lnR  = mysqli_fetch_array($rsR)) {
-			$VlRec     = $lnR['vlrec'];
-			$RecBebe   = $RecBebe + $VlRec;
-			$ValorBebe = number_format($RecBebe, 2, ",", ".");
-		}
-		if ($ValorBebe == '') {
-			$ValorBebe = '0,00';
-		}*/
-
 		// Totalizando Contratos (Entrada)
 		$sqlR = "SELECT numdoc FROM registro where tiporec='3' and subtipo = 'CNTE' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #11. Contate seu Administrador.');
@@ -348,24 +353,6 @@ ini_set('error_log', 'php_errors.log');
 		if ($VrBookRecF == '') {
 			$VrBookRecF = '0,00';
 		}
-
-		// Resgate de Cheques
-		/*$sqlR = "SELECT numdoc FROM registro where tiporec='5' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc";
-		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #23. Contate seu Administrador.');
-		$NResgate = mysqli_num_rows($rsR);
-
-		$sqlR = "SELECT vlrec FROM registro where tiporec='5' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
-		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #24. Contate seu Administrador.');
-		
-		while ($lnR  = mysqli_fetch_array($rsR)) {
-			$VlRec    = $lnR['vlrec'];
-			$RecResg  = $RecResg + $VlRec;
-			$ValorResg = number_format($RecResg, 2, ",", ".");
-		}
-		
-		if ($ValorResg == '') {
-			$ValorResg = '0,00';
-		}*/
 
 		// Despesas
 		$sqlR = "SELECT numdoc FROM registro where tiporec='8' and estorno <> 'x' and datarec = '$dtOpen' ";
@@ -500,48 +487,6 @@ ini_set('error_log', 'php_errors.log');
 			$CardParcAdm = '0,00';
 		}
 
-		// Arrecadado em Cheques a Vista
-		/*$sqlR = "SELECT vlrec FROM registro where modpgto='40' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
-		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #34. Contate seu Administrador.');
-		
-		while ($lnR  = mysqli_fetch_array($rsR)) {
-			$VlRec   = $lnR['vlrec'];
-			$cheqTotV  = $cheqTotV + $VlRec;
-			$CheqTotal = number_format($cheqTotV, 2, ",", ".");
-		}
-		
-		if ($CheqTotal == '') {
-			$CheqTotal = '0,00';
-		}
-
-		// Arrecadado em Cheques Pre-datados
-		$sqlR = "SELECT vlrec FROM registro where modpgto='50' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
-		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #35. Contate seu Administrador.');
-		
-		while ($lnR  = mysqli_fetch_array($rsR)) {
-			$VlRec   = $lnR['vlrec'];
-			$cheqTotPre  = $cheqTotPre + $VlRec;
-			$CheqPre = number_format($cheqTotPre, 2, ",", ".");
-		}
-		
-		if ($CheqPre == '') {
-			$CheqPre = '0,00';
-		}
-
-		// Depósito de Clientes
-		$sqlR = "SELECT vlrec FROM registro where modpgto='60' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
-		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #36. Contate seu Administrador.');
-		
-		while ($lnR  = mysqli_fetch_array($rsR)) {
-			$VlRec    = $lnR['vlrec'];
-			$DepClientes   = $DepClientes + $VlRec;
-			$DepCli = number_format($DepClientes, 2, ",", ".");
-		}
-		
-		if ($DepCli == '') {
-			$DepCli = '0,00';
-		}*/
-
 		// Obtendo o Total Depositado
 		$sqlR = "select * from depositos where dtdep = '$dtOpen' ";
 		$rsR  = mysqli_query($conec, $sqlR) or die("File fccxant Error #37. Contate seu Administrador.");
@@ -554,7 +499,6 @@ ini_set('error_log', 'php_errors.log');
 		$Recolh = number_format($Recl, 2, ".", "");
 
 		// Totalizando Recebimentos
-		//$Entradas    = $cashTot + $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $DepClientes + $pixQRCode + $pixCNPJ;
 		$Entradas    = $cashTot + $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $pixQRCode + $pixCNPJ;
 		$DemaisTot   = $cDebFinal + $credTotV + $credTotPLoja + $credTotPAdm + $pixQRCode + $pixCNPJ;
 		$Geral       = $Recolh + $DemaisTot;
@@ -708,12 +652,13 @@ ini_set('error_log', 'php_errors.log');
 							</td>
 						</tr>
 
-						<tr>
+						<!--<tr>
 							<td>
 								<font color="gold"><b><i>Chaveiros:. . . . . . . . . </b></i></font>
-								<b><i><?php echo "$NTChav itens --> R$ $ValorChav"; ?></i></b>
+								<b><i><?php //echo "$NTChav itens --> R$ $ValorChav"; 
+										?></i></b>
 							</td>
-						</tr>
+						</tr>-->
 
 						<tr>
 							<td>
@@ -750,12 +695,13 @@ ini_set('error_log', 'php_errors.log');
 							</td>
 						</tr>
 
-						<tr>
+						<!--<tr>
 							<td>
 								<font color="gold"><b><i>Propostas (Parcela):. . </b></i></font>
-								<b><i><?php echo "$NPropParc itens --> R$ $ValorPropParc"; ?></i></b>
+								<b><i><?php //echo "$NPropParc itens --> R$ $ValorPropParc"; 
+										?></i></b>
 							</td>
-						</tr>
+						</tr>-->
 
 						<tr>
 							<td>
@@ -971,19 +917,11 @@ ini_set('error_log', 'php_errors.log');
 
 		// Calculando Recolhimentos
 		$TPgto = $Pgtos + $Recl;
-		$TotPgto = number_format($TPgto, 2, ",", "."); 
-		
+		$TotPgto = number_format($TPgto, 2, ",", ".");
+
 		// Variáveis zeradas
 		$NBebe = '0';
 		$NResgate = '0';
-		
-		?>
-
-		<p>
-			<center><a href='http://localhost/caixa'><img src='./images/sair2.gif' border='0'></a>&nbsp;&nbsp;&nbsp;
-				<a href="reimpfech.php?c_s=<?php echo $lg_user; ?>"><img src="./images/reimp.gif" border="0"></a>
-		</p>
-		<?php
 
 		// Gravando Spool de Reimpressão
 		$sqlS = "update spoolfch set fita 	= '$Fita',
@@ -1102,8 +1040,6 @@ ini_set('error_log', 'php_errors.log');
 				despout      = '$OUT'  where fita = '$Fita' and ano = '$ano' ";
 
 		$rsGr  = mysqli_query($conec, $sqlGr) or die("File fccxant Error #100. SQL Error: " . mysqli_error($conec) . " | Query: " . $sqlGr);
-
-		//=============================================================================================================
 
 		// spoolfch
 		$sqlATF_1 = "SELECT fita, datafch FROM spoolfch ORDER BY datafch DESC LIMIT 1";
@@ -1259,433 +1195,315 @@ ini_set('error_log', 'php_errors.log');
 			$rsATF_3 = mysqli_query($conec, $sqlATF_3) or die("Erro ao inserir dados: " . mysqli_error($conec));
 		}
 
-		//=============================================================================================================
+		?>
 
-		// Imprimindo os Dados
-		$traco = "------------------------------------------------";
-		shell_exec("echo 'Estrella Photo Studio' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
+		<form method="post" action="impfccxant.php?c_s=<?php echo $lg_user; ?>" target="_blank">
+			<input type="hidden" name="c_s" value="<?php echo $lg_user; ?>">
+			<input type="hidden" name="tipoFech" value="<?php echo $TipoFech; ?>">
+			<input type="hidden" name="fita" value="<?php echo $Fita; ?>">
+			<input type="hidden" name="ano" value="<?php echo $ano; ?>">
+			<input type="hidden" name="datafch" value="<?php echo $dataFch; ?>">
+			<input type="hidden" name="pc" value="<?php echo $PC; ?>">
+			<input type="hidden" name="ape" value="<?php echo $Ape; ?>">
+			<input type="hidden" name="hora" value="<?php echo $hora; ?>">
+			<input type="hidden" name="app" value="<?php echo $app; ?>">
+			<input type="hidden" name="inicial" value="<?php echo $inicial; ?>">
+			<input type="hidden" name="totin" value="<?php echo $TotIn; ?>">
+			<input type="hidden" name="recolh" value="<?php echo $RecolTot; ?>">
+			<input type="hidden" name="numvendas" value="<?php echo $NVendas; ?>">
+			<input type="hidden" name="valorvend" value="<?php echo $ValorVend; ?>">
+			<input type="hidden" name="numpgtos" value="<?php echo $NumPgtos; ?>">
+			<input type="hidden" name="pgtoservicos" value="<?php echo $PgtoServicos; ?>">
+			<input type="hidden" name="pgtotot" value="<?php echo $PgtoTot; ?>">
+			<input type="hidden" name="totpgto" value="<?php echo $TotPgto; ?>">
+			<input type="hidden" name="fechamento" value="<?php echo $FechamentoF; ?>">
+			<input type="hidden" name="gavaut" value="<?php echo $GavAut; ?>">
+			<input type="hidden" name="difcx" value="<?php echo $DifCx; ?>">
+			<input type="hidden" name="cd" value="<?php echo $cd; ?>">
+			<input type="hidden" name="numprodsrec" value="<?php echo $NPRecs; ?>">
+			<input type="hidden" name="nbookrec" value="<?php echo $NBookRec; ?>">
+			<input type="hidden" name="numchav" value="<?php echo $NTChav; ?>">
+			<input type="hidden" name="numtxprod" value="<?php echo $NTxProd; ?>">
+			<input type="hidden" name="numconcurso" value="<?php echo $NConcurso; ?>">
+			<input type="hidden" name="numbebe" value="<?php echo $NBebe; ?>">
+			<input type="hidden" name="numcontent" value="<?php echo $NContEnt; ?>">
+			<input type="hidden" name="numcontparc" value="<?php echo $NContParc; ?>">
+			<input type="hidden" name="numpropent" value="<?php echo $NPropEnt; ?>">
+			<input type="hidden" name="numpropparc" value="<?php echo $NPropParc; ?>">
+			<input type="hidden" name="numresgate" value="<?php echo $NResgate; ?>">
+			<input type="hidden" name="numestorno" value="<?php echo $NEstorno; ?>">
+			<input type="hidden" name="vrchav" value="<?php echo $ValorChav; ?>">
+			<input type="hidden" name="vrprod" value="<?php echo $ValorProd; ?>">
+			<input type="hidden" name="vrprecs" value="<?php echo $VrPRecsF; ?>">
+			<input type="hidden" name="vrconc" value="<?php echo $ValorConc; ?>">
+			<input type="hidden" name="vrbebe" value="<?php echo $ValorBebe; ?>">
+			<input type="hidden" name="vrbookrec" value="<?php echo $VrBookRecF; ?>">
+			<input type="hidden" name="vrcontent" value="<?php echo $ValorContEnt; ?>">
+			<input type="hidden" name="vrpropent" value="<?php echo $ValorPropEnt; ?>">
+			<input type="hidden" name="vrcontparc" value="<?php echo $ValorContParc; ?>">
+			<input type="hidden" name="vrpropparc" value="<?php echo $ValorPropParc; ?>">
+			<input type="hidden" name="vrresg" value="<?php echo $ValorResg; ?>">
+			<input type="hidden" name="vrestorno" value="<?php echo $ValorEstorno; ?>">
+			<input type="hidden" name="sobra" value="<?php echo $IncSobra; ?>">
+			<input type="hidden" name="depcli" value="<?php echo $DepCli; ?>">
+			<input type="hidden" name="dinheiro" value="<?php echo $Dinheiro; ?>">
+			<input type="hidden" name="carddeb" value="<?php echo $CardDeb; ?>">
+			<input type="hidden" name="cardvista" value="<?php echo $CardVista; ?>">
+			<input type="hidden" name="cardparclj" value="<?php echo $CardParcLj; ?>">
+			<input type="hidden" name="cardparcadm" value="<?php echo $CardParcAdm; ?>">
+			<input type="hidden" name="pixqrcode" value="<?php echo $PixQRCode; ?>">
+			<input type="hidden" name="pixcnpj" value="<?php echo $PixCNPJ; ?>">
 
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '* * * F E C H A M E N T O - D O - C A I X A * * ' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '----------------- ( F I N A L ) --------------- ' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo Fita Numero: '$Fita/$ano' >> /backups/fccxant_$dtAbre.txt");
+			<?php
 
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo PC: '$PC - $Ape' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo Data: '$dataFch' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo Hora: $hora >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo Operador: '$userF ($app)' >> /backups/fccxant_$dtAbre.txt");
-
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Valor de Abertura:. . . . . . . . R$ $inicial' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-
-		shell_exec("echo '----------------- RECEBIMENTOS -----------------' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'POR TIPO DE SERVICO' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '-------------------' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Chaveiros: . . . . . . . [$NTChav] - R$ $ValorChav' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Taxa de Producao:. . . . [$NTxProd] - R$ $ValorProd' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Inscricao Concurso:. . . [$NConcurso] - R$ $ValorConc' >> /backups/fccxant_$dtAbre.txt");
-		//shell_exec("echo 'Concurso Bebe Estrella:. [$NBebe] - R$ $ValorBebe' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Contrato(Entrada): . . . [$NContEnt] - R$ $ValorContEnt' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Contrato(Parcela): . . . [$NContParc] - R$ $ValorContParc' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Proposta(Entrada): . . . [$NPropEnt] - R$ $ValorPropEnt' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Proposta(Parcela): . . . [$NPropParc] - R$ $ValorPropParc' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Produtos(Exceto Books):. [$NPRecs] - R$ $VrPRecsF' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Books a Vista: . . . . . [$NBookRec] - R$ $VrBookRecF' >> /backups/fccxant_$dtAbre.txt");
-		//shell_exec("echo 'Resgate Cheques: . . . . [$NResgate] - R$ $ValorResg' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Despesas:. . . . . . . . [$NumPgtos] - R$ $PgtoTot' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Estorno: . . . . . . . . [$NEstorno] - R$ $ValorEstorno' >> /backups/fccxant_$dtAbre.txt");
-
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'POR FORMA DE RECEBIMENTO' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '------------------------' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Dinheiro:. . . . . . . . . . . . R$ $Dinheiro' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Cartao de Debito:. . . . . . . . R$ $CardDeb' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Cartao Credito (a Vista):. . . . R$ $CardVista' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Cartao Credito (Parcelado Loja): R$ $CardParcLj' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Cartao Credito (Parc. Admnist.): R$ $CardParcAdm' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Pix QR Code:. . . . . . . . . .  R$ $PixQRCode' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Pix CNPJ:. . . . . . . . . . . . R$ $PixCNPJ' >> /backups/fccxant_$dtAbre.txt");
-		//shell_exec("echo 'Cheques (A Vista): . . . . . . . R$ $CheqTotal' >> /backups/fccxant_$dtAbre.txt");
-		//shell_exec("echo 'Cheques (Pre-datados): . . . . . R$ $CheqPre' >> /backups/fccxant_$dtAbre.txt");
-		//shell_exec("echo 'Deposito de Clientes:. . . . . . R$ $DepCli' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Total de Recebimentos: . . . . . R$ $TotIn' >> /backups/fccxant_$dtAbre.txt");
-
-		if ($IncSobra > 0.009) {
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '------------ INCORPORACAO DE SALDO ------------' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo 'Sobra Incorporada ao Caixa:. . . R$ $IncSobraF' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		}
-
-		// Gerando a Retificação
-		$sql = "select * from errlanc where dataop = $DataAtual";
-		$rs  = mysqli_query($conec, $sql) or die("File fccxant Error #42. Contate seu Administrador.");
-		$regs = mysqli_num_rows($rs);
-
-		if ($regs > 0) {
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '---------- RETIFICACAO DE LANCAMENTO ----------' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '            (NA FORMA DE PAGAMENTO)' >> /backups/fccxant_$dtAbre.txt");
-
-			while ($ln = mysqli_fetch_array($rs)) {
-				$cashi    = $ln['cashi'];
-				$cdebi    = $ln['cdebi'];
-				$ccredvi  = $ln['ccredvi'];
-				$ccredpli = $ln['ccredpli'];
-				$ccredpai = $ln['ccredpai'];
-				$cheqvi   = $ln['cheqvi'];
-				$cheqpi   = $ln['cheqpi'];
-				$depclii  = $ln['depclii'];
-
-				$casho    = $ln['casho'];
-				$cdebo    = $ln['cdebo'];
-				$ccredvo  = $ln['ccredvo'];
-				$ccredplo = $ln['ccredplo'];
-				$ccredpao = $ln['ccredpao'];
-				$cheqvo   = $ln['cheqvo'];
-				$cheqpo   = $ln['cheqpo'];
-				$depclio  = $ln['depclio'];
-
-				if ($cashi > 0) {
-					$De = 'Dinheiro';
-					$Dif = $cashi;
-				} else if ($cdebi > 0) {
-					$De = 'Cartao de Debito';
-					$Dif = $cdebi;
-				} else if ($ccredvi > 0) {
-					$De = 'Cartao de Credito a Vista';
-					$Dif = $ccredvi;
-				} else if ($ccredpli > 0) {
-					$De = 'Cartao Credito Parcelamento Loja';
-					$Dif = $ccredpli;
-				} else if ($ccredpai > 0) {
-					$De = 'Cartao Credito Parcel. Administradora';
-					$Dif = $ccredpai;
-				} else if ($cheqvi > 0) {
-					$De = 'Cheque a Vista';
-					$Dif = $cheqvi;
-				} else if ($cheqpi > 0) {
-					$De = 'Cheque Pre-datado';
-					$Dif = $cheqpi;
-				} else {
-					$De = 'Deposito de Clientes';
-					$Dif = $depclii;
-				}
-				if ($casho > 0) {
-					$Para = 'Dinheiro';
-				} else if ($cdebo > 0) {
-					$Para = 'Cartao de Debito';
-				} else if ($ccredvo > 0) {
-					$Para = 'Cartao de Credito a Vista';
-				} else if ($ccredplo > 0) {
-					$Para = 'Cartao Credito Parcelamento Loja';
-				} else if ($ccredpao > 0) {
-					$Para = 'Cartao Credito Parcel. Administradora';
-				} else if ($cheqvo > 0) {
-					$Para = 'Cheque a Vista';
-				} else if ($cheqpo > 0) {
-					$Para = 'Cheque Pre-datado';
-				} else {
-					$Para = 'Deposito de Clientes';
-				}
-
-				$DifF = number_format($Dif, 2, ",", ".");
-
-				shell_exec("echo 'DE:    $De' >> /backups/fccxant_$dtAbre.txt");
-				shell_exec("echo 'PARA:  $Para' >> /backups/fccxant_$dtAbre.txt");
-				shell_exec("echo 'VALOR: R$ $DifF' >> /backups/fccxant_$dtAbre.txt");
-				shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
+			// IncSobra
+			if ($IncSobra > 0.009) {
+			?>
+				<input type="hidden" name="incsobra" value="<?php echo $IncSobraF; ?>">
+				<?php
 			}
-		}
 
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '------------------ PAGAMENTOS ------------------' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo DESPESAS >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo -------- >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'de Pessoal:. . . . . . . . . . . R$ $DDPF' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Material de Consumo: . . . . . . R$ $MCSF' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Material de Divulgacao:. . . . . R$ $MDVF' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Material de Producao:. . . . . . R$ $MPDF' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Reembolso de Clientes: . . . . . R$ $RCLF' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Servicos Prestados:. . . . . . . R$ $SRVF' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Vale Transporte: . . . . . . . . R$ $VTRF' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Outros:. . . . . . . . . . . . . R$ $OUTF' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'T O T A L: . . . . . . . . . . . R$ $PgtoTot' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo RECOLHIMENTOS >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo ------------- >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Total Recolhido: . . . . . . . . R$ $Recolh' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Pagamentos + Recolhimentos:. . . R$ $TotPgto' >> /backups/fccxant_$dtAbre.txt");
+			// Gerando a Retificação
+			$sql = "select * from errlanc where dataop = $DataAtual";
+			$rs  = mysqli_query($conec, $sql) or die("File fccxant Error #42. Contate seu Administrador.");
+			$regs = mysqli_num_rows($rs);
 
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '---------------- SALDO DE CAIXA ----------------' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Valor Real: . . . . . . . . . R$ $FechamentoF' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo 'Gaveta: . . . . . . . . . . . R$ $GavAut' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
+			if ($regs > 0) {
 
-		shell_exec("echo 'Diferenca do Caixa:. . . R$ $DifCx $cd' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
+				while ($ln = mysqli_fetch_array($rs)) {
+					$cashi    = $ln['cashi'];
+					$cdebi    = $ln['cdebi'];
+					$ccredvi  = $ln['ccredvi'];
+					$ccredpli = $ln['ccredpli'];
+					$ccredpai = $ln['ccredpai'];
+					$cheqvi   = $ln['cheqvi'];
+					$cheqpi   = $ln['cheqpi'];
+					$depclii  = $ln['depclii'];
 
-		// Emitindo Comprovante de Sobra ou Falta
-		if ($Diferenca > 0) {
-			shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo Estrella Photo Studio >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
+					$casho    = $ln['casho'];
+					$cdebo    = $ln['cdebo'];
+					$ccredvo  = $ln['ccredvo'];
+					$ccredplo = $ln['ccredplo'];
+					$ccredpao = $ln['ccredpao'];
+					$cheqvo   = $ln['cheqvo'];
+					$cheqpo   = $ln['cheqpo'];
+					$depclio  = $ln['depclio'];
 
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '- - - - - DOCUMENTO DE SOBRA DE CAIXA - - - - -' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo PC: '$PC - $Ape' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo Data: '$dataFch' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo Hora: $hora >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-
-			shell_exec("echo 'Saldo de Fechamento:. . . . . R$ $FechamentoF' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo 'Valor Informado:. . . . . . . R$ $GavAut' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo 'Sobra de Numerario: . . . . . R$ $DifCx' >> /backups/fccxant_$dtAbre.txt");
-
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo ---------------------------------------- >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo Assinatura da Auditora >> /backups/fccxant_$dtAbre.txt");
-		} else if ($Diferenca < 0) {
-			shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '* * * * * - Estrella Photo Studio - * * * * *' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '- - - - - DOCUMENTO DE FALTA DE CAIXA - - - - -' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo PC: '$PC - $Ape' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo Data: '$dataFch' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo Hora: $hora >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-
-			shell_exec("echo 'Saldo de Fechamento:. . . . . R$ $FechamentoF' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo 'Valor Informado:. . . . . . . R$ $GavAut' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo 'Falta de Numerario: . . . . . R$ $DifCx' >> /backups/fccxant_$dtAbre.txt");
-
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo ---------------------------------------- >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo Assinatura da Aux. Administrativa >> /backups/fccxant_$dtAbre.txt");
-
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo ---------------------------------------- >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo Assinatura da Encarregada >> /backups/fccxant_$dtAbre.txt");
-
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo ---------------------------------------- >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo Assinatura da Auditora >> /backups/fccxant_$dtAbre.txt");
-		}
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-
-		include "autentics.php";
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-
-		if ($Diferenca > 0) {
-			shell_exec("echo '----- HOUVE SOBRA DE R$ $DifCx -----' >> /backups/fccxant_$dtAbre.txt");
-		} else if ($Diferenca < 0) {
-			shell_exec("echo '----- HOUVE FALTA DE R$ $DifCx -----' >> /backups/fccxant_$dtAbre.txt");
-		}
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '================================================' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '===                                          ===' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '===            H-I-S-T-O-R-I-C-O             ===' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '===                                          ===' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '================================================' >> /backups/fccxant_$dtAbre.txt");
-
-		shell_exec("echo '        OPERADORES CADASTRADOS NO SISTEMA' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '        ---------- ----------- -- -------' >> /backups/fccxant_$dtAbre.txt");
-
-		// Obtendo a Relação de Operadores Cadastrados
-		$sqlCad = "select * from cadastro where dtcad = '$dtAbre' ";
-		$rsCad  = mysqli_query($conec, $sqlCad) or die("File fccxant Error #43. Contate seu Administrador.");
-		$regCad = mysqli_num_rows($rsCad);
-
-		if ($regCad > 0) {
-			while ($lnCad = mysqli_fetch_array($rsCad)) {
-				$MatCad = $lnCad['mat'];
-
-				$sqlH2 = "select * from operador where mat = '$MatCad' ";
-				$rsH2  = mysqli_query($conec, $sqlH2) or die("File fccxant Error #44. Contate seu Administrador.");
-				while ($lnH2 = mysqli_fetch_array($rsH2)) {
-					$MatOp  = $lnH2['mat'];
-					$MatOpF = substr($MatOp, 0, 1) . "." . substr($MatOp, 1, 3) . "." . substr($MatOp, 4, 3) . "-" . substr($MatOp, 7, 1);
-					$Cargo  = $lnH2['cargo'];
-					if ($Cargo == 'Cai') {
-						$Cargo = 'Ag. Adm';
-					}
-					$Tempo  = $lnH2['horaop'];
-					$Free   = $lnH2['free'];
-					if ($Free == 'f') {
-						$Compl = ' - Free-Lancer';
+					if ($cashi > 0) {
+						$De = 'Dinheiro';
+						$Dif = $cashi;
+					} else if ($cdebi > 0) {
+						$De = 'Cartao de Debito';
+						$Dif = $cdebi;
+					} else if ($ccredvi > 0) {
+						$De = 'Cartao de Credito a Vista';
+						$Dif = $ccredvi;
+					} else if ($ccredpli > 0) {
+						$De = 'Cartao Credito Parcelamento Loja';
+						$Dif = $ccredpli;
+					} else if ($ccredpai > 0) {
+						$De = 'Cartao Credito Parcel. Administradora';
+						$Dif = $ccredpai;
 					} else {
-						$Compl = '';
+						$De = 'Deposito de Clientes';
+						$Dif = $depclii;
 					}
-					$Resp   = $lnH2['resp'];
-					$RespF  = substr($Resp, 0, 1) . "." . substr($Resp, 1, 3) . "." . substr($Resp, 4, 3) . "-" . substr($Resp, 7, 1);
+					if ($casho > 0) {
+						$Para = 'Dinheiro';
+					} else if ($cdebo > 0) {
+						$Para = 'Cartao de Debito';
+					} else if ($ccredvo > 0) {
+						$Para = 'Cartao de Credito a Vista';
+					} else if ($ccredplo > 0) {
+						$Para = 'Cartao Credito Parcelamento Loja';
+					} else if ($ccredpao > 0) {
+						$Para = 'Cartao Credito Parcel. Administradora';
+					} else {
+						$Para = 'Deposito de Clientes';
+					}
 
-					shell_exec("echo 'FUNC. CADASTRADO: $MatOpF $Compl' >> /backups/fccxant_$dtAbre.txt");
-					shell_exec("echo 'NA FUNCAO: $Cargo' >> /backups/fccxant_$dtAbre.txt");
-					shell_exec("echo 'AS: $Tempo' hs >> /backups/fccxant_$dtAbre.txt");
-					shell_exec("echo 'CADASTRADO POR: $RespF' >> /backups/fccxant_$dtAbre.txt");
-					shell_exec("echo '                - - - X - - -' >> /backups/fccxant_$dtAbre.txt");
+					$DifF = number_format($Dif, 2, ",", ".");
+
+				?>
+					<input type="hidden" name="lancDe[]" value="<?php echo $De; ?>">
+					<input type="hidden" name="lancPara[]" value="<?php echo $Para; ?>">
+					<input type="hidden" name="lancValor[]" value="<?php echo $DifF; ?>">
+			<?php
 				}
 			}
-		}
-		if ($rsH2 instanceof mysqli_result) {
-			mysqli_free_result($rsH2);
-		}
 
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
+			?>
+			<input type="hidden" name="ddpf" value="<?php echo $DDPF; ?>">
+			<input type="hidden" name="mcsf" value="<?php echo $MCSF; ?>">
+			<input type="hidden" name="mdvf" value="<?php echo $MDVF; ?>">
+			<input type="hidden" name="mpdf" value="<?php echo $MPDF; ?>">
+			<input type="hidden" name="rclf" value="<?php echo $RCLF; ?>">
+			<input type="hidden" name="srvf" value="<?php echo $SRVF; ?>">
+			<input type="hidden" name="vtrf" value="<?php echo $VTRF; ?>">
+			<input type="hidden" name="outf" value="<?php echo $OUTF; ?>">
+			<input type="hidden" name="recolh" value="<?php echo $Recolh; ?>">
 
-		// Obtendo a Relação de Recuperação de Senhas
-		$sqlR  = "select * from restsenha where datar = '$dtAbre' ";
-		$rsR   = mysqli_query($conec, $sqlR) or die("File fccxant Error #45. Contate seu Administrador.");
-		$regsR = mysqli_num_rows($rsR);
+			<?php
 
-		if ($regsR > 0) {
-			while ($lnR = mysqli_fetch_array($rsR)) {
-				$UserR  = $lnR['user'];
-				$UserRF = substr($UserR, 0, 1) . "." . substr($UserR, 1, 3) . "." . substr($UserR, 4, 3) . "-" . substr($UserR, 7, 1);
-				$CpfR   = $lnR['cpf'];
-				$CpfRF = substr($CpfR, 0, 3) . "." . substr($CpfR, 3, 3) . "." . substr($CpfR, 6, 3) . "-" . substr($CpfR, 9, 2);
-				$AudR   = $lnR['aud'];
-				$AudRF = substr($AudR, 0, 1) . "." . substr($AudR, 1, 3) . "." . substr($AudR, 4, 3) . "-" . substr($AudR, 7, 1);
-				$DataR  = $lnR['datar'];
-				$DataRF = substr($DataR, 8, 2) . "/" . substr($DataR, 5, 2) . "/" . substr($DataR, 0, 4);
-				$HoraR  = $lnR['horar'];
 
-				shell_exec("echo '        SOLICITACOES DE SENHA PROVISORIA' >> /backups/fccxant_$dtAbre.txt");
-				shell_exec("echo '        ------------ -- ----- ----------' >> /backups/fccxant_$dtAbre.txt");
+			// Emitindo Comprovante de Sobra ou Falta
+			if ($Diferenca > 0) {
 
-				shell_exec("echo 'SOLICITANTE: $UserRF     CPF: $CpfRF' >> /backups/fccxant_$dtAbre.txt");
-				shell_exec("echo 'DATA: $DataRF             HORA: $HoraR' >> /backups/fccxant_$dtAbre.txt");
-				shell_exec("echo 'AUTORIZADO POR: $AudRF' >> /backups/fccxant_$dtAbre.txt");
+			?>
+				<input type="hidden" name="fechamentoF" value="<?php echo $FechamentoF; ?>">
+				<input type="hidden" name="gavaut" value="<?php echo $GavAut; ?>">
+				<input type="hidden" name="difcx" value="<?php echo $DifCx; ?>">
+				<input type="hidden" name="cd" value="<?php echo $cd; ?>">
+
+			<?php
+
+			} else if ($Diferenca < 0) {
+
+			?>
+				<input type="hidden" name="fechamentoF" value="<?php echo $FechamentoF; ?>">
+				<input type="hidden" name="gavaut" value="<?php echo $GavAut; ?>">
+				<input type="hidden" name="difcx" value="<?php echo $DifCx; ?>">
+				<input type="hidden" name="cd" value="<?php echo $cd; ?>">
+
+			<?php
 			}
-		}
 
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo Visto do Caixa: --------------------------- >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-
-		shell_exec("echo '- - - TERMINO DA FITA NUMERO - $Fita/$ano - - -' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo Visto do Caixa: --------------------------- >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-		// shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-
-		// Concurso Bebê Estrella
-		$sqlRf = "select dtopen from caixa order by dtopen desc ";
-		$rsRf  = mysqli_query($conec, $sqlRf) or die("File fccxant Error #46. Contate seu Administrador.");
-		$lnRf  = mysqli_fetch_array($rsRf);
-		$dtRef = $lnRf['dtopen'];
-		$dtRefB = substr($dtRef, 8, 2) . "/" . substr($dtRef, 5, 2) . "/" . substr($dtRef, 0, 4);
-
-		$sqlRel = "select * from databebe where dthoje = '$dtRef'order by recibo";
-		$rsRel  = mysqli_query($conec, $sqlRel) or die("File fccxant Error #47. Contate seu Administrador.");
-		$regRel = mysqli_num_rows($rsRel);
-
-		if ($regRel > 0) {
-			// Cabeçalho
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '============================================' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo 'RECIBOS BEBE ESTRELLA  -  DATA: $dtRefB' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '\tRECIBO   -   NASCIMENTO' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '-------------------------------------------' >> /backups/fccxant_$dtAbre.txt");
-
-
-			while ($lnRel  = mysqli_fetch_array($rsRel)) {
-				$RecB = $lnRel['recibo'];
-				$NasB = $lnRel['dtnasc'];
-				$DtNascB = substr($NasB, 8, 2) . "/" . substr($NasB, 5, 2) . "/" . substr($NasB, 0, 4);
-
-				shell_exec("echo '\t$RecB   -   $DtNascB' >> /backups/fccxant_$dtAbre.txt");
+			// Spoll 2
+			$SqlSp = "select * from spool2 order by rec";
+			$rsSp  = mysqli_query($conec, $SqlSp) or die("Não foi possível obter dados da spool");
+			while ($lnSp  = mysqli_fetch_array($rsSp)) {
+				$Spo = $lnSp['spo2'];
+			?>
+				<input type="hidden" name="spool2[]" value="<?php echo $Spo; ?>">
+			<?php
 			}
-			shell_exec("echo '============================================' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		}
 
-		// Imprimindo Recolhimentos
-		$sqlRec = "select dtopen from caixa order by dtopen desc ";
-		$rsRec  = mysqli_query($conec, $sqlRec) or die("File fccxant Error #48. Contate seu Administrador.");
-		$regRec = mysqli_num_rows($rsRec);
-		$lnRec = mysqli_fetch_array($rsRec);
-		$dtOpen  = $lnRec['dtopen'];
-		$DataAb = substr($dtOpen, 8, 2) . "/" . substr($dtOpen, 5, 2) . "/" . substr($dtOpen, 0, 4);
-
-		shell_exec("echo '==============================================' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '       ESTUDIO: PC-$PC Versao: $Versao' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '       RECOLHIMENTOS EM $DataAb' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '       ------------- -- ----------' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '          CAPA DE LOTE - $horaNorm'-'$cashTot'-'$horaInv' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo ' HORA\t\tENVELOPE\tVALOR\tMATRIC' >> /backups/fccxant_$dtAbre.txt");
-
-		if ($regRec > 0) {
-			$sqlDep = "select hrdep, envelope, valor, matreceb from depositos where dtdep = '$dtOpen' ";
-			$rsDep  = mysqli_query($conec, $sqlDep) or die("File fccxant Error #49. Contate seu Administrador.");
-			$AcRec  = 0;
-			$ACount = 0;
-
-			while ($lnDep = mysqli_fetch_array($rsDep)) {
-				$Hora   = $lnDep['hrdep'];
-				$Nvlp   = $lnDep['envelope'];
-				$Vlr    = $lnDep['valor'];
-				$Matr   = $lnDep['matreceb'];
-				$Mtrc   = $Matr + 0;
-				$ACount = $ACount + 1;
-				$AcRec  = $AcRec + $Vlr;
-
-				shell_exec("echo '$Hora\t\t$Nvlp\t\t$Vlr\t\t$Mtrc' >> /backups/fccxant_$dtAbre.txt");
+			if ($Diferenca > 0) {
+			?>
+				<input type="hidden" name="difcx" value="<?php echo $DifCx; ?>">
+			<?php
+			} else if ($Diferenca < 0) {
+			?>
+				<input type="hidden" name="difcx" value="<?php echo $DifCx; ?>">
+				<?php
 			}
-			$TRec  = number_format($AcRec, 2, ",", ".");
-			shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-			shell_exec("echo 'QUANT. DE RECOLHIMENTOS: $ACount - R$ $TRec' >> /backups/fccxant_$dtAbre.txt");
-		} else {
-			shell_exec("echo ' *** NAO HOUVE DEPOSITOS NESTA DATA ***' >> /backups/fccxant_$dtAbre.txt");
-		}
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
 
-		shell_exec("echo '   ***  $horaInv''$horaNorm'-'$Entradas'-'$horaInv''$horaNorm ***' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '==============================================' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '- - - TERMINO DA FITA NUMERO - $Fita/$ano - - -' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo $traco >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
-		shell_exec("echo '\n' >> /backups/fccxant_$dtAbre.txt");
+			// Obtendo a Relação de Operadores Cadastrados
+			$sqlCad = "select * from cadastro where dtcad = '$dtAbre' ";
+			$rsCad  = mysqli_query($conec, $sqlCad) or die("File fccxant Error #43. Contate seu Administrador.");
+			$regCad = mysqli_num_rows($rsCad);
+
+			if ($regCad > 0) {
+				while ($lnCad = mysqli_fetch_array($rsCad)) {
+					$MatCad = $lnCad['mat'];
+
+					$sqlH2 = "select * from operador where mat = '$MatCad' ";
+					$rsH2  = mysqli_query($conec, $sqlH2) or die("File fccxant Error #44. Contate seu Administrador.");
+					while ($lnH2 = mysqli_fetch_array($rsH2)) {
+						$MatOp  = $lnH2['mat'];
+						$MatOpF = substr($MatOp, 0, 1) . "." . substr($MatOp, 1, 3) . "." . substr($MatOp, 4, 3) . "-" . substr($MatOp, 7, 1);
+						$Cargo  = $lnH2['cargo'];
+						if ($Cargo == 'Cai') {
+							$Cargo = 'Ag. Adm';
+						}
+						$Tempo  = $lnH2['horaop'];
+						$Free   = $lnH2['free'];
+						if ($Free == 'f') {
+							$Compl = ' - Free-Lancer';
+						} else {
+							$Compl = '';
+						}
+						$Resp   = $lnH2['resp'];
+						$RespF  = substr($Resp, 0, 1) . "." . substr($Resp, 1, 3) . "." . substr($Resp, 4, 3) . "-" . substr($Resp, 7, 1);
+
+				?>
+						<input type="hidden" name="cadMat[]" value="<?php echo $MatOpF; ?>">
+						<input type="hidden" name="cadCargo[]" value="<?php echo $Cargo; ?>">
+						<input type="hidden" name="cadTempo[]" value="<?php echo $Tempo; ?>">
+						<input type="hidden" name="cadCompl[]" value="<?php echo $Compl; ?>">
+						<input type="hidden" name="cadResp[]" value="<?php echo $RespF; ?>">
+					<?php
+					}
+				}
+			}
+			if ($rsH2 instanceof mysqli_result) {
+				mysqli_free_result($rsH2);
+			}
+
+			// Obtendo a Relação de Recuperação de Senhas
+			$sqlR  = "select * from restsenha where datar = '$dtAbre' ";
+			$rsR   = mysqli_query($conec, $sqlR) or die("File fccxant Error #45. Contate seu Administrador.");
+			$regsR = mysqli_num_rows($rsR);
+
+			if ($regsR > 0) {
+				while ($lnR = mysqli_fetch_array($rsR)) {
+					$UserR  = $lnR['user'];
+					$UserRF = substr($UserR, 0, 1) . "." . substr($UserR, 1, 3) . "." . substr($UserR, 4, 3) . "-" . substr($UserR, 7, 1);
+					$CpfR   = $lnR['cpf'];
+					$CpfRF = substr($CpfR, 0, 3) . "." . substr($CpfR, 3, 3) . "." . substr($CpfR, 6, 3) . "-" . substr($CpfR, 9, 2);
+					$AudR   = $lnR['aud'];
+					$AudRF = substr($AudR, 0, 1) . "." . substr($AudR, 1, 3) . "." . substr($AudR, 4, 3) . "-" . substr($AudR, 7, 1);
+					$DataR  = $lnR['datar'];
+					$DataRF = substr($DataR, 8, 2) . "/" . substr($DataR, 5, 2) . "/" . substr($DataR, 0, 4);
+					$HoraR  = $lnR['horar'];
+
+					?>
+					<input type="hidden" name="cpfrf[]" value="<?php echo $CpfRF; ?>">
+					<input type="hidden" name="userf[]" value="<?php echo $UserRF; ?>">
+					<input type="hidden" name="audrf[]" value="<?php echo $AudRF; ?>">
+					<input type="hidden" name="datarf[]" value="<?php echo $DataRF; ?>">
+					<input type="hidden" name="horarf[]" value="<?php echo $HoraR; ?>">
+				<?php
+				}
+			}
+
+			// Imprimindo Recolhimentos
+			$sqlRec = "select dtopen from caixa order by dtopen desc ";
+			$rsRec  = mysqli_query($conec, $sqlRec) or die("File fccxant Error #48. Contate seu Administrador.");
+			$regRec = mysqli_num_rows($rsRec);
+			$lnRec = mysqli_fetch_array($rsRec);
+			$dtOpen  = $lnRec['dtopen'];
+			$DataAb = substr($dtOpen, 8, 2) . "/" . substr($dtOpen, 5, 2) . "/" . substr($dtOpen, 0, 4);
+
+			if ($regRec > 0) {
+				$sqlDep = "select hrdep, envelope, valor, matreceb from depositos where dtdep = '$dtOpen' ";
+				$rsDep  = mysqli_query($conec, $sqlDep) or die("File fccxant Error #49. Contate seu Administrador.");
+				$AcRec  = 0;
+				$ACount = 0;
+
+				while ($lnDep = mysqli_fetch_array($rsDep)) {
+					$Hora   = $lnDep['hrdep'];
+					$Nvlp   = $lnDep['envelope'];
+					$Vlr    = $lnDep['valor'];
+					$Matr   = $lnDep['matreceb'];
+					$Mtrc   = $Matr + 0;
+					$ACount = $ACount + 1;
+					$AcRec  = $AcRec + $Vlr;
+				}
+				$TRec  = number_format($AcRec, 2, ",", ".");
+				?>
+				<input type="hidden" name="acrec" value="<?php echo $AcRec; ?>">
+				<input type="hidden" name="acount" value="<?php echo $ACount; ?>">
+				<input type="hidden" name="trec" value="<?php echo $TRec; ?>">
+			<?php
+			} else {
+				$SDep = "Não houve depósitos nesta data.";
+			?>
+				<input type="hidden" name="SDep" value="<?php echo $SDep; ?>">
+			<?php
+			}
+			//shell_exec("echo '   ***  $horaInv''$horaNorm'-'$Entradas'-'$horaInv''$horaNorm ***' >> /backups/fccxant_$dtAbre.txt");
+			?>
+			<table width="50%" align="center" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td colspan="2" align="center">
+						<input type="submit" value="Imprimir" class="btn">
+						<input type="button" value="Voltar" class="btn" onclick="window.location.href='sair.php?c_s=<?php echo $lg_user; ?>'">
+					</td>
+				</tr>
+			</table>
+		</form>
+	<?php
 	} else { ?>
 		<br><br><br>
 		<font size='6'><b>

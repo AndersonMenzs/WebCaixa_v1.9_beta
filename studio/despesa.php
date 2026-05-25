@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>WebCaixa v1.20.10_beta</title>
+	<title>WebCaixa v1.20.12_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -211,6 +211,7 @@
 			var tabelaRemb = document.getElementById('tb_reembolso_cli');
 			var tablaValeTrans = document.getElementById('tb_vale_trans_dp');
 			var tabelaServPrest = document.getElementById('tb_serv_prest_dp');
+			var codTipoRef = document.getElementById('cod_TipoRef');
 
 			// Inicialmente oculte ambas
 			if (tabelaDP) tabelaDP.style.display = 'none';
@@ -228,22 +229,31 @@
 				if (c) c.removeAttribute('required');
 			});
 
-				// Mostre a tabela correta
-				if (selectedValue === '1' || optionClass.includes('despesa-dp')) {
-					if (tabelaDP) tabelaDP.style.display = 'table';
-					if (tabelaRemb) tabelaRemb.style.display = 'none';
-					if (tablaValeTrans) tablaValeTrans.style.display = 'none';
-					if (tabelaServPrest) tabelaServPrest.style.display = 'none';
-				} else if (selectedValue === '5' || optionClass.includes('reembolso-cli')) {
+			// Mostre a tabela correta
+			if (selectedValue === '1' || optionClass.includes('despesa-dp')) {
+				if (tabelaDP) tabelaDP.style.display = 'table';
+				if (tabelaRemb) tabelaRemb.style.display = 'none';
+				if (tablaValeTrans) tablaValeTrans.style.display = 'none';
+				if (tabelaServPrest) tabelaServPrest.style.display = 'none';
+				var refDPSelecionado = document.getElementById('lsref_desp');
+				if (codTipoRef && refDPSelecionado) {
+					codTipoRef.value = refDPSelecionado.options[refDPSelecionado.selectedIndex].getAttribute('data-cod-tiporef') || '';
+				}
+			} else if (selectedValue === '5' || optionClass.includes('reembolso-cli')) {
 				if (tabelaRemb) tabelaRemb.style.display = 'table';
 				if (tabelaDP) tabelaDP.style.display = 'none';
 				if (tablaValeTrans) tablaValeTrans.style.display = 'none';
 				if (tabelaServPrest) tabelaServPrest.style.display = 'none';
+				var refRembSelecionado = document.getElementById('lsref_remb');
+				if (codTipoRef && refRembSelecionado) {
+					codTipoRef.value = refRembSelecionado.options[refRembSelecionado.selectedIndex].getAttribute('data-cod-tiporef') || '';
+				}
 			} else if (selectedValue === '7' || optionClass.includes('vale_trans-dp')) {
 				if (tablaValeTrans) tablaValeTrans.style.display = 'table';
 				if (tabelaDP) tabelaDP.style.display = 'none';
 				if (tabelaRemb) tabelaRemb.style.display = 'none';
 				if (tabelaServPrest) tabelaServPrest.style.display = 'none';
+				if (codTipoRef) codTipoRef.value = '';
 				var colabVT = document.getElementById('mat_vend_input_vt');
 				if (colabVT) colabVT.setAttribute('required', 'required');
 			} else if (selectedValue === '6' || optionClass.includes('serv_prest-dp')) {
@@ -251,6 +261,7 @@
 				if (tabelaDP) tabelaDP.style.display = 'none';
 				if (tabelaRemb) tabelaRemb.style.display = 'none';
 				if (tablaValeTrans) tablaValeTrans.style.display = 'none';
+				if (codTipoRef) codTipoRef.value = '';
 				var colabSrv = document.getElementById('mat_vend_input_srv');
 				if (colabSrv) colabSrv.setAttribute('required', 'required');
 			}
@@ -284,7 +295,24 @@
 					if (colabSrv) colabSrv.value = '';
 					if (matSrv) matSrv.value = '';
 				}
+				if (codTipoRef) codTipoRef.value = '';
 			}
+		}
+
+		function atualizarCodTipoRef(selectEl) {
+			var codTipoRef = document.getElementById('cod_TipoRef');
+			if (!codTipoRef || !selectEl) return;
+
+			codTipoRef.value = selectEl.options[selectEl.selectedIndex].getAttribute('data-cod-tiporef') || '';
+		}
+
+		function prepararEnvioDespesa() {
+			mostrarTabelaDespesa();
+			if (typeof checkdata === 'function') {
+				return checkdata();
+			}
+
+			return true;
 		}
 
 		// Função para inicializar na carga da página
@@ -399,8 +427,8 @@
 
 	?>
 
-		<table width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
-			<form name="pgtos" method="post" action="confdesp.php" OnSubmit="JavaScript:return checkdata()">
+		<form name="pgtos" id="pgtos_form" method="post" action="confdesp.php" OnSubmit="JavaScript:return prepararEnvioDespesa()">
+			<table width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
 					<td width="32%" align="center">
 						<font color='gold' size='5'><b><i>Código</i></b></font>
@@ -423,6 +451,7 @@
 						<input type="text" name="txtvalor" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('pgtos', 'txtvalor', event);">
 						<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 						<input type="hidden" name="txtcaixa" value="<?php echo $SdCaixa; ?>">
+						<input type="hidden" name="cod_TipoRef" id="cod_TipoRef" value="">
 					</td>
 					<td width="35%" align="center">
 						<select name="lsPr" id="lsPr" class="campos" onchange="mostrarTabelaDespesa()">
@@ -463,70 +492,116 @@
 						</select>
 					</td>
 				</tr>
-		</table>
-
-		<br>
-		<?php
-
-		if ($ch == 'ok-enc' or $ch == 'ok') {
-		?>
-			<table id="tb_despesas_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
-				<tr>
-					<td width="100%" align="center">
-						<font color='gold' size='5'><b><i>Referente</i></b></font>
-					</td>
-				</tr>
-
-				<tr>
-					<td width="100%" align="center">
-						<select name="lsref_desp" id="lsref_desp" class="campos">
-						<?php
-						// Criando a Instrução SQL de Consulta
-						$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' ORDER BY codref";
-						$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
-
-						while ($lnpr = mysqli_fetch_array($rspr)) {
-							$CodRef_Desp  = $lnpr['codref'];
-							$TipoRef_Desp = $lnpr['nomeref'];
-						?>
-							<option value="<?php echo $TipoRef_Desp; ?>" class="campos">
-								<?php echo "$TipoRef_Desp"; ?>
-							</option>
-						<?php
-						}
-						mysqli_free_result($rspr);
-					?>
-					</select>
-					</td>
-				</tr>
 			</table>
-		<?php
-		} elseif ($ch == 'ok-cai') {
-		?>
-			<table id="tb_despesas_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
+
+			<br>
+			<?php
+
+			if ($ch == 'ok-enc' or $ch == 'ok') {
+			?>
+				<table id="tb_despesas_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
+					<tr>
+						<td width="100%" align="center">
+							<font color='gold' size='5'><b><i>Referente</i></b></font>
+						</td>
+					</tr>
+
+					<tr>
+						<td width="100%" align="center">
+							<select name="lsref_desp" id="lsref_desp" class="campos" onchange="atualizarCodTipoRef(this)">
+								<?php
+								// Criando a Instrução SQL de Consulta
+								$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' ORDER BY codref";
+								$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+
+								while ($lnpr = mysqli_fetch_array($rspr)) {
+									$CodRef_Desp  = $lnpr['codref'];
+									$TipoRef_Desp = $lnpr['nomeref'];
+									$Cod_TipoRef = $lnpr['cod_tiporef'];
+								?>
+									<option value="<?php echo $TipoRef_Desp; ?>" data-cod-tiporef="<?php echo $Cod_TipoRef; ?>" class="campos">
+										<?php echo "$TipoRef_Desp"; ?>
+									</option>
+								<?php
+								}
+								mysqli_free_result($rspr);
+								?>
+							</select>
+						</td>
+					</tr>
+				</table>
+			<?php
+			} elseif ($ch == 'ok-cai') {
+			?>
+				<table id="tb_despesas_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
+					<tr>
+						<td width="50%" align="center">
+							<font color='gold' size='5'><b><i>Referente</i></b></font>
+						</td>
+						<td width="50%" align="center">
+							<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
+						</td>
+					</tr>
+
+					<tr>
+						<td width="50%" align="center">
+							<select name="lsref_desp" id="lsref_desp" class="campos" onchange="atualizarCodTipoRef(this)">
+								<?php
+								// Criando a Instrução SQL de Consulta
+								$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' ORDER BY codref";
+								$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+
+								while ($lnpr = mysqli_fetch_array($rspr)) {
+									$CodRef_Desp  = $lnpr['codref'];
+									$TipoRef_Desp = $lnpr['nomeref'];
+									$Cod_TipoRef = $lnpr['cod_tiporef'];
+								?>
+									<option value="<?php echo $TipoRef_Desp; ?>" data-cod-tiporef="<?php echo $Cod_TipoRef; ?>" class="campos">
+										<?php echo "$TipoRef_Desp"; ?>
+									</option>
+								<?php
+								}
+								mysqli_free_result($rspr);
+								?>
+							</select>
+						</td>
+						<td width="50%" align="center">
+							<input type="text" id="mat_vend_input_dp" name="colab_dp" size="40" maxlength="8" class="campos"
+								onkeypress="fPassaAlfaNumerico('an')"
+								onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+							<input type="hidden" name="mat_colab_dp" id="mat_vend_dp" value="<?php echo $matVendEsc; ?>">
+						</td>
+					</tr>
+				</table>
+			<?php
+			}
+			?>
+
+			<table id="tb_reembolso_cli" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
 					<td width="50%" align="center">
 						<font color='gold' size='5'><b><i>Referente</i></b></font>
 					</td>
 					<td width="50%" align="center">
-						<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
+						<font color='gold' size='5'><b><i>Cliente</i></b></font>
 					</td>
 				</tr>
 
 				<tr>
 					<td width="50%" align="center">
-						<select name="lsref_desp" id="lsref_desp" class="campos">
+						<select name="lsref_remb" id="lsref_remb" class="campos" onchange="atualizarCodTipoRef(this)">
 							<?php
 							// Criando a Instrução SQL de Consulta
-							$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'RCL' ORDER BY codref";
+							$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'DDP' ORDER BY codref";
 							$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
 
 							while ($lnpr = mysqli_fetch_array($rspr)) {
-								$CodRef_Desp  = $lnpr['codref'];
-								$TipoRef_Desp = $lnpr['nomeref'];
+								$CodRef_Remb  = $lnpr['codref'];
+								$TipoRef_Remb = $lnpr['nomeref'];
+								$Cod_TipoRef = $lnpr['cod_tiporef'];
 							?>
-								<option value="<?php echo $TipoRef_Desp; ?>" class="campos">
-									<?php echo "$TipoRef_Desp"; ?>
+								<option value="<?php echo $TipoRef_Remb; ?>" data-cod-tiporef="<?php echo $Cod_TipoRef; ?>" class="campos">
+									<?php echo "$TipoRef_Remb"; ?>
 								</option>
 							<?php
 							}
@@ -535,102 +610,59 @@
 						</select>
 					</td>
 					<td width="50%" align="center">
-						<input type="text" id="mat_vend_input_dp" name="colab_dp" size="40" maxlength="8" class="campos"
+						<input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
 							onkeypress="fPassaAlfaNumerico('an')"
-							onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
-						<input type="hidden" name="mat_colab_dp" id="mat_vend_dp" value="<?php echo $matVendEsc; ?>">
+							onkeyup='this.value=this.value.toUpperCase(); validnome(this)'>
 					</td>
 				</tr>
 			</table>
-		<?php
-		}
-		?>
 
-		<table id="tb_reembolso_cli" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
-			<tr>
-				<td width="50%" align="center">
-					<font color='gold' size='5'><b><i>Referente</i></b></font>
-				</td>
-				<td width="50%" align="center">
-					<font color='gold' size='5'><b><i>Cliente</i></b></font>
-				</td>
-			</tr>
+			<table id="tb_vale_trans_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
+				<tr>
+					<td width="50%" align="center">
+						<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
+					</td>
+				</tr>
 
-			<tr>
-				<td width="50%" align="center">
-					<select name="lsref_remb" id="lsref_remb" class="campos">
-						<?php
-						// Criando a Instrução SQL de Consulta
-						$sqlpr = "SELECT * FROM tiporef WHERE ref_tiporec <> 'DDP' ORDER BY codref";
-						$rspr = mysqli_query($conec, $sqlpr) or die("Não foi possível acessar os Dados");
+				<tr>
+					<td width="50%" align="center">
+						<input type="text" id="mat_vend_input_vt" name="colab_vt" size="40" maxlength="8" class="campos"
+							onkeypress="fPassaAlfaNumerico('an')"
+							onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+						<input type="hidden" name="mat_colab_vt" id="mat_vend_vt" value="<?php echo $matVendEsc; ?>">
+					</td>
+				</tr>
+			</table>
 
-						while ($lnpr = mysqli_fetch_array($rspr)) {
-							$CodRef_Remb  = $lnpr['codref'];
-							$TipoRef_Remb = $lnpr['nomeref'];
-						?>
-							<option value="<?php echo $TipoRef_Remb; ?>" class="campos">
-								<?php echo "$TipoRef_Remb"; ?>
-							</option>
-						<?php
-						}
-						mysqli_free_result($rspr);
-						?>
-					</select>
-				</td>
-				<td width="50%" align="center">
-					<input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
-						onkeypress="fPassaAlfaNumerico('an')"
-						onkeyup='this.value=this.value.toUpperCase(); validnome(this)'>
-				</td>
-			</tr>
-		</table>
+			<table id="tb_serv_prest_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
+				<tr>
+					<td width="50%" align="center">
+						<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
+					</td>
+				</tr>
 
-		<table id="tb_vale_trans_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
-			<tr>
-				<td width="50%" align="center">
-					<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
-				</td>
-			</tr>
+				<tr>
+					<td width="50%" align="center">
+						<input type="text" id="mat_vend_input_srv" name="colab_srv" size="40" maxlength="8" class="campos"
+							onkeypress="fPassaAlfaNumerico('an')"
+							onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
+						<input type="hidden" name="mat_colab_srv" id="mat_vend_srv" value="<?php echo $matVendEsc; ?>">
+					</td>
+				</tr>
+			</table>
 
-			<tr>
-				<td width="50%" align="center">
-					<input type="text" id="mat_vend_input_vt" name="colab_vt" size="40" maxlength="8" class="campos"
-						onkeypress="fPassaAlfaNumerico('an')"
-						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
-					<input type="hidden" name="mat_colab_vt" id="mat_vend_vt" value="<?php echo $matVendEsc; ?>">
-				</td>
-			</tr>
-		</table>
+			<br>
 
-		<table id="tb_serv_prest_dp" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
-			<tr>
-				<td width="50%" align="center">
-					<font color='gold' size='5'><b><i>Colaborador(a)</i></b></font>
-				</td>
-			</tr>
-
-			<tr>
-				<td width="50%" align="center">
-					<input type="text" id="mat_vend_input_srv" name="colab_srv" size="40" maxlength="8" class="campos"
-						onkeypress="fPassaAlfaNumerico('an')"
-						onkeyup='this.value=this.value.toUpperCase(); validnome(this)' required autofocus>
-					<input type="hidden" name="mat_colab_srv" id="mat_vend_srv" value="<?php echo $matVendEsc; ?>">
-				</td>
-			</tr>
-		</table>
-
-		<br>
-
-		<table width="100%" border="0" cellspacing="0">
-			<tr>
-				<td width="9%"><a href="pgtos.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a></td>
-				<td width="82%" align="center">
-					<input type="submit" name="btenviar" value="Continuar">&nbsp;&nbsp;
-					<input type="reset" name="btreset" value="Limpar">
-				<td width="9%" align="right"><a href="pgtos.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
-				</td>
-			</tr>
-		</table>
+			<table width="100%" border="0" cellspacing="0">
+				<tr>
+					<td width="9%"><a href="pgtos.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a></td>
+					<td width="82%" align="center">
+						<input type="submit" name="btenviar" value="Continuar">&nbsp;&nbsp;
+						<input type="reset" name="btreset" value="Limpar">
+					<td width="9%" align="right"><a href="pgtos.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+					</td>
+				</tr>
+			</table>
 		</form>
 	<?php
 	} else {

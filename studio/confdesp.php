@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>WebCaixa v1.20.10_beta</title>
+	<title>WebCaixa v1.20.12_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -38,7 +38,6 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
-
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R3.1.1";
@@ -53,11 +52,11 @@
 	$TipoPag   = trim($_POST['lsPr']);
 	$lsref_desp	= trim($_POST['lsref_desp'] ?? '');
 	$lsref_remb	= trim($_POST['lsref_remb'] ?? '');
+	$cod_TipoRef = trim($_POST['cod_TipoRef'] ?? '');
 	$TipoRef = ($lsref_remb != 'Selecione' and $lsPr == '5') ? $lsref_remb : '';
 	$TipoDoc = ($lsPr == '1') ? 'DDP' : (($lsref_remb != 'Selecione' and $lsPr == '5') ? 'RCL' : ($lsPr == '7' ? 'VTR' : ($lsPr == '6' ? 'SRV' : ($lsPr == '4' ? 'MPD' : ($lsPr == '2' ? 'MCS' : ($lsPr == '3' ? 'MDV' : ($lsPr == '8' ? 'OUT' : '')))))));
 	$cliente	= trim($_POST['cliente'] ?? '');
-echo $lsref_desp;
-exit;
+	
 	// Verifica se o tipo de despesa é 2, 3, 4 ou 8 para obter a matrícula e o nome do colaborador
 	if ($TipoPag == '2' or $TipoPag == '3' or $TipoPag == '4' or $TipoPag == '8') {
 
@@ -79,6 +78,20 @@ exit;
 
 	include "conexao.php";
 	include "dbselect.php";
+
+	if ($cod_TipoRef == '') {
+		$refSelecionada = ($lsPr == '5') ? $lsref_remb : $lsref_desp;
+		if ($refSelecionada != '' && $refSelecionada != 'Selecione') {
+			$refSelecionada = mysqli_real_escape_string($conec, $refSelecionada);
+			$sqlRef = "SELECT * FROM tiporef WHERE nomeref = '$refSelecionada' LIMIT 1";
+			$rsRef = mysqli_query($conec, $sqlRef);
+			if ($rsRef && mysqli_num_rows($rsRef) > 0) {
+				$lnRef = mysqli_fetch_array($rsRef);
+				$cod_TipoRef = trim(isset($lnRef['cod_tiporec']) ? $lnRef['cod_tiporec'] : $lnRef['codref']);
+				mysqli_free_result($rsRef);
+			}
+		}
+	}
 
 	// Obtendo o código do estúdio
 	$sql = "SELECT pc FROM antfech";
@@ -173,6 +186,7 @@ exit;
 		<input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
 		<input type="hidden" name="tipodoc" value="<?php echo $TipoDoc; ?>">
 		<input type="hidden" name="tiporef" value="<?php echo $TipoRef; ?>">
+		<input type="hidden" name="cod_TipoRef" value="<?php echo $cod_TipoRef; ?>">
 		<input type="hidden" name="nomedesc" value="<?php echo $NomeDesc; ?>">
 
 		<p>

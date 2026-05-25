@@ -1,7 +1,7 @@
 '<html>
 
 <head>
-	<title>WebCaixa v1.20.10_beta</title>
+	<title>WebCaixa v1.20.12_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -53,6 +53,7 @@
 	$TipoRec   = '8';
 	$TipoDoc = trim($_POST['tipodoc']);
 	$TipoRef = trim($_POST['tiporef']);
+	$cod_TipoRef = trim($_POST['cod_TipoRef'] ?? '');
 	$NomeDesc = trim($_POST['nomedesc']);
 
 	// Inicializações para evitar avisos/erros caso não existam valores
@@ -60,6 +61,7 @@
 	$PC = trim($_POST['pc']);
 
 	$UltDoc_ci = '';
+	$UltDoc_dp = '';
 	$UltDoc_rc = '';
 	$UltDoc_mc = '';
 	$UltDoc_md = '';
@@ -110,26 +112,26 @@
 			}
 			$Reg  = $Reg + 1;
 
-			// Comunicação Interna
+			// Despesa DP
 			if ($TipoDoc == 'DDP') {
 				$TipoDoc = 'CI';
 
-				// Recebendo o próximo número de registro CI
+				// Recebendo o próximo número de registro DP
 				$sqlr_ci = "select numdoc from registro where numdoc like '$TipoDoc%' order by numdoc desc";
 				$rsr_ci  = mysqli_query($conec, $sqlr_ci) or die(" Não foi possível acessar os Dados");
 				$regsr_ci = mysqli_num_rows($rsr_ci);
 				$lnr_ci = mysqli_fetch_array($rsr_ci);
-				$UltDoc_ci = $lnr_ci['numdoc'];
+				$UltDoc_dp = $lnr_ci['numdoc'];
 
 				if ($regsr_ci > 0) {
-					$codigo_atual = $UltDoc_ci;
+					$codigo_atual = $UltDoc_dp;
 					$prefixo = substr($codigo_atual, 0, 2);
 					$numero = substr($codigo_atual, 2);
 					$novo_numero = intval($numero) + 1;
-					$UltDoc_ci = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
+					$UltDoc_dp = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 				}
 			}
-
+			
 			// Reembolso de Cliente
 			if ($TipoDoc == 'RCL') {
 				$TipoDoc = 'RC';
@@ -166,7 +168,7 @@
 					$numero = substr($codigo_atual, 2);
 					$novo_numero = intval($numero) + 1;
 					$UltDoc_mc = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
-				}			
+				}
 			}
 
 			// Material de Divulgação
@@ -185,7 +187,7 @@
 					$numero = substr($codigo_atual, 2);
 					$novo_numero = intval($numero) + 1;
 					$UltDoc_md = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
-				}		
+				}
 			}
 
 			// Material de Produção
@@ -267,11 +269,11 @@
 					$UltDoc_out = $prefixo . str_pad($novo_numero, strlen($numero), '0', STR_PAD_LEFT);
 				}
 			}
-			
+
 			// Condições para atribuir o número do documento correto
 			if ($TipoDesp == '1') {
 
-				$sqlGr = "insert into registro values($Reg, '$UltDoc_ci', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '$mat_vend', '$colab', '$cliente')";
+				$sqlGr = "insert into registro values($Reg, '$UltDoc_dp', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '', '', '')";
 				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados");
 			}
 
@@ -334,8 +336,10 @@
 				<input type="hidden" name="tipodoc" value="<?php echo $TipoDoc; ?>">
 				<input type="hidden" name="txttipodesp" value="<?php echo $TipoDesp; ?>">
 				<input type="hidden" name="tiporef" value="<?php echo $TipoRef; ?>">
+				<input type="hidden" name="cod_TipoRef" value="<?php echo $cod_TipoRef; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
 				<input type="hidden" name="mat_vend" value="<?php echo $mat_vend; ?>">
+				<input type="hidden" name="ultdoc_dp" value="<?php echo $UltDoc_dp; ?>">
 				<input type="hidden" name="ultdoc_ci" value="<?php echo $UltDoc_ci; ?>">
 				<input type="hidden" name="ultdoc_rc" value="<?php echo $UltDoc_rc; ?>">
 				<input type="hidden" name="ultdoc_md" value="<?php echo $UltDoc_md; ?>">

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>WebCaixa v1.20.10_beta</title>
+	<title>WebCaixa v1.20.12_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -41,6 +41,11 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onload="imprimirERedirecionar()">
 	<?php
+	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+	echo "<pre>";
+	print_r($dados);
+	echo "</pre>";
+	exit;*/
 
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -57,6 +62,7 @@
 	$TipoRec   = trim($_POST['tiporec']);
 	$TipoDesp  = trim($_POST['txttipodesp']);
 	$TipoRef = trim($_POST['tiporef']);
+	$cod_TipoRef = trim($_POST['cod_TipoRef'] ?? '');
 	$FPag      = trim($_POST['formapag']);
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
@@ -136,6 +142,7 @@
 	$UltDoc_rc_h = str_replace("-", "", $UltDoc_rc);
 	$UltDoc_mp_h = str_replace("-", "", $UltDoc_mp);
 	$UltDoc_mc_h = str_replace("-", "", $UltDoc_mc);
+	$UltDoc_md_h = str_replace("-", "", $UltDoc_md);
 	$UltDoc_vt_h = str_replace("-", "", $UltDoc_vt);
 	$UltDoc_sp_h = str_replace("-", "", $UltDoc_sp);
 	$UltDoc_out_h = str_replace("-", "", $UltDoc_out);
@@ -157,7 +164,7 @@
 		$Aut = $Reg . $PC . $horaaut . $UltDoc_vt_h . " " . $dtAut . " R$ " . $Vr  . $SgRec  . $FmRec  . $MatRec;
 	} elseif ($TipoDoc == 'SP') {
 		$Aut = $Reg . $PC . $horaaut . $UltDoc_sp_h . " " . $dtAut . " R$ " . $Vr  . $SgRec  . $FmRec  . $MatRec;
-	} elseif ($TipoDoc == 'OUT') {
+	} elseif ($TipoDoc == 'OT') {
 		$Aut = $Reg . $PC . $horaaut . $UltDoc_out_h . " " . $dtAut . " R$ " . $Vr  . $SgRec  . $FmRec  . $MatRec;
 	}
 
@@ -173,7 +180,6 @@
 	mysqli_free_result($rs);
 	mysqli_free_result($rsPC);
 	mysqli_free_result($rsRec);
-	mysqli_free_result($rsApe);
 	$SisRot = "S-7.3.1.2";
 	include "rodape.php";
 
@@ -185,14 +191,15 @@
 			function imprimirERedirecionar() {
 				// Monta a URL com os dados
 				var url = './ci_desp.php?tipo=<?php echo urlencode($tipo); ?>' +
-					'&UlDoc_dp=<?php echo urlencode($UltDoc_rc); ?>' +
+					'&UlDoc_dp=<?php echo urlencode($UltDoc_dp); ?>' +
 					'&Aut=<?php echo urlencode($Aut); ?>' +
 					'&Data=<?php echo urlencode($Data); ?>' +
 					'&PC=<?php echo urlencode($PC); ?>' +
 					'&Tes=<?php echo urlencode($Tes); ?>' +
 					'&Valor=<?php echo urlencode($Valor); ?>' +
 					'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
-					'&TipoRef=<?php echo urlencode($TipoRef); ?>';
+					'&TipoRef=<?php echo urlencode($TipoRef); ?>' +
+					'&cod_TipoRef=<?php echo urlencode($cod_TipoRef); ?>';
 				window.open(url, '_blank');
 				setTimeout(function() {
 					window.location.href = './index.php?c_s=<?php echo $lg_user; ?>';
@@ -212,12 +219,12 @@
 					'&Data=<?php echo urlencode($Data); ?>' +
 					'&PC=<?php echo urlencode($PC); ?>' +
 					'&Tes=<?php echo urlencode($Tes); ?>' +
-					'&Assunto=<?php echo urlencode($Assunto); ?>' +
 					'&mat_vend=<?php echo urlencode($mat_vend); ?>' +
 					'&cliente=<?php echo urlencode($cliente); ?>' +
 					'&Valor=<?php echo urlencode($Valor); ?>' +
 					'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
-					'&TipoRef=<?php echo urlencode($TipoRef); ?>';
+					'&TipoRef=<?php echo urlencode($TipoRef); ?>' +
+					'&cod_TipoRef=<?php echo urlencode($cod_TipoRef); ?>';
 				window.open(url, '_blank');
 				setTimeout(function() {
 					window.location.href = './index.php?c_s=<?php echo $lg_user; ?>';
@@ -237,12 +244,12 @@
 					'&Data=<?php echo urlencode($Data); ?>' +
 					'&PC=<?php echo urlencode($PC); ?>' +
 					'&Tes=<?php echo urlencode($Tes); ?>' +
-					'&Assunto=<?php echo urlencode($Assunto); ?>' +
 					'&colab=<?php echo urlencode($colab); ?>' +
 					'&mat_vend=<?php echo urlencode($mat_vend); ?>' +
 					'&Valor=<?php echo urlencode($Valor); ?>' +
 					'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
 					'&TipoRef=<?php echo urlencode($TipoRef); ?>' +
+					'&cod_TipoRef=<?php echo urlencode($cod_TipoRef); ?>' +
 					'&NomeDesc=<?php echo urlencode($NomeDesc); ?>';
 				window.open(url, '_blank');
 				setTimeout(function() {
@@ -263,12 +270,12 @@
 					'&Data=<?php echo urlencode($Data); ?>' +
 					'&PC=<?php echo urlencode($PC); ?>' +
 					'&Tes=<?php echo urlencode($Tes); ?>' +
-					'&Assunto=<?php echo urlencode($Assunto); ?>' +
 					'&colab=<?php echo urlencode($colab); ?>' +
 					'&mat_vend=<?php echo urlencode($mat_vend); ?>' +
 					'&Valor=<?php echo urlencode($Valor); ?>' +
 					'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
 					'&TipoRef=<?php echo urlencode($TipoRef); ?>' +
+					'&cod_TipoRef=<?php echo urlencode($cod_TipoRef); ?>' +
 					'&NomeDesc=<?php echo urlencode($NomeDesc); ?>';
 				window.open(url, '_blank');
 				setTimeout(function() {
@@ -292,12 +299,12 @@
 					'&Data=<?php echo urlencode($Data); ?>' +
 					'&PC=<?php echo urlencode($PC); ?>' +
 					'&Tes=<?php echo urlencode($Tes); ?>' +
-					'&Assunto=<?php echo urlencode($Assunto); ?>' +
 					'&colab=<?php echo urlencode($colab); ?>' +
 					'&mat_vend=<?php echo urlencode($mat_vend); ?>' +
 					'&Valor=<?php echo urlencode($Valor); ?>' +
 					'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
 					'&TipoRef=<?php echo urlencode($TipoRef); ?>' +
+					'&cod_TipoRef=<?php echo urlencode($cod_TipoRef); ?>' +
 					'&NomeDesc=<?php echo urlencode($NomeDesc); ?>';
 				window.open(url, '_blank');
 				setTimeout(function() {

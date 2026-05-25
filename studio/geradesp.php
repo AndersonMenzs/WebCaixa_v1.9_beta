@@ -1,7 +1,7 @@
 '<html>
 
 <head>
-	<title>WebCaixa v1.20.10_beta</title>
+	<title>WebCaixa v1.20.12_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -53,6 +53,7 @@
 	$TipoRec   = '8';
 	$TipoDoc = trim($_POST['tipodoc']);
 	$TipoRef = trim($_POST['tiporef']);
+	$cod_TipoRef = trim($_POST['cod_TipoRef'] ?? '');
 	$NomeDesc = trim($_POST['nomedesc']);
 
 	// Inicializações para evitar avisos/erros caso não existam valores
@@ -335,6 +336,7 @@
 				<input type="hidden" name="tipodoc" value="<?php echo $TipoDoc; ?>">
 				<input type="hidden" name="txttipodesp" value="<?php echo $TipoDesp; ?>">
 				<input type="hidden" name="tiporef" value="<?php echo $TipoRef; ?>">
+				<input type="hidden" name="cod_TipoRef" value="<?php echo $cod_TipoRef; ?>">
 				<input type="hidden" name="txtmat" value="<?php echo $Mat; ?>"><br>
 				<input type="hidden" name="mat_vend" value="<?php echo $mat_vend; ?>">
 				<input type="hidden" name="ultdoc_dp" value="<?php echo $UltDoc_dp; ?>">
