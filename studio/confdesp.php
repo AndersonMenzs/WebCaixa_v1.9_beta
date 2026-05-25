@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>WebCaixa v1.20.12_beta</title>
+	<title>WebCaixa v1.20.14_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -87,7 +87,7 @@
 			$rsRef = mysqli_query($conec, $sqlRef);
 			if ($rsRef && mysqli_num_rows($rsRef) > 0) {
 				$lnRef = mysqli_fetch_array($rsRef);
-				$cod_TipoRef = trim(isset($lnRef['cod_tiporec']) ? $lnRef['cod_tiporec'] : $lnRef['codref']);
+				$cod_TipoRef = trim(isset($lnRef['cod_tiporef']) ? $lnRef['cod_tiporef'] : $lnRef['codref']);
 				mysqli_free_result($rsRef);
 			}
 		}
