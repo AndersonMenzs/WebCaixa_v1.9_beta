@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>WebCaixa v1.20.16_beta</title>
+    <title>WebCaixa v1.20.17_beta</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style type="text/css">
     body {
@@ -99,7 +99,7 @@
     // Obtendo o Login
        $Sis     = "S7";
        $Rot       = "S7R5.2";
-       $lg_user   = trim($_POST['txtuser']);
+       $lg_user   = trim($_POST['txtuser'] ?? '');
 
        if ($lg_user == '')
 	 {
@@ -112,7 +112,7 @@
 	 $dv   = substr($user,7,1);
        $userF   = "$mat1.$mat2.$mat3-$dv";
        $pss     = substr($lg_user,8,40);
-       $dtAbre  = trim($_POST['dtabre']);
+       $dtAbre  = trim($_POST['dtabre'] ?? '');
        $ch        = '';
        $erro = 'n';;
 
@@ -163,7 +163,7 @@
                     <input type="text" name="txtcash" size="7" maxlength="7" class="campos"
                         onKeyUp="FormataValor('recolhe', 'txtcash', event);">
                     <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-                    <input type="hidden" name="dtabre" value="<?php echo $dtAbre; ?>">
+                    <input type="hidden" name="dtabre" value="<?php echo $dtOpen; ?>">
                 </td>
             </tr>
         </table><br><br>
@@ -171,17 +171,17 @@
         <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
             <tr>
                 <td width=24%>
-                    <a href="http://localhost/caixa"><img src="../images/voltar.gif">
+                    <a href="index.php?c_s=<?php echo $lg_user; ?>"><img src="../images/voltar.gif"></a>
                 </td>
                 <td width=52% align="center">
                     <input type="submit" name="btapl" value="Continuar">&nbsp;&nbsp;
-                    <input type="reset" name="btcanc" value="Limpar"></a>
+                    <input type="reset" name="btcanc" value="Limpar">
                 </td>
                 <td width=24% align="right">
-                    <a href="http://localhost/caixa"><img src="../images/voltar.gif">
+                    <a href="index.php?c_s=<?php echo $lg_user; ?>"><img src="../images/voltar.gif"></a>
                 </td>
             </tr>
-            <table><br>
+        </table><br>
     </form><?php
 	   } else { ?>
     <br><br><br>

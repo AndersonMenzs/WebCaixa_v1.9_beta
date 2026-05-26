@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>WebCaixa v1.20.16_beta</title>
+	<title>WebCaixa v1.20.17_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -1095,14 +1095,10 @@
 			}
 
 			?>
-
-
-
 			<p>
 				<center>
 					<input type="submit" name="btimprime" value="Imprimir" autofocus>
-					<!-- Voltar para o Menu Principal tipo submit  -->
-					<input type="submit" name="btvoltar" value="Voltar" formaction="index.php?c_s=<?= $lg_user ?>">
+					<input type="button" name="btvoltar" value="Voltar" onclick="window.location.href='index.php?c_s=<?= $lg_user ?>'">
 				</center>
 			</p>
 		</form>

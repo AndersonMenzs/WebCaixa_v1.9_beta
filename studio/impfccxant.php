@@ -12,7 +12,11 @@ function post($chave, $padrao = '')
 function num($chave, $padrao = 0.0)
 {
 	$valor = post($chave, $padrao);
+	return valor_num($valor, $padrao);
+}
 
+function valor_num($valor, $padrao = 0.0)
+{
 	if (is_array($valor)) {
 		return (float) $padrao;
 	}
@@ -41,64 +45,69 @@ include "conexao.php";
 include "dbselect.php";
 
 // Recebendo variáveis
-/*$lg_user = $_POST['c_s'];*/
-$TipoFech = $_POST['tipoFech'];
-$Fita    = $_POST['fita'];
-$ano     = $_POST['ano'];
-$PC      = $_POST['pc'];
-$dataFch  = $_POST['datafch'];
-$hora    = $_POST['hora'];
-$app     = $_POST['app'];
-$inicial = $_POST['inicial'];
+/*$lg_user = post('c_s');*/
+$TipoFech = post('tipoFech');
+$Fita    = post('fita');
+$ano     = post('ano');
+$PC      = post('pc');
+$dataFch  = post('datafch');
+$hora    = post('hora');
+$app     = post('app');
+$inicial = post('inicial');
 
-$NTxProd = $_POST['numtxprod'];
-$ValorProd = $_POST['vrprod'];
-$NConcurso = $_POST['numconcurso'];
-$ValorConc = $_POST['vrconc'];
-$NContEnt = $_POST['numcontent'];
-$ValorContEnt = $_POST['vrcontent'];
-$NContParc = $_POST['numcontparc'];
-$ValorContParc = $_POST['vrcontparc'];
-$NPropEnt = $_POST['numpropent'];
-$ValorPropEnt = $_POST['vrpropent'];
-$NPRecs = $_POST['numprodsrec'];
-$VrPRecsF = $_POST['vrprecs'];
-$NBookRec = $_POST['nbookrec'];
-$VrBookRecF = $_POST['vrbookrec'];
-$NumPgtos  = $_POST['numpgtos'];
-$PgtoServicos = $_POST['pgtoservicos'];
-$NEstorno = $_POST['numestorno'];
-$ValorEstorno = $_POST['vrestorno'];
+$NTxProd = post('numtxprod');
+$ValorProd = post('vrprod');
+$NConcurso = post('numconcurso');
+$ValorConc = post('vrconc');
+$NContEnt = post('numcontent');
+$ValorContEnt = post('vrcontent');
+$NContParc = post('numcontparc');
+$ValorContParc = post('vrcontparc');
+$NPropEnt = post('numpropent');
+$ValorPropEnt = post('vrpropent');
+$NPRecs = post('numprodsrec');
+$VrPRecsF = post('vrprecs');
+$NBookRec = post('nbookrec');
+$VrBookRecF = post('vrbookrec');
+$NumPgtos  = post('numpgtos');
+$PgtoServicos = post('pgtoservicos');
+$NEstorno = post('numestorno');
+$ValorEstorno = post('vrestorno');
 
-$Dinheiro = $_POST['dinheiro'];
-$CardDeb = $_POST['carddeb'];
-$CardVista = $_POST['cardvista'];
-$CardParcLj = $_POST['cardparclj'];
-$CardParcAdm = $_POST['cardparcadm'];
-$PixQRCode = $_POST['pixqrcode'];
-$PixCNPJ = $_POST['pixcnpj'];
-$TotIn = $_POST['totin'];
+$Dinheiro = post('dinheiro');
+$CardDeb = post('carddeb');
+$CardVista = post('cardvista');
+$CardParcLj = post('cardparclj');
+$CardParcAdm = post('cardparcadm');
+$PixQRCode = post('pixqrcode');
+$PixCNPJ = post('pixcnpj');
+$TotIn = post('totin');
 
-$DDPtot = $_POST['ddpf'];
-$MCStot = $_POST['mcsf'];
-$MDVtot = $_POST['mdvf'];
-$MPDtot = $_POST['mpdf'];
-$RCLtot = $_POST['rclf'];
-$SRVtot = $_POST['srvf'];
-$VTRtot = $_POST['vtrf'];
-$OUTtot = $_POST['outf'];
-$PgtoTot = $_POST['pgtotot'];
+$DDPtot = post('ddpf');
+$MCStot = post('mcsf');
+$MDVtot = post('mdvf');
+$MPDtot = post('mpdf');
+$RCLtot = post('rclf');
+$SRVtot = post('srvf');
+$VTRtot = post('vtrf');
+$OUTtot = post('outf');
+$PgtoTot = post('pgtotot');
 
-$Recolh = $_POST['recolh'];
-$TotPgto = $_POST['totpgto'];
-$IncSobraF = $_POST['incsobra'];
+$Recolh = post('recolh', '0,00');
+$TotPgto = post('totpgto', '0,00');
+$IncSobraF = post('incsobra', '0,00');
 
-$FechamentoF = $_POST['fechamentoF'];
-$GavAut = $_POST['gavaut'];
-$DifCx = $_POST['difcx'];
-$cd = $_POST['cd'];
+$FechamentoF = post('fechamentoF', post('fechamento', '0,00'));
+$GavAut = post('gavaut', '0,00');
+$DifCx = post('difcx', '0,00');
+$cd = post('cd');
+$Diferenca = abs(num('difcx')) > 0.009;
+$horaNorm = date("Hi");
+$horaInv = date("iH");
+$Reimp = '';
+$Entradas = $TotIn;
 
-$fech_data = trim($_POST['datafch'] ?? $_GET['datafch'] ?? '');
+$fech_data = trim(post('datafch', $_GET['datafch'] ?? ''));
 $fech_data_obj = date_create_from_format('d/m/Y', $fech_data);
 
 if (!$fech_data_obj) {
@@ -123,7 +132,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>WebCaixa v1.20.16_beta</title>
+    <title>WebCaixa v1.20.17_beta</title>
     <meta name="generator" content="LibreOffice 25.2.3.2 (Linux)" />
     <meta name="created" content="2026-04-19T12:11:10.519774564" />
     <meta name="changed" content="2026-04-20T15:19:01.024157216" />
@@ -148,7 +157,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
 
         @page {
             size: A4 portrait;
-            margin: 12mm;
+            margin: 5mm;
         }
 
         html,
@@ -384,7 +393,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
 
             body {
                 box-sizing: border-box;
-                padding: 10mm;
+                padding: 0;
             }
 
             .container {
@@ -423,9 +432,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
     </style>
 </head>
 
-<!--<body lang="pt-BR" link="#000080" vlink="#800000" dir="ltr" onload="window.print();">-->
-
-<body>
+<body lang="pt-BR" link="#000080" vlink="#800000" dir="ltr" onload="window.print();">
     <div class="container">
         <div class="page">
             <div class="row">
@@ -667,7 +674,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                     </td>
                                 </tr>
                                 <?php
-                                if ($NTxProd > 0 && $ValorProd > 0.00) {
+                                if (valor_num($NTxProd) > 0 && valor_num($ValorProd) > 0) {
                                 ?>
                                     <tr>
                                         <td width="43%" style="border: none; padding: 0in">
@@ -701,7 +708,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                 <?php
                                 }
 
-                                if ($NConcurso > 0 && $ValorConc > 0.00) {
+                                if (valor_num($NConcurso) > 0 && valor_num($ValorConc) > 0) {
                                 ?>
                                     <tr>
                                         <td width="43%" style="border: none; padding: 0in">
@@ -735,7 +742,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                 <?php
                                 }
 
-                                if ($NContEnt > 0 && $ValorContEnt > 0.00) {
+                                if (valor_num($NContEnt) > 0 && valor_num($ValorContEnt) > 0) {
                                 ?>
                                     <tr>
                                         <td width="43%" style="border: none; padding: 0in">
@@ -769,7 +776,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                 <?php
                                 }
 
-                                if ($NContParc > 0 && $ValorContParc > 0.00) {
+                                if (valor_num($NContParc) > 0 && valor_num($ValorContParc) > 0) {
                                 ?>
                                     <tr>
                                         <td width="43%" style="border: none; padding: 0in">
@@ -803,7 +810,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                 <?php
                                 }
 
-                                if ($NPropEnt > 0 && $ValorPropEnt > 0.00) {
+                                if (valor_num($NPropEnt) > 0 && valor_num($ValorPropEnt) > 0) {
                                 ?>
                                     <tr>
                                         <td width="43%" style="border: none; padding: 0in">
@@ -837,7 +844,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                 <?php
                                 }
 
-                                if ($NPRecs > 0 && $VrPRecsF > 0.00) {
+                                if (valor_num($NPRecs) > 0 && valor_num($VrPRecsF) > 0) {
                                 ?>
                                     <tr>
                                         <td width="43%" style="border: none; padding: 0in">
@@ -871,7 +878,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                 <?php
                                 }
 
-                                if ($NBookRec > 0 && $VrBookRecF > 0.00) {
+                                if (valor_num($NBookRec) > 0 && valor_num($VrBookRecF) > 0) {
                                 ?>
                                     <tr>
                                         <td width="43%" style="border: none; padding: 0in">
@@ -905,7 +912,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                 <?php
                                 }
 
-                                if ($NumPgtos > 0 && $PgtoServicos > 0.00) {
+                                if (valor_num($NumPgtos) > 0 && valor_num($PgtoServicos) > 0) {
                                 ?>
                                     <tr>
                                         <td width="43%" style="border: none; padding: 0in">
@@ -939,7 +946,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                 <?php
                                 }
 
-                                if ($NEstorno > 0 && $ValorEstorno > 0.00) {
+                                if (valor_num($NEstorno) > 0 && valor_num($ValorEstorno) > 0) {
                                 ?>
                                     <tr>
                                         <td width="43%" style="border: none; padding: 0in">
@@ -1005,7 +1012,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                         </td>
                                     </tr>
 
-                                    <?php if ($Dinheiro > 0.00) { ?>
+                                    <?php if (valor_num($Dinheiro) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1024,7 +1031,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                         </tr>
                                     <?php } ?>
 
-                                    <?php if ($CardDeb > 0.00) { ?>
+                                    <?php if (valor_num($CardDeb) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1043,7 +1050,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                         </tr>
                                     <?php } ?>
 
-                                    <?php if ($CardVista > 0.00) { ?>
+                                    <?php if (valor_num($CardVista) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1062,7 +1069,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                         </tr>
                                     <?php } ?>
 
-                                    <?php if ($CardParcLj > 0.00) { ?>
+                                    <?php if (valor_num($CardParcLj) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1081,7 +1088,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                         </tr>
                                     <?php } ?>
 
-                                    <?php if ($CardParcAdm > 0.00) { ?>
+                                    <?php if (valor_num($CardParcAdm) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1100,7 +1107,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                         </tr>
                                     <?php } ?>
 
-                                    <?php if ($PixQRCode > 0.00) { ?>
+                                    <?php if (valor_num($PixQRCode) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1119,7 +1126,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                         </tr>
                                     <?php } ?>
 
-                                    <?php if ($PixCNPJ > 0.00) { ?>
+                                    <?php if (valor_num($PixCNPJ) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1188,7 +1195,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                         </td>
                                     </tr>
 
-                                    <?php if ($DDPtot > 0.00) { ?>
+                                    <?php if (valor_num($DDPtot) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1206,7 +1213,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                             </td>
                                         </tr>
                                     <?php } ?>
-                                    <?php if ($MCStot > 0.00) { ?>
+                                    <?php if (valor_num($MCStot) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1224,7 +1231,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                             </td>
                                         </tr>
                                     <?php } ?>
-                                    <?php if ($MDVtot > 0.00) { ?>
+                                    <?php if (valor_num($MDVtot) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1242,7 +1249,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                             </td>
                                         </tr>
                                     <?php } ?>
-                                    <?php if ($MPDtot > 0.00) { ?>
+                                    <?php if (valor_num($MPDtot) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1260,7 +1267,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                             </td>
                                         </tr>
                                     <?php } ?>
-                                    <?php if ($RCLtot > 0.00) { ?>
+                                    <?php if (valor_num($RCLtot) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1278,7 +1285,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                             </td>
                                         </tr>
                                     <?php } ?>
-                                    <?php if ($SRVtot > 0.00) { ?>
+                                    <?php if (valor_num($SRVtot) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1296,7 +1303,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                             </td>
                                         </tr>
                                     <?php } ?>
-                                    <?php if ($VTRtot > 0.00) { ?>
+                                    <?php if (valor_num($VTRtot) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1314,7 +1321,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                             </td>
                                         </tr>
                                     <?php } ?>
-                                    <?php if ($OUTtot > 0.00) { ?>
+                                    <?php if (valor_num($OUTtot) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
                                                 <p>
@@ -1392,7 +1399,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                         <p>
                                             <font class="fonte-rel">
                                                 <font size="1" class="fs-6">
-                                                    <?php if ($Recolh > 0.00) { ?>
+                                                    <?php if (valor_num($Recolh) > 0) { ?>
                                                         <i>R$ <?= $Recolh ?></i>
                                                     <?php } else { ?>
                                                         <i>R$ 0,00</i>
@@ -1424,7 +1431,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                 </tr>
             </table>
 
-            <?php if (!empty($IncSobraF) && $IncSobraF > 0) { ?>
+            <?php if (valor_num($IncSobraF) > 0) { ?>
                 <div class="bloco-4 bloco-esq">
                     <table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
                         <tr>

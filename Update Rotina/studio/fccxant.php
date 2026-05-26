@@ -8,7 +8,7 @@ ini_set('error_log', 'php_errors.log');
 <html>
 
 <head>
-	<title>WebCaixa v1.20.16_beta</title>
+	<title>WebCaixa v1.20.17_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -120,6 +120,11 @@ ini_set('error_log', 'php_errors.log');
 		$RecBook      = 0;
 		$RecResg      = 0;
 		$RecEst       = 0;
+		$RecChav      = 0;
+		$RecDesp      = 0;
+		$Recl         = 0;
+		$pixQRCode    = 0;
+		$pixCNPJ      = 0;
 		$cDebFinal    = 0;
 		$credTotV     = 0;
 		$credTotPLoja = 0;
@@ -136,6 +141,42 @@ ini_set('error_log', 'php_errors.log');
 		$SRV          = 0;
 		$VTR          = 0;
 		$OUT          = 0;
+		$NBebe        = 0;
+		$NResgate     = 0;
+		$NEstorno     = 0;
+		$NTChav       = 0;
+		$NPropParc    = 0;
+		$NVendas      = 0;
+		$ValorChav      = '0,00';
+		$ValorProd      = '0,00';
+		$ValorConc      = '0,00';
+		$ValorBebe      = '0,00';
+		$ValorContEnt   = '0,00';
+		$ValorContParc  = '0,00';
+		$ValorPropEnt   = '0,00';
+		$ValorPropParc  = '0,00';
+		$ValorVend      = '0,00';
+		$VrPRecsF       = '0,00';
+		$VrBookRecF     = '0,00';
+		$ValorResg      = '0,00';
+		$ValorEstorno   = '0,00';
+		$PgtoTot        = '0,00';
+		$Dinheiro       = '0,00';
+		$PixQRCode      = '0,00';
+		$PixCNPJ        = '0,00';
+		$CardDeb        = '0,00';
+		$CardVista      = '0,00';
+		$CardParcLj     = '0,00';
+		$CardParcAdm    = '0,00';
+		$CheqTotal      = '0,00';
+		$CheqPre        = '0,00';
+		$DepCli         = '0,00';
+		$Recolh         = '0.00';
+		$RecolTot       = '0,00';
+		$TotIn          = '0,00';
+		$TotOutros      = '0,00';
+		$TotGeral       = '0,00';
+		$TotPgto        = '0,00';
 
 		// Obtendo Apelido
 		include "conexao.php";
@@ -199,7 +240,6 @@ ini_set('error_log', 'php_errors.log');
 
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
-			echo $_POST['vlrec'];
 			$RecChav = $RecChav + $VlRec;
 			$ValorChav    = number_format($RecChav, 2, ",", ".");
 		}
@@ -1213,10 +1253,10 @@ ini_set('error_log', 'php_errors.log');
 			<input type="hidden" name="numvendas" value="<?php echo $NVendas; ?>">
 			<input type="hidden" name="valorvend" value="<?php echo $ValorVend; ?>">
 			<input type="hidden" name="numpgtos" value="<?php echo $NumPgtos; ?>">
-			<input type="hidden" name="pgtoservicos" value="<?php echo $PgtoServicos; ?>">
+			<!--<input type="hidden" name="pgtoservicos" value="<?php //echo $PgtoServicos; ?>">-->
 			<input type="hidden" name="pgtotot" value="<?php echo $PgtoTot; ?>">
 			<input type="hidden" name="totpgto" value="<?php echo $TotPgto; ?>">
-			<input type="hidden" name="fechamento" value="<?php echo $FechamentoF; ?>">
+			<input type="hidden" name="fechamentoF" value="<?php echo $FechamentoF; ?>">
 			<input type="hidden" name="gavaut" value="<?php echo $GavAut; ?>">
 			<input type="hidden" name="difcx" value="<?php echo $DifCx; ?>">
 			<input type="hidden" name="cd" value="<?php echo $cd; ?>">
@@ -1264,7 +1304,7 @@ ini_set('error_log', 'php_errors.log');
 			}
 
 			// Gerando a Retificação
-			$sql = "select * from errlanc where dataop = $DataAtual";
+			$sql = "select * from errlanc where dataop = '$DataAtual'";
 			$rs  = mysqli_query($conec, $sql) or die("File fccxant Error #42. Contate seu Administrador.");
 			$regs = mysqli_num_rows($rs);
 
@@ -1341,7 +1381,7 @@ ini_set('error_log', 'php_errors.log');
 			<input type="hidden" name="srvf" value="<?php echo $SRVF; ?>">
 			<input type="hidden" name="vtrf" value="<?php echo $VTRF; ?>">
 			<input type="hidden" name="outf" value="<?php echo $OUTF; ?>">
-			<input type="hidden" name="recolh" value="<?php echo $Recolh; ?>">
+			<input type="hidden" name="recolh" value="<?php echo $RecolTot; ?>">
 
 			<?php
 
@@ -1392,6 +1432,7 @@ ini_set('error_log', 'php_errors.log');
 			$sqlCad = "select * from cadastro where dtcad = '$dtAbre' ";
 			$rsCad  = mysqli_query($conec, $sqlCad) or die("File fccxant Error #43. Contate seu Administrador.");
 			$regCad = mysqli_num_rows($rsCad);
+			$rsH2 = null;
 
 			if ($regCad > 0) {
 				while ($lnCad = mysqli_fetch_array($rsCad)) {
@@ -1498,7 +1539,7 @@ ini_set('error_log', 'php_errors.log');
 				<tr>
 					<td colspan="2" align="center">
 						<input type="submit" value="Imprimir" class="btn">
-						<input type="button" value="Voltar" class="btn" onclick="window.location.href='sair.php?c_s=<?php echo $lg_user; ?>'">
+						<input type="button" value="Sair" class="btn" onclick="window.location.href='sair.php?c_s=<?php echo $lg_user; ?>'">
 					</td>
 				</tr>
 			</table>
@@ -1515,22 +1556,6 @@ ini_set('error_log', 'php_errors.log');
 	<?php
 	}
 
-	// Encerrando a Conexão
-	if ($rsA instanceof mysqli_result) {
-		mysqli_free_result($rsA);
-	}
-	if ($rsR instanceof mysqli_result) {
-		mysqli_free_result($rsR);
-	}
-	if ($rsRec instanceof mysqli_result) {
-		mysqli_free_result($rsRec);
-	}
-	if ($rsDep instanceof mysqli_result) {
-		mysqli_free_result($rsDep);
-	}
-	if ($rsGr instanceof mysqli_result) {
-		mysqli_free_result($rsGr);
-	}
 	$SisRot = "S-7.5.2.1.1";
 	include "rodape.php"; ?>
 

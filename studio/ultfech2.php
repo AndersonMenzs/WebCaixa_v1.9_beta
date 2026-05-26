@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>WebCaixa v1.20.16_beta</title>
+    <title>WebCaixa v1.20.17_beta</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style type="text/css">
         body {
@@ -138,7 +138,7 @@
                         $rsR = mysqli_query($conec, $sqlR) or die("Não foi Possível Consultar");
                         $lnR = mysqli_fetch_array($rsR);
                         $Nome = $lnR['nome'];
-
+echo $Nome;
                         ?>
                         <font color='#FFFFFF'><b><i><?php echo $Nome; ?></i></b>
                             <font>
