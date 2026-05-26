@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>WebCaixa v1.20.14_beta</title>
+	<title>WebCaixa v1.20.16_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -364,6 +364,10 @@
 		</b>
 	</font><br><br><br>
 	<?php
+
+	// Conectando ao Banco de Dados
+	include "conexao.php";
+	include "dbselect.php";
 
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
 		// Obtendo o Saldo de Caixa
