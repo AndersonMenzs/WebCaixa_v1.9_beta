@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>WebCaixa v1.20.17_beta</title>
+    <title>WebCaixa v1.20.19_beta</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 	  body {
@@ -66,11 +66,13 @@ document.onkeydown = F5;
 	   </td>
 	 </tr>
 
-	 <tr>
+	<!-- <tr>
 	   <td>
 	      <a href="ultfech.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a><font size='4'><b><i> Reimprimir Último Fechamento</i></b></font>
 	   </td>
-	 </tr><?php
+	 </tr>-->
+	 
+	 <?php
        } ?>
     </table>
 
@@ -83,8 +85,7 @@ document.onkeydown = F5;
 
    // Encerrando as Conexões
       $SisRot = "S-7.5";
-      include "rodape.php";
-      mysqli_close($conec); ?>
+      include "rodape.php"; ?>
 
   </body>
 

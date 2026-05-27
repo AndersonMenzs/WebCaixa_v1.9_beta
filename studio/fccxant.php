@@ -8,7 +8,7 @@ ini_set('error_log', 'php_errors.log');
 <html>
 
 <head>
-	<title>WebCaixa v1.20.18_beta</title>
+	<title>WebCaixa v1.20.19_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {

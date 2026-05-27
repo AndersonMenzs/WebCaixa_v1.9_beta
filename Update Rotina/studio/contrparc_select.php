@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>WebCaixa v1.20.17_beta</title>
+    <title>WebCaixa v1.20.19_beta</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style type="text/css">
         body {
@@ -231,7 +231,7 @@
                                 <?php
 
                                 // Pacotes
-                                $sql_Pct = "SELECT * FROM produtos WHERE cod_prod IN ('1','2','3','5','6','7','8','9','10') ORDER BY nome_prod ASC";
+                                $sql_Pct = "SELECT * FROM produtos WHERE cod_prod IN ('1','2','3','4','5','6','7','8','9','10') ORDER BY nome_prod ASC";
                                 $res_Pct = mysqli_query($conec, $sql_Pct) or die("File Error #1. Contate seu Administrador.");
 
                                 while ($row_Pct = mysqli_fetch_assoc($res_Pct)) {

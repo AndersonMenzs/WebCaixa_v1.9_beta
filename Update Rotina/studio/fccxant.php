@@ -8,7 +8,7 @@ ini_set('error_log', 'php_errors.log');
 <html>
 
 <head>
-	<title>WebCaixa v1.20.17_beta</title>
+	<title>WebCaixa v1.20.19_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -1293,7 +1293,6 @@ ini_set('error_log', 'php_errors.log');
 			<input type="hidden" name="cardparcadm" value="<?php echo $CardParcAdm; ?>">
 			<input type="hidden" name="pixqrcode" value="<?php echo $PixQRCode; ?>">
 			<input type="hidden" name="pixcnpj" value="<?php echo $PixCNPJ; ?>">
-
 			<?php
 
 			// IncSobra
