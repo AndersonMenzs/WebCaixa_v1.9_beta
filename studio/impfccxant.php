@@ -70,7 +70,7 @@ $VrPRecsF = post('vrprecs');
 $NBookRec = post('nbookrec');
 $VrBookRecF = post('vrbookrec');
 $NumPgtos  = post('numpgtos');
-$PgtoServicos = post('pgtoservicos');
+$PgtoServicos = post('pgtotot');
 $NEstorno = post('numestorno');
 $ValorEstorno = post('vrestorno');
 
@@ -120,10 +120,6 @@ $fech_data_safe = date_format($fech_data_obj, 'Y-m-d');
 $fech_data_recolh = date_format($fech_data_obj, 'Y-m-d');
 $fech_data_spo = date_format($fech_data_obj, 'dmy');
 
-
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -132,7 +128,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>WebCaixa v1.20.17_beta</title>
+    <title>WebCaixa v1.20.18_beta</title>
     <meta name="generator" content="LibreOffice 25.2.3.2 (Linux)" />
     <meta name="created" content="2026-04-19T12:11:10.519774564" />
     <meta name="changed" content="2026-04-20T15:19:01.024157216" />
@@ -367,6 +363,18 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
             margin-bottom: 0.05in;
         }
 
+        .bloco-autenticacoes {
+            width: 100%;
+            display: block;
+            font-size: 12px;
+            margin-bottom: 0.05in;
+        }
+
+        .quebra-pagina-95 {
+            break-before: page;
+            page-break-before: always;
+        }
+
         .bloco-vazio {
             width: 49%;
             display: inline-block;
@@ -428,11 +436,23 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                 break-inside: avoid;
                 page-break-inside: avoid;
             }
+
+            .bloco-autenticacoes,
+            .bloco-autenticacoes table {
+                break-inside: auto;
+                page-break-inside: auto;
+            }
+
+            .bloco-autenticacoes tr,
+            .bloco-autenticacoes td {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
         }
     </style>
 </head>
 
-<body lang="pt-BR" link="#000080" vlink="#800000" dir="ltr" onload="window.print();">
+<body lang="pt-BR" link="#000080" vlink="#800000" dir="ltr" onload="prepararImpressao();">
     <div class="container">
         <div class="page">
             <div class="row">
@@ -944,6 +964,9 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                         </td>
                                     </tr>
                                 <?php
+                                } else {
+                                    echo $NumPgtos . "<br>";
+                                    echo $PgtoServicos . "<br>";
                                 }
 
                                 if (valor_num($NEstorno) > 0 && valor_num($ValorEstorno) > 0) {
@@ -1698,6 +1721,9 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                 $spools[] = $lnSp['spo'];
             }
 
+            ?>
+                <div class="bloco-autenticacoes">
+            <?php
             if (!empty($spools)) {
             ?>
 
@@ -1777,6 +1803,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                         </td>
                     </tr>
                 </table>
+                </div>
             <?php }
 
             // Obtendo a Relação de Operadores Cadastrados
@@ -1813,7 +1840,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
             }
 
             if (!empty($Oper['matopf']) && is_array($Oper['matopf'])) { ?>
-                <div class="bloco-full">
+                <div class="bloco-full bloco-operadores">
 
                     <table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
                         <tr>
@@ -2035,7 +2062,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
             }
 
             if (!empty($Recolhimentos) && is_array($Recolhimentos)) { ?>
-                <div class="bloco-full">
+                <div class="bloco-full bloco-recolhimentos">
 
                     <table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
                         <tr valign="top">
@@ -2219,6 +2246,100 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
             </p>
         </div>
     </div>
+    <script>
+        function mmParaPx(mm) {
+            var medidor = document.createElement('div');
+            medidor.style.height = mm + 'mm';
+            medidor.style.position = 'absolute';
+            medidor.style.visibility = 'hidden';
+            document.body.appendChild(medidor);
+            var px = medidor.offsetHeight;
+            document.body.removeChild(medidor);
+            return px;
+        }
+
+        function ajustarQuebrasPagina() {
+            var pagina = document.querySelector('.page');
+            if (!pagina) {
+                return;
+            }
+
+            var alturaUtilPagina = mmParaPx(287);
+            var limitePagina = alturaUtilPagina * 0.95;
+            var offsetPagina = pagina.offsetTop;
+            var elementos = Array.prototype.slice.call(pagina.children).filter(function(elemento) {
+                return elemento.tagName !== 'SCRIPT' &&
+                    !elemento.classList.contains('bloco-autenticacoes') &&
+                    !elemento.classList.contains('bloco-operadores') &&
+                    !elemento.classList.contains('bloco-recolhimentos') &&
+                    elemento.offsetHeight > 0;
+            });
+
+            elementos.forEach(function(elemento) {
+                elemento.classList.remove('quebra-pagina-95');
+            });
+
+            var blocoAutenticacoes = pagina.querySelector('.bloco-autenticacoes');
+            var fimAutenticacoes = blocoAutenticacoes ?
+                (blocoAutenticacoes.offsetTop - offsetPagina + blocoAutenticacoes.offsetHeight) : 0;
+            var autenticacoesOcupamFimDaPagina = fimAutenticacoes >= limitePagina;
+
+            if (pagina.scrollHeight > alturaUtilPagina && autenticacoesOcupamFimDaPagina) {
+                var secaoFinal = pagina.querySelector('.bloco-operadores') || pagina.querySelector('.bloco-recolhimentos');
+
+                if (secaoFinal) {
+                    secaoFinal.classList.add('quebra-pagina-95');
+                }
+            }
+
+            for (var ciclo = 0; ciclo < 4; ciclo++) {
+                var alterou = false;
+
+                for (var i = 1; i < elementos.length; i++) {
+                    var elemento = elementos[i];
+                    var topo = elemento.offsetTop - offsetPagina;
+                    var altura = elemento.offsetHeight;
+                    var base = topo + altura;
+                    var topoNaPagina = topo % alturaUtilPagina;
+                    var baseNaPagina = base % alturaUtilPagina;
+                    var atravessaPagina = Math.floor(topo / alturaUtilPagina) !== Math.floor(base / alturaUtilPagina);
+                    var podeCaberEmUmaPagina = altura < alturaUtilPagina;
+
+                    if (
+                        !elemento.classList.contains('quebra-pagina-95') &&
+                        (topoNaPagina >= limitePagina || baseNaPagina >= limitePagina || (atravessaPagina && podeCaberEmUmaPagina))
+                    ) {
+                        elemento.classList.add('quebra-pagina-95');
+                        alterou = true;
+                        break;
+                    }
+                }
+
+                if (!alterou) {
+                    break;
+                }
+            }
+        }
+
+        function imprimirDepoisDoLayout() {
+            ajustarQuebrasPagina();
+
+            window.requestAnimationFrame(function() {
+                ajustarQuebrasPagina();
+                window.print();
+            });
+        }
+
+        function prepararImpressao() {
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(imprimirDepoisDoLayout);
+            } else {
+                setTimeout(imprimirDepoisDoLayout, 100);
+            }
+        }
+
+        window.addEventListener('beforeprint', ajustarQuebrasPagina);
+    </script>
 
 </body>
 
