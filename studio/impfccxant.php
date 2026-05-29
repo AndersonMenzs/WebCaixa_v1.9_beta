@@ -128,7 +128,7 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>WebCaixa v1.20.19_beta</title>
+    <title>WebCaixa v1.20.20_beta</title>
     <meta name="generator" content="LibreOffice 25.2.3.2 (Linux)" />
     <meta name="created" content="2026-04-19T12:11:10.519774564" />
     <meta name="changed" content="2026-04-20T15:19:01.024157216" />
@@ -964,9 +964,6 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
                                         </td>
                                     </tr>
                                 <?php
-                                } else {
-                                    echo $NumPgtos . "<br>";
-                                    echo $PgtoServicos . "<br>";
                                 }
 
                                 if (valor_num($NEstorno) > 0 && valor_num($ValorEstorno) > 0) {
