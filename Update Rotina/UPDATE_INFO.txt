@@ -1,7 +1,7 @@
 Projeto: WebCaixa
-Versao anterior: WebCaixa v1.20.19_beta
-Versao do pacote: WebCaixa v1.20.20_beta
+Versao anterior: WebCaixa v1.20.20_beta
+Versao do pacote: WebCaixa v1.20.21_beta
 Base: HEAD~1
 Destino: WORKTREE
-Commit atual: 5255237
-Gerado em: 2026-05-29 07:30:18
+Commit atual: b097f91
+Gerado em: 2026-06-01 08:21:39

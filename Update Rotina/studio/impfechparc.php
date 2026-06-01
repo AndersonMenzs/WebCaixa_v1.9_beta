@@ -133,6 +133,20 @@ $FechamentoFFmt    = moeda($FechamentoF);
 $GavAutFmt         = moeda($GavAut);
 $DifCxFmt          = moeda($DifCx);
 
+// Conectando ao banco de dados
+include "conexao.php";
+include "dbselect.php";
+
+// Consultando dados da abertura
+$sqlA = "select * from antcaixa where dtcriado = '$dataFch'";
+$rsA  = mysqli_query($conec, $sqlA) or die("Erro #00 - Abertura não encontrada" . mysqli_error($conec));
+$regA = mysqli_num_rows($rsA);
+$hr_abertura = mysqli_fetch_assoc($rsA)['hora'];
+
+// Converter em formato 00:00
+$hr_abertura = DateTime::createFromFormat('H:i:s', $hr_abertura);
+$hr_abertura = $hr_abertura->format('H:i');
+
 ?>
 
 <!DOCTYPE html>
@@ -141,7 +155,7 @@ $DifCxFmt          = moeda($DifCx);
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>WebCaixa v1.20.20_beta</title>
+	<title>WebCaixa v1.20.21_beta</title>
 	<meta name="generator" content="LibreOffice 25.2.3.2 (Linux)" />
 	<meta name="created" content="2026-04-19T12:11:10.519774564" />
 	<meta name="changed" content="2026-04-20T15:19:01.024157216" />
@@ -297,7 +311,39 @@ $DifCxFmt          = moeda($DifCx);
 			vertical-align: top !important;
 		}
 
+		.tabela-resumo-movimento {
+			display: block;
+			width: 100%;
+		}
+
+		.tabela-resumo-movimento>tbody {
+			display: block;
+			width: 100%;
+		}
+
+		.tabela-resumo-movimento>tbody>tr {
+			display: flex;
+			align-items: stretch;
+			width: 100%;
+		}
+
+		.tabela-resumo-movimento>tbody>tr>td.coluna-topo {
+			display: flex;
+			flex: 0 0 24%;
+			box-sizing: border-box;
+		}
+
+		.tabela-resumo-movimento>tbody>tr>td:not(.coluna-topo) {
+			display: block;
+			flex: 0 0 1%;
+		}
+
+		.tabela-resumo-movimento .coluna-box {
+			min-height: 0;
+		}
+
 		.coluna-box {
+			width: 100%;
 			height: 100%;
 			min-height: 230px;
 			display: flex;
@@ -350,6 +396,11 @@ $DifCxFmt          = moeda($DifCx);
 		}
 
 		.quebra-pagina-95 {
+			break-before: page;
+			page-break-before: always;
+		}
+
+		.copia-movimento {
 			break-before: page;
 			page-break-before: always;
 		}
@@ -545,7 +596,7 @@ $DifCxFmt          = moeda($DifCx);
 					<td width="16%" bgcolor="#ffffff" style="background: #ffffff; border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0in; padding-left: 0in; padding-right: 0in">
 						<p class="txt-centro">
 							<font class="fonte-rel">
-								<font size="1" class="fs-7"><?= $hora ?></font>
+								<font size="1" class="fs-7"><?= $hr_abertura . " | " . $hora ?></font>
 							</font>
 						</p>
 					</td>
@@ -638,7 +689,7 @@ $DifCxFmt          = moeda($DifCx);
 				</tr>
 			</table>
 
-			<table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
+			<table width="100%" cellpadding="4" cellspacing="0" class="tabela-resumo-movimento" style="margin-bottom: 0.05in">
 				<tr valign="top">
 					<td width="24%" class="coluna-topo" style="border: 1px solid #000000; padding: 0.04in;">
 						<div class="coluna-box">
@@ -2100,8 +2151,7 @@ $DifCxFmt          = moeda($DifCx);
 			return px;
 		}
 
-		function ajustarQuebrasPagina() {
-			var pagina = document.querySelector('.page');
+		function ajustarQuebrasPaginaPagina(pagina) {
 			if (!pagina) {
 				return;
 			}
@@ -2163,7 +2213,27 @@ $DifCxFmt          = moeda($DifCx);
 			}
 		}
 
+		function ajustarQuebrasPagina() {
+			var paginas = document.querySelectorAll('.page');
+
+			Array.prototype.forEach.call(paginas, ajustarQuebrasPaginaPagina);
+		}
+
+		function prepararCopiasImpressao() {
+			var container = document.querySelector('.container');
+			var paginaOriginal = container ? container.querySelector('.page') : null;
+
+			if (!container || !paginaOriginal || container.querySelector('.copia-movimento')) {
+				return;
+			}
+
+			var segundaVia = paginaOriginal.cloneNode(true);
+			segundaVia.classList.add('copia-movimento');
+			container.appendChild(segundaVia);
+		}
+
 		function imprimirDepoisDoLayout() {
+			prepararCopiasImpressao();
 			ajustarQuebrasPagina();
 
 			window.requestAnimationFrame(function() {

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>WebCaixa v1.20.20_beta</title>
+	<title>WebCaixa v1.20.21_beta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
@@ -231,43 +231,7 @@
 						<blink>Não esqueça de ligar a Impressora
 					</i></b></font>
 		</center>
-		<?php
-
-		// Imprimindo os Dados
-		$traco = "------------------------------------------------";
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo Fita Numero: '$Fita/$ano' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '* * * * * - ESTRELLA PHOTO STUDIO - * * * * *' > /dev/lp0");
-		shell_exec("echo 'ORIGINAL ---> STUDIO' > /dev/lp0");
-		shell_exec("echo 'COPIA ------> TESOURARIA' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '      A B E R T U R A - D O - C A I X A' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo PC: '$PC - $Ape' > /dev/lp0");
-		shell_exec("echo Data: '$dataAbr ($diaSem)' > /dev/lp0");
-		shell_exec("echo Hora: $hora > /dev/lp0");
-		shell_exec("echo Operador: '$userF - $ApeF' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo 'Valor de Abertura: . . . . . . . R$ $inicial'> /dev/lp0");
-
-		if ($regDf > 0 and $SF <> '') {
-			shell_exec("echo '$SF do Mov. Anterior:. . . . . R$ $DiferF'> /dev/lp0");
-		}
-
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo Visto do Caixa: --------------------------- > /dev/lp0");
-		shell_exec("echo $traco > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
-		shell_exec("echo '\n' > /dev/lp0");
+		<?php			
 
 		// Salvando os Dados
 		$sqlGr = "insert into caixa (fita, ano, dtopen, numerario, operador) values ('$Fita', '$ano', '$gravaAbr', '$abert', '$user')";

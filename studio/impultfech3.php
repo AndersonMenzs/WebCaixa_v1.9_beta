@@ -66,6 +66,25 @@ if (!$ln) {
 	die("Fechamento não encontrado para a data informada.");
 }
 
+// Consultando dados da abertura
+$sqlA = "select * from antcaixa where dtcriado = '$fech_data_registro'";
+$rsA  = mysqli_query($conec, $sqlA) or die("Erro #00 - Abertura não encontrada" . mysqli_error($conec));
+$regA = mysqli_num_rows($rsA);
+$lnA = mysqli_fetch_assoc($rsA);
+
+if (!$lnA) {
+	die("Erro #00 - Abertura não encontrada");
+}
+
+$hr_abertura = $lnA['hora'];
+$op_abertura = $lnA['ape_operador'];
+
+// Converter em formato 00:00
+$hr_abertura_obj = DateTime::createFromFormat('H:i:s', $hr_abertura);
+if ($hr_abertura_obj) {
+	$hr_abertura = $hr_abertura_obj->format('H:i');
+}
+
 $Fita         = $ln['fita'];
 $ano          = $ln['ano'];
 $PC		= $ln['pc'];
@@ -197,7 +216,7 @@ if ($PixCNPJ == '') {
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>WebCaixa v1.20.20_beta</title>
+	<title>WebCaixa v1.20.21_beta</title>
 	<meta name="generator" content="LibreOffice 25.2.3.2 (Linux)" />
 	<meta name="created" content="2026-04-19T12:11:10.519774564" />
 	<meta name="changed" content="2026-04-20T15:19:01.024157216" />
@@ -387,7 +406,39 @@ if ($PixCNPJ == '') {
 			vertical-align: top !important;
 		}
 
+		.tabela-resumo-movimento {
+			display: block;
+			width: 100%;
+		}
+
+		.tabela-resumo-movimento>tbody {
+			display: block;
+			width: 100%;
+		}
+
+		.tabela-resumo-movimento>tbody>tr {
+			display: flex;
+			align-items: stretch;
+			width: 100%;
+		}
+
+		.tabela-resumo-movimento>tbody>tr>td.coluna-topo {
+			display: flex;
+			flex: 0 0 24.25%;
+			box-sizing: border-box;
+		}
+
+		.tabela-resumo-movimento>tbody>tr>td.espaco {
+			display: block;
+			flex: 0 0 1%;
+		}
+
+		.tabela-resumo-movimento .coluna-box {
+			min-height: 0;
+		}
+
 		.coluna-box {
+			width: 100%;
 			height: 100%;
 			min-height: 230px;
 			display: flex;
@@ -440,6 +491,11 @@ if ($PixCNPJ == '') {
 		}
 
 		.quebra-pagina-95 {
+			break-before: page;
+			page-break-before: always;
+		}
+
+		.copia-movimento {
 			break-before: page;
 			page-break-before: always;
 		}
@@ -635,7 +691,7 @@ if ($PixCNPJ == '') {
 					<td width="15.833%" bgcolor="#ffffff" style="background: #ffffff; border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0in; padding-left: 0in; padding-right: 0in">
 						<p class="txt-centro">
 							<font class="fonte-rel">
-								<font size="1" class="fs-7"><?= $hora ?></font>
+								<font size="1" class="fs-7"><?= $hr_abertura . " | " . $hora ?></font>
 							</font>
 						</p>
 					</td>
@@ -643,7 +699,7 @@ if ($PixCNPJ == '') {
 					<td width="15.833%" bgcolor="#ffffff" style="background: #ffffff; border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0in; padding-left: 0in; padding-right: 0in">
 						<p class="txt-centro">
 							<font class="fonte-rel">
-								<font size="1" class="fs-7"><?= $app ?></font>
+								<font size="1" class="fs-7"><?= $op_abertura . " | " . $app ?></font>
 							</font>
 						</p>
 					</td>
@@ -728,7 +784,7 @@ if ($PixCNPJ == '') {
 				</tr>
 			</table>
 
-			<table width="100%" cellpadding="4" cellspacing="0" class="tabela-quatro" style="margin-bottom: 0.05in">
+			<table width="100%" cellpadding="4" cellspacing="0" class="tabela-quatro tabela-resumo-movimento" style="margin-bottom: 0.05in">
 				<tr valign="top">
 					<td width="24.25%" class="coluna-topo" style="border: 1px solid #000000; padding: 0.04in;">
 						<div class="coluna-box">
@@ -1479,7 +1535,7 @@ if ($PixCNPJ == '') {
 										</p>
 									</td>
 								</tr>
-								<tr>
+								<!--<tr>
 									<td width="68%" style="border: none; padding: 0in">
 										<p>
 											<font class="fonte-rel">
@@ -1494,7 +1550,7 @@ if ($PixCNPJ == '') {
 											</font>
 										</p>
 									</td>
-								</tr>
+								</tr>-->
 							</table>
 						</div>
 					</td>
@@ -1854,7 +1910,7 @@ if ($PixCNPJ == '') {
 			<?php }
 
 			// Obtendo a Relação de Operadores Cadastrados
-			$Oper = [
+			/*$Oper = [
 				'matopf' => [],
 				'cargo'  => [],
 				'tempo'  => [],
@@ -2089,7 +2145,7 @@ if ($PixCNPJ == '') {
 					</table>
 
 				</div>
-			<?php }
+			<?php }*/
 
 			$fech_data_recolh = date("Y-m-d", strtotime(str_replace('/', '-', $dataFch)));
 
@@ -2310,8 +2366,7 @@ if ($PixCNPJ == '') {
 			return px;
 		}
 
-		function ajustarQuebrasPagina() {
-			var pagina = document.querySelector('.page');
+		function ajustarQuebrasPaginaPagina(pagina) {
 			if (!pagina) {
 				return;
 			}
@@ -2373,7 +2428,27 @@ if ($PixCNPJ == '') {
 			}
 		}
 
+		function ajustarQuebrasPagina() {
+			var paginas = document.querySelectorAll('.page');
+
+			Array.prototype.forEach.call(paginas, ajustarQuebrasPaginaPagina);
+		}
+
+		function prepararCopiasImpressao() {
+			var container = document.querySelector('.container');
+			var paginaOriginal = container ? container.querySelector('.page') : null;
+
+			if (!container || !paginaOriginal || container.querySelector('.copia-movimento')) {
+				return;
+			}
+
+			var segundaVia = paginaOriginal.cloneNode(true);
+			segundaVia.classList.add('copia-movimento');
+			container.appendChild(segundaVia);
+		}
+
 		function imprimirDepoisDoLayout() {
+			prepararCopiasImpressao();
 			ajustarQuebrasPagina();
 
 			window.requestAnimationFrame(function() {

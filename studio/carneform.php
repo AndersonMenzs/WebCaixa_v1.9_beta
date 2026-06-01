@@ -7,7 +7,7 @@ session_start();
 <html lang="pt-BR">
 
 <head>
-    <title>WebCaixa v1.20.20_beta</title>
+    <title>WebCaixa v1.20.21_beta</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <link rel="stylesheet" href="./css/style.css">
