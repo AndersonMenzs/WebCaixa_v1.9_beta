@@ -51,7 +51,6 @@ $fech_data_registro = date_format($fech_data_obj, 'Y-m-d');
 $fech_data_oper = date_format($fech_data_obj, 'Y-m-d');
 $fech_data_safe = date_format($fech_data_obj, 'Y-m-d');
 $fech_data_recolh = date_format($fech_data_obj, 'Y-m-d');
-//$fech_data_spo = date_format($fech_data_obj, 'dmy');
 
 // Obtendo os Dados da Spool de Fechamento
 include "conexao.php";
@@ -510,8 +509,7 @@ if ($PixCNPJ == '') {
 
 		@media screen {
 			.page {
-				transform: scale(1.3);
-				transform-origin: top center;
+				zoom: 1.3;
 			}
 		}
 
@@ -1535,22 +1533,6 @@ if ($PixCNPJ == '') {
 										</p>
 									</td>
 								</tr>
-								<!--<tr>
-									<td width="68%" style="border: none; padding: 0in">
-										<p>
-											<font class="fonte-rel">
-												<font size="1" class="fs-6"><i>Pagamentos + Recolhimentos</i></font>
-											</font>
-										</p>
-									</td>
-									<td width="32%" style="border: none; padding: 0in">
-										<p>
-											<font class="fonte-rel">
-												<font size="1" class="fs-6"><i>R$ <?= $TotPgto ?></i></font>
-											</font>
-										</p>
-									</td>
-								</tr>-->
 							</table>
 						</div>
 					</td>
@@ -2447,8 +2429,20 @@ if ($PixCNPJ == '') {
 			container.appendChild(segundaVia);
 		}
 
-		function imprimirDepoisDoLayout() {
+		function limparCopiasImpressao() {
+			var copias = document.querySelectorAll('.copia-movimento');
+
+			Array.prototype.forEach.call(copias, function(copia) {
+				copia.parentNode.removeChild(copia);
+			});
+		}
+
+		function prepararLayoutImpressao() {
 			prepararCopiasImpressao();
+			ajustarQuebrasPagina();
+		}
+
+		function imprimirDepoisDoLayout() {
 			ajustarQuebrasPagina();
 
 			window.requestAnimationFrame(function() {
@@ -2465,7 +2459,8 @@ if ($PixCNPJ == '') {
 			}
 		}
 
-		window.addEventListener('beforeprint', ajustarQuebrasPagina);
+		window.addEventListener('beforeprint', prepararLayoutImpressao);
+		window.addEventListener('afterprint', limparCopiasImpressao);
 	</script>
 
 </body>

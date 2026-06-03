@@ -45,7 +45,7 @@ include "conexao.php";
 include "dbselect.php";
 
 // Recebendo variáveis
-/*$lg_user = post('c_s');*/
+$lg_user = post('c_s');
 $TipoFech = post('tipoFech');
 $Fita    = post('fita');
 $ano     = post('ano');
@@ -124,11 +124,20 @@ $fech_data_spo = date_format($fech_data_obj, 'dmy');
 $sqlA = "select * from antcaixa where dtcriado = '$fech_data_registro'";
 $rsA  = mysqli_query($conec, $sqlA) or die("Erro #00 - Abertura não encontrada" . mysqli_error($conec));
 $regA = mysqli_num_rows($rsA);
-$hr_abertura = mysqli_fetch_assoc($rsA)['hora'];
+$lnA = mysqli_fetch_assoc($rsA);
+
+if (!$lnA) {
+	die("Erro #00 - Abertura não encontrada");
+}
+
+$hr_abertura = $lnA['hora'];
+$ape_abertura = $lnA['ape_operador'];
 
 // Converter em formato 00:00
-$hr_abertura = DateTime::createFromFormat('H:i:s', $hr_abertura);
-$hr_abertura = $hr_abertura->format('H:i');
+$hr_abertura_obj = DateTime::createFromFormat('H:i:s', $hr_abertura);
+if ($hr_abertura_obj) {
+	$hr_abertura = $hr_abertura_obj->format('H:i');
+}
 
 ?>
 
@@ -432,8 +441,7 @@ $hr_abertura = $hr_abertura->format('H:i');
 
         @media screen {
             .page {
-                transform: scale(1.3);
-                transform-origin: top center;
+                zoom: 1.3;
             }
         }
 
@@ -499,8 +507,7 @@ $hr_abertura = $hr_abertura->format('H:i');
     </style>
 </head>
 
-<!--<body lang="pt-BR" link="#000080" vlink="#800000" dir="ltr" onload="prepararImpressao();">-->
-<body lang="pt-BR" link="#000080" vlink="#800000" dir="ltr">
+<body lang="pt-BR" link="#000080" vlink="#800000" dir="ltr" onload="prepararImpressao();">
     <div class="container">
         <div class="page">
             <div class="row">
@@ -622,7 +629,7 @@ $hr_abertura = $hr_abertura->format('H:i');
                     <td width="15.833%" bgcolor="#ffffff" style="background: #ffffff; border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0in; padding-left: 0in; padding-right: 0in">
                         <p class="txt-centro">
                             <font class="fonte-rel">
-                                <font size="1" class="fs-7"><?= $app ?></font>
+                                <font size="1" class="fs-7"><?= $ape_abertura . " | " . $app ?></font>
                             </font>
                         </p>
                     </td>
@@ -1477,22 +1484,6 @@ $hr_abertura = $hr_abertura->format('H:i');
                                         </p>
                                     </td>
                                 </tr>
-                                <!--<tr>
-                                    <td width="68%" style="border: none; padding: 0in">
-                                        <p>
-                                            <font class="fonte-rel">
-                                                <font size="1" class="fs-6"><i>Pagamentos + Recolhimentos</i></font>
-                                            </font>
-                                        </p>
-                                    </td>
-                                    <td width="32%" style="border: none; padding: 0in">
-                                        <p>
-                                            <font class="fonte-rel">
-                                                <font size="1" class="fs-6"><i>R$ <?= $TotPgto ?></i></font>
-                                            </font>
-                                        </p>
-                                    </td>
-                                </tr>-->
                             </table>
                         </div>
                     </td>
@@ -2384,8 +2375,20 @@ $hr_abertura = $hr_abertura->format('H:i');
             container.appendChild(segundaVia);
         }
 
-        function imprimirDepoisDoLayout() {
+        function limparCopiasImpressao() {
+            var copias = document.querySelectorAll('.copia-movimento');
+
+            Array.prototype.forEach.call(copias, function(copia) {
+                copia.parentNode.removeChild(copia);
+            });
+        }
+
+        function prepararLayoutImpressao() {
             prepararCopiasImpressao();
+            ajustarQuebrasPagina();
+        }
+
+        function imprimirDepoisDoLayout() {
             ajustarQuebrasPagina();
 
             window.requestAnimationFrame(function() {
@@ -2402,7 +2405,8 @@ $hr_abertura = $hr_abertura->format('H:i');
             }
         }
 
-        window.addEventListener('beforeprint', ajustarQuebrasPagina);
+        window.addEventListener('beforeprint', prepararLayoutImpressao);
+        window.addEventListener('afterprint', limparCopiasImpressao);
     </script>
 
 </body>

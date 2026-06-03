@@ -1,4 +1,8 @@
 <?php
+/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+echo "<pre>";
+print_r($dados);
+echo "</pre>";*/
 
 function post($chave, $padrao = '')
 {
@@ -138,14 +142,23 @@ include "conexao.php";
 include "dbselect.php";
 
 // Consultando dados da abertura
-$sqlA = "select * from antcaixa where dtcriado = '$dataFch'";
+$sqlA = "select * from antcaixa dtcriado order by dtcriado asc";
 $rsA  = mysqli_query($conec, $sqlA) or die("Erro #00 - Abertura não encontrada" . mysqli_error($conec));
 $regA = mysqli_num_rows($rsA);
-$hr_abertura = mysqli_fetch_assoc($rsA)['hora'];
+$lnA = mysqli_fetch_assoc($rsA);
+
+if (!$lnA) {
+    die("Erro #00 - Abertura não encontrada para $dataFch");
+}
+
+$hr_abertura = $lnA['hora'];
+$ape_abertura = $lnA['ape_operador'];
 
 // Converter em formato 00:00
-$hr_abertura = DateTime::createFromFormat('H:i:s', $hr_abertura);
-$hr_abertura = $hr_abertura->format('H:i');
+$hr_abertura_obj = DateTime::createFromFormat('H:i:s', $hr_abertura);
+if ($hr_abertura_obj) {
+    $hr_abertura = $hr_abertura_obj->format('H:i');
+}
 
 ?>
 
@@ -400,11 +413,6 @@ $hr_abertura = $hr_abertura->format('H:i');
 			page-break-before: always;
 		}
 
-		.copia-movimento {
-			break-before: page;
-			page-break-before: always;
-		}
-
 		.bloco-vazio {
 			width: 49%;
 			display: inline-block;
@@ -604,7 +612,7 @@ $hr_abertura = $hr_abertura->format('H:i');
 					<td width="16%" bgcolor="#ffffff" style="background: #ffffff; border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0in; padding-left: 0in; padding-right: 0in">
 						<p class="txt-centro">
 							<font class="fonte-rel">
-								<font size="1" class="fs-7"><?= $app ?></font>
+								<font size="1" class="fs-7"><?= $ape_abertura . " | " . $app ?></font>
 							</font>
 						</p>
 					</td>
@@ -1422,22 +1430,6 @@ $hr_abertura = $hr_abertura->format('H:i');
 										</p>
 									</td>
 								</tr>
-								<tr>
-									<td width="68%" style="border: none; padding: 0in">
-										<p>
-											<font class="fonte-rel">
-												<font size="1" class="fs-6"><i>Pagamentos + Recolhimentos</i></font>
-											</font>
-										</p>
-									</td>
-									<td width="32%" style="border: none; padding: 0in">
-										<p>
-											<font class="fonte-rel">
-												<font size="1" class="fs-6"><i>R$ <?= $TotPgtoFmt ?></i></font>
-											</font>
-										</p>
-									</td>
-								</tr>
 							</table>
 						</div>
 					</td>
@@ -2219,21 +2211,7 @@ $hr_abertura = $hr_abertura->format('H:i');
 			Array.prototype.forEach.call(paginas, ajustarQuebrasPaginaPagina);
 		}
 
-		function prepararCopiasImpressao() {
-			var container = document.querySelector('.container');
-			var paginaOriginal = container ? container.querySelector('.page') : null;
-
-			if (!container || !paginaOriginal || container.querySelector('.copia-movimento')) {
-				return;
-			}
-
-			var segundaVia = paginaOriginal.cloneNode(true);
-			segundaVia.classList.add('copia-movimento');
-			container.appendChild(segundaVia);
-		}
-
 		function imprimirDepoisDoLayout() {
-			prepararCopiasImpressao();
 			ajustarQuebrasPagina();
 
 			window.requestAnimationFrame(function() {

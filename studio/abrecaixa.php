@@ -225,12 +225,6 @@
 				</td>
 			</tr>
 		</table><br>
-
-		<center>
-			<font size="6" color="gold"><b><i>
-						<blink>Não esqueça de ligar a Impressora
-					</i></b></font>
-		</center>
 		<?php			
 
 		// Salvando os Dados
