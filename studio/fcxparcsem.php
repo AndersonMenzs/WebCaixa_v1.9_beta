@@ -44,12 +44,6 @@ ini_set('error_log', 'php_errors.log');
 
 	<?php
 
-	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	var_dump($dados);
-	echo "</pre>";
-	exit;*/
-
 	include "../cabecprs.php";
 
 	// Obtendo o Login
@@ -163,28 +157,6 @@ ini_set('error_log', 'php_errors.log');
 		$VTR = 0;
 		$OUT = 0;
 
-		// Totalizando Chaveiros
-		/*$sqlT = "SELECT vltx FROM taxas where codigo = 'CHV' order by datalt desc";
-		$rsT  = mysqli_query($conec, $sqlT) or die('Erro #0!');
-		$lnT  = mysqli_fetch_array($rsT);
-		$VLTX = $lnT['vltx'];
-
-		$sqlR = "SELECT numdoc, vlrec FROM registro where tiporec='9' and estorno <> 'x' and datarec = '$dtOpen' ";
-		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #1!');
-
-		while ($lnR  = mysqli_fetch_array($rsR)) {
-			$VlRec   = $lnR['vlrec'];
-			$RecChav = $RecChav + $VlRec;
-			$ValorChav    = number_format($RecChav, 2, ",", ".");
-		}
-
-		if ($ValorChav == '') {
-			$ValorChav = '0,00';
-			$NTChav = 0;
-		} else {
-			$NTChav = $RecChav / $VLTX;
-		}*/
-
 		// Totalizando Taxa de Produção
 		$sqlR = "SELECT numdoc FROM registro where tiporec='1' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #1A!');
@@ -275,24 +247,6 @@ ini_set('error_log', 'php_errors.log');
 			$ValorPropEnt = '0,00';
 		}
 
-		// Totalizando Propostas (Parcela)
-		/*$sqlR = "SELECT numdoc FROM registro where tiporec='4' and subtipo = 'PVDP' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc, parcela";
-		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #2A!');
-		$NPropParc = mysqli_num_rows($rsR);
-
-		$sqlR = "SELECT vlrec FROM registro where tiporec='4' and subtipo = 'PVDP' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
-		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #3A!');
-
-		while ($lnR  = mysqli_fetch_array($rsR)) {
-			$VlRec         = $lnR['vlrec'];
-			$RecPVDP       = $RecPVDP + $VlRec;
-			$ValorPropParc = number_format($RecPVDP, 2, ",", ".");
-		}
-
-		if ($ValorPropParc == '') {
-			$ValorPropParc = '0,00';
-		}*/
-
 		// Totalizando Produtos
 		$sqlR = "SELECT numdoc FROM registro where tiporec='6' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #4A!');
@@ -328,24 +282,6 @@ ini_set('error_log', 'php_errors.log');
 		if ($VrBookRecF == '') {
 			$VrBookRecF = '0,00';
 		}
-
-		// Resgate de Cheques
-		/*$sqlR = "SELECT numdoc FROM registro where tiporec='5' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc";
-		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #8A!');
-		$NResgate = mysqli_num_rows($rsR);
-
-		$sqlR = "SELECT vlrec FROM registro where tiporec='5' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
-		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #9A!');
-
-		while ($lnR  = mysqli_fetch_array($rsR)) {
-			$VlRec    = $lnR['vlrec'];
-			$RecResg  = $RecResg + $VlRec;
-			$ValorResg = number_format($RecResg, 2, ",", ".");
-		}
-
-		if ($ValorResg == '') {
-			$ValorResg = '0,00';
-		}*/
 
 		// Despesas
 		$sqlR = "SELECT numdoc FROM registro where tiporec='8' and estorno <> 'x' and datarec = '$dtOpen' ";
@@ -468,7 +404,7 @@ ini_set('error_log', 'php_errors.log');
 		}
 
 		// Arrecadado em Card Crédito Parc. Adm.
-		/*$sqlR = "SELECT vlrec FROM registro where modpgto='32' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
+		$sqlR = "SELECT vlrec FROM registro where modpgto='32' and tiporec <> 'E' and estorno <> 'x' and datarec = '$dtOpen' order by tiporec";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #9B!');
 		while ($lnR  = mysqli_fetch_array($rsR)) {
 			$VlRec   = $lnR['vlrec'];
@@ -477,7 +413,7 @@ ini_set('error_log', 'php_errors.log');
 		}
 		if ($CardParcAdm == '') {
 			$CardParcAdm = '0,00';
-		}*/
+		}
 
 		// Obtendo o Total Depositado
 		$sqlR = "select * from depositos where dtdep = '$dtOpen' ";
@@ -622,13 +558,6 @@ ini_set('error_log', 'php_errors.log');
 							</td>
 						</tr>
 
-						<!--<tr>
-							<td>
-								<font color="gold"><b><i>Chaveiros: . . . . . . . . . </b></i></font>
-								<b><i><?php //echo "$NTChav itens --> R$ $ValorChav"; ?></i></b>
-							</td>
-						</tr>-->
-
 						<tr>
 							<td>
 								<font color="gold"><b><i>Taxa de Produção:. . . </b></i></font>
@@ -663,14 +592,7 @@ ini_set('error_log', 'php_errors.log');
 								<b><i><?php echo "$NPropEnt itens --> R$ $ValorPropEnt"; ?></i></b>
 							</td>
 						</tr>
-
-						<!--<tr>
-							<td>
-								<font color="gold"><b><i>Propostas (Parcela):. . </b></i></font>
-								<b><i><?php //echo "$NPropParc itens --> R$ $ValorPropParc"; ?></i></b>
-							</td>
-						</tr>-->
-
+						
 						<tr>
 							<td>
 								<font color="gold"><b><i>Produtos &amp; Serviços:. <font color='#FFFFFF'><?php echo " $NPRecs itens --> R$ $VrPRecsF"; ?> </b></i></font>
@@ -744,6 +666,13 @@ ini_set('error_log', 'php_errors.log');
 							<td>
 								<font color="gold"><b><i>Cartão Crédito (Parc. Loja): . </b></i></font>
 								<b><i>R$ <?php echo $CardParcLj; ?></i></b>
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<font color="gold"><b><i>Cartão Crédito (Parc. Adm): . </b></i></font>
+								<b><i>R$ <?php echo $CardParcAdm; ?></i></b>
 							</td>
 						</tr>
 					</table><br>
