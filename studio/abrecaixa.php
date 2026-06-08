@@ -228,6 +228,18 @@
 		<?php			
 
 		// Salvando os Dados
+		$sql = "INSERT INTO antcaixa (
+                            fita, ano, pc, ape, dtopen, diasem, hora, 
+                            vlr_abertura, mov_anterior, difcx, sobra_falta, 
+                            ape_operador, operador, dtcriado) 
+                        VALUES (
+                            '$Fita', '$ano', '$PC', '$Ape', '$dataAbr', 
+                            '$diaSem', '$hora', '$inicial', '0,00', '$DiferF', 
+                            '$SF', '$ApeF', '$userF', '$dtabert'
+                        )";
+		$rs  = mysqli_query($conec, $sql);
+
+
 		$sqlGr = "insert into caixa (fita, ano, dtopen, numerario, operador) values ('$Fita', '$ano', '$gravaAbr', '$abert', '$user')";
 		$rsGr  = mysqli_query($conec, $sqlGr);
 
