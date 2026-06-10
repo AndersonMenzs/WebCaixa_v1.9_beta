@@ -110,6 +110,7 @@
 				// Verificando Cadastramentos
 				include "conexao.php";
 				include "dbselect.php";
+				include "valida_caixa.php";
 
 				$sqlAt  = "update operador set dataop = '$dataatual' where mat = '$user' ";
 				$rsAt   = mysqli_query($conec, $sqlAt) or die("Erro de Acesso #1. Contate seu Administrador.");
@@ -135,7 +136,7 @@
 					$ini = 'ok';
 				}
 
-				// Verificando Fechamento Anterior
+				// Obtendo ultimo caixa para manter os links existentes do menu
 				$sqlF = "select dtopen, dtclose from caixa order by dtopen desc";
 				$rsF  = mysqli_query($conec, $sqlF) or die("Erro de Acesso #4. Contate seu Administrador.");
 				$regF = mysqli_num_rows($rsF);
@@ -143,8 +144,11 @@
 				$abre  = $lnF['dtopen'];
 				$fecha = $lnF['dtclose'];
 
-				if ($regF > 0 and  $abre <> $dataatual and $fecha == NULL) {
+				// Verificando Fechamento Anterior
+				$caixaAnterior = caixa_anterior_aberto($conec);
+				if ($caixaAnterior['aberto']) {
 					$chF = 'no';
+					$abre = $caixaAnterior['dtopen'];
 				} ?>
 </head>
 
@@ -155,51 +159,19 @@
 	if ($ch == 'no') {
 		include "us_cad.php";
 	}
-	?>
-
-	<center>
-		<font face="arial" color="gold" size="6"><b><i><u>SISTEMA DO CAIXA</u></i></b></font>
-	</center>
-	<center>
-		<font size="4" color="lime"><b><i>(Versão: <?php echo "$Versao"; ?>)</i></b></font>
-	</center><br>
-	<?php
 
 	include "sitcaixa.php";
 
 	if ($chF == 'no' and $AtuSen == 'ok') {
-		$abY    = substr($abre, 0, 4);
-		$abM    = substr($abre, 5, 2);
-		$abD    = substr($abre, 8, 2);
-		$dtabre = "$abD/$abM/$abY"; ?>
-
-		<br>
-		<font size="6">
-			<b><i>
-					<center>Você <font color="gold">"<blink><u>Não Fechou o Caixa</u></blink>"<font color="#FFFFFF"> do Dia <font color="gold">"<blink><u><?php echo $dtabre; ?></u></blink>"<font color="#FFFFFF">!</center>
-				</i></b>
-		</font><br>
-
-		<form name="frmfecha" method="post" action="fechacaixa.php">
-			<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-			<input type="hidden" name="dtabre" value="<?php echo $abre; ?>">
-			<input type="hidden" name="txtcod" value="<?php echo $Codigo; ?>">
-			<table width="100%" border="0" cellpadding="10" cellspacing="0">
-				<tr>
-					<td width='20%'>
-						<a href="http://localhost/caixa/"><img src="./images/voltar.gif"></a>
-					</td>
-					<td width='60%' align='center'>
-						<input type="submit" name="btenv" value="Fechar o Caixa">&nbsp;&nbsp;&nbsp;&nbsp;
-					</td>
-					<td width='20%' align='right'>
-						<a href="http://localhost/caixa/"><img src="./images/voltar.gif"></a>
-					</td>
-			</table>
-		</form>
-	<?php
-	} else if ($chI == 'no' and $ch == 'ok' and $AtuSen = 'ok') { ?>
+		mostrar_bloqueio_caixa($lg_user, $caixaAnterior['dtopen_br']);
+	} else if ($chI == 'no' and $ch == 'ok' and $AtuSen == 'ok') { ?>
 		<table width='20%' border='0' cellpadding='7' cellspacing='0' align='center'>
+		<center>
+			<font face="arial" color="gold" size="6"><b><i><u>SISTEMA DO CAIXA</u></i></b></font>
+		</center>
+		<center>
+			<font size="4" color="lime"><b><i>(Versão: <?php echo "$Versao"; ?>)</i></b></font>
+		</center><br>
 			<tr>
 				<td width="35%"></td>
 				<td width="35%">
@@ -216,11 +188,17 @@
 					<font size='4'><b><i>- Sair do Sistema</i></b></font>
 				</td>
 				<td width="30%"></td>
-			</tr>
+			</tr><br><br><br>
 		</table>
 	<?php
 	} else if ($chI == 'ok' and ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok')) { ?>
 		<table width='35%' border='0' cellpadding='5' cellspacing='0' align='center'>
+		<center>
+			<font face="arial" color="gold" size="6"><b><i><u>SISTEMA DO CAIXA</u></i></b></font>
+		</center>
+		<center>
+			<font size="4" color="lime"><b><i>(Versão: <?php echo "$Versao"; ?>)</i></b></font>
+		</center><br>
 			<?php
 			if ($ch == 'ok' and $AtuSen == 'ok') { ?>
 				<tr>
@@ -306,7 +284,7 @@
 						<font size='4'><b><i>- Despesas &amp; Recolhimentos</i></b></font>
 					</td>
 
-					
+
 				</tr>
 			<?php
 			}
@@ -377,7 +355,7 @@
 				</td>
 				<td width="30%"></td>
 			</tr>
-		</table>
+		</table><br><br><br>	
 	<?php
 	} else { ?><br>
 		<font size="6" color="#FFFFFF"><b><i>

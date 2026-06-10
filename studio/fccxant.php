@@ -12,8 +12,9 @@ ini_set('error_log', 'php_errors.log');
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 		body {
-			margin-left: 0%;
-			margin-right: 0%;
+			margin-top: 2%;
+			margin-left: 2%;
+			margin-right: 2%;
 			border: 3px solid gray;
 			padding: 10px 10px 10px 10px;
 			font-family: sans-serif;

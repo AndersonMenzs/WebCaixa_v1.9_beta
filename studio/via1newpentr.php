@@ -48,6 +48,10 @@ include "./valor_ext.php";
 	$Cliente   = trim($_POST['cliente']);
 	$vlr_ext   = valorPorExtenso($VrEntr);
 
+	include "valida_caixa.php";
+
+	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
+
 	// Obtendo o código do PC
 	$sqlPC = "select pc from inicial";
 	$rsPC  = mysqli_query($conec, $sqlPC) or die("Não foi possível acessar o PC");

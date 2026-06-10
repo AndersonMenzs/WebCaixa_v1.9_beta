@@ -7,37 +7,28 @@ include "conexao.php";
 
 // Selecionando o Banco de Dados Funcionários
 include "dbselect.php";
+include_once "valida_caixa.php";
 
-// Consultando Tabela
-$sqlx = "select dtopen, dtclose from caixa where dtclose IS NULL";
+// Verificando Situação do Caixa pela regra central de bloqueio.
+$caixaAnterior = caixa_anterior_aberto($conec);
 
-// Consultando o Registro
-$rsx = mysqli_query($conec, $sqlx) or die("Não foi possível acessar o Caixa");
-
-// Contando Registros
-$regsx = mysqli_num_rows($rsx);
-
-// Obtendo o Último Registro
-while ($lnx   = mysqli_fetch_array($rsx)) {
-   $Abert  = $lnx['dtopen'];
-   $Fecha  = $lnx['dtclose'];
-}
-
-// Verificando Situação do Caixa
-if ($regsx > 0) {
+if ($caixaAnterior['aberto']) {
+   $chcx = 'a';
+} else if (caixa_aberto_hoje($conec)) {
    $chcx = 'f';
-} else if ($regsx == 0) {
-   $sqlV  = "select dtopen, dtclose from caixa order by dtclose desc";
+} else {
+   $sqlV  = "select dtopen, dtclose from caixa where dtclose IS NOT NULL order by dtclose desc";
    $rsV   = mysqli_query($conec, $sqlV) or die("Não foi possível acessar o Caixa");
    $lnV   = mysqli_fetch_array($rsV);
-   $Abr = $lnV['dtopen'];
-   $Fch = $lnV['dtclose'];
 
-   if ($Fch < $dataop) {
-      $chcx = 'x';
+   if ($lnV) {
+      $Abr = $lnV['dtopen'];
+      $Fch = caixa_normalizar_data($lnV['dtclose']);
+
+      if ($Fch != '' and $Fch < $dataop) {
+         $chcx = 'x';
+      }
    }
-} else if ($Abert < $dataop) {
-   $chcx = 'a';
+
+   mysqli_free_result($rsV);
 }
-// Encerrando a Conexão
-mysqli_free_result($rsx);

@@ -72,6 +72,9 @@
 
 	include "conexao.php";
 	include "dbselect.php";
+	include "valida_caixa.php";
+
+	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
 
 	// Obtendo a Sigla de Pagamento
 	$sql = "select * from pgtos where codpag = '$TipoDesp' ";

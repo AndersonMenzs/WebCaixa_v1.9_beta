@@ -135,6 +135,10 @@ include 'dbselect.php';
 	$SubTipo   = 'CNTP';
 	$DataHoje  = date('Y-m-d');
 
+	include "valida_caixa.php";
+
+	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
+
 	// Verificar se o operador digitou a senha correta
 	$sqlo = "SELECT * FROM operador WHERE pass = '$Senha'";
 	$rso  = mysqli_query($conec, $sqlo);

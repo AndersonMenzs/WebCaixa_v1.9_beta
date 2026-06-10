@@ -65,6 +65,13 @@
 	include "us_sist.php";
 	if ($ch == 'no') {
 		include "us_cad.php";
+	}
+
+	include "dbselect.php";
+	include "valida_caixa.php";
+
+	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
+		bloquear_se_caixa_anterior_aberto($conec, $lg_user);
 	} ?>
 
 	<font color="gold" size="6"><br>

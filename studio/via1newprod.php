@@ -65,6 +65,10 @@ include "./valor_ext.php";
 	$Aghata	= isset($_POST['aghata']) ? trim($_POST['aghata']) : 'N';
 	$vlr_ext   = valorPorExtenso($TaxaProdF);
 
+	include "valida_caixa.php";
+
+	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
+
 	// CORREÇÃO: Calcular gratuidade se não foi passada
 	if ($temGratuidade == 'N') {
 		// Recalcula a gratuidade baseado nas regras

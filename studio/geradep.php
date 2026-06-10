@@ -56,6 +56,9 @@
 
 	include "conexao.php";
 	include "dbselect.php";
+	include "valida_caixa.php";
+
+	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
 
 	// Obtendo o PC
 	$sqlo = "select pc, ape from inicial order by dtaltera desc ";

@@ -52,6 +52,9 @@ include "./valor_ext.php";
 	// Pesquisando PC
 	include "conexao.php";
 	include "dbselect.php";
+	include "valida_caixa.php";
+
+	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
 
 	// Obtendo o código do PC
 	$sqlPC = "select pc from inicial";

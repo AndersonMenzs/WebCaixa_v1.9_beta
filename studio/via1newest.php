@@ -58,6 +58,9 @@ ini_set('error_log', 'php_errors.log');
 	$Colab = $ln['nome'];
 
 	include "dbselect.php";
+	include "valida_caixa.php";
+
+	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
 
 	$sqlPC = "select pc from inicial";
 	$rsPC  = mysqli_query($conec, $sqlPC) or die("Não foi possível acessar o PC");

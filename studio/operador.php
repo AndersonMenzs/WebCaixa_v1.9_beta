@@ -77,12 +77,12 @@
 			<?php
 			} ?>
 
-			<tr>
-				<td>
-					<a href="ultfech2.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
-					<font size='4'><b><i>- Reimprimir Fechamentos Anteriores </i></b></font>
-				</td>
-			</tr>
+				<tr>
+					<td>
+						<a href="ultfech2.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
+						<font size='4'><b><i>- Listar Fechamentos Finais Anteriores </i></b></font>
+					</td>
+				</tr>
 
 			<tr>
 				<td>

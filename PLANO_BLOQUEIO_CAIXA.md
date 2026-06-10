@@ -1,5 +1,15 @@
 # Plano para Bloquear Registros com Caixa Anterior Aberto
 
+## Status
+
+- Fase 1 concluída: criado `studio/valida_caixa.php` com funções centrais de validação.
+- Fase 2 concluída: `studio/index.php` passou a usar a validação central e a condição `$AtuSen` foi corrigida.
+- Fase 3 concluída: páginas de entrada operacional passaram a bloquear caixa anterior aberto.
+- Fase 4 concluída: gravações críticas no servidor passaram a revalidar caixa anterior aberto antes de inserir registros/autenticações.
+- Fase 5 concluída: exceções necessárias para fechamento, impressão/listagem de fechamento e saída foram conferidas.
+- Fase 6 concluída: mensagem de bloqueio padronizada em `studio/valida_caixa.php`.
+- Fase 7 concluída parcialmente: sintaxe validada e regra central testada contra caixa anterior aberto real.
+
 ## Objetivo
 
 Garantir que o sistema bloqueie novos registros quando existir um caixa de dia anterior ainda aberto, mesmo que o operador feche o navegador e volte diretamente para uma tela interna.
@@ -130,7 +140,7 @@ bloquear_se_caixa_anterior_aberto($conec, $lg_user);
 
 Algumas páginas devem continuar acessíveis mesmo com caixa anterior aberto, porque servem para resolver o problema.
 
-Exceções prováveis:
+Exceções definidas:
 
 - `studio/index.php`
 - `studio/fechacaixa.php`
@@ -147,6 +157,11 @@ Exceções prováveis:
 
 Também podem ficar livres páginas puramente administrativas, se a regra do negócio permitir.
 
+Conferência da Fase 5:
+
+- Nenhuma das páginas de fechamento/impressão/saída acima chama `bloquear_se_caixa_anterior_aberto`.
+- `studio/index.php` pode incluir `valida_caixa.php`, mas permanece livre porque apenas mostra o aviso e direciona para o fechamento.
+
 ## Fase 6: Padronizar a Mensagem de Bloqueio
 
 Criar uma saída padrão para evitar mensagens diferentes em cada arquivo.
@@ -162,6 +177,8 @@ Botões sugeridos:
 
 - Fechar o Caixa
 - Voltar para o início
+
+Implementado em `studio/valida_caixa.php`, na função `mostrar_bloqueio_caixa()`.
 
 ## Fase 7: Testes Manuais
 
@@ -185,6 +202,15 @@ Testar os cenários abaixo:
 4. Fechamento pendente.
    - `fechacaixa.php` deve continuar acessível.
    - A rotina de fechamento deve funcionar normalmente.
+
+Conferência da Fase 7:
+
+- `php -l` passou nos arquivos alterados das Fases 1 a 4.
+- Banco consultado em modo somente leitura em 09/06/2026.
+- Cenário real encontrado: caixa de `06/06/2026` aberto com `dtclose NULL`.
+- `caixa_anterior_aberto($conec)` retornou `06/06/2026`.
+- `usuario_pode_registrar_movimento($conec)` retornou bloqueio.
+- Não foram alterados dados do banco para simular os demais cenários.
 
 ## Fase 8: Melhorias Futuras
 

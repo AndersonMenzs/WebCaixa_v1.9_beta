@@ -111,6 +111,9 @@
 	// Pesquisando PC
 	include "conexao.php";
 	include "dbselect.php";
+	include "valida_caixa.php";
+
+	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
 
 	$sqlPC = "select pc from inicial";
 	$rsPC  = mysqli_query($conec, $sqlPC) or die("Erro de Banco de Dados #1. Contate seu Administrador.");

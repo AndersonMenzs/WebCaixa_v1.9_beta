@@ -74,6 +74,9 @@ ini_set('error_log', 'php_errors.log');
 
 	include "conexao.php";
 	include "dbselect.php";
+	include "valida_caixa.php";
+
+	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
 
 	// Obtendo Dados
 	$sqlo = "select * from operador where pass = '$Senha' ";

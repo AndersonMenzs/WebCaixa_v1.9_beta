@@ -68,6 +68,10 @@ include "./valor_ext.php";
 	$ProdutosTop = array();
 	$ProdutosKit = array();
 
+	include "valida_caixa.php";
+
+	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
+
 	// Verificando se os campos de pct_prod estão vazios ou não
 	if (isset($_POST['ped_prod_1']) && !empty(trim($_POST['ped_prod_1']))) {
 		$Qtde_Prod_1 = isset($_POST['qtde_kit_1']) ? trim($_POST['qtde_kit_1']) : '';

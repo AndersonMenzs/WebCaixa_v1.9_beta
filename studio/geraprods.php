@@ -103,6 +103,9 @@ ini_set('display_startup_errors', 1);
 
 	include "conexao.php";
 	include "dbselect.php";
+	include "valida_caixa.php";
+
+	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
 
 	// Obtendo Dados
 	$sqlo = "select * from operador where pass = '$Senha' ";

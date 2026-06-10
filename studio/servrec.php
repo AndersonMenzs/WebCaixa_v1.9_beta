@@ -53,6 +53,11 @@
     }
 
     include "sitcaixa.php";
+    include "valida_caixa.php";
+
+    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
+        bloquear_se_caixa_anterior_aberto($conec, $lg_user);
+    }
 
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
 
