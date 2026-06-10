@@ -53,7 +53,7 @@ Exemplos:
 
 Observacoes:
   - Arquivos deletados nao sao copiados para o pacote.
-  - A propria pasta de destino, .git e pasta_sem_referencia sao ignoradas.
+  - A propria pasta de destino, .git, pasta_sem_referencia e _em_referencia sao ignoradas.
   - O pacote inclui qualquer arquivo modificado rastreado pelo Git, nao apenas PHP.
   - Arquivos novos nao rastreados entram somente com --untracked.
   - Por padrao, a versao WebCaixa e escalonada em patch antes de gerar.
@@ -65,6 +65,7 @@ current_version() {
     --exclude-dir=.git \
     --exclude-dir="$OUTPUT_DIR" \
     --exclude-dir=pasta_sem_referencia \
+    --exclude-dir=_em_referencia \
     "${VERSION_INCLUDE_ARGS[@]}" \
     "${VERSION_PREFIX}[0-9][0-9.]*\\(_[A-Za-z0-9.-]*\\)\\?" . |
     sed "s/^${VERSION_PREFIX}//" |
@@ -139,6 +140,7 @@ update_project_version() {
     --exclude-dir=.git \
     --exclude-dir="$OUTPUT_DIR" \
     --exclude-dir=pasta_sem_referencia \
+    --exclude-dir=_em_referencia \
     "${VERSION_INCLUDE_ARGS[@]}" \
     "${VERSION_PREFIX}[0-9]" . |
     xargs -0 perl -pi -e "s/\\Q${VERSION_PREFIX}\\E[0-9]+(?:\\.[0-9]+){1,2}(?:_[A-Za-z0-9.-]+)?/${VERSION_PREFIX}${new_version}/g"
@@ -279,7 +281,7 @@ trap 'rm -f "$TMP_LIST" "$TMP_REMOVE_LIST" "$FILTERED_LIST" "$FILTERED_REMOVE_LI
 
 while IFS= read -r file; do
   case "$file" in
-    ""|.git/*|"$OUTPUT_DIR"/*|pasta_sem_referencia/*)
+    ""|.git/*|"$OUTPUT_DIR"/*|pasta_sem_referencia/*|_em_referencia/*)
       continue
       ;;
   esac
@@ -291,7 +293,7 @@ done < "$TMP_LIST"
 
 while IFS= read -r file; do
   case "$file" in
-    ""|.git/*|"$OUTPUT_DIR"/*|pasta_sem_referencia/*)
+    ""|.git/*|"$OUTPUT_DIR"/*|pasta_sem_referencia/*|_em_referencia/*)
       continue
       ;;
   esac

@@ -4,9 +4,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<style type="text/css">
 	  body {
-		margin-top: 5%;
-		margin-left: 12%;
-		margin-right: 12%;
+		margin-top: 2%;
+		margin-left: 2%;
+		margin-right: 2%;
 		border: 3px solid gray;
 		padding: 10px 10px 10px 10px;
 		font-family:sans-serif;
