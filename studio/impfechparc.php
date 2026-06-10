@@ -807,7 +807,7 @@ if ($hr_abertura_obj) {
 											<p>
 												<font class="fonte-rel">
 													<font size="1" class="fs-6">
-														<i>Contr. Entrada</i>
+														<i>Pgto Carnê</i>
 													</font>
 												</font>
 											</p>
@@ -943,7 +943,7 @@ if ($hr_abertura_obj) {
 											<p>
 												<font class="fonte-rel">
 													<font size="1" class="fs-6">
-														<i>Book à Vista</i>
+														<i>Book</i>
 													</font>
 												</font>
 											</p>
