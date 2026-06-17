@@ -434,29 +434,18 @@
 		<form name="pgtos" id="pgtos_form" method="post" action="confdesp.php" OnSubmit="JavaScript:return prepararEnvioDespesa()">
 			<table width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
+					<td width="35%" align="center">
+						<font color='gold' size='5'><b><i>Tipo de Despesa</i></b></font>
+					</td>
 					<td width="32%" align="center">
 						<font color='gold' size='5'><b><i>Código</i></b></font>
 					</td>
 					<td width="33%" align="center">
 						<font color='gold' size='5'><b><i>Valor</i></b></font>
 					</td>
-					<td width="35%" align="center">
-						<font color='gold' size='5'><b><i>Tipo de Despesa</i></b></font>
-					</td>
 				</tr>
 
 				<tr>
-					<td width="32%" align="center">
-						<input type="text" name="txtcod" size="6" maxlength="6" class="campos" onkeypress="fPassaAlfaNumerico('an')" onkeyup="this.value=this.value.toUpperCase()">&nbsp;&nbsp;&nbsp;
-						<input type="text" name="txtcod2" size="6" maxlength="6" class="campos" onkeypress="fPassaAlfaNumerico('an')" onkeyup="this.value=this.value.toUpperCase()">
-					</td>
-					<td width="33%" align="center">
-						<font size='4'><b><i>R$ </i></b></font>
-						<input type="text" name="txtvalor" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('pgtos', 'txtvalor', event);">
-						<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
-						<input type="hidden" name="txtcaixa" value="<?php echo $SdCaixa; ?>">
-						<input type="hidden" name="cod_TipoRef" id="cod_TipoRef" value="">
-					</td>
 					<td width="35%" align="center">
 						<select name="lsPr" id="lsPr" class="campos" onchange="mostrarTabelaDespesa()">
 							<?php
@@ -494,6 +483,17 @@
 							mysqli_free_result($rspr);
 							?>
 						</select>
+					</td>
+					<td width="32%" align="center">
+						<input type="text" name="txtcod" size="6" maxlength="6" class="campos" onkeypress="fPassaAlfaNumerico('an')" onkeyup="this.value=this.value.toUpperCase()">&nbsp;&nbsp;&nbsp;
+						<input type="text" name="txtcod2" size="6" maxlength="6" class="campos" onkeypress="fPassaAlfaNumerico('an')" onkeyup="this.value=this.value.toUpperCase()">
+					</td>
+					<td width="33%" align="center">
+						<font size='4'><b><i>R$ </i></b></font>
+						<input type="text" name="txtvalor" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('pgtos', 'txtvalor', event);">
+						<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
+						<input type="hidden" name="txtcaixa" value="<?php echo $SdCaixa; ?>">
+						<input type="hidden" name="cod_TipoRef" id="cod_TipoRef" value="">
 					</td>
 				</tr>
 			</table>
