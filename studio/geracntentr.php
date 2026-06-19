@@ -79,7 +79,7 @@ ini_set('error_log', 'php_errors.log');
 	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
 
 	// Obtendo Dados
-	$sqlo = "select * from operador where pass = '$Senha' ";
+	$sqlo = "select * from operador where mat = '$user' and pass = '$Senha' ";
 	$rso  = mysqli_query($conec, $sqlo);
 	$regso = mysqli_num_rows($rso); ?>
 

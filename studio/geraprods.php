@@ -108,7 +108,7 @@ ini_set('display_startup_errors', 1);
 	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
 
 	// Obtendo Dados
-	$sqlo = "select * from operador where pass = '$Senha' ";
+	$sqlo = "select * from operador where mat = '$user' and pass = '$Senha' ";
 	$rso  = mysqli_query($conec, $sqlo) or die("Não foi Possível acessar os Dados");
 	$regso = mysqli_num_rows($rso); ?>
 

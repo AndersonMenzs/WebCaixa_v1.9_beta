@@ -140,7 +140,7 @@ include 'dbselect.php';
 	bloquear_se_caixa_anterior_aberto($conec, $lg_user);
 
 	// Verificar se o operador digitou a senha correta
-	$sqlo = "SELECT * FROM operador WHERE pass = '$Senha'";
+	$sqlo = "SELECT * FROM operador WHERE mat = '$user' AND pass = '$Senha'";
 	$rso  = mysqli_query($conec, $sqlo);
 
 	if (!$rso) {
@@ -231,6 +231,8 @@ include 'dbselect.php';
 			$totalInserido = 0;
 			$parcelaFinal = $parcelaInicial + $quantidadeParcelas - 1;
 			$contadorRegistro = 1;
+			$Reg++;
+			$RegOperacao = (int) $Reg;
 
 			// Iniciar transação
 			mysqli_begin_transaction($conec);
@@ -248,11 +250,7 @@ include 'dbselect.php';
 							$valorRateado = round($valorTotal - $totalInserido, 2);
 						}
 
-						// Incrementa o registro
-						$Reg++;
-
 						// Escapar os dados para evitar SQL injection
-						$Reg = (int) $Reg;
 						$NDoc = mysqli_real_escape_string($conec, $NDoc);
 						$TipoRec = mysqli_real_escape_string($conec, $TipoRec);
 						$SubTipo = mysqli_real_escape_string($conec, $SubTipo);
@@ -268,11 +266,11 @@ include 'dbselect.php';
 						$Cliente = mysqli_real_escape_string($conec, $Cliente);
 
 						// Query de inserção
-						$sqlP = "INSERT INTO registro 
-                        (reg, numdoc, tiporec, subtipo, modpgto, parcela, datarec, horarec, vlrec, operador, estorno, mat_vend, vendedora, cliente) 
-                        VALUES 
-                        ($Reg, '$NDoc', '$TipoRec', '$SubTipo', '$ModPgto', $Parcela, 
-                        '$dtRec', '$horarec', $VrRateado, '$Operador', '$Estorno', 
+						$sqlP = "INSERT INTO registro
+                        (reg, numdoc, tiporec, subtipo, modpgto, parcela, datarec, horarec, vlrec, operador, estorno, mat_vend, vendedora, cliente)
+                        VALUES
+                        ($RegOperacao, '$NDoc', '$TipoRec', '$SubTipo', '$ModPgto', $Parcela,
+                        '$dtRec', '$horarec', $VrRateado, '$Operador', '$Estorno',
                         '$Mat_Vend', '$Vendedora_Full', '$Cliente')";
 
 						// Executar
@@ -282,11 +280,8 @@ include 'dbselect.php';
 						}
 					}
 				}
-				// Criando o spool após inserir os registros para garantir que o reg seja o correto
-				$sqlReg = "SELECT MIN(reg) AS reg FROM registro WHERE datarec = '$dtRec' AND numdoc = '$NDoc'";
-				$rsReg = mysqli_query($conec, $sqlReg) or die("File geracntparc Error #2. Contate seu Administrador.");
-				$lnReg = mysqli_fetch_array($rsReg);
-				$Reg = $lnReg['reg'];
+				// Todas as parcelas e formas de pagamento pertencem à mesma operação.
+				$Reg = $RegOperacao;
 
 				$RegFull = 10000 + $Reg;
 				$RegSp = substr($RegFull, 1, 4);

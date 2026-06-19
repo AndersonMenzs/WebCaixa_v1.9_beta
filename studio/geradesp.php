@@ -85,7 +85,7 @@
 	mysqli_free_result($rs);
 
 	// Obtendo Dados
-	$sqlo = "select * from operador where pass = '$Senha' ";
+	$sqlo = "select * from operador where mat = '$user' and pass = '$Senha' ";
 	$rso  = mysqli_query($conec, $sqlo);
 	$regso = mysqli_num_rows($rso); ?>
 
