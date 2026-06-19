@@ -213,37 +213,6 @@ include "./valor_ext.php";
 		$ModPag = "CART. CRED. PARC. LOJA";
 		$FmRec_a = "CPL";
 	}
-
-	/*if ($Rdopt == 'BOOK' or $Rdopt == 'POSTER' or $Rdopt == 'BOOK/POSTER') {
-		// Imprimindo o Recibo
-		$MatRec = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
-		$VrRecF    = number_format($VrRec, 2, ',', '.');
-		$Aut1 = $Reg;
-		$Aut2 = "$Reg$PC$NDoc $dtAut" . "R$ " . "$VrRecF$SlgPag_a$MatRec$Rdopt";
-
-		// Gravando a Spool
-		$sql = "insert into spool values ('$Aut1', '$Aut2')";
-		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
-
-		// Gravando a Spool
-		$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
-		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
-
-	} elseif ($Rdopt == 'NORMAL') {
-		// Imprimindo o Recibo
-		$MatRec = substr($Mat, 0, 7) . "-" . substr($Mat, 7, 1);
-		$VrRecF    = number_format($VrRec, 2, ',', '.');
-		$Aut1 = $Reg;
-		$Aut2 = "$Reg$PC$NDoc $dtAut" . "R$ " . "$VrRecF$FmRec_a$MatRec";
-
-		// Gravando a Spool
-		$sql = "insert into spool values ('$Aut1', '$Aut2')";
-		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
-
-		// Gravando a Spool
-		$sql = "insert into spool2 values ('$Aut1', '$Aut2')";
-		$rs  = mysqli_query($conec, $sql) or die("Não foi possível gravar a Spool");
-	}*/
 	
 	// Encerrando a Conexão
 	mysqli_close($conec);
