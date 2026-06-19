@@ -83,20 +83,9 @@
 				$user      = substr($lg_user, 0, 8);
 				$pss       = substr($lg_user, 8, 40);
 				$contadig  = substr($lg_user, 48, 1);
-				$compSenha = strlen($contadig);
 				$geracod   = date('smi') + date('ssi');
 				$geracodF  = 1000000 + $geracod;
 				$Codigo    = substr($geracodF, 1, 6);
-
-				if ($compSenha == '0') {
-					$contadig = 1;
-				}
-
-				if ($contadig == '0' or $contadig == '6') {
-					$AtuSen = 'no';
-				} else {
-					$AtuSen = 'ok';
-				}
 
 				$lg_user = $user . $pss;
 				$dataatual = date('Y-m-d');
@@ -111,6 +100,47 @@
 				include "conexao.php";
 				include "dbselect.php";
 				include "valida_caixa.php";
+
+				/*
+				 * Estado persistente da senha no campo free:
+				 * T = provisória; S = já alterada.
+				 * Cadastros antigos são migrados automaticamente no login.
+				 */
+				$sqlSenha = "select free from operador where mat = '$user' and pass = '$pss' ";
+				$rsSenha = mysqli_query($conec, $sqlSenha) or die("Erro de Acesso #0. Contate seu Administrador.");
+				$lnSenha = mysqli_fetch_array($rsSenha);
+				$estadoSenha = $lnSenha ? strtoupper(trim($lnSenha['free'])) : '';
+
+				if ($estadoSenha == 'T') {
+					$AtuSen = 'no';
+				} else if ($estadoSenha == 'S') {
+					$AtuSen = 'ok';
+				} else {
+					// Migração dos usuários anteriores ao controle persistente.
+					$senhaProvisoria = false;
+					include "dblog.php";
+					$sqlCpf = "select cpf from pessoal where mat = '$user' ";
+					$rsCpf = mysqli_query($conec, $sqlCpf) or die("Erro de Acesso #0A. Contate seu Administrador.");
+					$lnCpf = mysqli_fetch_array($rsCpf);
+
+					if ($lnCpf) {
+						$cpf = preg_replace('/\D/', '', $lnCpf['cpf']);
+						$senhaProvisoria = hash_equals(sha1(substr($cpf, 0, 5)), $pss)
+							or hash_equals(sha1(substr($cpf, 0, 6)), $pss);
+					} else {
+						$senhaProvisoria = ($contadig == '0' or $contadig == '6');
+					}
+
+					mysqli_free_result($rsCpf);
+					include "dbselect.php";
+					$AtuSen = $senhaProvisoria ? 'no' : 'ok';
+					$novoEstado = $senhaProvisoria ? 'T' : 'S';
+
+					$sqlMigraSenha = "update operador set free = '$novoEstado' where mat = '$user' and pass = '$pss' ";
+					mysqli_query($conec, $sqlMigraSenha) or die("Erro de Acesso #0B. Contate seu Administrador.");
+				}
+
+				mysqli_free_result($rsSenha);
 
 				$sqlAt  = "update operador set dataop = '$dataatual' where mat = '$user' ";
 				$rsAt   = mysqli_query($conec, $sqlAt) or die("Erro de Acesso #1. Contate seu Administrador.");
@@ -191,7 +221,7 @@
 			</tr><br><br><br>
 		</table>
 	<?php
-	} else if ($chI == 'ok' and ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok')) { ?>
+	} else if ($chI == 'ok' and ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok')) { ?>
 		<table width='35%' border='0' cellpadding='5' cellspacing='0' align='center'>
 		<center>
 			<font face="arial" color="gold" size="6"><b><i><u>SISTEMA DO CAIXA</u></i></b></font>
@@ -212,7 +242,7 @@
 			<?php
 			}
 
-			if (($ch == 'ok' or $ch == 'ok-enc') and $AtuSen == 'ok') { ?>
+			if (($ch == 'ok' or $ch == 'ok-enc' or $ch == 'ok-adm') and $AtuSen == 'ok') { ?>
 				<tr>
 					<td width="35%">
 					<td width="35%">
@@ -313,7 +343,7 @@
 			<?php
 			}
 
-			if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $chcx == 'f' and $AtuSen == 'ok') { ?>
+			if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') and $chcx == 'f' and $AtuSen == 'ok') { ?>
 				<tr>
 					<td width="35%">
 					<td width="35%">

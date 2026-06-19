@@ -82,7 +82,7 @@ document.onkeydown = F5;
 	   $sqlD = "delete from operador where mat = '$user' ";
 	   $rsD  = mysqli_query($conec, $sqlD) or die ("File geracad.php Error #2. Contate seu Administrador.");
 
-	   $sqlO = "insert into operador values ('$user', '$pss', '$Cargo', '$dtRest', '$hrRest', '', '$MatAud')";
+	   $sqlO = "insert into operador values ('$user', '$pss', '$Cargo', '$dtRest', '$hrRest', 'T', '$MatAud')";
 	   $rsO  = mysqli_query($conec, $sqlO) or die ("File geracad.php Error #3. Contate seu Administrador.");
 	   mysqli_free_result($rsO);
 
@@ -100,7 +100,7 @@ document.onkeydown = F5;
 		  $rsD  = mysqli_query($conec, $sqlD) or die ("File geracad.php Error #6. Contate seu Administrador.");
 		  mysqli_free_result($rsD);
 
-		  $sqlO = "insert into operador values ('$user', '$pss', '$Cargo', '$dtRest', '$hrRest', '', '$MatAud')";
+		  $sqlO = "insert into operador values ('$user', '$pss', '$Cargo', '$dtRest', '$hrRest', 'T', '$MatAud')";
 		  $rsO  = mysqli_query($conec, $sqlO) or die ("File geracad.php Error #7. Contate seu Administrador.");
 		  mysqli_free_result($rsO);
 

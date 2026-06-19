@@ -94,7 +94,7 @@
 </head>
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
-    <?php 
+    <?php
     include "../cabecprs.php";
 
     // Obtendo o Login
@@ -114,13 +114,15 @@
     $pss     = substr($lg_user, 8, 40);
     $dtAbre  = trim($_POST['dtabre'] ?? '');
     $ch        = '';
-    $erro = 'n';;
+    $erro = 'n';
 
     include "us_sist.php";
+
     if ($ch == 'no') {
         include "us_cad.php";
     }
-    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?><br><br>
+
+    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') { ?><br><br>
         <font size='4' color='gold'><b><u><i>
                         <center>FECHAMENTO DO CAIXA</center>
                     </i></u></b></font><br><br>
@@ -141,7 +143,7 @@
         $dia  = date("w");
 
         if ($dtOpen == $data) {
-            if ($dia >= 1 and $dia <= 5 and $hora <= "17:00" or $dia == 6 and $hora <= "13:00") {
+            if ($dia >= 1 and $dia <= 5 and $hora <= "12:00" or $dia == 6 and $hora <= "13:00") {
                 $erro = 'y';
             }
         }
@@ -179,8 +181,9 @@
                         </td>
                     </tr>
                 </table><br>
-            </form><?php
-                } else { ?>
+            </form>
+        <?php
+        } else { ?>
             <br><br><br>
             <font size='6'><b>
                     <center>
@@ -191,8 +194,8 @@
                 </b></font><br><br><br>
             <center><a href='index.php?c_s=<?php echo $lg_user; ?>'><img src='images/voltar.gif'></a></center><br><br>
         <?php
-                }
-            } else { ?>
+        }
+    } else { ?>
         <br><br><br>
         <font size='6'><b>
                 <center>Acesso <font color='gold'>
@@ -201,11 +204,11 @@
             </b></font><br><br><br>
         <center><a href='index.php?c_s=<?php echo $lg_user; ?>'><img src='images/voltar.gif'></a></center><br><br>
     <?php
-            }
+    }
 
-            // Encerrando
-            $SisRot = "S-7.5.2";
-            include "rodape.php"; ?>
+    // Encerrando
+    $SisRot = "S-7.5.2";
+    include "rodape.php"; ?>
 
 </body>
 

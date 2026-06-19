@@ -40,9 +40,12 @@ document.onkeydown = F5;
 	 $PssAnt  = strtolower($_POST['txtoldsen']);
 	 $Pss1    = strtolower($_POST['txtnvsen']);
 	 $Pss2    = strtolower($_POST['txtcfsen']);
-	 $mfunc   = $_REQUEST['rp_mt'];
+	 $mfunc   = trim($_REQUEST['rp_mt']);
 	 $ctPssAnt= sha1($PssAnt);
 	 $ctPss   = sha1($Pss1);
+	 $senhaValida = strlen($Pss1) == 6
+		&& preg_match('/[a-z]/i', $Pss1)
+		&& preg_match('/[0-9]/', $Pss1);
 
       // Verificando Integridade
 	 if ($ctPssAnt <> $pss)
@@ -51,7 +54,7 @@ document.onkeydown = F5;
 	    <center><b><i>A Senha Anterior Informada <font color='gold'><blink>Não Confere</blink><font color='#FFFFFF'>.</i>
 	    <br><br><br>Tente Novamente!</b></center></font><br>
 	    <center><br><A HREF='JavaScript:window.history.back()'><img src='./images/voltar.gif'></A></center><br><br><?php
-	   } else if (trim($Pss1) <> "" and $Pss1 == $Pss2)
+	   } else if ($senhaValida and $Pss1 == $Pss2)
 		    {
 		    // Abrindo a Conexão
 		       include "conexao.php";
@@ -67,7 +70,7 @@ document.onkeydown = F5;
 		      if ($regsCon == 0)
 			{
 			 // Criando a Instrução SQL de atualização
-			    $sqlALT = "UPDATE operador SET pass = '$ctPss' WHERE mat = '$mfunc' ";
+			    $sqlALT = "UPDATE operador SET pass = '$ctPss', free = 'S' WHERE mat = '$mfunc' ";
 			    $rsAltera = mysqli_query($conec, $sqlALT) or die("Erro de Alteração de Senha #2. Contate seu Administrador.");
 			    //mysqli_free_result($rsAltera);
 
@@ -87,10 +90,15 @@ document.onkeydown = F5;
 				   <br><br>Digite Uma Senha Diferente!</b></center></font><br>
 				   <center><br><A HREF='JavaScript:window.history.back()'><img src='./images/voltar.gif'></A></center><br><?php
 			       }
-		   } else { ?>
+		   } else if ($Pss1 <> $Pss2) { ?>
 			   <font color="gold" size='6'><br><br>
 			   <center><b><i><blink>As Senhas Não Conferem.</blink><font color='#FFFFFF'></i>
 			   <br><br>Tente Novamente!</b></center></font><br>
+			   <center><br><A HREF='JavaScript:window.history.back()'><img src='./images/voltar.gif'></A></center><br><?php
+			  } else { ?>
+			   <font color="gold" size='6'><br><br>
+			   <center><b><i><blink>Senha Não Aceita.</blink><font color='#FFFFFF'></i>
+			   <br><br>A senha deve conter exatamente 6 caracteres, com letras e números.</b></center></font><br>
 			   <center><br><A HREF='JavaScript:window.history.back()'><img src='./images/voltar.gif'></A></center><br><?php
 			  }
 

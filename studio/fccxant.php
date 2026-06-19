@@ -97,7 +97,7 @@ ini_set('error_log', 'php_errors.log');
 		include "us_cad.php";
 	}
 
-	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
+	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') { ?>
 		<font size='4' color='gold'>
 			<b>
 				<u>

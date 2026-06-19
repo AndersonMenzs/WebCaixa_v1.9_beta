@@ -56,10 +56,10 @@
 	</font><br><br><br>
 	<?php
 
-	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
+	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') { ?>
 		<table width="40%" border="0" cellpadding="0" cellspacing="10" align="center">
 			<?php
-			if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
+			if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok-adm' or $ch == 'ok') { ?>
 				<tr>
 					<td>
 						<a href="fechacaixa.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>

@@ -15,6 +15,7 @@ $rsu = mysqli_query($conec, $sqlu) or die("Não foi possível acessar o Cadastro
 
 // Obtendo os Dados do Banco
 $lns   = mysqli_fetch_array($rss);
+
 if ($lns) {
     $lg  = $lns['mat'];
     $sis = $lns['sis'];

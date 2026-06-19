@@ -80,7 +80,7 @@ document.onkeydown = F5;
 	      include "dbselect.php";
 
 	   // Criando a Instrução SQL de Inclusão
-	      $sqlA = "INSERT INTO operador VALUES ('$Mat', '$PassOp', '$Func', '$DataOp', '$HoraOp', '', '$user')";
+	      $sqlA = "INSERT INTO operador VALUES ('$Mat', '$PassOp', '$Func', '$DataOp', '$HoraOp', 'T', '$user')";
 	      $rsA = mysqli_query($conec, $sqlA) or die("Erro de Atualização #4. Contate seu Administrador."); ?><br><br><br><br>
 
 	   <font size="6"><center><b>Funcionário(a) <font color="gold"><blink>Cadastrado(a)</blink><font color="#FFFFFF"> com Sucesso!</b></center></font><br><br>

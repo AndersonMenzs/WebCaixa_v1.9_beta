@@ -81,7 +81,7 @@
 		include "us_cad.php";
 	}
 
-	if ($ch == 'ok') { ?><br><br>
+	if ($ch == 'ok' or $ch == 'ok-adm') { ?><br><br>
 		<font color='gold' size='6'><b><u><i>
 						<center>CADASTRAR FUNCIONÁRIOS</center>
 					</i></u></b></font> <br><br><br>
@@ -205,7 +205,7 @@
 	<meta http-equiv="refresh" content="60;URL=./index.php?c_s=<?php echo $lg_user; ?>">
 	<?php
 
-	if ($ch <> 'ok' and $ch <> 'ok-enc') { ?>
+	if ($ch <> 'ok' and $ch <> 'ok-enc' and $ch <> 'ok-adm') { ?>
 		<br><br><br>
 		<font size='5'><b>
 				<center>Acesso <font color='gold'>

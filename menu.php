@@ -69,6 +69,13 @@
 	       {
 	        $log_aut = substr($lg_user,0,8);
 		$pss_aut = substr($lg_user,8,40);
+		$soma = substr($lg_user,48,1);
+
+		if ($soma === '' or !ctype_digit($soma))
+		  {
+		   // Retornos internos já carregam uma credencial autenticada.
+		   $soma = 1;
+		  }
 	       } ?>
   </head>
 

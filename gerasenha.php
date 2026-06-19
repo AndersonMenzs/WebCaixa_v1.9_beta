@@ -64,7 +64,7 @@ document.onkeydown = F5;
 	   
 	   include "dbselect.php";
 
-	   $sqlO = "update operador set pass = '$pss' where mat = '$user' ";
+	   $sqlO = "update operador set pass = '$pss', free = 'T' where mat = '$user' ";
 	   $rsO  = mysqli_query($conec, $sqlO) or die ("Erro de Banco de Dados #2. Contate seu Administrador.");
 	   //mysqli_free_result($rsO);
 
