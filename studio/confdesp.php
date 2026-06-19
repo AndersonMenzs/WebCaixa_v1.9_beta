@@ -38,10 +38,6 @@
 
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 	<?php
-	/*$dados = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-	echo "<pre>";
-	print_r($dados);
-	echo "</pre>";*/
 	
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
@@ -58,6 +54,7 @@
 	$lsref_desp	= trim($_POST['lsref_desp'] ?? '');
 	$lsref_remb	= trim($_POST['lsref_remb'] ?? '');
 	$cod_TipoRef = trim($_POST['cod_TipoRef'] ?? '');
+	$documento_reembolso = trim($_POST['documento_reembolso'] ?? '');
 	$TipoRef = ($lsref_remb != 'Selecione' and $lsPr == '5') ? $lsref_remb : '';
 	$TipoDoc = ($lsPr == '1') ? 'DDP' : (($lsref_remb != 'Selecione' and $lsPr == '5') ? 'RCL' : ($lsPr == '7' ? 'VTR' : ($lsPr == '6' ? 'SRV' : ($lsPr == '4' ? 'MPD' : ($lsPr == '2' ? 'MCS' : ($lsPr == '3' ? 'MDV' : ($lsPr == '8' ? 'OUT' : '')))))));
 	$cliente	= trim($_POST['cliente'] ?? '');
@@ -192,6 +189,7 @@
 		<input type="hidden" name="tipodoc" value="<?php echo $TipoDoc; ?>">
 		<input type="hidden" name="tiporef" value="<?php echo $TipoRef; ?>">
 		<input type="hidden" name="cod_TipoRef" value="<?php echo $cod_TipoRef; ?>">
+		<input type="hidden" name="documento_reembolso" value="<?php echo htmlspecialchars($documento_reembolso, ENT_QUOTES, 'UTF-8'); ?>">
 		<input type="hidden" name="nomedesc" value="<?php echo $NomeDesc; ?>">
 
 		<p>

@@ -63,6 +63,7 @@
 	$TipoDesp  = trim($_POST['txttipodesp']);
 	$TipoRef = trim($_POST['tiporef']);
 	$cod_TipoRef = trim($_POST['cod_TipoRef'] ?? '');
+	$documento_reembolso = trim($_POST['documento_reembolso'] ?? '');
 	$FPag      = trim($_POST['formapag']);
 	$dtRec     = trim($_POST['dtrec']);
 	$aRec    = substr($dtRec, 2, 2);
@@ -227,7 +228,8 @@
 					'&Valor=<?php echo urlencode($Valor); ?>' +
 					'&Valor_ext=<?php echo urlencode($Valor_ext); ?>' +
 					'&TipoRef=<?php echo urlencode($TipoRef); ?>' +
-					'&cod_TipoRef=<?php echo urlencode($cod_TipoRef); ?>';
+					'&cod_TipoRef=<?php echo urlencode($cod_TipoRef); ?>' +
+					'&documento_reembolso=<?php echo urlencode($documento_reembolso); ?>';
 				window.open(url, '_blank');
 				setTimeout(function() {
 					window.location.href = './index.php?c_s=<?php echo $lg_user; ?>';

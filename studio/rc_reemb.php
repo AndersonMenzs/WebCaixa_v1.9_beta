@@ -1,11 +1,5 @@
 <?php
 
-//$dados = filter_input_array(INPUT_GET, FILTER_DEFAULT);
-//echo "<pre>";
-//print_r($dados);
-//echo "</pre>";
-//exit();
-
 // Importando os Dados do Formulário
 $empresa        = "ESTRELLA PHOTO STUDIO";
 $tipoDocumento  = "Comunicação Interna";
@@ -15,6 +9,7 @@ $dataDocumento  = trim($_GET['Data']);
 
 $origem         = "PC-" . trim($_GET['PC']);
 $destino        = trim($_GET['Tes']);
+$Documento      = trim($_GET['documento_reembolso'] ?? '');
 
 $assunto        = "Comprovante de Reembolso de " . trim($_GET['TipoRef']);
 
@@ -169,7 +164,8 @@ $autenticacao    = trim($_GET['Aut']);
             <strong>Protocolo:</strong> <?= $protocolo ?><br>
             <strong>Data:</strong> <?= $dataDocumento ?><br>
             <strong>De:</strong> <?= $origem ?><br>
-            <strong>Para:</strong> <?= $destino ?>
+            <strong>Para:</strong> <?= $destino ?><br>
+            <strong>Documento:</strong> <?= $Documento ?><br>
         </div>
 
         <div class="linha">

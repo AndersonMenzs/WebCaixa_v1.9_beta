@@ -212,7 +212,6 @@
 			var tablaValeTrans = document.getElementById('tb_vale_trans_dp');
 			var tabelaServPrest = document.getElementById('tb_serv_prest_dp');
 			var codTipoRef = document.getElementById('cod_TipoRef');
-			var campoValor = document.getElementById('txtvalor');
 
 			// Inicialmente oculte ambas
 			if (tabelaDP) tabelaDP.style.display = 'none';
@@ -249,10 +248,6 @@
 				if (codTipoRef && refRembSelecionado) {
 					codTipoRef.value = refRembSelecionado.options[refRembSelecionado.selectedIndex].getAttribute('data-cod-tiporef') || '';
 				}
-				if (refRembSelecionado) refRembSelecionado.disabled = true;
-				if (campoValor) campoValor.readOnly = true;
-				var registroReembolso = document.getElementById('registro_reembolso');
-				if (registroReembolso) registroReembolso.focus();
 			} else if (selectedValue === '7' || optionClass.includes('vale_trans-dp')) {
 				if (tablaValeTrans) tablaValeTrans.style.display = 'table';
 				if (tabelaDP) tabelaDP.style.display = 'none';
@@ -261,7 +256,6 @@
 				if (codTipoRef) codTipoRef.value = '';
 				var colabVT = document.getElementById('mat_vend_input_vt');
 				if (colabVT) colabVT.setAttribute('required', 'required');
-				if (campoValor) campoValor.readOnly = false;
 			} else if (selectedValue === '6' || optionClass.includes('serv_prest-dp')) {
 				if (tabelaServPrest) tabelaServPrest.style.display = 'table';
 				if (tabelaDP) tabelaDP.style.display = 'none';
@@ -270,17 +264,6 @@
 				if (codTipoRef) codTipoRef.value = '';
 				var colabSrv = document.getElementById('mat_vend_input_srv');
 				if (colabSrv) colabSrv.setAttribute('required', 'required');
-				if (campoValor) campoValor.readOnly = false;
-			}
-
-			if (selectedValue !== '5' && !optionClass.includes('reembolso-cli') && campoValor) {
-				campoValor.readOnly = false;
-				var refRemb = document.getElementById('lsref_remb');
-				if (refRemb) refRemb.disabled = false;
-				var registroReembolsoValidado = document.getElementById('registro_reembolso_validado');
-				if (registroReembolsoValidado && registroReembolsoValidado.value !== '') {
-					limparDadosRegistroReembolso();
-				}
 			}
 
 			// Opcional: Limpar campos quando mudar de tabela
@@ -316,39 +299,6 @@
 			}
 		}
 
-		function alterarTipoDespesa() {
-			var formulario = document.getElementById('pgtos_form');
-			var codTipoRef = document.getElementById('cod_TipoRef');
-			var registroReembolso = document.getElementById('registro_reembolso');
-			var refDespesa = document.getElementById('lsref_desp');
-			var refReembolso = document.getElementById('lsref_remb');
-			var camposColaborador = [
-				['mat_vend_input_dp', 'mat_vend_dp'],
-				['mat_vend_input_vt', 'mat_vend_vt'],
-				['mat_vend_input_srv', 'mat_vend_srv']
-			];
-
-			if (formulario) {
-				if (formulario.elements.txtcod) formulario.elements.txtcod.value = '';
-				if (formulario.elements.txtcod2) formulario.elements.txtcod2.value = '';
-			}
-
-			limparDadosRegistroReembolso();
-			if (registroReembolso) registroReembolso.value = '';
-			if (refDespesa) refDespesa.selectedIndex = 0;
-			if (refReembolso) refReembolso.selectedIndex = 0;
-			if (codTipoRef) codTipoRef.value = '';
-
-			camposColaborador.forEach(function(campos) {
-				var nome = document.getElementById(campos[0]);
-				var matricula = document.getElementById(campos[1]);
-				if (nome) nome.value = '';
-				if (matricula) matricula.value = '';
-			});
-
-			mostrarTabelaDespesa();
-		}
-
 		function atualizarCodTipoRef(selectEl) {
 			var codTipoRef = document.getElementById('cod_TipoRef');
 			if (!codTipoRef || !selectEl) return;
@@ -356,140 +306,8 @@
 			codTipoRef.value = selectEl.options[selectEl.selectedIndex].getAttribute('data-cod-tiporef') || '';
 		}
 
-		function limparDadosRegistroReembolso() {
-			var registroValidado = document.getElementById('registro_reembolso_validado');
-			var cliente = document.getElementById('cliente');
-			var campoValor = document.getElementById('txtvalor');
-			var referente = document.getElementById('lsref_remb');
-			var valorOculto = document.getElementById('txtvalor_reembolso');
-			var referenteOculto = document.getElementById('lsref_remb_oculto');
-			var clienteOculto = document.getElementById('cliente_reembolso');
-			var documentoOculto = document.getElementById('documento_reembolso');
-			var referenteDescricaoOculto = document.getElementById('referente_descricao_reembolso');
-
-			if (registroValidado) registroValidado.value = '';
-			if (cliente) {
-				cliente.name = 'cliente';
-				cliente.disabled = false;
-				cliente.value = '';
-			}
-			if (campoValor) {
-				campoValor.name = 'txtvalor';
-				campoValor.disabled = false;
-				campoValor.value = '';
-			}
-			if (referente) {
-				referente.name = 'lsref_remb';
-				referente.disabled = false;
-			}
-			if (valorOculto) {
-				valorOculto.name = '';
-				valorOculto.value = '';
-			}
-			if (referenteOculto) {
-				referenteOculto.name = '';
-				referenteOculto.value = '';
-			}
-			if (clienteOculto) {
-				clienteOculto.name = '';
-				clienteOculto.value = '';
-			}
-			if (documentoOculto) documentoOculto.value = '';
-			if (referenteDescricaoOculto) referenteDescricaoOculto.value = '';
-		}
-
-		function selecionarReferenteReembolso(sigla) {
-			var select = document.getElementById('lsref_remb');
-			if (!select) return;
-
-			for (var i = 0; i < select.options.length; i++) {
-				if (select.options[i].getAttribute('data-siglaref') === sigla) {
-					select.selectedIndex = i;
-					atualizarCodTipoRef(select);
-					return;
-				}
-			}
-		}
-
-		function buscarRegistroReembolso() {
-			var campoRegistro = document.getElementById('registro_reembolso');
-			var botao = document.getElementById('bt_buscar_registro_reembolso');
-			var registro = campoRegistro ? campoRegistro.value.trim() : '';
-
-			limparDadosRegistroReembolso();
-
-			if (!/^\d+$/.test(registro)) {
-				alert('Informe um número de registro válido.');
-				if (campoRegistro) campoRegistro.focus();
-				return;
-			}
-
-			if (botao) botao.disabled = true;
-
-			$.ajax({
-				url: 'buscar_registro_reembolso.php',
-				dataType: 'json',
-				data: {
-					registro: registro
-				},
-				success: function(dados) {
-					if (!dados || !dados.sucesso) {
-						alert((dados && dados.mensagem) ? dados.mensagem : 'Registro não encontrado.');
-						return;
-					}
-
-					document.getElementById('registro_reembolso_validado').value = dados.registro;
-					document.getElementById('cliente').value = dados.cliente;
-					document.getElementById('txtvalor').value = dados.valor;
-					selecionarReferenteReembolso(dados.sigla_referente);
-
-					var campoValor = document.getElementById('txtvalor');
-					var referente = document.getElementById('lsref_remb');
-					var cliente = document.getElementById('cliente');
-					var valorOculto = document.getElementById('txtvalor_reembolso');
-					var referenteOculto = document.getElementById('lsref_remb_oculto');
-					var clienteOculto = document.getElementById('cliente_reembolso');
-					var documentoOculto = document.getElementById('documento_reembolso');
-					var referenteDescricaoOculto = document.getElementById('referente_descricao_reembolso');
-
-					valorOculto.name = '';
-					valorOculto.value = dados.valor;
-					referenteOculto.name = 'lsref_remb';
-					referenteOculto.value = referente.value;
-					clienteOculto.name = 'cliente';
-					clienteOculto.value = dados.cliente;
-					documentoOculto.value = dados.documento;
-					referenteDescricaoOculto.value = dados.referente;
-
-					campoValor.name = 'txtvalor';
-					referente.name = '';
-					cliente.name = '';
-					campoValor.disabled = false;
-					campoValor.readOnly = true;
-					referente.disabled = true;
-					cliente.disabled = true;
-
-					alert('Registro localizado.');
-				},
-				error: function() {
-					alert('Não foi possível consultar o registro.');
-				},
-				complete: function() {
-					if (botao) botao.disabled = false;
-				}
-			});
-		}
-
 		function prepararEnvioDespesa() {
 			mostrarTabelaDespesa();
-			var tipoDespesa = document.getElementById('lsPr');
-			var registroValidado = document.getElementById('registro_reembolso_validado');
-			if (tipoDespesa && tipoDespesa.value === '5' && (!registroValidado || registroValidado.value === '')) {
-				alert('Consulte e confirme o registro da compra antes de continuar.');
-				var campoRegistro = document.getElementById('registro_reembolso');
-				if (campoRegistro) campoRegistro.focus();
-				return false;
-			}
 			if (typeof checkdata === 'function') {
 				return checkdata();
 			}
@@ -517,12 +335,6 @@
 		// Execute quando a página carregar
 		$(document).ready(function() {
 			inicializarTabelasDespesa();
-			$('#registro_reembolso').on('input', limparDadosRegistroReembolso).on('keydown', function(event) {
-				if (event.key === 'Enter') {
-					event.preventDefault();
-					buscarRegistroReembolso();
-				}
-			});
 		});
 	</script>
 
@@ -635,7 +447,7 @@
 
 				<tr>
 					<td width="35%" align="center">
-						<select name="lsPr" id="lsPr" class="campos" onchange="alterarTipoDespesa()">
+						<select name="lsPr" id="lsPr" class="campos" onchange="mostrarTabelaDespesa()">
 							<?php
 							// Obtendo a Relação
 							// Conectando ao Banco de Dados
@@ -678,8 +490,7 @@
 					</td>
 					<td width="33%" align="center">
 						<font size='4'><b><i>R$ </i></b></font>
-						<input type="text" name="txtvalor" id="txtvalor" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('pgtos', 'txtvalor', event);">
-						<input type="hidden" id="txtvalor_reembolso" value="">
+						<input type="text" name="txtvalor" size="7" maxlength="7" class="campos" OnKeyUp="FormataValor('pgtos', 'txtvalor', event);">
 						<input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
 						<input type="hidden" name="txtcaixa" value="<?php echo $SdCaixa; ?>">
 						<input type="hidden" name="cod_TipoRef" id="cod_TipoRef" value="">
@@ -772,27 +583,16 @@
 
 			<table id="tb_reembolso_cli" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
-					<td width=25% align="center">
-						<font color='gold' size='5'><b><i>Registro</i></b></font>
-					</td>
-					<td width=25% align="center">
+					<td width="50%" align="center">
 						<font color='gold' size='5'><b><i>Referente</i></b></font>
 					</td>
-					<td width=50% align="center">
+					<td width="50%" align="center">
 						<font color='gold' size='5'><b><i>Cliente</i></b></font>
 					</td>
 				</tr>
+
 				<tr>
-					<td width="25%" align="center">
-						<input type="text" id="registro_reembolso" name="registro_reembolso" size="8" maxlength="8"
-							class="campos" inputmode="numeric" autocomplete="off" autofocus>&nbsp;&nbsp;&nbsp;
-						<input type="button" id="bt_buscar_registro_reembolso" value="Consultar"
-							onclick="buscarRegistroReembolso()">
-						<input type="hidden" id="registro_reembolso_validado" name="registro_reembolso_validado" value="">
-						<input type="hidden" id="documento_reembolso" name="documento_reembolso" value="">
-						<input type="hidden" id="referente_descricao_reembolso" name="referente_descricao_reembolso" value="">
-					</td>
-					<td width="25%" align="center">
+					<td width="50%" align="center">
 						<select name="lsref_remb" id="lsref_remb" class="campos" onchange="atualizarCodTipoRef(this)">
 							<?php
 							// Criando a Instrução SQL de Consulta
@@ -804,7 +604,7 @@
 								$TipoRef_Remb = $lnpr['nomeref'];
 								$Cod_TipoRef = $lnpr['cod_tiporef'];
 							?>
-								<option value="<?php echo $TipoRef_Remb; ?>" data-cod-tiporef="<?php echo $Cod_TipoRef; ?>" data-siglaref="<?php echo $lnpr['siglaref']; ?>" class="campos">
+								<option value="<?php echo $TipoRef_Remb; ?>" data-cod-tiporef="<?php echo $Cod_TipoRef; ?>" class="campos">
 									<?php echo "$TipoRef_Remb"; ?>
 								</option>
 							<?php
@@ -812,13 +612,11 @@
 							mysqli_free_result($rspr);
 							?>
 						</select>
-						<input type="hidden" id="lsref_remb_oculto" value="">
 					</td>
 					<td width="50%" align="center">
 						<input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
 							onkeypress="fPassaAlfaNumerico('an')"
-							onkeyup='this.value=this.value.toUpperCase(); validnome(this)' readonly>
-						<input type="hidden" id="cliente_reembolso" value="">
+							onkeyup='this.value=this.value.toUpperCase(); validnome(this)'>
 					</td>
 				</tr>
 			</table>
