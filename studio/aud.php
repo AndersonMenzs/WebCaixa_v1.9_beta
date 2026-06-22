@@ -69,6 +69,13 @@
 
 			<tr>
 				<td>
+					<a href="estoque.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
+					<font size='4'><b><i>- Estoque e Solicitação de Itens</i></b></font>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
 					<a href="fchparcsem.php?c_s=<?php echo "$lg_user" . "$dtAbre"; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
 					<font size='4'><b><i>- Fechamento Parcial&nbsp;&nbsp; <font color='lime'>(sem&nbsp;&nbsp;&nbsp;Impressão)</i></b></font>
 				</td>
@@ -122,17 +129,19 @@
 					<font size='4'><b><i>- Reajuste de Preço de Taxas e Produtos</i></b></font>
 				</td>
 			</tr>
-		</table>
-		<meta http-equiv="refresh" content="60;URL=./acaud.php?c_s=<?php echo $lg_user; ?>"><?php
-																						} else { ?>
+		</table><br>
+		<meta http-equiv="refresh" content="60;URL=./acaud.php?c_s=<?php echo $lg_user; ?>">
+	<?php
+	} else { ?>
 		<br><br><br>
 		<font size='7'><b>
 				<center>Acesso <font color='gold'>
 						<blink><u>não Autorizado</u>
 						</blink>
 						<font color='#FFFFFF'>!!!</center>
-			</b></font><br><br><?php
-																						} ?>
+			</b></font><br><br>
+	<?php
+	} ?>
 	<center><a href='index.php?c_s=<?php echo $lg_user; ?>'><img src='images/voltar.gif'></a></center><br>
 	<?php
 
