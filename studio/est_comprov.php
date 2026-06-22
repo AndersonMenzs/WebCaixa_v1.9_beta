@@ -16,7 +16,16 @@ $matricula       = trim($_GET['Mat']);
 $matricula       = substr($matricula, 0, 1) . "." . substr($matricula, 1, 3) . "." . substr($matricula, 4, 3) . "-" . substr($matricula, 7, 1);
 
 $nomeFuncionario = trim($_GET['Colab']);
-$valor           = trim($_GET['VrEntr']);
+$valorRecebido   = trim($_GET['VrEntr']);
+
+// Converte valores no formato brasileiro (ex.: 1.234,56) para o formato
+// numérico esperado pelo PHP (1234.56), sem alterar valores como 19.80.
+if (strpos($valorRecebido, ',') !== false) {
+    $valor = (float) str_replace(['.', ','], ['', '.'], $valorRecebido);
+} else {
+    $valor = (float) $valorRecebido;
+}
+
 $valorExtenso    = trim($_GET['Valor_ext']);
 $ModPag          = trim($_GET['ModPag']);
 
