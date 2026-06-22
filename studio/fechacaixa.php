@@ -143,7 +143,7 @@
         $dia  = date("w");
 
         if ($dtOpen == $data) {
-            if ($dia >= 1 and $dia <= 5 and $hora <= "12:00" or $dia == 6 and $hora <= "13:00") {
+            if ($dia >= 1 and $dia <= 5 and $hora <= "17:00" or $dia == 6 and $hora <= "13:00") {
                 $erro = 'y';
             }
         }
