@@ -216,7 +216,7 @@
                         <font size="4" color='gold'><b><i>Qtde: </i></b></font>
                         <select name="qtde_book" id="qtde_book" class="campos" style="width: 60px; height: 30px; margin-right: 22px;">
                             <option value="" selected>0</option>
-                            <?php for ($i = 1; $i <= 10; $i++) { ?>
+                            <?php for ($i = 1; $i <= 1; $i++) { ?>
                                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                             <?php } ?>
                         </select>
@@ -254,7 +254,7 @@
                         <font size="4" color='gold'><b><i>Qtde: </i></b></font>
                         <select name="qtde_poster" id="qtde_poster" class="campos" style="width: 60px; height: 30px; margin-right: 22px;">
                             <option value="" selected>0</option>
-                            <?php for ($i = 1; $i <= 10; $i++) { ?>
+                            <?php for ($i = 1; $i <= 2; $i++) { ?>
                                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                             <?php } ?>
                         </select>
