@@ -18,11 +18,20 @@ if (!$conec) {
 }
 
 $registro = isset($_GET['registro']) ? trim($_GET['registro']) : '';
+$dataConsulta = isset($_GET['data']) ? trim($_GET['data']) : '';
 
 if ($registro === '' || !ctype_digit($registro)) {
 	responder(array(
 		'sucesso' => false,
 		'mensagem' => 'Informe um número de registro válido.'
+	));
+}
+
+$dataValida = DateTime::createFromFormat('!Y-m-d', $dataConsulta);
+if (!$dataValida || $dataValida->format('Y-m-d') !== $dataConsulta) {
+	responder(array(
+		'sucesso' => false,
+		'mensagem' => 'Informe uma data válida para consultar o registro.'
 	));
 }
 
@@ -35,7 +44,7 @@ $sql = "SELECT
 			MAX(cliente) AS cliente
 		FROM registro
 		WHERE reg = ?
-			AND datarec = CURDATE()
+			AND datarec = ?
 			AND tiporec <> '8'
 			AND tiporec <> 'E'
 			AND (estorno IS NULL OR estorno = '')
@@ -51,16 +60,17 @@ if (!$stmt) {
 }
 
 $registroNumero = intval($registro);
-mysqli_stmt_bind_param($stmt, 'i', $registroNumero);
+mysqli_stmt_bind_param($stmt, 'is', $registroNumero, $dataConsulta);
 mysqli_stmt_execute($stmt);
 $resultado = mysqli_stmt_get_result($stmt);
 $dados = $resultado ? mysqli_fetch_assoc($resultado) : null;
 mysqli_stmt_close($stmt);
 
 if (!$dados) {
+	$dataMensagem = $dataValida->format('d/m/Y');
 	responder(array(
 		'sucesso' => false,
-		'mensagem' => 'Registro não encontrado hoje, estornado ou impróprio para reembolso.'
+		'mensagem' => 'Registro não encontrado em ' . $dataMensagem . ', estornado ou impróprio para reembolso.'
 	));
 }
 

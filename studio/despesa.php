@@ -251,8 +251,13 @@
 				}
 				if (refRembSelecionado) refRembSelecionado.disabled = true;
 				if (campoValor) campoValor.readOnly = true;
+				var dataRegistroReembolso = document.getElementById('data_registro_reembolso');
 				var registroReembolso = document.getElementById('registro_reembolso');
-				if (registroReembolso) registroReembolso.focus();
+				if (dataRegistroReembolso) {
+					dataRegistroReembolso.focus();
+				} else if (registroReembolso) {
+					registroReembolso.focus();
+				}
 			} else if (selectedValue === '7' || optionClass.includes('vale_trans-dp')) {
 				if (tablaValeTrans) tablaValeTrans.style.display = 'table';
 				if (tabelaDP) tabelaDP.style.display = 'none';
@@ -412,11 +417,19 @@
 		}
 
 		function buscarRegistroReembolso() {
+			var campoData = document.getElementById('data_registro_reembolso');
 			var campoRegistro = document.getElementById('registro_reembolso');
 			var botao = document.getElementById('bt_buscar_registro_reembolso');
+			var dataRegistro = campoData ? campoData.value.trim() : '';
 			var registro = campoRegistro ? campoRegistro.value.trim() : '';
 
 			limparDadosRegistroReembolso();
+
+			if (!/^\d{4}-\d{2}-\d{2}$/.test(dataRegistro)) {
+				alert('Informe uma data válida para consultar o registro.');
+				if (campoData) campoData.focus();
+				return;
+			}
 
 			if (!/^\d+$/.test(registro)) {
 				alert('Informe um número de registro válido.');
@@ -430,7 +443,8 @@
 				url: 'buscar_registro_reembolso.php',
 				dataType: 'json',
 				data: {
-					registro: registro
+					registro: registro,
+					data: dataRegistro
 				},
 				success: function(dados) {
 					if (!dados || !dados.sucesso) {
@@ -517,6 +531,12 @@
 		// Execute quando a página carregar
 		$(document).ready(function() {
 			inicializarTabelasDespesa();
+			$('#data_registro_reembolso').on('change input', limparDadosRegistroReembolso).on('keydown', function(event) {
+				if (event.key === 'Enter') {
+					event.preventDefault();
+					buscarRegistroReembolso();
+				}
+			});
 			$('#registro_reembolso').on('input', limparDadosRegistroReembolso).on('keydown', function(event) {
 				if (event.key === 'Enter') {
 					event.preventDefault();
@@ -772,20 +792,27 @@
 
 			<table id="tb_reembolso_cli" width="85%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
-					<td width=25% align="center">
+					<td width="15%" align="center">
+						<font color='gold' size='5'><b><i>Data</i></b></font>
+					</td>
+					<td width="20%" align="center">
 						<font color='gold' size='5'><b><i>Registro</i></b></font>
 					</td>
-					<td width=25% align="center">
+					<td width="25%" align="center">
 						<font color='gold' size='5'><b><i>Referente</i></b></font>
 					</td>
-					<td width=50% align="center">
+					<td width="40%" align="center">
 						<font color='gold' size='5'><b><i>Cliente</i></b></font>
 					</td>
 				</tr>
 				<tr>
-					<td width="25%" align="center">
+					<td width="15%" align="center">
+						<input type="date" id="data_registro_reembolso" name="data_registro_reembolso"
+							value="<?php echo date('Y-m-d'); ?>" class="campos" required>
+					</td>
+					<td width="20%" align="center">
 						<input type="text" id="registro_reembolso" name="registro_reembolso" size="8" maxlength="8"
-							class="campos" inputmode="numeric" autocomplete="off" autofocus>&nbsp;&nbsp;&nbsp;
+							class="campos" inputmode="numeric" autocomplete="off">&nbsp;&nbsp;&nbsp;
 						<input type="button" id="bt_buscar_registro_reembolso" value="Consultar"
 							onclick="buscarRegistroReembolso()">
 						<input type="hidden" id="registro_reembolso_validado" name="registro_reembolso_validado" value="">
@@ -814,7 +841,7 @@
 						</select>
 						<input type="hidden" id="lsref_remb_oculto" value="">
 					</td>
-					<td width="50%" align="center">
+					<td width="40%" align="center">
 						<input type="text" id="cliente" name="cliente" size="40" maxlength="50" class="campos"
 							onkeypress="fPassaAlfaNumerico('an')"
 							onkeyup='this.value=this.value.toUpperCase(); validnome(this)' readonly>
