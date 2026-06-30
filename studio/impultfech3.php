@@ -892,7 +892,7 @@ if ($PixCNPJ == '') {
 											<p>
 												<font class="fonte-rel">
 													<font size="1" class="fs-6">
-														<i>Pgto Carnê</i>
+														<i>Contr. Entrada</i>
 													</font>
 												</font>
 											</p>
@@ -926,7 +926,7 @@ if ($PixCNPJ == '') {
 											<p>
 												<font class="fonte-rel">
 													<font size="1" class="fs-6">
-														<i>Contr. Parcela</i>
+														<i>Pgto. Carnê</i>
 													</font>
 												</font>
 											</p>
