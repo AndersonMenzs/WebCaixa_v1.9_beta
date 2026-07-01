@@ -1,7 +1,7 @@
 studio/php_errors.log
 conexao.php
 studio/conexao.php
-install.php
+install.txt
 MANUAL_ESTOQUE.md
 PLANO_BLOQUEIO_CAIXA.md
 PLANO_ESTOQUE.md
@@ -10,5 +10,5 @@ README_MODIFICAOES.md
 README.md
 REDAME.md
 WebCaixa.session.sql
-
 _em_referencia
+minds
