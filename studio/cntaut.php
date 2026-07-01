@@ -176,8 +176,9 @@ ini_set('error_log', 'php_errors.log');
 				while ($tmp = mysqli_fetch_assoc($rs)) {
 
 					$d   = $tmp['numdoc'];
+					$r   = $tmp['reg'];
 					$temEstorno = !empty($tmp['estorno']) ? 1 : 0;
-					$groupKey = $d . "_" . $temEstorno;
+					$groupKey = $d . "_" . $r . "_" . $temEstorno;
 					$vlr = floatval($tmp['vlrec']);
 
 					if (!empty($tmp['estorno'])) {
@@ -205,8 +206,9 @@ ini_set('error_log', 'php_errors.log');
 
 			while ($ln = mysqli_fetch_assoc($rs)) {
 				$Doc = $ln['numdoc'];
+				$Reg = $ln['reg'];
 				$temEstorno = !empty($ln['estorno']) ? 1 : 0;
-				$groupKey = $Doc . "_" . $temEstorno;
+				$groupKey = $Doc . "_" . $Reg . "_" . $temEstorno;
 
 				if (!isset($docsByKey[$groupKey])) {
 					$docsByKey[$groupKey] = [];
@@ -217,19 +219,20 @@ ini_set('error_log', 'php_errors.log');
 				
 				// Detectar CNTP
 				if ($ln['siglarec'] == 'CNTP') {
-					if (!isset($docsCNTP[$Doc])) {
-						$docsCNTP[$Doc] = [];
+					$cntpKey = $Doc . "_" . $Reg;
+					if (!isset($docsCNTP[$cntpKey])) {
+						$docsCNTP[$cntpKey] = [];
 					}
-					$docsCNTP[$Doc][] = $ln;
+					$docsCNTP[$cntpKey][] = $ln;
 				}
 			}
 			
 			// Verificar quais CNTP têm múltiplas formas de pagamento
 			$docsCNTPMultiplas = [];
-			foreach ($docsCNTP as $Doc => $registros) {
+			foreach ($docsCNTP as $cntpKey => $registros) {
 				$formas = array_unique(array_column($registros, 'modpgto'));
 				if (count($formas) > 1) {
-					$docsCNTPMultiplas[$Doc] = true;
+					$docsCNTPMultiplas[$cntpKey] = true;
 				}
 			}
 
@@ -242,10 +245,8 @@ ini_set('error_log', 'php_errors.log');
 
 				$docsIndexPrinted[$groupKey] = 0;
 				
-				// Extrair o número do documento do groupKey
-				$docArray = explode("_", $groupKey);
-				$Doc = $docArray[0];
-				$temEstorno = $docArray[1];
+				$Doc = $allRows[0]['numdoc'];
+				$temEstorno = !empty($allRows[0]['estorno']) ? 1 : 0;
 
 				foreach ($allRows as $ln) {
 
