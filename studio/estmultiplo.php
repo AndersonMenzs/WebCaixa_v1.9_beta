@@ -34,7 +34,7 @@
 	$rsr  = mysqli_query($conec, $sqlr) or die("Erro de Banco de Dados #M1. Contate seu Administrador.");
 
 	// Consultando Registros Múltiplos
-	$sqlr = "select * from registro where reg >= $Aut and numdoc = '$NDoc' and datarec = '$dtComp' ";
+	$sqlr = "select * from registro where reg = $Aut and numdoc = '$NDoc' and datarec = '$dtComp' ";
 	$rsr  = mysqli_query($conec, $sqlr) or die("Erro de Banco de Dados #M2. Contate seu Administrador.");
 	$regsr = mysqli_num_rows($rsr);
 
@@ -53,12 +53,12 @@
 		mysqli_free_result($rsGr);
 
 		// Atualizando o Registro
-		$sqlAt = "update registro set estorno = 'x' where reg >= '$Aut' and numdoc = '$NDoc' and datarec = '$dtComp' and tiporec <> 'E' ";
+		$sqlAt = "update registro set estorno = 'x' where reg = '$Aut' and numdoc = '$NDoc' and datarec = '$dtComp' and tiporec <> 'E' ";
 		$rsAt  = mysqli_query($conec, $sqlAt) or die("Erro de Banco de Dados #M4. Contate seu Administrador.");
 		mysqli_free_result($rsAt);
 
 		// Consultando Registro Estornado
-		$sqlART = "select * from registro where reg >= '$Aut' and numdoc = '$NDoc' and datarec = '$dtComp' ";
+		$sqlART = "select * from registro where reg = '$Aut' and numdoc = '$NDoc' and datarec = '$dtComp' ";
 		$rsART  = mysqli_query($conec, $sqlART) or die("Erro de Banco de Dados #M5. Contate seu Administrador.");
 		$lnART  = mysqli_fetch_array($rsART);
 		$Tipo  = $lnART['tiporec'];
