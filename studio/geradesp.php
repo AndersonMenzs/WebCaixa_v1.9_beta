@@ -103,6 +103,70 @@
 			$lno  = mysqli_fetch_array($rso);
 			$Mat = $lno['mat'];
 
+			// Normalizando e validando o referente da Despesa DP no servidor
+			$tiposComIdentificacao = ['71', '07', '12', '43', '47'];
+			if ($TipoDesp === '1') {
+				$cod_TipoRef = str_pad(trim($cod_TipoRef), 2, '0', STR_PAD_LEFT);
+
+				$stmtTipoRef = mysqli_prepare(
+					$conec,
+					"SELECT cod_tiporef FROM tiporef WHERE cod_tiporef = ? LIMIT 1"
+				);
+
+				if (!$stmtTipoRef) {
+					die("Não foi possível validar o referente. Contate seu Administrador.");
+				}
+
+				mysqli_stmt_bind_param($stmtTipoRef, 's', $cod_TipoRef);
+				if (!mysqli_stmt_execute($stmtTipoRef)) {
+					mysqli_stmt_close($stmtTipoRef);
+					die("Não foi possível validar o referente. Contate seu Administrador.");
+				}
+
+				mysqli_stmt_store_result($stmtTipoRef);
+				$tipoRefValido = mysqli_stmt_num_rows($stmtTipoRef) === 1;
+				mysqli_stmt_close($stmtTipoRef);
+
+				if (!$tipoRefValido) {
+					die("Referente inválido. Contate seu Administrador.");
+				}
+			}
+
+			// Identificando a colaboradora pelo operador autenticado
+			$deveIdentificarColaboradora =
+				$TipoDesp === '1'
+				&& in_array($cod_TipoRef, $tiposComIdentificacao, true);
+			$nomeColaboradoraAutenticada = '';
+
+			if ($deveIdentificarColaboradora) {
+				$stmtPessoa = mysqli_prepare(
+					$conec,
+					"SELECT nome FROM cadfunc.pessoal WHERE mat = ? LIMIT 1"
+				);
+
+				if (!$stmtPessoa) {
+					die("Não foi possível identificar a colaboradora autenticada. Contate seu Administrador.");
+				}
+
+				mysqli_stmt_bind_param($stmtPessoa, 's', $user);
+				if (!mysqli_stmt_execute($stmtPessoa)) {
+					mysqli_stmt_close($stmtPessoa);
+					die("Não foi possível identificar a colaboradora autenticada. Contate seu Administrador.");
+				}
+
+				mysqli_stmt_store_result($stmtPessoa);
+				mysqli_stmt_bind_result($stmtPessoa, $nomeColaboradoraAutenticada);
+				$pessoaEncontrada =
+					mysqli_stmt_num_rows($stmtPessoa) === 1
+					&& mysqli_stmt_fetch($stmtPessoa);
+				mysqli_stmt_close($stmtPessoa);
+
+				$nomeColaboradoraAutenticada = trim((string) $nomeColaboradoraAutenticada);
+				if (!$pessoaEncontrada || $nomeColaboradoraAutenticada === '') {
+					die("Não foi possível identificar a colaboradora autenticada. Contate seu Administrador.");
+				}
+			}
+
 			// Gravando o Registro
 			$sqlr = "select * from registro order by datarec desc, reg desc";
 			$rsr  = mysqli_query($conec, $sqlr) or die("Não foi possível acessar os Dados");
@@ -275,10 +339,95 @@
 			}
 
 			// Condições para atribuir o número do documento correto
-			if ($TipoDesp == '1') {
+			if ($TipoDesp === '1') {
+				if (!mysqli_begin_transaction($conec)) {
+					die("Não foi possível iniciar a gravação da despesa.");
+				}
 
-				$sqlGr = "insert into registro values($Reg, '$UltDoc_dp', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '', '', '')";
-				$rsGr  = mysqli_query($conec, $sqlGr) or die("Não foi possível salvar os Dados");
+				$registroDespesaGravado = false;
+				try {
+					// despesa_dp usa InnoDB; gravamos primeiro para permitir rollback
+					if ($deveIdentificarColaboradora) {
+						$stmtIdentificacao = mysqli_prepare(
+							$conec,
+							"INSERT INTO despesa_dp
+								(numdoc, cod_tiporef, mat, nome_colab)
+							 VALUES (?, ?, ?, ?)"
+						);
+
+						if (!$stmtIdentificacao) {
+							throw new Exception("Não foi possível preparar a identificação da colaboradora.");
+						}
+
+						mysqli_stmt_bind_param(
+							$stmtIdentificacao,
+							'ssss',
+							$UltDoc_dp,
+							$cod_TipoRef,
+							$user,
+							$nomeColaboradoraAutenticada
+						);
+
+						if (!mysqli_stmt_execute($stmtIdentificacao)) {
+							mysqli_stmt_close($stmtIdentificacao);
+							throw new Exception("Não foi possível salvar a identificação da colaboradora.");
+						}
+
+						mysqli_stmt_close($stmtIdentificacao);
+					}
+
+					// registro usa MyISAM e não participa do rollback da transação
+					$sqlGr = "insert into registro values($Reg, '$UltDoc_dp', '$TipoRec', '$SubTipo', '$FPag', '0', '$dtRec', '$hora', '$Valor', '$Mat', '', '', '', '')";
+					if (!mysqli_query($conec, $sqlGr)) {
+						throw new Exception("Não foi possível salvar a despesa.");
+					}
+					$registroDespesaGravado = true;
+
+					if (!mysqli_commit($conec)) {
+						throw new Exception("Não foi possível confirmar a gravação da despesa.");
+					}
+				} catch (Throwable $erro) {
+					$compensacaoConcluida = true;
+
+					// Se o MyISAM já foi gravado, desfazemos exatamente a linha criada
+					if ($registroDespesaGravado) {
+						$stmtCompensacao = mysqli_prepare(
+							$conec,
+							"DELETE FROM registro
+							 WHERE reg = ?
+							   AND numdoc = ?
+							   AND datarec = ?
+							   AND tiporec = ?
+							   AND operador = ?
+							 LIMIT 1"
+						);
+
+						if (!$stmtCompensacao) {
+							$compensacaoConcluida = false;
+						} else {
+							mysqli_stmt_bind_param(
+								$stmtCompensacao,
+								'issss',
+								$Reg,
+								$UltDoc_dp,
+								$dtRec,
+								$TipoRec,
+								$Mat
+							);
+
+							$compensacaoConcluida =
+								mysqli_stmt_execute($stmtCompensacao)
+								&& mysqli_stmt_affected_rows($stmtCompensacao) === 1;
+							mysqli_stmt_close($stmtCompensacao);
+						}
+					}
+
+					mysqli_rollback($conec);
+					if (!$compensacaoConcluida) {
+						die("Falha crítica ao desfazer a despesa. Contate seu Administrador.");
+					}
+					die($erro->getMessage());
+				}
 			}
 
 			if ($TipoDesp == '2') {
