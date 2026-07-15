@@ -75,7 +75,6 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
     <?php
-
     // Importando os Dados do Formulário
     $Sis       = "S7";
     $Rot       = "S7R2.2.1";
@@ -107,6 +106,8 @@
 
     $VrPrest    = moedaParaFloat($_POST['txtvalor'] ?? 0);
     $VrPrestF   = number_format($VrPrest, 2, ',', '.');
+    $Chk_Parcial = isset($_POST['chk_parcial']) ? trim($_POST['chk_parcial']) : '';
+    $Chk_Pedido = isset($_POST['chk_pedido']) ? trim($_POST['chk_pedido']) : '';
     $PIni      = trim($_POST['txtparc_ini']);
     $PUlt      = trim($_POST['txtparc_ult']);
     $QtdeParc  = $PUlt - $PIni + 1;
@@ -166,7 +167,7 @@
     <?php
 
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
-        if (!$Quitacao) { ?>
+        if ($Chk_Pedido != '1') { ?>
         <form name="frmest" id="frmest" method="post" action="confcntparc.php" autocomplete="off">
             <input type="hidden" name="txtuser" value="<?php echo $lg_user; ?>">
             <input type="hidden" name="ref_std" value="<?php echo $ref_std; ?>">
@@ -175,6 +176,8 @@
             <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
             <input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
             <input type="hidden" name="txtvalor" value="<?php echo $VrPrest; ?>">
+            <input type="hidden" name="chk_parcial" value="<?php echo $Chk_Parcial; ?>">
+            <input type="hidden" name="chk_pedido" value="<?php echo $Chk_Pedido; ?>">
             <input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
             <input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
             <input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
@@ -189,6 +192,12 @@
             <input type="hidden" name="rdopt" value="NORMAL">
             <input type="hidden" name="pct_book" value="">
             <input type="hidden" name="ped_poster" value="">
+            <?php if ($Quitacao) { ?>
+                <input type="hidden" name="chk_quitacao" value="1">
+            <?php } ?>
+            <?php if ($TotalParcelasContrato !== '') { ?>
+                <input type="hidden" name="total_parcelas_contrato" value="<?php echo $TotalParcelasContrato; ?>">
+            <?php } ?>
         </form>
         <script>
             document.forms['frmest'].submit();
@@ -314,6 +323,8 @@
             <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
             <input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
             <input type="hidden" name="txtvalor" value="<?php echo $VrPrest; ?>">
+            <input type="hidden" name="chk_parcial" value="<?php echo $Chk_Parcial; ?>">
+            <input type="hidden" name="chk_pedido" value="<?php echo $Chk_Pedido; ?>">
             <input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
             <input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
             <input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
@@ -325,7 +336,9 @@
             <input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
             <input type="hidden" name="parcial" value="<?php echo $Parcial; ?>">
             <input type="hidden" name="parc_card_cred" value="<?php echo $Parc_card_cred; ?>">
-            <input type="hidden" name="chk_quitacao" value="1">
+            <?php if ($Quitacao) { ?>
+                <input type="hidden" name="chk_quitacao" value="1">
+            <?php } ?>
             <input type="hidden" name="total_parcelas_contrato" value="<?php echo $TotalParcelasContrato; ?>">
 
 

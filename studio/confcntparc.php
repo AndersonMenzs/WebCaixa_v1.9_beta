@@ -60,7 +60,6 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
-
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.2.1";
@@ -92,6 +91,8 @@
 
 	$VrPrest    = moedaParaFloat($_POST['txtvalor'] ?? 0);
 	$VrPrestF   = number_format($VrPrest, 2, ',', '.');
+	$Chk_Parcial = isset($_POST['chk_parcial']) ? trim($_POST['chk_parcial']) : '';
+	$Chk_Pedido = isset($_POST['chk_pedido']) ? trim($_POST['chk_pedido']) : '';
 	$PIni      = trim($_POST['txtparc_ini']);
 	$PUlt      = trim($_POST['txtparc_ult']);
 	$QtdeParc  = $PUlt - $PIni + 1;
@@ -371,6 +372,8 @@
 			<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 			<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 			<input type="hidden" name="vrprest" value="<?php echo $VrPrest; ?>">
+            <input type="hidden" name="chk_parcial" value="<?php echo $Chk_Parcial; ?>">
+            <input type="hidden" name="chk_pedido" value="<?php echo $Chk_Pedido; ?>">
 			<input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
 			<input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
 			<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">

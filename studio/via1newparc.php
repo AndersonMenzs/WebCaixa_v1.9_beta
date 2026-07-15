@@ -21,12 +21,6 @@ include "./valor_ext.php";
 <body background="../images/bg1.jpg" text="#FFFFFF">
 
 	<?php
-	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	var_dump($dados);
-	echo "</pre>";
-	exit();*/
-
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.2.1.2";

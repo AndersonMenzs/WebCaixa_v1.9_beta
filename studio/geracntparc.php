@@ -39,12 +39,6 @@ include 'dbselect.php';
 <body background="../images/bg1.jpg" text="#FFFFFF">
 
 	<?php
-	/*$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-	echo "<pre>";
-	var_dump($dados);
-	echo "</pre>";
-	exit();*/
-
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.2.1.1";
@@ -72,6 +66,8 @@ include 'dbselect.php';
 
 	$VrRec     = $txt1 + $txt2 + $txt3;
 	$VrPrest   = trim($_POST['vrprest'] ?? '');
+	$Chk_Parcial = isset($_POST['chk_parcial']) ? trim($_POST['chk_parcial']) : '';
+	$Chk_Pedido = isset($_POST['chk_pedido']) ? trim($_POST['chk_pedido']) : '';
 	$VrRecF    = number_format($VrRec, 2, ',', '.');
 	$QtdeParc  = (int) trim($_POST['qtdeparc'] ?? 0);
 	$Parc      = trim($_POST['vrprest'] ?? '');

@@ -331,28 +331,34 @@
 
 			<table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
-					<td width="15%" align="center">
+					<td width="12%" align="center">
 						<font color='gold' size='4'><b><i>Vlr. Prestação</i></b></font>
 					</td>
-					<td width="15%" align="center">
+					<td width="12%" align="center">
 						<font color='gold' size='4'><b><i>Vlr. Recebido</i></b></font>
 					</td>
-					<td width="10%" align="center">
+					<td width="7%" align="center">
 						<font color='gold' size='4'><b><i>Nº Prestação</i></b></font>
 					</td>
 					<td width="8%" align="center">
+						<font color='gold' size='4'><b><i>Restante Parcela?</i></b></font>
+					</td>
+					<td width="7%" align="center">
+						<font color='gold' size='4'><b><i>Pedido?</i></b></font>
+					</td>
+					<td width="7%" align="center">
 						<font color='gold' size='4'><b><i>Quitação?</i></b></font>
 					</td>
-					<td width="8%" align="center" id="colParcelasHeader" style="<?php echo $mostraParcelas ? '' : 'display:none;'; ?>">
+					<td width="7%" align="center" id="colParcelasHeader" style="<?php echo $mostraParcelas ? '' : 'display:none;'; ?>">
 						<font color='gold' size='4'><b><i><span id="labelQtdPrestacoes">Parcela(s)</span></i></b></font>
 					</td>
-					<td width="12%" align="center" id="colParcialHeader" style="<?php echo $mostraParcial ? '' : 'display:none;'; ?>">
+					<td width="10%" align="center" id="colParcialHeader" style="<?php echo $mostraParcial ? '' : 'display:none;'; ?>">
 						<font color='gold' size='4'><b><i><span id="labelParcial"><?php echo ($parcialC > 0) ? 'Parcial da Próxima' : 'Parcial'; ?></span></i></b></font>
 					</td>
 					<td width="20%" align="center">
 						<font color='gold' size='4'><b><i>Forma Pagamento</i></b></font>
 					</td>
-					<td width="15%" align="center">
+					<td width="10%" align="center">
 						<font color='gold' size='4'><b><i>Valor</i></b></font>
 					</td>
 				</tr>
@@ -368,6 +374,12 @@
 					<td rowspan="3" align="center">
 						<input type="text" name="txtparc" id="txtparc" size="4" maxlength="2" class="campos" onkeyup="validate(this)" onchange="validateParcelas(this)">
 						<input type="hidden" name="total_parcelas_contrato" id="total_parcelas_contrato" value="">
+					</td>
+					<td rowspan="3" align="center">
+						<input type="checkbox" name="chk_parcial" id="chk_parcial" value="1">
+					</td>
+					<td rowspan="3" align="center">
+						<input type="checkbox" name="chk_pedido" id="chk_pedido" value="1">
 					</td>
 					<td rowspan="3" align="center">
 						<input type="checkbox" name="chk_quitacao" id="chk_quitacao" value="1" onchange="toggleQuitacao(this)">
