@@ -91,7 +91,6 @@
 
 	$VrPrest    = moedaParaFloat($_POST['txtvalor'] ?? 0);
 	$VrPrestF   = number_format($VrPrest, 2, ',', '.');
-	$Chk_Parcial = isset($_POST['chk_parcial']) ? trim($_POST['chk_parcial']) : '';
 	$Chk_Pedido = isset($_POST['chk_pedido']) ? trim($_POST['chk_pedido']) : '';
 	$PIni      = trim($_POST['txtparc_ini']);
 	$PUlt      = trim($_POST['txtparc_ult']);
@@ -136,6 +135,7 @@
 
 	$Pedido = implode(", ", $ItensPedido);
 	$Quitacao = isset($_POST['chk_quitacao']) && $_POST['chk_quitacao'] == '1';
+	$TotalParcelasContrato = isset($_POST['total_parcelas_contrato']) && trim($_POST['total_parcelas_contrato']) !== '' ? trim($_POST['total_parcelas_contrato']) : $QtdeParc;
 	$ValorQuitacaoCents = moedaParaCentavos($_POST['txtvalor'] ?? 0) * (int) $QtdeParc;
 	$ValorPagamentosCents = moedaParaCentavos($_POST['txt1'] ?? 0) + moedaParaCentavos($_POST['txt2'] ?? 0) + moedaParaCentavos($_POST['txt3'] ?? 0);
 
@@ -285,12 +285,22 @@
 
 				<tr>
 					<td width="45%" align="right">
-						<font color='gold' size='5'><b><i>Total Cobrado </i></b></font>
+						<font color='gold' size='5'><b><i>Valor da Prestação </i></b></font>
 					</td>
 					<td width="55%" align="center">
 						<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $VrPrestFormF; ?></i></b></font>
 					</td>
 				</tr>
+					<?php if ($Quitacao) { ?>
+						<tr>
+							<td width="45%" align="right">
+								<font color='gold' size='5'><b><i>Quitação </i></b></font>
+							</td>
+							<td width="55%" align="center">
+								<font color='#FFFFFF' size='5'><b><i>Sim</i></b></font>
+							</td>
+						</tr>
+					<?php } ?>
 
 				<?php if ($ParcialF > 0) { ?>
 					<tr>
@@ -372,7 +382,6 @@
 			<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 			<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 			<input type="hidden" name="vrprest" value="<?php echo $VrPrest; ?>">
-            <input type="hidden" name="chk_parcial" value="<?php echo $Chk_Parcial; ?>">
             <input type="hidden" name="chk_pedido" value="<?php echo $Chk_Pedido; ?>">
 			<input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
 			<input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
@@ -390,9 +399,7 @@
 			<?php if (isset($_POST['chk_quitacao'])) { ?>
 				<input type="hidden" name="chk_quitacao" value="<?php echo trim($_POST['chk_quitacao']); ?>">
 			<?php } ?>
-			<?php if (isset($_POST['total_parcelas_contrato'])) { ?>
-				<input type="hidden" name="total_parcelas_contrato" value="<?php echo trim($_POST['total_parcelas_contrato']); ?>">
-			<?php } ?>
+				<input type="hidden" name="total_parcelas_contrato" value="<?php echo $TotalParcelasContrato; ?>">
 			<p>
 				<center>
 					<input id="ghost_click" type="submit" name="btenvia" value="Continuar">

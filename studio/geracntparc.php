@@ -66,7 +66,6 @@ include 'dbselect.php';
 
 	$VrRec     = $txt1 + $txt2 + $txt3;
 	$VrPrest   = trim($_POST['vrprest'] ?? '');
-	$Chk_Parcial = isset($_POST['chk_parcial']) ? trim($_POST['chk_parcial']) : '';
 	$Chk_Pedido = isset($_POST['chk_pedido']) ? trim($_POST['chk_pedido']) : '';
 	$VrRecF    = number_format($VrRec, 2, ',', '.');
 	$QtdeParc  = (int) trim($_POST['qtdeparc'] ?? 0);
@@ -80,6 +79,7 @@ include 'dbselect.php';
 	$Rdopt     = trim($_POST['rdopt'] ?? '');
 	$Pedido    = trim($_POST['pedido'] ?? '');
 	$Quitacao  = isset($_POST['chk_quitacao']) && $_POST['chk_quitacao'] == '1';
+	$TotalParcelasContrato = isset($_POST['total_parcelas_contrato']) && trim($_POST['total_parcelas_contrato']) !== '' ? (int) trim($_POST['total_parcelas_contrato']) : $QtdeParc;
 
 	function moedaParaFloat($valor) {
 		$valor = trim((string) $valor);
@@ -230,6 +230,32 @@ include 'dbselect.php';
 			$Reg++;
 			$RegOperacao = (int) $Reg;
 
+			// Garante a tabela complementar sem alterar a tabela registro.
+			$sqlMetaCreate = "CREATE TABLE IF NOT EXISTS registro_contrparc_meta (
+				id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+				reg_operacao INT NOT NULL,
+				numdoc CHAR(7) NOT NULL,
+				datarec DATE NOT NULL,
+				horarec CHAR(5) NOT NULL,
+				operador CHAR(8) NOT NULL,
+				mat_colaborador CHAR(8) NOT NULL,
+				parcela_ini INT NOT NULL,
+				parcela_ult INT NOT NULL,
+				qtdeparc INT NOT NULL,
+				parcial CHAR(1) NOT NULL DEFAULT 'N',
+				valor_parcial DECIMAL(8,2) NOT NULL DEFAULT 0.00,
+				quitacao CHAR(1) NOT NULL DEFAULT 'N',
+				dtcad DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				PRIMARY KEY (id),
+				UNIQUE KEY uk_registro_contrparc_meta_operacao (reg_operacao, numdoc, datarec),
+				KEY idx_registro_contrparc_meta_operacao (reg_operacao),
+				KEY idx_registro_contrparc_meta_numdoc (numdoc),
+				KEY idx_registro_contrparc_meta_datarec (datarec),
+				KEY idx_registro_contrparc_meta_colaborador (mat_colaborador),
+				KEY idx_registro_contrparc_meta_flags (parcial, quitacao)
+			) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci";
+			mysqli_query($conec, $sqlMetaCreate) or die("File geracntparc Error #META1. Contate seu Administrador.");
+
 			// Iniciar transação
 			mysqli_begin_transaction($conec);
 
@@ -278,6 +304,36 @@ include 'dbselect.php';
 				}
 				// Todas as parcelas e formas de pagamento pertencem à mesma operação.
 				$Reg = $RegOperacao;
+
+				$ParcialValorMeta = moedaParaFloat($Parcial);
+				$FlagParcialMeta = $ParcialValorMeta > 0 ? 'S' : 'N';
+				$FlagQuitacaoMeta = $Quitacao ? 'S' : 'N';
+				$RegMeta = (int) $RegOperacao;
+				$NDocMeta = mysqli_real_escape_string($conec, substr(trim($NDoc_a), 0, 7));
+				$DataRecMeta = mysqli_real_escape_string($conec, $dtRec);
+				$HoraRecMeta = mysqli_real_escape_string($conec, $hora);
+				$MatColaboradorMeta = mysqli_real_escape_string($conec, substr(trim($_POST['mat_vend'] ?? ''), 0, 8));
+				$OperadorMeta = mysqli_real_escape_string($conec, $user);
+				$ValorParcialMeta = number_format($ParcialValorMeta, 2, '.', '');
+				$ParcelaIniMeta = (int) $PIni;
+				$ParcelaUltMeta = (int) $PUlt;
+				$QtdeParcMeta = $TotalParcelasContrato > 0 ? (int) $TotalParcelasContrato : (int) $QtdeParc;
+
+				$sqlMetaInsert = "INSERT INTO registro_contrparc_meta
+				(reg_operacao, numdoc, datarec, horarec, mat_colaborador, operador, parcial, quitacao, valor_parcial, parcela_ini, parcela_ult, qtdeparc)
+				VALUES
+				($RegMeta, '$NDocMeta', '$DataRecMeta', '$HoraRecMeta', '$MatColaboradorMeta', '$OperadorMeta', '$FlagParcialMeta', '$FlagQuitacaoMeta', $ValorParcialMeta, $ParcelaIniMeta, $ParcelaUltMeta, $QtdeParcMeta)
+				ON DUPLICATE KEY UPDATE
+				horarec = VALUES(horarec),
+				mat_colaborador = VALUES(mat_colaborador),
+				operador = VALUES(operador),
+				parcial = VALUES(parcial),
+				quitacao = VALUES(quitacao),
+				valor_parcial = VALUES(valor_parcial),
+				parcela_ini = VALUES(parcela_ini),
+				parcela_ult = VALUES(parcela_ult),
+				qtdeparc = VALUES(qtdeparc)";
+				mysqli_query($conec, $sqlMetaInsert) or die("File geracntparc Error #META2. Contate seu Administrador.");
 
 				$RegFull = 10000 + $Reg;
 				$RegSp = substr($RegFull, 1, 4);

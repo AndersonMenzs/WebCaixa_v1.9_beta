@@ -106,7 +106,6 @@
 
     $VrPrest    = moedaParaFloat($_POST['txtvalor'] ?? 0);
     $VrPrestF   = number_format($VrPrest, 2, ',', '.');
-    $Chk_Parcial = isset($_POST['chk_parcial']) ? trim($_POST['chk_parcial']) : '';
     $Chk_Pedido = isset($_POST['chk_pedido']) ? trim($_POST['chk_pedido']) : '';
     $PIni      = trim($_POST['txtparc_ini']);
     $PUlt      = trim($_POST['txtparc_ult']);
@@ -124,7 +123,7 @@
     $Parc_card_cred = trim($_POST['parc_card_cred_1']) + trim($_POST['parc_card_cred_2']) + trim($_POST['parc_card_cred_3']);
     $ref_std = trim($_POST['ref_std']);
     $Quitacao = isset($_POST['chk_quitacao']) && $_POST['chk_quitacao'] == '1';
-    $TotalParcelasContrato = isset($_POST['total_parcelas_contrato']) ? trim($_POST['total_parcelas_contrato']) : '';
+    $TotalParcelasContrato = isset($_POST['total_parcelas_contrato']) && trim($_POST['total_parcelas_contrato']) !== '' ? trim($_POST['total_parcelas_contrato']) : $QtdeParc;
     $ValorQuitacaoCents = moedaParaCentavos($_POST['txtvalor'] ?? 0) * (int) $QtdeParc;
     $ValorRecebidoCents = moedaParaCentavos($_POST['vlr_recebido'] ?? 0);
     $ValorPagamentosCents = moedaParaCentavos($_POST['txt1'] ?? 0) + moedaParaCentavos($_POST['txt2'] ?? 0) + moedaParaCentavos($_POST['txt3'] ?? 0);
@@ -176,7 +175,6 @@
             <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
             <input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
             <input type="hidden" name="txtvalor" value="<?php echo $VrPrest; ?>">
-            <input type="hidden" name="chk_parcial" value="<?php echo $Chk_Parcial; ?>">
             <input type="hidden" name="chk_pedido" value="<?php echo $Chk_Pedido; ?>">
             <input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
             <input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
@@ -323,7 +321,6 @@
             <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
             <input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
             <input type="hidden" name="txtvalor" value="<?php echo $VrPrest; ?>">
-            <input type="hidden" name="chk_parcial" value="<?php echo $Chk_Parcial; ?>">
             <input type="hidden" name="chk_pedido" value="<?php echo $Chk_Pedido; ?>">
             <input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
             <input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
