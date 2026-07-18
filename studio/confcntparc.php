@@ -91,6 +91,8 @@
 
 	$VrPrest    = moedaParaFloat($_POST['txtvalor'] ?? 0);
 	$VrPrestF   = number_format($VrPrest, 2, ',', '.');
+	$CreditoCobrancaF = moedaParaFloat($_POST['credito_cobranca'] ?? 0);
+	$CreditoCobranca = number_format($CreditoCobrancaF, 2, ',', '.');
 	$Chk_Pedido = isset($_POST['chk_pedido']) ? trim($_POST['chk_pedido']) : '';
 	$PIni      = trim($_POST['txtparc_ini']);
 	$PUlt      = trim($_POST['txtparc_ult']);
@@ -137,6 +139,7 @@
 	$Quitacao = isset($_POST['chk_quitacao']) && $_POST['chk_quitacao'] == '1';
 	$TotalParcelasContrato = isset($_POST['total_parcelas_contrato']) && trim($_POST['total_parcelas_contrato']) !== '' ? trim($_POST['total_parcelas_contrato']) : $QtdeParc;
 	$ValorQuitacaoCents = moedaParaCentavos($_POST['txtvalor'] ?? 0) * (int) $QtdeParc;
+	$CreditoCobrancaCents = moedaParaCentavos($_POST['credito_cobranca'] ?? 0);
 	$ValorPagamentosCents = moedaParaCentavos($_POST['txt1'] ?? 0) + moedaParaCentavos($_POST['txt2'] ?? 0) + moedaParaCentavos($_POST['txt3'] ?? 0);
 
 	if ($Quitacao && $ParcialF > 0) {
@@ -146,10 +149,10 @@
 		exit;
 	}
 
-	if ($Quitacao && $ValorQuitacaoCents > 0 && $ValorPagamentosCents != $ValorQuitacaoCents) {
+	if ($Quitacao && $ValorQuitacaoCents > 0 && ($ValorPagamentosCents + $CreditoCobrancaCents) != $ValorQuitacaoCents) {
 		$SisRot = "S-7.2.2.1";
 		include "./rodape.php";
-		echo "<script>alert('Valor recebido incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
+		echo "<script>alert('Valor recebido + crédito cobrança incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
 		exit;
 	}
 
@@ -275,7 +278,7 @@
 						if ($QtdeParc > 1) { ?>
 					<tr>
 						<td width="45%" align="right">
-							<font color='gold' size='5'><b><i>Valor de Cada Parcela </i></b></font>
+							<font color='gold' size='5'><b><i>Valor Prestação </i></b></font>
 						</td>
 						<td width="55%" align="center">
 							<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $VrPrestF; ?></i></b></font>
@@ -285,12 +288,22 @@
 
 				<tr>
 					<td width="45%" align="right">
-						<font color='gold' size='5'><b><i>Valor da Prestação </i></b></font>
+						<font color='gold' size='5'><b><i>Valor Recebido </i></b></font>
 					</td>
 					<td width="55%" align="center">
 						<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $VrPrestFormF; ?></i></b></font>
 					</td>
 				</tr>
+					<?php if ($CreditoCobrancaF > 0) { ?>
+						<tr>
+							<td width="45%" align="right">
+								<font color='gold' size='5'><b><i>Crédito Cobrança </i></b></font>
+							</td>
+							<td width="55%" align="center">
+								<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $CreditoCobranca; ?></i></b></font>
+							</td>
+						</tr>
+					<?php } ?>
 					<?php if ($Quitacao) { ?>
 						<tr>
 							<td width="45%" align="right">
@@ -305,7 +318,7 @@
 				<?php if ($ParcialF > 0) { ?>
 					<tr>
 						<td width="45%" align="right">
-							<font color='gold' size='5'><b><i>Parcial </i></b></font>
+							<font color='gold' size='5'><b><i>Parcial Creditado </i></b></font>
 						</td>
 						<td width="55%" align="center">
 							<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $Parcial; ?></i></b></font>
@@ -382,6 +395,7 @@
 			<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 			<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 			<input type="hidden" name="vrprest" value="<?php echo $VrPrest; ?>">
+			<input type="hidden" name="credito_cobranca" value="<?php echo $CreditoCobrancaF; ?>">
             <input type="hidden" name="chk_pedido" value="<?php echo $Chk_Pedido; ?>">
 			<input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
 			<input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">

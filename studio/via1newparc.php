@@ -58,6 +58,7 @@ include "./valor_ext.php";
 	$VrRecF    = number_format($VrRec, 2, ',', '.');
 	$vlr_ext   = valorPorExtenso($VrRecF);
 	$VrPrest   = trim($_POST['vrprest']);
+	$CreditoCobranca = trim($_POST['credito_cobranca'] ?? '0');
 	$PIni = trim($_POST['txtparc_ini']);
 	$PUlt = trim($_POST['txtparc_ult']);
 	$QtdParcPag = trim($_POST['qtdeparc']);
@@ -237,6 +238,7 @@ include "./valor_ext.php";
 				'&QtdParcPag=<?php echo urlencode($QtdParcPag); ?>' +
 				'&VrPrest=<?php echo urlencode($VrPrest); ?>' +
 				'&VrRec=<?php echo urlencode($VrRec); ?>' +
+				'&CreditoCobranca=<?php echo urlencode($CreditoCobranca); ?>' +
 				'&FmRec=<?php echo urlencode($FmRec_a); ?>' +
 				'&data=<?php echo urlencode($dtRec); ?>' +
 				'&Vendedora=<?php echo urlencode($Vendedora); ?>' +

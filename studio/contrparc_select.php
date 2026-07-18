@@ -106,6 +106,7 @@
 
     $VrPrest    = moedaParaFloat($_POST['txtvalor'] ?? 0);
     $VrPrestF   = number_format($VrPrest, 2, ',', '.');
+    $CreditoCobranca = moedaParaFloat($_POST['credito_cobranca'] ?? 0);
     $Chk_Pedido = isset($_POST['chk_pedido']) ? trim($_POST['chk_pedido']) : '';
     $PIni      = trim($_POST['txtparc_ini']);
     $PUlt      = trim($_POST['txtparc_ult']);
@@ -126,6 +127,7 @@
     $TotalParcelasContrato = isset($_POST['total_parcelas_contrato']) && trim($_POST['total_parcelas_contrato']) !== '' ? trim($_POST['total_parcelas_contrato']) : $QtdeParc;
     $ValorQuitacaoCents = moedaParaCentavos($_POST['txtvalor'] ?? 0) * (int) $QtdeParc;
     $ValorRecebidoCents = moedaParaCentavos($_POST['vlr_recebido'] ?? 0);
+    $CreditoCobrancaCents = moedaParaCentavos($_POST['credito_cobranca'] ?? 0);
     $ValorPagamentosCents = moedaParaCentavos($_POST['txt1'] ?? 0) + moedaParaCentavos($_POST['txt2'] ?? 0) + moedaParaCentavos($_POST['txt3'] ?? 0);
 
     if ($Quitacao && $Parcial > 0) {
@@ -135,10 +137,10 @@
         exit;
     }
 
-    if ($Quitacao && $ValorQuitacaoCents > 0 && ($ValorRecebidoCents != $ValorQuitacaoCents || $ValorPagamentosCents != $ValorQuitacaoCents)) {
+    if ($Quitacao && $ValorQuitacaoCents > 0 && (($ValorRecebidoCents + $CreditoCobrancaCents) != $ValorQuitacaoCents || $ValorPagamentosCents != $ValorRecebidoCents)) {
         $SisRot = "S-7.1";
         include "./rodape.php";
-        echo "<script>alert('Valor recebido incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
+        echo "<script>alert('Valor recebido + crédito cobrança incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
         exit;
     }
 
@@ -150,7 +152,7 @@
     <table width='100%' border='0' cellpadding='0' cellspacing='0'>
         <tr>
             <td width='9%'>
-                <a href="servrec.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
+                <a href="contrparc_tipo.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
             </td>
             <td width='82%' align='center'>
                 <font color="gold" size="6"><b>
@@ -158,7 +160,7 @@
                     </b></font><br><br><br>
             </td>
             <td width='9%'>
-                <a href="servrec.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+                <a href="contrparc_tipo.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
             </td>
         </tr>
     </table>
@@ -175,6 +177,7 @@
             <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
             <input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
             <input type="hidden" name="txtvalor" value="<?php echo $VrPrest; ?>">
+            <input type="hidden" name="credito_cobranca" value="<?php echo $CreditoCobranca; ?>">
             <input type="hidden" name="chk_pedido" value="<?php echo $Chk_Pedido; ?>">
             <input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
             <input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
@@ -321,6 +324,7 @@
             <input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
             <input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
             <input type="hidden" name="txtvalor" value="<?php echo $VrPrest; ?>">
+            <input type="hidden" name="credito_cobranca" value="<?php echo $CreditoCobranca; ?>">
             <input type="hidden" name="chk_pedido" value="<?php echo $Chk_Pedido; ?>">
             <input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
             <input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">

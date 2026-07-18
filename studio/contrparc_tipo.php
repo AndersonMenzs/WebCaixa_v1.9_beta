@@ -38,12 +38,34 @@
 		}
 
 		/* Padroniza o tamanho do checkbox para ficar do tamanho do campo de texto */
-		input[type="checkbox"] {
-			width: 1.5em;
-			height: 1.5em;
-			vertical-align: middle;
-		}
-	</style>
+			input[type="checkbox"] {
+				width: 1.5em;
+				height: 1.5em;
+				vertical-align: middle;
+			}
+
+			.contrparc-pagamento {
+				table-layout: fixed;
+			}
+
+			.contrparc-pagamento td {
+				padding: 6px 4px;
+				overflow-wrap: anywhere;
+			}
+
+			.contrparc-pagamento select {
+				max-width: 100%;
+			}
+
+			.contrparc-pagamento input[type="text"] {
+				box-sizing: border-box;
+				max-width: 64px;
+			}
+
+			.contrparc-pagamento #txtparc {
+				max-width: 36px;
+			}
+		</style>
 
 	<script>
 		function putFocus(formInst, elementInst) {
@@ -188,9 +210,12 @@
 	// Converter para centavos
 	$valor_str = str_replace(',', '.', str_replace('.', '', $_POST['txtvalor'] ?? '0'));
 	$vlr_recebido_str = str_replace(',', '.', str_replace('.', '', $_POST['vlr_recebido'] ?? '0'));
+	$credito_cobranca_str = str_replace(',', '.', str_replace('.', '', $_POST['credito_cobranca'] ?? '0'));
 
 	$valC = intval(round(floatval($valor_str) * 100));
 	$recC = intval(round(floatval($vlr_recebido_str) * 100));
+	$creditoC = intval(round(floatval($credito_cobranca_str) * 100));
+	$totalCalcC = $recC + $creditoC;
 	$txtparc = intval($_POST['txtparc'] ?? 0);
 
 	if ($txtparc > 12) {
@@ -198,10 +223,10 @@
 	}
 
 	// Lógica de cálculo das parcelas
-	$parcelasPlenas = $valC > 0 ? intdiv($recC, $valC) : 0;
-	$parcialC = $recC - ($parcelasPlenas * $valC);
+	$parcelasPlenas = $valC > 0 ? intdiv($totalCalcC, $valC) : 0;
+	$parcialC = $totalCalcC - ($parcelasPlenas * $valC);
 	$PIni = $txtparc;
-	if ($valC > 0 && $recC > 0 && $recC < $valC) {
+	if ($valC > 0 && $totalCalcC > 0 && $totalCalcC < $valC) {
 		$PUlt = $txtparc;
 	} else {
 		$PUlt = $parcelasPlenas > 0 ? ($txtparc + $parcelasPlenas - 1) : ($txtparc - 1);
@@ -214,7 +239,7 @@
 	$mostraParcelas = ($txtparc > 0);
 	$labelParcialInicial = 'Parcial';
 	if ($mostraParcial) {
-		$labelParcialInicial = ($valC > 0 && $recC > 0 && $recC < $valC)
+		$labelParcialInicial = ($valC > 0 && $totalCalcC > 0 && $totalCalcC < $valC)
 			? 'Parcial da ' . $txtparc . 'ª Prestação'
 			: 'Parcial da ' . $nextParc . 'ª Prestação';
 	}
@@ -227,7 +252,7 @@
 	<table width='100%' border='0' cellpadding='0' cellspacing='0'>
 		<tr>
 			<td width='9%'>
-				<a href="contrparc.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
+				<a href="contrparc_tipo.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
 			</td>
 			<td width='82%' align='center'>
 				<font color="gold" size="6"><b>
@@ -235,7 +260,7 @@
 					</b></font><br><br><br>
 			</td>
 			<td width='9%'>
-				<a href="contrparc.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+				<a href="contrparc_tipo.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
 			</td>
 		</tr>
 	</table>
@@ -243,18 +268,18 @@
 	<?php
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
 		<form name="parcela" method="post" action="contrparc_select.php" onsubmit="return checkdata()" autocomplete="off">
-			<table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
+			<table width="95%" border="5" cellpadding="6" cellspacing="0" align="center" class="contrparc-pagamento">
 				<tr>
-					<td align="center">
+					<td width="10%" align="center">
 						<font color='gold' size='5'><b><i>Ref. Estúdio</i></b></font>
 					</td>
-					<td align="center">
+					<td width="10%" align="center">
 						<font color='gold' size='5'><b><i>Contrato</i></b></font>
 					</td>
-					<td align="center">
+					<td width="40%" align="center">
 						<font color='gold' size='5'><b><i>Colaboradora</i></b></font>
 					</td>
-					<td align="center">
+					<td width="40%" align="center">
 						<font color='gold' size='5'><b><i>Cliente</i></b></font>
 					</td>
 				</tr>
@@ -280,13 +305,16 @@
 			</table>
 			<br>
 
-			<table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
+			<table width="100%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
-					<td width="12%" align="center">
+					<td width="9%" align="center">
 						<font color='gold' size='4'><b><i>Vlr. Prestação</i></b></font>
 					</td>
-					<td width="12%" align="center">
+					<td width="9%" align="center">
 						<font color='gold' size='4'><b><i>Vlr. Recebido</i></b></font>
+					</td>
+					<td width="9%" align="center">
+						<font color='gold' size='4'><b><i>Créd. Cobrança</i></b></font>
 					</td>
 					<td width="7%" align="center">
 						<font color='gold' size='4'><b><i>Nº Prestação</i></b></font>
@@ -320,7 +348,11 @@
 						<input type="text" name="vlr_recebido" id="vlr_recebido" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'vlr_recebido', event); validate(this)">
 					</td>
 					<td rowspan="3" align="center">
-						<input type="text" name="txtparc" id="txtparc" size="4" maxlength="2" class="campos" onkeyup="validate(this)" onchange="validateParcelas(this)">
+						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
+						<input type="text" name="credito_cobranca" id="credito_cobranca" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'credito_cobranca', event); validate(this)">
+					</td>
+					<td rowspan="3" align="center">
+						<input type="text" name="txtparc" id="txtparc" size="1" maxlength="2" class="campos" onkeyup="validate(this)" onchange="validateParcelas(this)">
 							<input type="hidden" name="total_parcelas_contrato" id="total_parcelas_contrato" value="<?php echo $totalParcelasContrato; ?>">
 					</td>
 					<td rowspan="3" align="center">
@@ -549,10 +581,12 @@
 		function atualizaParcelas() {
 			var valParcelaCents = parseCurrencyToCents(document.getElementById('txtvalor').value);
 			var recebidoCents = parseCurrencyToCents(document.getElementById('vlr_recebido').value);
+			var creditoCobrancaCents = parseCurrencyToCents((document.getElementById('credito_cobranca') || {}).value || '');
+			var totalCalculoCents = recebidoCents + creditoCobrancaCents;
 			var inicioParc = parseInt((document.getElementById('txtparc').value || '0'), 10) || 0;
 			setParcelasColumnVisible(inicioParc > 0);
 
-			if (valParcelaCents <= 0 || recebidoCents <= 0 || inicioParc <= 0) {
+			if (valParcelaCents <= 0 || totalCalculoCents <= 0 || inicioParc <= 0) {
 				document.getElementById('PIni').textContent = inicioParc > 0 ? inicioParc : '';
 				document.getElementById('PUlt').textContent = '';
 				document.getElementById('Psep').style.display = 'none';
@@ -571,8 +605,8 @@
 				return;
 			}
 
-			var parcelasPlenas = Math.floor(recebidoCents / valParcelaCents);
-			var parcialCents = recebidoCents - (parcelasPlenas * valParcelaCents);
+			var parcelasPlenas = Math.floor(totalCalculoCents / valParcelaCents);
+			var parcialCents = totalCalculoCents - (parcelasPlenas * valParcelaCents);
 
 			var pIni = inicioParc;
 			var pUlt = parcelasPlenas > 0 ? (inicioParc + parcelasPlenas - 1) : inicioParc;
@@ -631,7 +665,7 @@
 
 		// Event listeners
 		document.addEventListener('DOMContentLoaded', function() {
-			['txtvalor', 'vlr_recebido', 'txtparc'].forEach(function(id) {
+			['txtvalor', 'vlr_recebido', 'credito_cobranca', 'txtparc'].forEach(function(id) {
 				var el = document.getElementById(id);
 				if (el) {
 					el.addEventListener('input', atualizaParcelas);

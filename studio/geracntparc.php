@@ -66,6 +66,7 @@ include 'dbselect.php';
 
 	$VrRec     = $txt1 + $txt2 + $txt3;
 	$VrPrest   = trim($_POST['vrprest'] ?? '');
+	$CreditoCobranca = moedaParaFloat($_POST['credito_cobranca'] ?? 0);
 	$Chk_Parcial = isset($_POST['chk_parcial']) ? trim($_POST['chk_parcial']) : '';
 	$Chk_Pedido = isset($_POST['chk_pedido']) ? trim($_POST['chk_pedido']) : '';
 	$VrRecF    = number_format($VrRec, 2, ',', '.');
@@ -95,7 +96,14 @@ include 'dbselect.php';
 		return (int) round(moedaParaFloat($valor) * 100);
 	}
 
-	if ($Quitacao && moedaParaFloat($Parcial) > 0) {
+	$ValorParcial = moedaParaFloat($Parcial);
+	$FlagPedido = ($Chk_Pedido == '1' || $Pedido !== '') ? 'S' : 'N';
+	$FlagParcial = ($ValorParcial > 0) ? 'S' : 'N';
+	$FlagQuitacao = $Quitacao ? 'S' : 'N';
+	$ValorCalculoParcial = $VrRec + $CreditoCobranca;
+	$ParcelaParcial = ($FlagParcial == 'S' && $ValorCalculoParcial >= moedaParaFloat($VrPrest)) ? ($PUlt + 1) : $PIni;
+
+	if ($Quitacao && $ValorParcial > 0) {
 		$SisRot = "S-7.2.2.1.1";
 		include "./rodape.php";
 		echo "<script>alert('Quitação não pode conter parcial. Ajuste o valor recebido.'); window.history.back();</script>";
@@ -105,11 +113,12 @@ include 'dbselect.php';
 
 	$ValorQuitacaoCents = moedaParaCentavos($VrPrest) * (int) $QtdeParc;
 	$ValorRecebidoCents = (int) round($VrRec * 100);
+	$CreditoCobrancaCents = (int) round($CreditoCobranca * 100);
 
-	if ($Quitacao && $ValorQuitacaoCents > 0 && $ValorRecebidoCents != $ValorQuitacaoCents) {
+	if ($Quitacao && $ValorQuitacaoCents > 0 && ($ValorRecebidoCents + $CreditoCobrancaCents) != $ValorQuitacaoCents) {
 		$SisRot = "S-7.2.2.1.1";
 		include "./rodape.php";
-		echo "<script>alert('Valor recebido incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
+		echo "<script>alert('Valor recebido + crédito cobrança incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
 		mysqli_close($conec);
 		exit;
 	}
@@ -315,6 +324,25 @@ include 'dbselect.php';
 					}
 				}
 
+				if ($FlagPedido == 'S' || $FlagParcial == 'S' || $FlagQuitacao == 'S') {
+					$NumDocParcial = mysqli_real_escape_string($conec, substr($NDoc, 0, 15));
+					$ParcelaParcialSql = mysqli_real_escape_string($conec, substr((string) $ParcelaParcial, 0, 2));
+					$PedidoParcial = mysqli_real_escape_string($conec, $FlagPedido);
+					$ParcialFlag = mysqli_real_escape_string($conec, $FlagParcial);
+					$QuitacaoFlag = mysqli_real_escape_string($conec, $FlagQuitacao);
+					$ValorParcialSql = number_format($ValorParcial, 2, '.', '');
+					$DtParcial = mysqli_real_escape_string($conec, $dtRec);
+					$MatParcial = mysqli_real_escape_string($conec, substr($Mat_Vend, 0, 8));
+					$ColabParcial = mysqli_real_escape_string($conec, substr($Vendedora_full, 0, 1000));
+
+					$sqlParcial = "INSERT INTO registro_parcial
+						(numdoc, parcela, pedido, parcial, quitacao, valor, dt_parcial, mat, colab)
+						VALUES
+						('$NumDocParcial', '$ParcelaParcialSql', '$PedidoParcial', '$ParcialFlag', '$QuitacaoFlag',
+						$ValorParcialSql, '$DtParcial', '$MatParcial', '$ColabParcial')";
+					mysqli_query($conec, $sqlParcial) or die("File geracntparc Error #5.1. Contate seu Administrador.");
+				}
+
 				// Commit da transação ANTES de gravar os spools
 				mysqli_commit($conec);
 
@@ -383,6 +411,7 @@ include 'dbselect.php';
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 				<input type="hidden" name="vrprest" value="<?php echo $VrPrest; ?>">
 				<input type="hidden" name="vrrec" value="<?php echo $VrRec; ?>">
+				<input type="hidden" name="credito_cobranca" value="<?php echo $CreditoCobranca; ?>">
 				<input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
 				<input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
 				<input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
