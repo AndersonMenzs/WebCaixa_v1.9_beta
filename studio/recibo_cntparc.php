@@ -46,8 +46,9 @@ $VrParcialF     = number_format($VrParcial, 2, ",", ".");
 $vlr_ext   = trim($_GET['vlr_ext']);
 $PIni = trim($_GET['PIni']);
 $PUlt = trim($_GET['PUlt']);
-$ValorCalculoParcial = (float) $VrRec + (float) $CreditoCobranca;
+$ValorCalculoParcial = (float) $VrRec;
 $ParcelaParcialRecibo = ((float) $VrParcial > 0 && $ValorCalculoParcial >= (float) $VrPrest) ? ((int) $PUlt + 1) : (int) $PIni;
+$ExibeParcelaIntegral = !((float) $VrParcial > 0 && (float) $VrRec < (float) $VrPrest);
 $Parc_Card_Cred = "X" . trim($_GET['parc_card_cred']);
 
 $Rdopt = trim($_GET['rdopt'] ?? '');
@@ -359,14 +360,18 @@ include "./dbselect.php";
                             <?php
                             $pini = (int)$PIni;
                             $pult = (int)$PUlt;
-                            if ($pult >= $pini && $pini > 0) {
-                                $arr = [];
-                                for ($i = $pini; $i <= $pult; $i++) {
-                                    $arr[] = $i . "ª";
+                            if ($ExibeParcelaIntegral) {
+                                if ($pult >= $pini && $pini > 0) {
+                                    $arr = [];
+                                    for ($i = $pini; $i <= $pult; $i++) {
+                                        $arr[] = $i . "ª";
+                                    }
+                                    echo implode(', ', $arr);
+                                } else {
+                                    echo $PIni;
                                 }
-                                echo implode(', ', $arr);
                             } else {
-                                echo $PIni;
+                                echo "---";
                             }
                             ?></font>
                     </td>
@@ -766,14 +771,18 @@ include "./dbselect.php";
                             <?php
                             $pini = (int)$PIni;
                             $pult = (int)$PUlt;
-                            if ($pult >= $pini && $pini > 0) {
-                                $arr = [];
-                                for ($i = $pini; $i <= $pult; $i++) {
-                                    $arr[] = $i . "ª";
+                            if ($ExibeParcelaIntegral) {
+                                if ($pult >= $pini && $pini > 0) {
+                                    $arr = [];
+                                    for ($i = $pini; $i <= $pult; $i++) {
+                                        $arr[] = $i . "ª";
+                                    }
+                                    echo implode(', ', $arr);
+                                } else {
+                                    echo $PIni;
                                 }
-                                echo implode(', ', $arr);
                             } else {
-                                echo $PIni;
+                                echo "---";
                             }
                             ?></font>
                     </td>

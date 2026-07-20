@@ -99,14 +99,14 @@
 	$QtdeParc  = $PUlt - $PIni + 1;
 	$ParcialF   = moedaParaFloat($_POST['parcial'] ?? 0);
 	$Parcial  = number_format($ParcialF, 2, ',', '.');
-	$VrPrestForm  = $VrPrest * $QtdeParc;
-	$VrPrestFormF  = number_format($VrPrestForm, 2, ',', '.');
 	$FPag_1      = trim($_POST['lsPr1']);
 	$FPag_2      = trim($_POST['lsPr2']);
 	$FPag_3      = trim($_POST['lsPr3']);
 	$txt1 = moedaParaFloat($_POST['txt1'] ?? 0);
 	$txt2 = moedaParaFloat($_POST['txt2'] ?? 0);
 	$txt3 = moedaParaFloat($_POST['txt3'] ?? 0);
+	$VrRecebido = $txt1 + $txt2 + $txt3;
+	$VrRecebidoF = number_format($VrRecebido, 2, ',', '.');
 	$Parc_card_cred = trim($_POST['parc_card_cred']);;
 
 	$ref_std = trim($_POST['ref_std']);
@@ -139,7 +139,6 @@
 	$Quitacao = isset($_POST['chk_quitacao']) && $_POST['chk_quitacao'] == '1';
 	$TotalParcelasContrato = isset($_POST['total_parcelas_contrato']) && trim($_POST['total_parcelas_contrato']) !== '' ? trim($_POST['total_parcelas_contrato']) : $QtdeParc;
 	$ValorQuitacaoCents = moedaParaCentavos($_POST['txtvalor'] ?? 0) * (int) $QtdeParc;
-	$CreditoCobrancaCents = moedaParaCentavos($_POST['credito_cobranca'] ?? 0);
 	$ValorPagamentosCents = moedaParaCentavos($_POST['txt1'] ?? 0) + moedaParaCentavos($_POST['txt2'] ?? 0) + moedaParaCentavos($_POST['txt3'] ?? 0);
 
 	if ($Quitacao && $ParcialF > 0) {
@@ -149,10 +148,10 @@
 		exit;
 	}
 
-	if ($Quitacao && $ValorQuitacaoCents > 0 && ($ValorPagamentosCents + $CreditoCobrancaCents) != $ValorQuitacaoCents) {
+	if ($Quitacao && $ValorQuitacaoCents > 0 && $ValorPagamentosCents != $ValorQuitacaoCents) {
 		$SisRot = "S-7.2.2.1";
 		include "./rodape.php";
-		echo "<script>alert('Valor recebido + crédito cobrança incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
+		echo "<script>alert('Valor recebido incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
 		exit;
 	}
 
@@ -291,7 +290,7 @@
 						<font color='gold' size='5'><b><i>Valor Recebido </i></b></font>
 					</td>
 					<td width="55%" align="center">
-						<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $VrPrestFormF; ?></i></b></font>
+							<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $VrRecebidoF; ?></i></b></font>
 					</td>
 				</tr>
 					<?php if ($CreditoCobrancaF > 0) { ?>

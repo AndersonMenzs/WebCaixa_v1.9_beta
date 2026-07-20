@@ -215,7 +215,7 @@
 	$valC = intval(round(floatval($valor_str) * 100));
 	$recC = intval(round(floatval($vlr_recebido_str) * 100));
 	$creditoC = intval(round(floatval($credito_cobranca_str) * 100));
-	$totalCalcC = $recC + $creditoC;
+	$totalCalcC = $recC;
 	$txtparc = intval($_POST['txtparc'] ?? 0);
 
 	if ($txtparc > 12) {
@@ -581,8 +581,7 @@
 		function atualizaParcelas() {
 			var valParcelaCents = parseCurrencyToCents(document.getElementById('txtvalor').value);
 			var recebidoCents = parseCurrencyToCents(document.getElementById('vlr_recebido').value);
-			var creditoCobrancaCents = parseCurrencyToCents((document.getElementById('credito_cobranca') || {}).value || '');
-			var totalCalculoCents = recebidoCents + creditoCobrancaCents;
+			var totalCalculoCents = recebidoCents;
 			var inicioParc = parseInt((document.getElementById('txtparc').value || '0'), 10) || 0;
 			setParcelasColumnVisible(inicioParc > 0);
 

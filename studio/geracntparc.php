@@ -100,7 +100,7 @@ include 'dbselect.php';
 	$FlagPedido = ($Chk_Pedido == '1' || $Pedido !== '') ? 'S' : 'N';
 	$FlagParcial = ($ValorParcial > 0) ? 'S' : 'N';
 	$FlagQuitacao = $Quitacao ? 'S' : 'N';
-	$ValorCalculoParcial = $VrRec + $CreditoCobranca;
+	$ValorCalculoParcial = $VrRec;
 	$ParcelaParcial = ($FlagParcial == 'S' && $ValorCalculoParcial >= moedaParaFloat($VrPrest)) ? ($PUlt + 1) : $PIni;
 
 	if ($Quitacao && $ValorParcial > 0) {
@@ -113,12 +113,11 @@ include 'dbselect.php';
 
 	$ValorQuitacaoCents = moedaParaCentavos($VrPrest) * (int) $QtdeParc;
 	$ValorRecebidoCents = (int) round($VrRec * 100);
-	$CreditoCobrancaCents = (int) round($CreditoCobranca * 100);
 
-	if ($Quitacao && $ValorQuitacaoCents > 0 && ($ValorRecebidoCents + $CreditoCobrancaCents) != $ValorQuitacaoCents) {
+	if ($Quitacao && $ValorQuitacaoCents > 0 && $ValorRecebidoCents != $ValorQuitacaoCents) {
 		$SisRot = "S-7.2.2.1.1";
 		include "./rodape.php";
-		echo "<script>alert('Valor recebido + crédito cobrança incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
+		echo "<script>alert('Valor recebido incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
 		mysqli_close($conec);
 		exit;
 	}
@@ -223,8 +222,19 @@ include 'dbselect.php';
 				$totalPagamentos += $p['valor'];
 			}
 
-			// 2. Calcular valor de cada parcela
-			$valorParcela = $valorTotal / $quantidadeParcelas;
+			// 2. Montar os lançamentos por parcela, separando a sobra como parcial da próxima.
+			$valorPrestacao = moedaParaFloat($VrPrest);
+			$lancamentosParcelas = [];
+			if ($ValorParcial > 0 && $valorTotal < $valorPrestacao) {
+				$lancamentosParcelas[] = ['parcela' => $PIni, 'valor' => $valorTotal];
+			} else {
+				for ($parcela = $PIni; $parcela <= $PUlt; $parcela++) {
+					$lancamentosParcelas[] = ['parcela' => $parcela, 'valor' => $valorPrestacao];
+				}
+				if ($ValorParcial > 0) {
+					$lancamentosParcelas[] = ['parcela' => $ParcelaParcial, 'valor' => $ValorParcial];
+				}
+			}
 
 			// 3. Calcular percentual de cada forma de pagamento
 			$percentuais = [];
@@ -234,7 +244,7 @@ include 'dbselect.php';
 
 			// 4. Inserir os registros (sem prepared statements para manter 100% estrutural)
 			$totalInserido = 0;
-			$parcelaFinal = $parcelaInicial + $quantidadeParcelas - 1;
+			$parcelaFinal = !empty($lancamentosParcelas) ? (int) end($lancamentosParcelas)['parcela'] : ($parcelaInicial + $quantidadeParcelas - 1);
 			$contadorRegistro = 1;
 			$Reg++;
 			$RegOperacao = (int) $Reg;
@@ -243,12 +253,14 @@ include 'dbselect.php';
 			mysqli_begin_transaction($conec);
 
 			try {
-				for ($parcela = $parcelaInicial; $parcela <= $parcelaFinal; $parcela++) {
+				foreach ($lancamentosParcelas as $lancamentoParcela) {
+					$parcela = (int) $lancamentoParcela['parcela'];
+					$valorLancamentoParcela = (float) $lancamentoParcela['valor'];
 
 					foreach ($pagamentos as $index => $pagamento) {
 
 						// Calcula o valor rateado
-						$valorRateado = round($valorParcela * $percentuais[$pagamento['modpgto']], 2);
+						$valorRateado = round($valorLancamentoParcela * $percentuais[$pagamento['modpgto']], 2);
 
 						// Se for o último registro, ajusta para fechar o total
 						if ($parcela == $parcelaFinal && $index == count($pagamentos) - 1) {

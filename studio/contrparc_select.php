@@ -127,7 +127,6 @@
     $TotalParcelasContrato = isset($_POST['total_parcelas_contrato']) && trim($_POST['total_parcelas_contrato']) !== '' ? trim($_POST['total_parcelas_contrato']) : $QtdeParc;
     $ValorQuitacaoCents = moedaParaCentavos($_POST['txtvalor'] ?? 0) * (int) $QtdeParc;
     $ValorRecebidoCents = moedaParaCentavos($_POST['vlr_recebido'] ?? 0);
-    $CreditoCobrancaCents = moedaParaCentavos($_POST['credito_cobranca'] ?? 0);
     $ValorPagamentosCents = moedaParaCentavos($_POST['txt1'] ?? 0) + moedaParaCentavos($_POST['txt2'] ?? 0) + moedaParaCentavos($_POST['txt3'] ?? 0);
 
     if ($Quitacao && $Parcial > 0) {
@@ -137,10 +136,10 @@
         exit;
     }
 
-    if ($Quitacao && $ValorQuitacaoCents > 0 && (($ValorRecebidoCents + $CreditoCobrancaCents) != $ValorQuitacaoCents || $ValorPagamentosCents != $ValorRecebidoCents)) {
+    if ($Quitacao && $ValorQuitacaoCents > 0 && ($ValorRecebidoCents != $ValorQuitacaoCents || $ValorPagamentosCents != $ValorRecebidoCents)) {
         $SisRot = "S-7.1";
         include "./rodape.php";
-        echo "<script>alert('Valor recebido + crédito cobrança incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
+        echo "<script>alert('Valor recebido incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
         exit;
     }
 
