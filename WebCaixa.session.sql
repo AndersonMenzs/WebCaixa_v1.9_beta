@@ -25,3 +25,7 @@ INSERT INTO formapag (codpag, modpag, siglapag) VALUES (99, 'Gratuidade', 'GRT')
 ALTER TABLE registro ADD COLUMN mat_vend VARCHAR(8);
 ALTER TABLE registro ADD COLUMN vendedora VARCHAR(100);
 ALTER TABLE registro ADD COLUMN cliente VARCHAR(100);
+
+SELECT * FROM registro WHERE datarec = '2026-07-21';
+
+SELECT * FROM registro_parcial WHERE dt_parcial = '2026-07-21';

@@ -296,7 +296,7 @@
 					<?php if ($CreditoCobrancaF > 0) { ?>
 						<tr>
 							<td width="45%" align="right">
-								<font color='gold' size='5'><b><i>Crédito Cobrança </i></b></font>
+								<font color='gold' size='5'><b><i>Restante Parcela </i></b></font>
 							</td>
 							<td width="55%" align="center">
 								<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $CreditoCobranca; ?></i></b></font>
