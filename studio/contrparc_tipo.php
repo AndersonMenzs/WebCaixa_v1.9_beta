@@ -252,7 +252,7 @@
 	<table width='100%' border='0' cellpadding='0' cellspacing='0'>
 		<tr>
 			<td width='9%'>
-				<a href="contrparc_tipo.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
+				<a href="contrparc.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
 			</td>
 			<td width='82%' align='center'>
 				<font color="gold" size="6"><b>
@@ -260,7 +260,7 @@
 					</b></font><br><br><br>
 			</td>
 			<td width='9%'>
-				<a href="contrparc_tipo.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+				<a href="contrparc.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
 			</td>
 		</tr>
 	</table>
