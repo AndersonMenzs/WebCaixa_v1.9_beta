@@ -37,41 +37,24 @@
 			cursor: pointer;
 		}
 
+		.quitacao-label {
+			color: #ffcc00;
+			font-weight: bold;
+		}
+
 		/* Padroniza o tamanho do checkbox para ficar do tamanho do campo de texto */
-			input[type="checkbox"] {
-				width: 1.5em;
-				height: 1.5em;
-				vertical-align: middle;
-			}
-
-			.contrparc-pagamento {
-				table-layout: fixed;
-			}
-
-			.contrparc-pagamento td {
-				padding: 6px 4px;
-				overflow-wrap: anywhere;
-			}
-
-			.contrparc-pagamento select {
-				max-width: 100%;
-			}
-
-			.contrparc-pagamento input[type="text"] {
-				box-sizing: border-box;
-				max-width: 64px;
-			}
-
-			.contrparc-pagamento #txtparc {
-				max-width: 36px;
-			}
-		</style>
+		input[type="checkbox"] {
+			width: 1.5em;
+			height: 1.5em;
+			vertical-align: middle;
+		}
+	</style>
 
 	<script>
 		function putFocus(formInst, elementInst) {
 			if (document.forms.length > 0) {
 				document.forms[formInst].elements[elementInst].focus();
-	}
+			}
 		}
 
 		function validate(field) {
@@ -104,6 +87,12 @@
 			var txtvalor = document.getElementById('txtvalor');
 			var vlr_recebido = document.getElementById('vlr_recebido');
 			var txtparc = document.getElementById('txtparc');
+			var chkQuitacao = document.getElementById('chk_quitacao');
+			var parcial = document.getElementById('parcial');
+			var qtdeQuitacao = document.getElementById('total_parcelas_contrato');
+			var txt1 = document.getElementById('txt1');
+			var txt2 = document.getElementById('txt2');
+			var txt3 = document.getElementById('txt3');
 
 			if (!txtvalor.value || parseFloat(txtvalor.value.replace('.', '').replace(',', '.')) <= 0) {
 				alert('Informe o valor da prestação!');
@@ -121,6 +110,41 @@
 				alert('Informe o número da prestação!');
 				txtparc.focus();
 				return false;
+			}
+
+			if (chkQuitacao && chkQuitacao.checked && parcial) {
+				var valorPrestacaoCents = parseCurrencyToCents(txtvalor.value);
+				var valorRecebidoCents = parseCurrencyToCents(vlr_recebido.value);
+				var qtdeParcelas = parseInt(qtdeQuitacao ? qtdeQuitacao.value : '0', 10) || 0;
+				var valorQuitacaoCents = valorPrestacaoCents * qtdeParcelas;
+				var valorPagamentosCents = parseCurrencyToCents(txt1 ? txt1.value : '') +
+					parseCurrencyToCents(txt2 ? txt2.value : '') +
+					parseCurrencyToCents(txt3 ? txt3.value : '');
+
+				if (qtdeParcelas <= 0) {
+					alert('Informe a quantidade de prestações a serem quitadas!');
+					return false;
+				}
+
+				if (valorRecebidoCents !== valorQuitacaoCents) {
+					alert('Valor recebido incorreto para quitação. O valor correto é R$ ' + formatCentsToBR(valorQuitacaoCents) + '.');
+					vlr_recebido.focus();
+					return false;
+				}
+
+				if (valorPagamentosCents !== valorQuitacaoCents) {
+					alert('Valor informado na forma de pagamento incorreto para quitação. O valor correto é R$ ' + formatCentsToBR(valorQuitacaoCents) + '.');
+					if (txt1) txt1.focus();
+					return false;
+				}
+
+				var parcialCents = parseCurrencyToCents(parcial.value);
+				if (parcialCents > 0) {
+					alert('Quitação não pode ter valor parcial. Ajuste o recebimento antes de continuar.');
+					vlr_recebido.focus();
+					return false;
+				}
+				parcial.value = '0,00';
 			}
 
 			return true;
@@ -183,7 +207,7 @@
 	<link rel="stylesheet" href="./css/themes.css">
 	<script src="./js/jquery.js"></script>
 	<script src="./js/ui.js"></script>
-	<script type="text/javascript" src="val_parcela.js?v=20260512" charset="utf-8"></script>
+	<script type="text/javascript" src="val_parcela.js?v=20260512_quitacao" charset="utf-8"></script>
 
 </head>
 
@@ -207,42 +231,42 @@
 	$Vendedora = trim($_POST['vendedora']);
 	$Cliente	= trim($_POST['cliente']);
 
+	// Verifica se é quitação
+	$chk_quitacao = isset($_POST['chk_quitacao']) ? $_POST['chk_quitacao'] : 0;
+	$qtde_parcelas_quitacao = isset($_POST['total_parcelas_contrato']) ? intval($_POST['total_parcelas_contrato']) : 0;
+
 	// Converter para centavos
 	$valor_str = str_replace(',', '.', str_replace('.', '', $_POST['txtvalor'] ?? '0'));
 	$vlr_recebido_str = str_replace(',', '.', str_replace('.', '', $_POST['vlr_recebido'] ?? '0'));
-	$credito_cobranca_str = str_replace(',', '.', str_replace('.', '', $_POST['credito_cobranca'] ?? '0'));
 
 	$valC = intval(round(floatval($valor_str) * 100));
 	$recC = intval(round(floatval($vlr_recebido_str) * 100));
-	$creditoC = intval(round(floatval($credito_cobranca_str) * 100));
-	$totalCalcC = $recC;
 	$txtparc = intval($_POST['txtparc'] ?? 0);
 
 	if ($txtparc > 12) {
 		$txtparc = 12;
 	}
 
-	// Lógica de cálculo das parcelas
-	$parcelasPlenas = $valC > 0 ? intdiv($totalCalcC, $valC) : 0;
-	$parcialC = $totalCalcC - ($parcelasPlenas * $valC);
-	$PIni = $txtparc;
-	if ($valC > 0 && $totalCalcC > 0 && $totalCalcC < $valC) {
-		$PUlt = $txtparc;
+	// Lógica de cálculo com suporte a quitação
+	if ($chk_quitacao == 1 && $qtde_parcelas_quitacao > 0) {
+		// Modo quitação: calcula a parcela final pela quantidade informada.
+		$PIni = $txtparc;
+		$parcelasPlenas = $qtde_parcelas_quitacao;
+		$PUlt = $txtparc + $parcelasPlenas - 1;
+		$parcialC = 0;
+		$Parcial = "0,00";
 	} else {
+		// Modo normal
+		$parcelasPlenas = $valC > 0 ? intdiv($recC, $valC) : 0;
+		$parcialC = $recC - ($parcelasPlenas * $valC);
+		$PIni = $txtparc;
 		$PUlt = $parcelasPlenas > 0 ? ($txtparc + $parcelasPlenas - 1) : ($txtparc - 1);
+		$Parcial = number_format($parcialC / 100, 2, '.', ',');
 	}
-	$Parcial = number_format($parcialC / 100, 2, '.', ',');
-	$totalParcelasContrato = ($PUlt >= $PIni) ? ($PUlt - $PIni + 1) : 0;
 
 	$nextParc = $PUlt + 1;
-	$mostraParcial = ($parcialC > 0);
+	$mostraParcial = ($chk_quitacao != 1 && $parcialC > 0);
 	$mostraParcelas = ($txtparc > 0);
-	$labelParcialInicial = 'Parcial';
-	if ($mostraParcial) {
-		$labelParcialInicial = ($valC > 0 && $totalCalcC > 0 && $totalCalcC < $valC)
-			? 'Parcial da ' . $txtparc . 'ª Prestação'
-			: 'Parcial da ' . $nextParc . 'ª Prestação';
-	}
 
 	include "us_sist.php";
 	if ($ch == 'no') {
@@ -252,7 +276,7 @@
 	<table width='100%' border='0' cellpadding='0' cellspacing='0'>
 		<tr>
 			<td width='9%'>
-				<a href="contrparc_tipo.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
+				<a href="contrparc.php?c_s=<?php echo $lg_user ?>"><img src="./images/voltar.gif"></a>
 			</td>
 			<td width='82%' align='center'>
 				<font color="gold" size="6"><b>
@@ -260,7 +284,7 @@
 					</b></font><br><br><br>
 			</td>
 			<td width='9%'>
-				<a href="contrparc_tipo.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
+				<a href="contrparc.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"></a>
 			</td>
 		</tr>
 	</table>
@@ -268,18 +292,18 @@
 	<?php
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
 		<form name="parcela" method="post" action="contrparc_select.php" onsubmit="return checkdata()" autocomplete="off">
-			<table width="95%" border="5" cellpadding="6" cellspacing="0" align="center" class="contrparc-pagamento">
+			<table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
-					<td width="10%" align="center">
+					<td align="center">
 						<font color='gold' size='5'><b><i>Ref. Estúdio</i></b></font>
 					</td>
-					<td width="10%" align="center">
+					<td align="center">
 						<font color='gold' size='5'><b><i>Contrato</i></b></font>
 					</td>
-					<td width="40%" align="center">
+					<td align="center">
 						<font color='gold' size='5'><b><i>Colaboradora</i></b></font>
 					</td>
-					<td width="40%" align="center">
+					<td align="center">
 						<font color='gold' size='5'><b><i>Cliente</i></b></font>
 					</td>
 				</tr>
@@ -305,31 +329,31 @@
 			</table>
 			<br>
 
-			<table width="100%" border="5" cellpadding="10" cellspacing="0" align="center">
+			<table width="95%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<tr>
-					<td width="9%" align="center">
+					<td width="12%" align="center">
 						<font color='gold' size='4'><b><i>Vlr. Prestação</i></b></font>
 					</td>
-					<td width="9%" align="center">
+					<td width="12%" align="center">
 						<font color='gold' size='4'><b><i>Vlr. Recebido</i></b></font>
-					</td>
-					<td width="9%" align="center">
-						<font color='gold' size='4'><b><i>Rest. Parcela</i></b></font>
 					</td>
 					<td width="7%" align="center">
 						<font color='gold' size='4'><b><i>Nº Prestação</i></b></font>
 					</td>
+					<td width="8%" align="center">
+						<font color='gold' size='4'><b><i>Restante Parcela?</i></b></font>
+					</td>
 					<td width="7%" align="center">
 						<font color='gold' size='4'><b><i>Pedido?</i></b></font>
 					</td>
-						<td width="7%" align="center">
-							<font color='gold' size='4'><b><i>Quitação?</i></b></font>
-						</td>
+					<td width="7%" align="center">
+						<font color='gold' size='4'><b><i>Quitação?</i></b></font>
+					</td>
 					<td width="7%" align="center" id="colParcelasHeader" style="<?php echo $mostraParcelas ? '' : 'display:none;'; ?>">
 						<font color='gold' size='4'><b><i><span id="labelQtdPrestacoes">Parcela(s)</span></i></b></font>
 					</td>
 					<td width="10%" align="center" id="colParcialHeader" style="<?php echo $mostraParcial ? '' : 'display:none;'; ?>">
-						<font color='gold' size='4'><b><i><span id="labelParcial"><?php echo $labelParcialInicial; ?></span></i></b></font>
+						<font color='gold' size='4'><b><i><span id="labelParcial"><?php echo ($parcialC > 0) ? 'Parcial da Próxima' : 'Parcial'; ?></span></i></b></font>
 					</td>
 					<td width="20%" align="center">
 						<font color='gold' size='4'><b><i>Forma Pagamento</i></b></font>
@@ -348,19 +372,18 @@
 						<input type="text" name="vlr_recebido" id="vlr_recebido" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'vlr_recebido', event); validate(this)">
 					</td>
 					<td rowspan="3" align="center">
-						<font color='#FFFFFF' size='4'><b><i>R$ </i></b></font>
-						<input type="text" name="credito_cobranca" id="credito_cobranca" size="6" maxlength="7" class="campos" onKeyUp="FormataValor('parcela', 'credito_cobranca', event); validate(this)">
+						<input type="text" name="txtparc" id="txtparc" size="4" maxlength="2" class="campos" onkeyup="validate(this)" onchange="validateParcelas(this)">
+						<input type="hidden" name="total_parcelas_contrato" id="total_parcelas_contrato" value="">
 					</td>
 					<td rowspan="3" align="center">
-						<input type="text" name="txtparc" id="txtparc" size="1" maxlength="2" class="campos" onkeyup="validate(this)" onchange="validateParcelas(this)">
-							<input type="hidden" name="total_parcelas_contrato" id="total_parcelas_contrato" value="<?php echo $totalParcelasContrato; ?>">
+						<input type="checkbox" name="chk_parcial" id="chk_parcial" value="1">
 					</td>
 					<td rowspan="3" align="center">
 						<input type="checkbox" name="chk_pedido" id="chk_pedido" value="1">
 					</td>
-						<td rowspan="3" align="center">
-							<input type="checkbox" name="chk_quitacao" id="chk_quitacao" value="1">
-						</td>
+					<td rowspan="3" align="center">
+						<input type="checkbox" name="chk_quitacao" id="chk_quitacao" value="1" onchange="toggleQuitacao(this)">
+					</td>
 					<td rowspan="3" align="center" id="colParcelasValor" style="<?php echo $mostraParcelas ? '' : 'display:none;'; ?>">
 						<input type="hidden" name="txtparc_ini" id="txtparc_ini" value="<?php echo $PIni; ?>">
 						<input type="hidden" name="txtparc_ult" id="txtparc_ult" value="<?php echo $PUlt; ?>">
@@ -578,14 +601,124 @@
 			if (valor) valor.style.display = display;
 		}
 
+		function toggleQuitacao(checkbox) {
+			var txtparc = document.getElementById('txtparc');
+			var txtvalor = document.getElementById('txtvalor');
+			var vlr_recebido = document.getElementById('vlr_recebido');
+			var labelParcial = document.getElementById('labelParcial');
+			var labelQtdPrestacoes = document.getElementById('labelQtdPrestacoes');
+			var qtdeParcelasHidden = document.getElementById('total_parcelas_contrato');
+
+			if (checkbox.checked) {
+				// Desabilita campos
+				txtparc.readOnly = false; // Mantém editável para informar a parcela inicial
+				txtvalor.readOnly = true;
+				vlr_recebido.readOnly = false; // Permite informar o valor total da quitação
+				txtvalor.style.backgroundColor = '#f0f0f0';
+
+				setParcelasColumnVisible(parseInt(txtparc.value || '0', 10) > 0);
+				setParcialColumnVisible(false);
+				if (labelQtdPrestacoes) {
+					labelQtdPrestacoes.textContent = 'Quitação do contrato';
+					labelQtdPrestacoes.style.color = '#ffcc00';
+				}
+
+				// Solicita a quantidade de prestações que serão quitadas.
+				var qtdeParcelas = prompt('Informe a quantidade de prestações a serem quitadas:', '1');
+				if (qtdeParcelas && parseInt(qtdeParcelas, 10) > 0) {
+					qtdeParcelasHidden.value = parseInt(qtdeParcelas, 10);
+					calcularQuitacao();
+				} else {
+					checkbox.checked = false;
+					toggleQuitacao(checkbox);
+				}
+			} else {
+				// Reativa os campos
+				txtvalor.readOnly = false;
+				txtvalor.style.backgroundColor = '';
+
+				if (labelParcial) {
+					labelParcial.textContent = 'Parcial';
+					labelParcial.style.color = '';
+				}
+				if (labelQtdPrestacoes) {
+					labelQtdPrestacoes.textContent = 'Parcela(s)';
+					labelQtdPrestacoes.style.color = '';
+				}
+
+				qtdeParcelasHidden.value = '';
+
+				// Recalcula normalmente
+				atualizaParcelas();
+			}
+		}
+
+		function calcularQuitacao() {
+			var txtparc = document.getElementById('txtparc');
+			var qtdeParcelasHidden = document.getElementById('total_parcelas_contrato');
+			var inicioParc = parseInt(txtparc.value, 10);
+			var qtdeParcelas = parseInt(qtdeParcelasHidden.value, 10);
+
+			if (!inicioParc || inicioParc <= 0) {
+				alert('Informe o número da parcela inicial para quitar o restante!');
+				document.getElementById('chk_quitacao').checked = false;
+				toggleQuitacao(document.getElementById('chk_quitacao'));
+				return;
+			}
+
+			if (!qtdeParcelas || qtdeParcelas <= 0) {
+				alert('Informe a quantidade de prestações a serem quitadas!');
+				document.getElementById('chk_quitacao').checked = false;
+				toggleQuitacao(document.getElementById('chk_quitacao'));
+				return;
+			}
+
+			var ultimaParcela = inicioParc + qtdeParcelas - 1;
+			var parcelasRestantes = qtdeParcelas;
+
+			// Atualiza a exibição
+			setParcelasColumnVisible(true);
+			document.getElementById('PIni').textContent = inicioParc;
+			document.getElementById('PUlt').textContent = ultimaParcela;
+			if (parcelasRestantes > 1) {
+				document.getElementById('Psep').style.display = 'inline';
+				document.getElementById('PUlt').style.display = 'inline';
+			} else {
+				document.getElementById('Psep').style.display = 'none';
+				document.getElementById('PUlt').style.display = 'none';
+			}
+			setParcialColumnVisible(false);
+			document.getElementById('Parcial').textContent = '';
+
+			// Atualiza os campos hidden
+			var hidIni = document.getElementById('txtparc_ini');
+			var hidUlt = document.getElementById('txtparc_ult');
+			var hidPar = document.getElementById('parcial');
+			if (hidIni) hidIni.value = inicioParc;
+			if (hidUlt) hidUlt.value = ultimaParcela;
+			if (hidPar) hidPar.value = '0,00';
+
+			// Atualiza label
+			var labelQtdPrestacoes = document.getElementById('labelQtdPrestacoes');
+			if (labelQtdPrestacoes) {
+				labelQtdPrestacoes.textContent = parcelasRestantes === 1 ? 'Prestação Recebida' : 'Prestações Recebidas';
+			}
+		}
+
 		function atualizaParcelas() {
+			// Verifica se o checkbox de quitação está marcado
+			var quitacaoCheckbox = document.getElementById('chk_quitacao');
+			if (quitacaoCheckbox && quitacaoCheckbox.checked) {
+				calcularQuitacao();
+				return;
+			}
+
 			var valParcelaCents = parseCurrencyToCents(document.getElementById('txtvalor').value);
 			var recebidoCents = parseCurrencyToCents(document.getElementById('vlr_recebido').value);
-			var totalCalculoCents = recebidoCents;
 			var inicioParc = parseInt((document.getElementById('txtparc').value || '0'), 10) || 0;
 			setParcelasColumnVisible(inicioParc > 0);
 
-			if (valParcelaCents <= 0 || totalCalculoCents <= 0 || inicioParc <= 0) {
+			if (valParcelaCents <= 0 || recebidoCents <= 0 || inicioParc <= 0) {
 				document.getElementById('PIni').textContent = inicioParc > 0 ? inicioParc : '';
 				document.getElementById('PUlt').textContent = '';
 				document.getElementById('Psep').style.display = 'none';
@@ -596,19 +729,17 @@
 				var hidIni = document.getElementById('txtparc_ini');
 				var hidUlt = document.getElementById('txtparc_ult');
 				var hidPar = document.getElementById('parcial');
-				var hidTotal = document.getElementById('total_parcelas_contrato');
 				if (hidIni) hidIni.value = inicioParc > 0 ? inicioParc : '';
 				if (hidUlt) hidUlt.value = '';
 				if (hidPar) hidPar.value = '';
-				if (hidTotal) hidTotal.value = '';
 				return;
 			}
 
-			var parcelasPlenas = Math.floor(totalCalculoCents / valParcelaCents);
-			var parcialCents = totalCalculoCents - (parcelasPlenas * valParcelaCents);
+			var parcelasPlenas = Math.floor(recebidoCents / valParcelaCents);
+			var parcialCents = recebidoCents - (parcelasPlenas * valParcelaCents);
 
 			var pIni = inicioParc;
-			var pUlt = parcelasPlenas > 0 ? (inicioParc + parcelasPlenas - 1) : inicioParc;
+			var pUlt = parcelasPlenas > 0 ? (inicioParc + parcelasPlenas - 1) : (inicioParc - 1);
 
 			var PIniEl = document.getElementById('PIni');
 			var PUltEl = document.getElementById('PUlt');
@@ -633,18 +764,13 @@
 			var hidIni = document.getElementById('txtparc_ini');
 			var hidUlt = document.getElementById('txtparc_ult');
 			var hidPar = document.getElementById('parcial');
-			var hidTotal = document.getElementById('total_parcelas_contrato');
-			var totalParcelas = pUlt >= pIni ? (pUlt - pIni + 1) : 0;
 			if (hidIni) hidIni.value = pIni;
-			if (hidUlt) hidUlt.value = pUlt;
+			if (hidUlt) hidUlt.value = (parcelasPlenas > 0 ? pUlt : '');
 			if (hidPar) hidPar.value = formatCentsToBR(parcialCents);
-			if (hidTotal) hidTotal.value = totalParcelas;
 
 			var labelQtdPrestacoes = document.getElementById('labelQtdPrestacoes');
 			if (labelQtdPrestacoes) {
-				if (parcelasPlenas === 0) {
-					labelQtdPrestacoes.textContent = 'Prestação Parcial';
-				} else if (parcelasPlenas === 1) {
+				if (parcelasPlenas === 1) {
 					labelQtdPrestacoes.textContent = 'Prestação Recebida';
 				} else {
 					labelQtdPrestacoes.textContent = 'Prestações Recebidas';
@@ -654,8 +780,8 @@
 			var labelParcial = document.getElementById('labelParcial');
 			if (labelParcial) {
 				if (parcialCents > 0) {
-					var parcialParcela = parcelasPlenas > 0 ? ((pUlt || 0) + 1) : inicioParc;
-					labelParcial.textContent = 'Parcial da ' + parcialParcela + 'ª Prestação';
+					var prox = (pUlt || 0) + 1;
+					labelParcial.textContent = 'Parcial da ' + prox + 'ª Prestação';
 				} else {
 					labelParcial.textContent = 'Parcial';
 				}
@@ -664,7 +790,7 @@
 
 		// Event listeners
 		document.addEventListener('DOMContentLoaded', function() {
-			['txtvalor', 'vlr_recebido', 'credito_cobranca', 'txtparc'].forEach(function(id) {
+			['txtvalor', 'vlr_recebido', 'txtparc'].forEach(function(id) {
 				var el = document.getElementById(id);
 				if (el) {
 					el.addEventListener('input', atualizaParcelas);

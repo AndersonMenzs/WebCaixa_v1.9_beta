@@ -66,7 +66,6 @@ include 'dbselect.php';
 
 	$VrRec     = $txt1 + $txt2 + $txt3;
 	$VrPrest   = trim($_POST['vrprest'] ?? '');
-	$CreditoCobranca = moedaParaFloat($_POST['credito_cobranca'] ?? 0);
 	$Chk_Parcial = isset($_POST['chk_parcial']) ? trim($_POST['chk_parcial']) : '';
 	$Chk_Pedido = isset($_POST['chk_pedido']) ? trim($_POST['chk_pedido']) : '';
 	$VrRecF    = number_format($VrRec, 2, ',', '.');
@@ -96,14 +95,7 @@ include 'dbselect.php';
 		return (int) round(moedaParaFloat($valor) * 100);
 	}
 
-	$ValorParcial = moedaParaFloat($Parcial);
-	$FlagPedido = ($Chk_Pedido == '1' || $Pedido !== '') ? 'S' : 'N';
-	$FlagParcial = ($ValorParcial > 0) ? 'S' : 'N';
-	$FlagQuitacao = $Quitacao ? 'S' : 'N';
-	$ValorCalculoParcial = $VrRec;
-	$ParcelaParcial = ($FlagParcial == 'S' && $ValorCalculoParcial >= moedaParaFloat($VrPrest)) ? ($PUlt + 1) : $PIni;
-
-	if ($Quitacao && $ValorParcial > 0) {
+	if ($Quitacao && moedaParaFloat($Parcial) > 0) {
 		$SisRot = "S-7.2.2.1.1";
 		include "./rodape.php";
 		echo "<script>alert('Quitação não pode conter parcial. Ajuste o valor recebido.'); window.history.back();</script>";
@@ -222,19 +214,8 @@ include 'dbselect.php';
 				$totalPagamentos += $p['valor'];
 			}
 
-			// 2. Montar os lançamentos por parcela, separando a sobra como parcial da próxima.
-			$valorPrestacao = moedaParaFloat($VrPrest);
-			$lancamentosParcelas = [];
-			if ($ValorParcial > 0 && $valorTotal < $valorPrestacao) {
-				$lancamentosParcelas[] = ['parcela' => $PIni, 'valor' => $valorTotal];
-			} else {
-				for ($parcela = $PIni; $parcela <= $PUlt; $parcela++) {
-					$lancamentosParcelas[] = ['parcela' => $parcela, 'valor' => $valorPrestacao];
-				}
-				if ($ValorParcial > 0) {
-					$lancamentosParcelas[] = ['parcela' => $ParcelaParcial, 'valor' => $ValorParcial];
-				}
-			}
+			// 2. Calcular valor de cada parcela
+			$valorParcela = $valorTotal / $quantidadeParcelas;
 
 			// 3. Calcular percentual de cada forma de pagamento
 			$percentuais = [];
@@ -244,7 +225,7 @@ include 'dbselect.php';
 
 			// 4. Inserir os registros (sem prepared statements para manter 100% estrutural)
 			$totalInserido = 0;
-			$parcelaFinal = !empty($lancamentosParcelas) ? (int) end($lancamentosParcelas)['parcela'] : ($parcelaInicial + $quantidadeParcelas - 1);
+			$parcelaFinal = $parcelaInicial + $quantidadeParcelas - 1;
 			$contadorRegistro = 1;
 			$Reg++;
 			$RegOperacao = (int) $Reg;
@@ -253,14 +234,12 @@ include 'dbselect.php';
 			mysqli_begin_transaction($conec);
 
 			try {
-				foreach ($lancamentosParcelas as $lancamentoParcela) {
-					$parcela = (int) $lancamentoParcela['parcela'];
-					$valorLancamentoParcela = (float) $lancamentoParcela['valor'];
+				for ($parcela = $parcelaInicial; $parcela <= $parcelaFinal; $parcela++) {
 
 					foreach ($pagamentos as $index => $pagamento) {
 
 						// Calcula o valor rateado
-						$valorRateado = round($valorLancamentoParcela * $percentuais[$pagamento['modpgto']], 2);
+						$valorRateado = round($valorParcela * $percentuais[$pagamento['modpgto']], 2);
 
 						// Se for o último registro, ajusta para fechar o total
 						if ($parcela == $parcelaFinal && $index == count($pagamentos) - 1) {
@@ -336,25 +315,6 @@ include 'dbselect.php';
 					}
 				}
 
-				if ($FlagPedido == 'S' || $FlagParcial == 'S' || $FlagQuitacao == 'S') {
-					$NumDocParcial = mysqli_real_escape_string($conec, substr($NDoc, 0, 15));
-					$ParcelaParcialSql = mysqli_real_escape_string($conec, substr((string) $ParcelaParcial, 0, 2));
-					$PedidoParcial = mysqli_real_escape_string($conec, $FlagPedido);
-					$ParcialFlag = mysqli_real_escape_string($conec, $FlagParcial);
-					$QuitacaoFlag = mysqli_real_escape_string($conec, $FlagQuitacao);
-					$ValorParcialSql = number_format($ValorParcial, 2, '.', '');
-					$DtParcial = mysqli_real_escape_string($conec, $dtRec);
-					$MatParcial = mysqli_real_escape_string($conec, substr($Mat_Vend, 0, 8));
-					$ColabParcial = mysqli_real_escape_string($conec, substr($Vendedora_full, 0, 1000));
-
-					$sqlParcial = "INSERT INTO registro_parcial
-						(numdoc, parcela, pedido, parcial, quitacao, valor, dt_parcial, mat, colab)
-						VALUES
-						('$NumDocParcial', '$ParcelaParcialSql', '$PedidoParcial', '$ParcialFlag', '$QuitacaoFlag',
-						$ValorParcialSql, '$DtParcial', '$MatParcial', '$ColabParcial')";
-					mysqli_query($conec, $sqlParcial) or die("File geracntparc Error #5.1. Contate seu Administrador.");
-				}
-
 				// Commit da transação ANTES de gravar os spools
 				mysqli_commit($conec);
 
@@ -423,7 +383,6 @@ include 'dbselect.php';
 				<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 				<input type="hidden" name="vrprest" value="<?php echo $VrPrest; ?>">
 				<input type="hidden" name="vrrec" value="<?php echo $VrRec; ?>">
-				<input type="hidden" name="credito_cobranca" value="<?php echo $CreditoCobranca; ?>">
 				<input type="hidden" name="qtdeparc" value="<?php echo $QtdeParc; ?>">
 				<input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
 				<input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">

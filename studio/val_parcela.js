@@ -12,18 +12,7 @@ function checkdata() {
 		form.action = 'confcntparc.php';
 	}*/
 
-	// VALIDAÇÃO 1: Valor da Prestação vs Valor Recebido
-	var valor = parseFloat(form.txtvalor.value);
-	var recebido = parseFloat(form.vlr_recebido.value);
-
-	if (valor > recebido) {
-		alert("Valor da Prestação não pode ser maior que o Valor Recebido!!!");
-		form.txtvalor.select();
-		form.txtvalor.focus();
-		return false;
-	}
-
-	// VALIDAÇÃO 2: Valor da Prestação vazio
+	// VALIDAÇÃO 1: Valor da Prestação vazio
 	if (form.txtvalor.value == "0" || form.txtvalor.value == "" || form.txtvalor.value.length < 1) {
 		alert("Valor da Prestação Está Vazio!!!");
 		form.txtvalor.select();
@@ -31,7 +20,7 @@ function checkdata() {
 		return false;
 	}
 
-	// VALIDAÇÃO 3: Número da Prestação vazio
+	// VALIDAÇÃO 2: Número da Prestação vazio
 	if (form.txtparc.value == "0" || form.txtparc.value == "" || form.txtparc.value.length < 1) {
 		alert("Número da Prestação Está Vazio!!!");
 		form.txtparc.select();
@@ -39,7 +28,7 @@ function checkdata() {
 		return false;
 	}
 
-	// VALIDAÇÃO 4: Nenhuma Forma de Pagamento selecionada
+	// VALIDAÇÃO 3: Nenhuma Forma de Pagamento selecionada
 	if (form.lsPr1.value == "00" && form.lsPr2.value == "00" && form.lsPr3.value == "00") {
 		alert("Nenhuma Forma de Pagamento Selecionada!!!");
 		form.txt1.select();
@@ -194,7 +183,7 @@ function checkdata() {
 			return false;
 		}
 
-		if (taxa !== valorQuitacao || soma !== valorQuitacao) {
+		if (taxa !== valorQuitacao) {
 			alert('Valor recebido incorreto para quitação.\nO valor correto é R$ ' + formatCentsToBR(valorQuitacao) + '.');
 			form.vlr_recebido.focus();
 			return false;

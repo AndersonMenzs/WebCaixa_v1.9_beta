@@ -40,11 +40,15 @@ $VrRecF     = number_format($VrRec, 2, ",", ".");
 $VrRecA = number_format($VrRec, 2, "", "");
 $VrPrest     = trim($_GET['VrPrest']);
 $VrPrestF     = number_format($VrPrest, 2, ",", ".");
+$CreditoCobranca = trim($_GET['CreditoCobranca'] ?? '0');
 $VrParcial     = trim($_GET['VrParcial']);
 $VrParcialF     = number_format($VrParcial, 2, ",", ".");
 $vlr_ext   = trim($_GET['vlr_ext']);
 $PIni = trim($_GET['PIni']);
 $PUlt = trim($_GET['PUlt']);
+$ValorCalculoParcial = (float) $VrRec;
+$ParcelaParcialRecibo = ((float) $VrParcial > 0 && $ValorCalculoParcial >= (float) $VrPrest) ? ((int) $PUlt + 1) : (int) $PIni;
+$ExibeParcelaIntegral = !((float) $VrParcial > 0 && (float) $VrRec < (float) $VrPrest);
 $Parc_Card_Cred = "X" . trim($_GET['parc_card_cred']);
 
 $Rdopt = trim($_GET['rdopt'] ?? '');
@@ -356,14 +360,18 @@ include "./dbselect.php";
                             <?php
                             $pini = (int)$PIni;
                             $pult = (int)$PUlt;
-                            if ($pult >= $pini && $pini > 0) {
-                                $arr = [];
-                                for ($i = $pini; $i <= $pult; $i++) {
-                                    $arr[] = $i . "ª";
+                            if ($ExibeParcelaIntegral) {
+                                if ($pult >= $pini && $pini > 0) {
+                                    $arr = [];
+                                    for ($i = $pini; $i <= $pult; $i++) {
+                                        $arr[] = $i . "ª";
+                                    }
+                                    echo implode(', ', $arr);
+                                } else {
+                                    echo $PIni;
                                 }
-                                echo implode(', ', $arr);
                             } else {
-                                echo $PIni;
+                                echo "---";
                             }
                             ?></font>
                     </td>
@@ -373,7 +381,7 @@ include "./dbselect.php";
                 ?>
                     <td align="left" valign=bottom></td>
                     <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="center" valign=middle>
-                        <font size=1><?php echo $PUlt + 1; ?>ª</font>
+                        <font size=1><?php echo $ParcelaParcialRecibo; ?>ª</font>
                     </td>
                 <?php
                 }
@@ -763,14 +771,18 @@ include "./dbselect.php";
                             <?php
                             $pini = (int)$PIni;
                             $pult = (int)$PUlt;
-                            if ($pult >= $pini && $pini > 0) {
-                                $arr = [];
-                                for ($i = $pini; $i <= $pult; $i++) {
-                                    $arr[] = $i . "ª";
+                            if ($ExibeParcelaIntegral) {
+                                if ($pult >= $pini && $pini > 0) {
+                                    $arr = [];
+                                    for ($i = $pini; $i <= $pult; $i++) {
+                                        $arr[] = $i . "ª";
+                                    }
+                                    echo implode(', ', $arr);
+                                } else {
+                                    echo $PIni;
                                 }
-                                echo implode(', ', $arr);
                             } else {
-                                echo $PIni;
+                                echo "---";
                             }
                             ?></font>
                     </td>
@@ -780,7 +792,7 @@ include "./dbselect.php";
                 ?>
                     <td align="left" valign=bottom></td>
                     <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=3 align="center" valign=middle>
-                        <font size=1><?php echo $PUlt + 1; ?>ª</font>
+                        <font size=1><?php echo $ParcelaParcialRecibo; ?>ª</font>
                     </td>
                 <?php
                 }

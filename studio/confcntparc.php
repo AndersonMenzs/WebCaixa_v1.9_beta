@@ -60,7 +60,6 @@
 <body background="../images/bg1.jpg" text="#FFFFFF" onLoad="putFocus(0,0)">
 
 	<?php
-
 	// Importando os Dados do Formulário
 	$Sis       = "S7";
 	$Rot       = "S7R2.2.1";
@@ -92,19 +91,22 @@
 
 	$VrPrest    = moedaParaFloat($_POST['txtvalor'] ?? 0);
 	$VrPrestF   = number_format($VrPrest, 2, ',', '.');
+	$CreditoCobrancaF = moedaParaFloat($_POST['credito_cobranca'] ?? 0);
+	$CreditoCobranca = number_format($CreditoCobrancaF, 2, ',', '.');
+	$Chk_Pedido = isset($_POST['chk_pedido']) ? trim($_POST['chk_pedido']) : '';
 	$PIni      = trim($_POST['txtparc_ini']);
 	$PUlt      = trim($_POST['txtparc_ult']);
 	$QtdeParc  = $PUlt - $PIni + 1;
 	$ParcialF   = moedaParaFloat($_POST['parcial'] ?? 0);
 	$Parcial  = number_format($ParcialF, 2, ',', '.');
-	$VrPrestForm  = $VrPrest * $QtdeParc;
-	$VrPrestFormF  = number_format($VrPrestForm, 2, ',', '.');
 	$FPag_1      = trim($_POST['lsPr1']);
 	$FPag_2      = trim($_POST['lsPr2']);
 	$FPag_3      = trim($_POST['lsPr3']);
 	$txt1 = moedaParaFloat($_POST['txt1'] ?? 0);
 	$txt2 = moedaParaFloat($_POST['txt2'] ?? 0);
 	$txt3 = moedaParaFloat($_POST['txt3'] ?? 0);
+	$VrRecebido = $txt1 + $txt2 + $txt3;
+	$VrRecebidoF = number_format($VrRecebido, 2, ',', '.');
 	$Parc_card_cred = trim($_POST['parc_card_cred']);;
 
 	$ref_std = trim($_POST['ref_std']);
@@ -135,6 +137,7 @@
 
 	$Pedido = implode(", ", $ItensPedido);
 	$Quitacao = isset($_POST['chk_quitacao']) && $_POST['chk_quitacao'] == '1';
+	$TotalParcelasContrato = isset($_POST['total_parcelas_contrato']) && trim($_POST['total_parcelas_contrato']) !== '' ? trim($_POST['total_parcelas_contrato']) : $QtdeParc;
 	$ValorQuitacaoCents = moedaParaCentavos($_POST['txtvalor'] ?? 0) * (int) $QtdeParc;
 	$ValorPagamentosCents = moedaParaCentavos($_POST['txt1'] ?? 0) + moedaParaCentavos($_POST['txt2'] ?? 0) + moedaParaCentavos($_POST['txt3'] ?? 0);
 
@@ -274,7 +277,7 @@
 						if ($QtdeParc > 1) { ?>
 					<tr>
 						<td width="45%" align="right">
-							<font color='gold' size='5'><b><i>Valor de Cada Parcela </i></b></font>
+							<font color='gold' size='5'><b><i>Valor Prestação </i></b></font>
 						</td>
 						<td width="55%" align="center">
 							<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $VrPrestF; ?></i></b></font>
@@ -284,17 +287,37 @@
 
 				<tr>
 					<td width="45%" align="right">
-						<font color='gold' size='5'><b><i>Total Cobrado </i></b></font>
+						<font color='gold' size='5'><b><i>Valor Recebido </i></b></font>
 					</td>
 					<td width="55%" align="center">
-						<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $VrPrestFormF; ?></i></b></font>
+							<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $VrRecebidoF; ?></i></b></font>
 					</td>
 				</tr>
+					<?php if ($CreditoCobrancaF > 0) { ?>
+						<tr>
+							<td width="45%" align="right">
+								<font color='gold' size='5'><b><i>Restante Parcela </i></b></font>
+							</td>
+							<td width="55%" align="center">
+								<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $CreditoCobranca; ?></i></b></font>
+							</td>
+						</tr>
+					<?php } ?>
+					<?php if ($Quitacao) { ?>
+						<tr>
+							<td width="45%" align="right">
+								<font color='gold' size='5'><b><i>Quitação </i></b></font>
+							</td>
+							<td width="55%" align="center">
+								<font color='#FFFFFF' size='5'><b><i>Sim</i></b></font>
+							</td>
+						</tr>
+					<?php } ?>
 
 				<?php if ($ParcialF > 0) { ?>
 					<tr>
 						<td width="45%" align="right">
-							<font color='gold' size='5'><b><i>Parcial </i></b></font>
+							<font color='gold' size='5'><b><i>Parcial Creditado </i></b></font>
 						</td>
 						<td width="55%" align="center">
 							<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $Parcial; ?></i></b></font>
@@ -371,6 +394,8 @@
 			<input type="hidden" name="vendedora" value="<?php echo $Vendedora; ?>">
 			<input type="hidden" name="cliente" value="<?php echo $Cliente; ?>">
 			<input type="hidden" name="vrprest" value="<?php echo $VrPrest; ?>">
+			<input type="hidden" name="credito_cobranca" value="<?php echo $CreditoCobrancaF; ?>">
+            <input type="hidden" name="chk_pedido" value="<?php echo $Chk_Pedido; ?>">
 			<input type="hidden" name="txtparc_ini" value="<?php echo $PIni; ?>">
 			<input type="hidden" name="txtparc_ult" value="<?php echo $PUlt; ?>">
 			<input type="hidden" name="lsPr1" value="<?php echo $FPag_1; ?>">
@@ -387,9 +412,7 @@
 			<?php if (isset($_POST['chk_quitacao'])) { ?>
 				<input type="hidden" name="chk_quitacao" value="<?php echo trim($_POST['chk_quitacao']); ?>">
 			<?php } ?>
-			<?php if (isset($_POST['total_parcelas_contrato'])) { ?>
-				<input type="hidden" name="total_parcelas_contrato" value="<?php echo trim($_POST['total_parcelas_contrato']); ?>">
-			<?php } ?>
+				<input type="hidden" name="total_parcelas_contrato" value="<?php echo $TotalParcelasContrato; ?>">
 			<p>
 				<center>
 					<input id="ghost_click" type="submit" name="btenvia" value="Continuar">
