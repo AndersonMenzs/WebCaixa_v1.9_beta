@@ -175,6 +175,8 @@ function checkdata() {
 	if (chkQuitacao && chkQuitacao.checked) {
 		const qtdeQuitacao = parseInt((document.getElementById('total_parcelas_contrato') || {}).value || '0', 10) || 0;
 		const valorQuitacao = parseCurrencyToCents(form.txtvalor.value) * qtdeQuitacao;
+		const creditoCobranca = parseCurrencyToCents((document.getElementById('credito_cobranca') || {}).value || '');
+		const creditoAplicadoQuitacao = taxa < valorQuitacao ? Math.min(creditoCobranca, valorQuitacao - taxa) : 0;
 		const parcial = parseCurrencyToCents((document.getElementById('parcial') || {}).value || '');
 
 		if (qtdeQuitacao <= 0) {
@@ -183,7 +185,7 @@ function checkdata() {
 			return false;
 		}
 
-		if (taxa !== valorQuitacao) {
+		if ((taxa + creditoAplicadoQuitacao) !== valorQuitacao) {
 			alert('Valor recebido incorreto para quitação.\nO valor correto é R$ ' + formatCentsToBR(valorQuitacao) + '.');
 			form.vlr_recebido.focus();
 			return false;

@@ -100,8 +100,10 @@ include 'dbselect.php';
 	$FlagPedido = ($Chk_Pedido == '1' || $Pedido !== '') ? 'S' : 'N';
 	$FlagParcial = ($ValorParcial > 0) ? 'S' : 'N';
 	$FlagQuitacao = $Quitacao ? 'S' : 'N';
-	$ValorCalculoParcial = $VrRec;
-	$ParcelaParcial = ($FlagParcial == 'S' && $ValorCalculoParcial >= moedaParaFloat($VrPrest)) ? ($PUlt + 1) : $PIni;
+	$ValorPrestacaoCalculo = moedaParaFloat($VrPrest);
+	$CreditoAplicadoParcial = ($ValorPrestacaoCalculo > 0) ? $CreditoCobranca : 0;
+	$ValorCalculoParcial = $VrRec + $CreditoAplicadoParcial;
+	$ParcelaParcial = ($FlagParcial == 'S' && $ValorCalculoParcial >= $ValorPrestacaoCalculo) ? ($PUlt + 1) : $PIni;
 
 	if ($Quitacao && $ValorParcial > 0) {
 		$SisRot = "S-7.2.2.1.1";
@@ -113,11 +115,13 @@ include 'dbselect.php';
 
 	$ValorQuitacaoCents = moedaParaCentavos($VrPrest) * (int) $QtdeParc;
 	$ValorRecebidoCents = (int) round($VrRec * 100);
+	$CreditoCobrancaCents = (int) round($CreditoCobranca * 100);
+	$CreditoAplicadoQuitacaoCents = ($ValorQuitacaoCents > 0 && $ValorRecebidoCents < $ValorQuitacaoCents) ? min($CreditoCobrancaCents, $ValorQuitacaoCents - $ValorRecebidoCents) : 0;
 
-	if ($Quitacao && $ValorQuitacaoCents > 0 && $ValorRecebidoCents != $ValorQuitacaoCents) {
+	if ($Quitacao && $ValorQuitacaoCents > 0 && ($ValorRecebidoCents + $CreditoAplicadoQuitacaoCents) != $ValorQuitacaoCents) {
 		$SisRot = "S-7.2.2.1.1";
 		include "./rodape.php";
-		echo "<script>alert('Valor recebido incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
+		echo "<script>alert('Valor recebido + Restante Parcela incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
 		mysqli_close($conec);
 		exit;
 	}
