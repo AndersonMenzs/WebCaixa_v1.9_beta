@@ -50,9 +50,9 @@ $VrParcialF     = number_format($VrParcial, 2, ",", ".");
 $vlr_ext   = trim($_GET['vlr_ext']);
 $PIni = trim($_GET['PIni']);
 $PUlt = trim($_GET['PUlt']);
-$ValorCalculoParcial = (float) $VrRec;
+$ValorCalculoParcial = (float) $VrRec + $CreditoCobrancaValor;
 $ParcelaParcialRecibo = ((float) $VrParcial > 0 && $ValorCalculoParcial >= (float) $VrPrest) ? ((int) $PUlt + 1) : (int) $PIni;
-$ExibeParcelaIntegral = !((float) $VrParcial > 0 && (float) $VrRec < (float) $VrPrest);
+$ExibeParcelaIntegral = !((float) $VrParcial > 0 && $ValorCalculoParcial < (float) $VrPrest);
 $Parc_Card_Cred = "X" . trim($_GET['parc_card_cred']);
 
 $Rdopt = trim($_GET['rdopt'] ?? '');
@@ -351,7 +351,7 @@ include "./dbselect.php";
                     <?php } ?>
                     <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                         <b>
-                            <font size=1>RESTANTE PARCELA</font>
+                            <font size=1>PARCIAL</font>
                         </b>
                     </td>
                 <?php
@@ -410,7 +410,7 @@ include "./dbselect.php";
                         <td align="left" valign=bottom></td>
                     <?php } ?>
                     <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                        <font size=1><?php echo "R$ " .  $CreditoCobrancaF; ?></font>
+                        <font size=1><?php echo "R$ " .  ($VrParcial > 0.00 ? $VrParcialF : $CreditoCobrancaF); ?></font>
                     </td>
                 <?php
                 } elseif ($VrParcial > 0.00) {
@@ -786,7 +786,7 @@ include "./dbselect.php";
                     <?php } ?>
                     <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
                         <b>
-                            <font size=1>RESTANTE PARCELA</font>
+                            <font size=1>PARCIAL</font>
                         </b>
                     </td>
                 <?php
@@ -845,7 +845,7 @@ include "./dbselect.php";
                         <td align="left" valign=bottom></td>
                     <?php } ?>
                     <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
-                        <font size=1><?php echo "R$ " .  $CreditoCobrancaF; ?></font>
+                        <font size=1><?php echo "R$ " .  ($VrParcial > 0.00 ? $VrParcialF : $CreditoCobrancaF); ?></font>
                     </td>
                 <?php
                 } elseif ($VrParcial > 0.00) {

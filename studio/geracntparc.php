@@ -348,14 +348,15 @@ include 'dbselect.php';
 					$QuitacaoFlag = mysqli_real_escape_string($conec, $FlagQuitacao);
 					$ValorParcialSql = number_format($ValorParcial, 2, '.', '');
 					$DtParcial = mysqli_real_escape_string($conec, $dtRec);
+					$HrParcial = mysqli_real_escape_string($conec, substr($hora, 0, 5));
 					$MatParcial = mysqli_real_escape_string($conec, substr($Mat_Vend, 0, 8));
 					$ColabParcial = mysqli_real_escape_string($conec, substr($Vendedora_full, 0, 1000));
 
 					$sqlParcial = "INSERT INTO registro_parcial
-						(numdoc, parcela, pedido, parcial, quitacao, valor, dt_parcial, mat, colab)
+						(numdoc, parcela, pedido, parcial, quitacao, valor, dt_parcial, hr_parcial, mat, colab)
 						VALUES
 						('$NumDocParcial', '$ParcelaParcialSql', '$PedidoParcial', '$ParcialFlag', '$QuitacaoFlag',
-						$ValorParcialSql, '$DtParcial', '$MatParcial', '$ColabParcial')";
+						$ValorParcialSql, '$DtParcial', '$HrParcial', '$MatParcial', '$ColabParcial')";
 					mysqli_query($conec, $sqlParcial) or die("File geracntparc Error #5.1. Contate seu Administrador.");
 				}
 

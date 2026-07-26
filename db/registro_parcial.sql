@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS registro_parcial (
     quitacao CHAR(1) NOT NULL DEFAULT 'N',
     valor DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     dt_parcial DATE NOT NULL,
+    hr_parcial CHAR(5) NOT NULL,
     mat CHAR(8) NOT NULL,
     colab VARCHAR(1000) NOT NULL,
     PRIMARY KEY (id)
