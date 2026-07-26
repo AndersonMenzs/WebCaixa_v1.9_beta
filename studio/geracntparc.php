@@ -341,6 +341,7 @@ include 'dbselect.php';
 				}
 
 				if ($FlagPedido == 'S' || $FlagParcial == 'S' || $FlagQuitacao == 'S') {
+					$RegParcial = (int) $RegOperacao;
 					$NumDocParcial = mysqli_real_escape_string($conec, substr($NDoc, 0, 15));
 					$ParcelaParcialSql = mysqli_real_escape_string($conec, substr((string) $ParcelaParcial, 0, 2));
 					$PedidoParcial = mysqli_real_escape_string($conec, $FlagPedido);
@@ -353,9 +354,9 @@ include 'dbselect.php';
 					$ColabParcial = mysqli_real_escape_string($conec, substr($Vendedora_full, 0, 1000));
 
 					$sqlParcial = "INSERT INTO registro_parcial
-						(numdoc, parcela, pedido, parcial, quitacao, valor, dt_parcial, hr_parcial, mat, colab)
+						(reg, numdoc, parcela, pedido, parcial, quitacao, valor, dt_parcial, hr_parcial, mat, colab)
 						VALUES
-						('$NumDocParcial', '$ParcelaParcialSql', '$PedidoParcial', '$ParcialFlag', '$QuitacaoFlag',
+						($RegParcial, '$NumDocParcial', '$ParcelaParcialSql', '$PedidoParcial', '$ParcialFlag', '$QuitacaoFlag',
 						$ValorParcialSql, '$DtParcial', '$HrParcial', '$MatParcial', '$ColabParcial')";
 					mysqli_query($conec, $sqlParcial) or die("File geracntparc Error #5.1. Contate seu Administrador.");
 				}

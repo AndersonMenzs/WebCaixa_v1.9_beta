@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS registro_parcial (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    reg INT NOT NULL,
     numdoc CHAR(15) NOT NULL,
     parcela CHAR(2) NOT NULL,
     pedido CHAR(1) NOT NULL DEFAULT 'N',
@@ -10,5 +11,6 @@ CREATE TABLE IF NOT EXISTS registro_parcial (
     hr_parcial CHAR(5) NOT NULL,
     mat CHAR(8) NOT NULL,
     colab VARCHAR(1000) NOT NULL,
+    estorno CHAR(1) NOT NULL DEFAULT '',
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
