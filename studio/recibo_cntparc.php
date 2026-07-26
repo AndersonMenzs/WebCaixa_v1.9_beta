@@ -41,14 +41,18 @@ $VrRecA = number_format($VrRec, 2, "", "");
 $VrPrest     = trim($_GET['VrPrest']);
 $VrPrestF     = number_format($VrPrest, 2, ",", ".");
 $CreditoCobranca = trim($_GET['CreditoCobranca'] ?? '0');
+$CreditoCobrancaValor = (strpos($CreditoCobranca, ',') !== false)
+    ? (float) str_replace(',', '.', str_replace('.', '', $CreditoCobranca))
+    : (float) $CreditoCobranca;
+$CreditoCobrancaF = number_format($CreditoCobrancaValor, 2, ",", ".");
 $VrParcial     = trim($_GET['VrParcial']);
 $VrParcialF     = number_format($VrParcial, 2, ",", ".");
 $vlr_ext   = trim($_GET['vlr_ext']);
 $PIni = trim($_GET['PIni']);
 $PUlt = trim($_GET['PUlt']);
-$ValorCalculoParcial = (float) $VrRec;
+$ValorCalculoParcial = (float) $VrRec + $CreditoCobrancaValor;
 $ParcelaParcialRecibo = ((float) $VrParcial > 0 && $ValorCalculoParcial >= (float) $VrPrest) ? ((int) $PUlt + 1) : (int) $PIni;
-$ExibeParcelaIntegral = !((float) $VrParcial > 0 && (float) $VrRec < (float) $VrPrest);
+$ExibeParcelaIntegral = !((float) $VrParcial > 0 && $ValorCalculoParcial < (float) $VrPrest);
 $Parc_Card_Cred = "X" . trim($_GET['parc_card_cred']);
 
 $Rdopt = trim($_GET['rdopt'] ?? '');
@@ -338,7 +342,20 @@ include "./dbselect.php";
                 <?php
                 }
 
-                if ($VrParcial > 0.00) {
+                if ($CreditoCobrancaValor > 0.00) {
+                ?>
+                    <td align="left" valign=bottom></td>
+                    <?php if ($VrParcial <= 0.00) { ?>
+                        <td colspan=3 align="center" valign=middle></td>
+                        <td align="left" valign=bottom></td>
+                    <?php } ?>
+                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
+                        <b>
+                            <font size=1>PARCIAL</font>
+                        </b>
+                    </td>
+                <?php
+                } elseif ($VrParcial > 0.00) {
                 ?>
                     <td align="left" valign=bottom></td>
                     <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
@@ -385,7 +402,18 @@ include "./dbselect.php";
                     </td>
                 <?php
                 }
-                if ($VrParcial > 0.00) {
+                if ($CreditoCobrancaValor > 0.00) {
+                ?>
+                    <td align="left" valign=bottom></td>
+                    <?php if ($VrParcial <= 0.00) { ?>
+                        <td colspan=3 align="center" valign=middle></td>
+                        <td align="left" valign=bottom></td>
+                    <?php } ?>
+                    <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
+                        <font size=1><?php echo "R$ " .  ($VrParcial > 0.00 ? $VrParcialF : $CreditoCobrancaF); ?></font>
+                    </td>
+                <?php
+                } elseif ($VrParcial > 0.00) {
                 ?>
                     <td align="left" valign=bottom></td>
                     <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
@@ -749,7 +777,20 @@ include "./dbselect.php";
                 <?php
                 }
 
-                if ($VrParcial > 0.00) {
+                if ($CreditoCobrancaValor > 0.00) {
+                ?>
+                    <td align="left" valign=bottom></td>
+                    <?php if ($VrParcial <= 0.00) { ?>
+                        <td colspan=3 align="center" valign=middle></td>
+                        <td align="left" valign=bottom></td>
+                    <?php } ?>
+                    <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
+                        <b>
+                            <font size=1>PARCIAL</font>
+                        </b>
+                    </td>
+                <?php
+                } elseif ($VrParcial > 0.00) {
                 ?>
                     <td align="left" valign=bottom></td>
                     <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
@@ -796,7 +837,18 @@ include "./dbselect.php";
                     </td>
                 <?php
                 }
-                if ($VrParcial > 0.00) {
+                if ($CreditoCobrancaValor > 0.00) {
+                ?>
+                    <td align="left" valign=bottom></td>
+                    <?php if ($VrParcial <= 0.00) { ?>
+                        <td colspan=3 align="center" valign=middle></td>
+                        <td align="left" valign=bottom></td>
+                    <?php } ?>
+                    <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>
+                        <font size=1><?php echo "R$ " .  ($VrParcial > 0.00 ? $VrParcialF : $CreditoCobrancaF); ?></font>
+                    </td>
+                <?php
+                } elseif ($VrParcial > 0.00) {
                 ?>
                     <td align="left" valign=bottom></td>
                     <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=2 align="center" valign=middle>

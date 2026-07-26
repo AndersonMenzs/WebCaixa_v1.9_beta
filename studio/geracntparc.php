@@ -100,8 +100,10 @@ include 'dbselect.php';
 	$FlagPedido = ($Chk_Pedido == '1' || $Pedido !== '') ? 'S' : 'N';
 	$FlagParcial = ($ValorParcial > 0) ? 'S' : 'N';
 	$FlagQuitacao = $Quitacao ? 'S' : 'N';
-	$ValorCalculoParcial = $VrRec;
-	$ParcelaParcial = ($FlagParcial == 'S' && $ValorCalculoParcial >= moedaParaFloat($VrPrest)) ? ($PUlt + 1) : $PIni;
+	$ValorPrestacaoCalculo = moedaParaFloat($VrPrest);
+	$CreditoAplicadoParcial = ($ValorPrestacaoCalculo > 0) ? $CreditoCobranca : 0;
+	$ValorCalculoParcial = $VrRec + $CreditoAplicadoParcial;
+	$ParcelaParcial = ($FlagParcial == 'S' && $ValorCalculoParcial >= $ValorPrestacaoCalculo) ? ($PUlt + 1) : $PIni;
 
 	if ($Quitacao && $ValorParcial > 0) {
 		$SisRot = "S-7.2.2.1.1";
@@ -113,11 +115,13 @@ include 'dbselect.php';
 
 	$ValorQuitacaoCents = moedaParaCentavos($VrPrest) * (int) $QtdeParc;
 	$ValorRecebidoCents = (int) round($VrRec * 100);
+	$CreditoCobrancaCents = (int) round($CreditoCobranca * 100);
+	$CreditoAplicadoQuitacaoCents = ($ValorQuitacaoCents > 0 && $ValorRecebidoCents < $ValorQuitacaoCents) ? min($CreditoCobrancaCents, $ValorQuitacaoCents - $ValorRecebidoCents) : 0;
 
-	if ($Quitacao && $ValorQuitacaoCents > 0 && $ValorRecebidoCents != $ValorQuitacaoCents) {
+	if ($Quitacao && $ValorQuitacaoCents > 0 && ($ValorRecebidoCents + $CreditoAplicadoQuitacaoCents) != $ValorQuitacaoCents) {
 		$SisRot = "S-7.2.2.1.1";
 		include "./rodape.php";
-		echo "<script>alert('Valor recebido incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
+		echo "<script>alert('Valor recebido + Restante Parcela incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
 		mysqli_close($conec);
 		exit;
 	}
@@ -337,6 +341,7 @@ include 'dbselect.php';
 				}
 
 				if ($FlagPedido == 'S' || $FlagParcial == 'S' || $FlagQuitacao == 'S') {
+					$RegParcial = (int) $RegOperacao;
 					$NumDocParcial = mysqli_real_escape_string($conec, substr($NDoc, 0, 15));
 					$ParcelaParcialSql = mysqli_real_escape_string($conec, substr((string) $ParcelaParcial, 0, 2));
 					$PedidoParcial = mysqli_real_escape_string($conec, $FlagPedido);
@@ -344,14 +349,15 @@ include 'dbselect.php';
 					$QuitacaoFlag = mysqli_real_escape_string($conec, $FlagQuitacao);
 					$ValorParcialSql = number_format($ValorParcial, 2, '.', '');
 					$DtParcial = mysqli_real_escape_string($conec, $dtRec);
+					$HrParcial = mysqli_real_escape_string($conec, substr($hora, 0, 5));
 					$MatParcial = mysqli_real_escape_string($conec, substr($Mat_Vend, 0, 8));
 					$ColabParcial = mysqli_real_escape_string($conec, substr($Vendedora_full, 0, 1000));
 
 					$sqlParcial = "INSERT INTO registro_parcial
-						(numdoc, parcela, pedido, parcial, quitacao, valor, dt_parcial, mat, colab)
+						(reg, numdoc, parcela, pedido, parcial, quitacao, valor, dt_parcial, hr_parcial, mat, colab)
 						VALUES
-						('$NumDocParcial', '$ParcelaParcialSql', '$PedidoParcial', '$ParcialFlag', '$QuitacaoFlag',
-						$ValorParcialSql, '$DtParcial', '$MatParcial', '$ColabParcial')";
+						($RegParcial, '$NumDocParcial', '$ParcelaParcialSql', '$PedidoParcial', '$ParcialFlag', '$QuitacaoFlag',
+						$ValorParcialSql, '$DtParcial', '$HrParcial', '$MatParcial', '$ColabParcial')";
 					mysqli_query($conec, $sqlParcial) or die("File geracntparc Error #5.1. Contate seu Administrador.");
 				}
 

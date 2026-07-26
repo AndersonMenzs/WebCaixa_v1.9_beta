@@ -323,6 +323,25 @@ ini_set('error_log', 'php_errors.log');
 			$ValorContParc = '0,00';
 		}
 
+		// Totalizando Ajuste Emergencial
+		$sqlR = "SELECT COUNT(*) as total FROM registro where tiporec='11' and subtipo = 'EMERG' and estorno <> 'x' and datarec = '$dtOpen'";
+		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #14A. Contate seu Administrador.');
+		$lnR = mysqli_fetch_array($rsR);
+		$NEmerg = $lnR['total'];
+
+		$sqlR = "SELECT vlrec FROM registro where tiporec='11' and subtipo = 'EMERG' and estorno <> 'x' and datarec = '$dtOpen' ";
+		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #14B. Contate seu Administrador.');
+
+		while ($lnR  = mysqli_fetch_array($rsR)) {
+			$VlRec    = $lnR['vlrec'];
+			$RecEmerg  = $RecEmerg + $VlRec;
+			$ValorEmerg = number_format($RecEmerg, 2, ",", ".");
+		}
+
+		if ($ValorEmerg == '') {
+			$ValorEmerg = '0,00';
+		}
+
 		// Totalizando Propostas (Entrada)
 		$sqlR = "SELECT numdoc FROM registro where tiporec='4' and subtipo = 'PVDE' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc";
 		$rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #15. Contate seu Administrador.');
@@ -693,14 +712,6 @@ ini_set('error_log', 'php_errors.log');
 							</td>
 						</tr>
 
-						<!--<tr>
-							<td>
-								<font color="gold"><b><i>Chaveiros:. . . . . . . . . </b></i></font>
-								<b><i><?php //echo "$NTChav itens --> R$ $ValorChav"; 
-										?></i></b>
-							</td>
-						</tr>-->
-
 						<tr>
 							<td>
 								<font color="gold"><b><i>Taxa de Produção:. . . </b></i></font>
@@ -736,14 +747,6 @@ ini_set('error_log', 'php_errors.log');
 							</td>
 						</tr>
 
-						<!--<tr>
-							<td>
-								<font color="gold"><b><i>Propostas (Parcela):. . </b></i></font>
-								<b><i><?php //echo "$NPropParc itens --> R$ $ValorPropParc"; 
-										?></i></b>
-							</td>
-						</tr>-->
-
 						<tr>
 							<td>
 								<font color="gold"><b><i>Produtos &amp; Serviços:. <font color='#FFFFFF'><?php echo " $NPRecs itens --> R$ $VrPRecsF"; ?> </b></i></font>
@@ -766,6 +769,12 @@ ini_set('error_log', 'php_errors.log');
 						<tr>
 							<td>
 								<font color="gold"><b><i>Estornos:. . . . . . . . . . <font color='#FFFFFF'><?php echo " $NEstorno itens --> R$ $ValorEstorno"; ?> </b></i></font>
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<font color="gold"><b><i>Ajustes Emergenciais:. . . . . <font color='#FFFFFF'><?php echo " $NEmerg itens --> R$ $ValorEmerg"; ?> </b></i></font>
 							</td>
 						</tr>
 					</table>
@@ -894,6 +903,13 @@ ini_set('error_log', 'php_errors.log');
 						<tr>
 							<td>
 								<font color="gold"><b><i>&nbsp;Estornos: . . . . . . . . . . . . . . </b></i></font><b><i>R$ <?php echo $ValorEstorno; ?><blink>
+											</font></i></b>
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<font color="gold"><b><i>&nbsp;Ajustes Emergenciais: . . . . . </b></i></font><b><i>R$ <?php echo $ValorEmerg; ?><blink>
 											</font></i></b>
 							</td>
 						</tr>
@@ -1269,6 +1285,7 @@ ini_set('error_log', 'php_errors.log');
 			<input type="hidden" name="numbebe" value="<?php echo $NBebe; ?>">
 			<input type="hidden" name="numcontent" value="<?php echo $NContEnt; ?>">
 			<input type="hidden" name="numcontparc" value="<?php echo $NContParc; ?>">
+			<input type="hidden" name="numemerg" value="<?php echo $NEmerg; ?>">
 			<input type="hidden" name="numpropent" value="<?php echo $NPropEnt; ?>">
 			<input type="hidden" name="numpropparc" value="<?php echo $NPropParc; ?>">
 			<input type="hidden" name="numresgate" value="<?php echo $NResgate; ?>">
@@ -1282,6 +1299,7 @@ ini_set('error_log', 'php_errors.log');
 			<input type="hidden" name="vrcontent" value="<?php echo $ValorContEnt; ?>">
 			<input type="hidden" name="vrpropent" value="<?php echo $ValorPropEnt; ?>">
 			<input type="hidden" name="vrcontparc" value="<?php echo $ValorContParc; ?>">
+			<input type="hidden" name="vremerg" value="<?php echo $ValorEmerg; ?>">
 			<input type="hidden" name="vrpropparc" value="<?php echo $ValorPropParc; ?>">
 			<input type="hidden" name="vrresg" value="<?php echo $ValorResg; ?>">
 			<input type="hidden" name="vrestorno" value="<?php echo $ValorEstorno; ?>">

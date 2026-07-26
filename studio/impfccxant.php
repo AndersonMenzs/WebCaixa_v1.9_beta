@@ -63,6 +63,8 @@ $NContEnt = post('numcontent');
 $ValorContEnt = post('vrcontent');
 $NContParc = post('numcontparc');
 $ValorContParc = post('vrcontparc');
+$NEmerg = post('numemerg');
+$ValorEmerg = post('vremerg');
 $NPropEnt = post('numpropent');
 $ValorPropEnt = post('vrpropent');
 $NPRecs = post('numprodsrec');
@@ -877,6 +879,40 @@ if ($hr_abertura_obj) {
                                                 <font class="fonte-rel">
                                                     <font size="1" class="fs-6">
                                                         <i>R$ <?= $ValorContParc ?></i>
+                                                    </font>
+                                                </font>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                <?php
+                                }
+
+                                if (valor_num($NEmerg) > 0 && valor_num($ValorEmerg) > 0) {
+                                ?>
+                                    <tr>
+                                        <td width="43%" style="border: none; padding: 0in">
+                                            <p>
+                                                <font class="fonte-rel">
+                                                    <font size="1" class="fs-6">
+                                                        <i>Aj. Emergencial</i>
+                                                    </font>
+                                                </font>
+                                            </p>
+                                        </td>
+                                        <td width="25%" style="border: none; padding: 0in">
+                                            <p class="txt-centro">
+                                                <font class="fonte-rel">
+                                                    <font size="1" class="fs-6">
+                                                        <i><?= $NEmerg ?></i>
+                                                    </font>
+                                                </font>
+                                            </p>
+                                        </td>
+                                        <td width="32%" style="border: none; padding: 0in">
+                                            <p>
+                                                <font class="fonte-rel">
+                                                    <font size="1" class="fs-6">
+                                                        <i>R$ <?= $ValorEmerg ?></i>
                                                     </font>
                                                 </font>
                                             </p>

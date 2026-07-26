@@ -88,6 +88,14 @@
 			$Cliente   = $lnr['cliente'];
 			mysqli_free_result($rsr);
 
+			if ($regsr > 0) {
+				$RegParcial = (int) $Aut;
+				$NDocParcial = mysqli_real_escape_string($conec, substr($NDoc, 0, 15));
+				$DtParcial = mysqli_real_escape_string($conec, $dtComp);
+				$sqlParcial = "update registro_parcial set estorno = 'x' where reg = $RegParcial and numdoc = '$NDocParcial' and dt_parcial = '$DtParcial' and estorno <> 'x' ";
+				mysqli_query($conec, $sqlParcial) or die("Erro de Banco de Dados #E5. Contate seu Administrador.");
+			}
+
 			if ($regsr == 1) {
 				include "estunico.php";
 			} else {

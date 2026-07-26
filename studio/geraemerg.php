@@ -103,7 +103,7 @@
 			$Reg  = $Reg + 1;
 
 			// Gravando o registro do ajuste emergencial
-			$sqlGr = "insert into registro values($Reg, '$Lacre', '$TipoRec', '$SubTipo', '0', '0', '$dtRec', '$HoraF', '$Valor', '$user', '', '', '', '')";
+			$sqlGr = "insert into registro values($Reg, '$Lacre', '$TipoRec', '$SubTipo', '10', '0', '$dtRec', '$HoraF', '$Valor', '$user', '', '', '', '')";
 			$rsGr  = mysqli_query($conec, $sqlGr) or die("Erro ao inserir registro emergencial #1. Contate seu Administrador.");
 
 			// Preparando o registro do ajuste emergencial
@@ -111,7 +111,7 @@
 			$RegFull = 10000 + $Reg;
 			$Reg = substr($RegFull, 1, 4);
 			$valorFormatado = 'R$ ' . number_format($Valor, 2, ',', '.');
-			$Spo = $Reg . $PCf . $Hora . $Lacre . $dtAut . $valorFormatado . $SgRec . $SubTipo . $MatRec;
+			$Spo = $Reg . $PCf . $Hora . $dtAut . $SgRec . $Lacre . $valorFormatado . $SubTipo . $MatRec;
 
 			// Gravando o registro do ajuste emergencial na tabela spool
 			$sqp = "insert into spool (rec, spo) values('$Reg', '$Spo')";
