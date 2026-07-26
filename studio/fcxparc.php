@@ -232,6 +232,23 @@
 			$ValorContParc = '0,00';
 		}
 
+		// Totalizando Ajuste Emergencial
+		$sqlR = "SELECT COUNT(*) as total FROM registro where tiporec='11' and subtipo = 'EMERG' and estorno <> 'x' and datarec = '$dtOpen'";
+		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #7! Emergencial');
+		$lnR = mysqli_fetch_array($rsR);
+		$NEmerg = $lnR['total'];
+
+		$sqlR = "SELECT vlrec FROM registro where tiporec='11' and subtipo = 'EMERG' and estorno <> 'x' and datarec = '$dtOpen' ";
+		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #8! Emergencial');
+		while ($lnR  = mysqli_fetch_array($rsR)) {
+			$VlRec    = $lnR['vlrec'];
+			$RecEmerg  = $RecEmerg + $VlRec;
+			$ValorEmerg = number_format($RecEmerg, 2, ",", ".");
+		}
+		if ($ValorEmerg == '') {
+			$ValorEmerg = '0,00';
+		}
+
 		// Totalizando Propostas (Entrada)
 		$sqlR = "SELECT numdoc FROM registro where tiporec='4' and subtipo = 'PVDE' and estorno <> 'x' and datarec = '$dtOpen' group by numdoc";
 		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #9!');
@@ -691,6 +708,13 @@
 								<font color="gold"><b><i>Estornos:. . . . . . . . . . <font color='#FFFFFF'><?php echo " $NEstorno itens --> R$ $ValorEstorno"; ?> </b></i></font>
 							</td>
 						</tr>
+
+						<tr>
+							<td>
+								<font color="gold"><b><i>Ajuste Emergencial:. . </b></i></font>
+								<b><i><?php echo "$NEmerg itens --> R$ $ValorEmerg"; ?></i></b>
+							</td>
+						</tr>
 					</table>
 				</td>
 				<td width="33%">
@@ -816,6 +840,14 @@
 
 						<tr>
 							<td>
+								<font color="gold"><b><i>&nbsp;Ajustes Emergenciais: . . . . . </b></i></font><b><i>R$ <?php echo $ValorEmerg; ?><blink>
+											</font></i></b>
+							</td>
+						</tr>
+
+
+						<tr>
+							<td>
 								<font color="gold"><b><i>&nbsp;Saldo de Caixa (Gaveta): . . . </b></i></font><b><i>R$ <?php echo $GavAut; ?><blink>
 											</font></i></b>
 							</td>
@@ -881,6 +913,8 @@
 			<input type="hidden" name="ncontentvlr" value="<?= $ValorContEnt ?>">
 			<input type="hidden" name="ncontparc" value="<?= $NContParc ?>">
 			<input type="hidden" name="ncontparcvlr" value="<?= $ValorContParc ?>">
+			<input type="hidden" name="nemerg" value="<?= $NEmerg ?>">
+			<input type="hidden" name="nemergvlr" value="<?= $ValorEmerg ?>">
 			<input type="hidden" name="npropent" value="<?= $NPropEnt ?>">
 			<input type="hidden" name="npropentvlr" value="<?= $ValorPropEnt ?>">
 			<input type="hidden" name="nprod" value="<?= $NPRecs ?>">

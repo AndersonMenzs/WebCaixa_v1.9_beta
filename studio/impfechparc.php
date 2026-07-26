@@ -55,6 +55,8 @@ $NContEnt       = num('ncontent', 0);
 $ValorContEnt   = num('ncontentvlr', 0);
 $NContParc      = num('ncontparc', 0);
 $ValorContParc  = num('ncontparcvlr', 0);
+$NEmerg         = num('nemerg', 0);
+$ValorEmerg     = num('nemergvlr', 0);
 $NPropEnt       = num('npropent', 0);
 $ValorPropEnt   = num('npropentvlr', 0);
 $NPRecs         = num('nprod', 0);
@@ -106,6 +108,7 @@ $ValorProdFmt      = moeda($ValorProd);
 $ValorConcFmt      = moeda($ValorConc);
 $ValorContEntFmt   = moeda($ValorContEnt);
 $ValorContParcFmt  = moeda($ValorContParc);
+$ValorEmergFmt     = moeda($ValorEmerg);
 $ValorPropEntFmt   = moeda($ValorPropEnt);
 $VrPRecsFFmt       = moeda($VrPRecsF);
 $VrBookRecFFmt     = moeda($VrBookRecF);
@@ -860,6 +863,40 @@ if ($hr_abertura_obj) {
 												<font class="fonte-rel">
 													<font size="1" class="fs-6">
 														<i>R$ <?= $ValorContParcFmt ?></i>
+													</font>
+												</font>
+											</p>
+										</td>
+									</tr>
+								<?php
+								}
+
+								if ($NEmerg > 0 && $ValorEmerg > 0.00) {
+								?>
+									<tr>
+										<td width="43%" style="border: none; padding: 0in">
+											<p>
+												<font class="fonte-rel">
+													<font size="1" class="fs-6">
+														<i>Aj. Emergencial</i>
+													</font>
+												</font>
+											</p>
+										</td>
+										<td width="25%" style="border: none; padding: 0in">
+											<p class="txt-centro">
+												<font class="fonte-rel">
+													<font size="1" class="fs-6">
+														<i><?= $NEmerg ?></i>
+													</font>
+												</font>
+											</p>
+										</td>
+										<td width="32%" style="border: none; padding: 0in">
+											<p>
+												<font class="fonte-rel">
+													<font size="1" class="fs-6">
+														<i>R$ <?= $ValorEmergFmt ?></i>
 													</font>
 												</font>
 											</p>

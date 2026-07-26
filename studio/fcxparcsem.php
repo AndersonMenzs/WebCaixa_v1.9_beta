@@ -84,7 +84,7 @@ ini_set('error_log', 'php_errors.log');
 	}
 
 	if ($ch == 'ok-enc' or $ch == 'ok') {
-		?>
+	?>
 
 		<font size='4' color='gold'>
 			<b>
@@ -227,6 +227,25 @@ ini_set('error_log', 'php_errors.log');
 
 		if ($ValorContParc == '') {
 			$ValorContParc = '0,00';
+		}
+
+		// Totalizando Ajuste Emergencial
+		$sqlR = "SELECT COUNT(*) as total FROM registro where tiporec='11' and subtipo = 'EMERG' and estorno <> 'x' and datarec = '$dtOpen'";
+		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #7! Emergencial');
+		$lnR = mysqli_fetch_array($rsR);
+		$NEmerg = $lnR['total'];
+
+		$sqlR = "SELECT vlrec FROM registro where tiporec='11' and subtipo = 'EMERG' and estorno <> 'x' and datarec = '$dtOpen' ";
+		$rsR  = mysqli_query($conec, $sqlR) or die('Erro #8! Emergencial');
+
+		while ($lnR  = mysqli_fetch_array($rsR)) {
+			$VlRec    = $lnR['vlrec'];
+			$RecEmerg  = $RecEmerg + $VlRec;
+			$ValorEmerg = number_format($RecEmerg, 2, ",", ".");
+		}
+
+		if ($ValorEmerg == '') {
+			$ValorEmerg = '0,00';
 		}
 
 		// Totalizando Propostas (Entrada)
@@ -592,7 +611,7 @@ ini_set('error_log', 'php_errors.log');
 								<b><i><?php echo "$NPropEnt itens --> R$ $ValorPropEnt"; ?></i></b>
 							</td>
 						</tr>
-						
+
 						<tr>
 							<td>
 								<font color="gold"><b><i>Produtos &amp; Serviços:. <font color='#FFFFFF'><?php echo " $NPRecs itens --> R$ $VrPRecsF"; ?> </b></i></font>
@@ -615,6 +634,12 @@ ini_set('error_log', 'php_errors.log');
 						<tr>
 							<td>
 								<font color="gold"><b><i>Estornos:. . . . . . . . . . <font color='#FFFFFF'><?php echo " $NEstorno itens --> R$ $ValorEstorno"; ?> </b></i></font>
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<font color="gold"><b><i>Ajustes Emergenciais:. . . . . <font color='#FFFFFF'><?php echo " $NEmerg itens --> R$ $ValorEmerg"; ?> </b></i></font>
 							</td>
 						</tr>
 					</table>
@@ -740,6 +765,13 @@ ini_set('error_log', 'php_errors.log');
 						<tr>
 							<td>
 								<font color="gold"><b><i>&nbsp;Estornos: . . . . . . . . . . . . . . </b></i></font><b><i>R$ <?php echo $ValorEstorno; ?><blink>
+											</font></i></b>
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<font color="gold"><b><i>&nbsp;Ajustes Emergenciais: . . . . . </b></i></font><b><i>R$ <?php echo $ValorEmerg; ?><blink>
 											</font></i></b>
 							</td>
 						</tr>

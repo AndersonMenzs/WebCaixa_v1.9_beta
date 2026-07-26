@@ -179,6 +179,25 @@ while ($lnTT = mysqli_fetch_array($rsTT)) {
 $fech_data_registro = date("Y-m-d", strtotime(str_replace('/', '-', $dataFch)));
 $fech_data_spo = date("dmy", strtotime(str_replace('/', '-', $dataFch)));
 
+// Totalizando Ajuste Emergencial
+$sqlR = "SELECT COUNT(*) as total FROM registro where tiporec='11' and subtipo = 'EMERG' and estorno <> 'x' and datarec = '$fech_data_registro'";
+$rsR  = mysqli_query($conec, $sqlR) or die('File impultfech3 Error #0A. Contate seu Administrador.');
+$lnR = mysqli_fetch_array($rsR);
+$NEmerg = $lnR['total'];
+
+$sqlR = "SELECT vlrec FROM registro where tiporec='11' and subtipo = 'EMERG' and estorno <> 'x' and datarec = '$fech_data_registro' ";
+$rsR  = mysqli_query($conec, $sqlR) or die('File impultfech3 Error #0B. Contate seu Administrador.');
+
+while ($lnR  = mysqli_fetch_array($rsR)) {
+	$VlRec    = $lnR['vlrec'];
+	$RecEmerg  = $RecEmerg + $VlRec;
+	$ValorEmerg = number_format($RecEmerg, 2, ",", ".");
+}
+
+if ($ValorEmerg == '') {
+	$ValorEmerg = '0,00';
+}
+
 // Arrecadado em Pix QRCode
 $sqlR = "SELECT vlrec FROM registro where modpgto='70' and tiporec <> 'E' and estorno <> 'x' and datarec = '$fech_data_registro' order by tiporec";
 $rsR  = mysqli_query($conec, $sqlR) or die('File fccxant Error #1. Contate seu Administrador.');
@@ -945,6 +964,40 @@ if ($PixCNPJ == '') {
 												<font class="fonte-rel">
 													<font size="1" class="fs-6">
 														<i>R$ <?= $ValorContParc ?></i>
+													</font>
+												</font>
+											</p>
+										</td>
+									</tr>
+								<?php
+								}
+
+								if ($NEmerg > 0 && $ValorEmerg > 0.00) {
+								?>
+									<tr>
+										<td width="43%" style="border: none; padding: 0in">
+											<p>
+												<font class="fonte-rel">
+													<font size="1" class="fs-6">
+														<i>Aj. Emergencial</i>
+													</font>
+												</font>
+											</p>
+										</td>
+										<td width="25%" style="border: none; padding: 0in">
+											<p class="txt-centro">
+												<font class="fonte-rel">
+													<font size="1" class="fs-6">
+														<i><?= $NEmerg ?></i>
+													</font>
+												</font>
+											</p>
+										</td>
+										<td width="32%" style="border: none; padding: 0in">
+											<p>
+												<font class="fonte-rel">
+													<font size="1" class="fs-6">
+														<i>R$ <?= $ValorEmerg ?></i>
 													</font>
 												</font>
 											</p>
