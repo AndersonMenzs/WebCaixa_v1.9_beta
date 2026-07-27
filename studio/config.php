@@ -5,3 +5,6 @@ $Senior = 55;
 
 // Idade mínima para gratuidade Mulher Ághata
 $Aghata = 35;
+
+// Valor máximo de recolhimento
+$Recolh = 300;

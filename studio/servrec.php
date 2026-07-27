@@ -54,6 +54,7 @@
 
     include "sitcaixa.php";
     include "valida_caixa.php";
+    include "config.php";
 
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
         bloquear_se_caixa_anterior_aberto($conec, $lg_user);
@@ -91,37 +92,43 @@
             $Deposito = $Deposito + $ln['valor'];
         }
 
-        $ValorAc = $Gaveta + $Cash + $ValRec - $Deposito - $ValDesp; ?>
+        $ValorAc = $Gaveta + $Cash + $ValRec - $Deposito - $ValDesp;
+        $precisaRecolher = ($ValorAc >= $Recolh);
+        ?>
 
-        <table width='100%' border='0' cellpadding='0' cellspacing='0'>
+        <table width='100%' border='0' cellpadding='0' cellspacing='0'<?php if ($precisaRecolher) { ?> style="height: 70vh;"<?php } ?>>
             <tr>
+                <?php if ($precisaRecolher) { ?>
+                <td align="center" style="vertical-align: middle;">
+                    <div style="text-align: center;">
+                        <font color="gold" size='6'><b><i>
+                                    <blink>&quot; <u>FAÇA O RECOLHIMENTO DO CAIXA!!!</u> &quot;</blink>
+                                </i></b></font>
+                        <br><br>
+                        <a href="deposito.php?c_s=<?php echo $lg_user; ?>">
+                            <button type="button">Recolhimento</button>
+                        </a>
+                    </div>
+                </td>
+                <?php } else { ?>
                 <td>
                     <a href="http://localhost/caixa/menu.php?c_s=<?php echo $lg_user; ?>"><img src="./images/voltar.gif"
                             width="120" border="0" align="top"></a>
                 </td>
                 <td align="center">
-                    <?php
-                    // Emitindo Aviso de Depósito
-                    if ($ValorAc > 500) {
-                    ?>
-                        <font color="gold" size='6'><b><i>
-                                    <blink>&quot; <u>FAÇA O RECOLHIMENTO DO CAIXA!!!</u> &quot;</blink>
-                                </i></b></font>
-                    <?php
-                    } else { ?>
-                        <font color="gold" size="6"><b><i><u>RECEBIMENTOS</u></i></b></font>
-                    <?php
-                    }
-                    ?>
+                    <font color="gold" size="6"><b><i><u>RECEBIMENTOS</u></i></b></font>
                 </td>
                 <td align="right">
                     <a href="http://localhost/caixa/menu.php?c_s=<?php echo $lg_user; ?>">
                         <img src="./images/voltar.gif" width="120" border="0" align="top">
                     </a>
                 </td>
+                <?php } ?>
             </tr>
-        </table><br><br>
+        </table>
 
+        <?php if (!$precisaRecolher) { ?>
+        <br><br>
         <table border='0' cellpadding='10' cellspacing='0' align="center">
             <tr>
                 <td>
@@ -160,6 +167,7 @@
                 </td>
             </tr>
         </table><br>
+        <?php } ?>
     <?php
 
         // Fechando a Conexão
