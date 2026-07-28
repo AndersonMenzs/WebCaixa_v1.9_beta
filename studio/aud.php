@@ -129,6 +129,13 @@
 					<font size='4'><b><i>- Reajuste de Preço de Taxas e Produtos</i></b></font>
 				</td>
 			</tr>
+
+			<tr>
+				<td>
+					<a href="config_sys.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
+					<font size='4'><b><i>- Configurações do Sistema WebCaixa</i></b></font>
+				</td>
+			</tr>
 		</table><br>
 		<meta http-equiv="refresh" content="60;URL=./acaud.php?c_s=<?php echo $lg_user; ?>">
 	<?php

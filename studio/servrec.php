@@ -54,26 +54,35 @@
 
     include "sitcaixa.php";
     include "valida_caixa.php";
-    include "config.php";
+
+    $Recolh = 300.00;
+    $sqlRecolh = "select vlr_config from config_sys where cod_config = 'RECOLH' order by id desc limit 1";
+    $rsRecolh  = mysqli_query($conec, $sqlRecolh) or die("Erro de Banco de Dados #0. Contate seu Administrador.");
+    if ($lnRecolh = mysqli_fetch_array($rsRecolh)) {
+        $Recolh = (float) $lnRecolh['vlr_config'];
+    }
 
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
         bloquear_se_caixa_anterior_aberto($conec, $lg_user);
     }
 
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
+        $ValRec = 0.00;
+        $ValDesp = 0.00;
+        $Deposito = 0.00;
 
         // Avaliando o Numerário em Caixa
         $sql = "select numerario, cashtot from caixa where dtopen = '$dataH' ";
         $rs  = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #1. Contate seu Administrador.");
         $ln  = mysqli_fetch_array($rs);
-        $Gaveta = $ln['numerario'];
-        $Cash   = $ln['cashtot'];
+        $Gaveta = (float) $ln['numerario'];
+        $Cash   = (float) $ln['cashtot'];
 
         // Avaliando o Total Arrecadado
         $sql = "select vlrec from registro where modpgto = '10' and tiporec <> 'E' and tiporec <> '8' and estorno = '' and  datarec = '$dataH' ";
         $rs  = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #2. Contate seu Administrador.");
         while ($ln  = mysqli_fetch_array($rs)) {
-            $RecCash = $ln['vlrec'];
+            $RecCash = (float) $ln['vlrec'];
             $ValRec  = $ValRec + $RecCash;
         }
 
@@ -81,7 +90,7 @@
         $sql = "select vlrec from registro where tiporec = '8' and estorno = '' and datarec = '$dataH' ";
         $rs  = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #3. Contate seu Administrador.");
         while ($ln  = mysqli_fetch_array($rs)) {
-            $RecDesp = $ln['vlrec'];
+            $RecDesp = (float) $ln['vlrec'];
             $ValDesp  = $ValDesp + $RecDesp;
         }
 
@@ -89,7 +98,7 @@
         $sql = "select valor from depositos where dtdep = '$dataH' ";
         $rs  = mysqli_query($conec, $sql) or die("Erro de Banco de Dados #4. Contate seu Administrador.");
         while ($ln  = mysqli_fetch_array($rs)) {
-            $Deposito = $Deposito + $ln['valor'];
+            $Deposito = $Deposito + (float) $ln['valor'];
         }
 
         $ValorAc = $Gaveta + $Cash + $ValRec - $Deposito - $ValDesp;
