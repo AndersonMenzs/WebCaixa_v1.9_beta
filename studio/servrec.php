@@ -117,6 +117,9 @@
                         <a href="deposito.php?c_s=<?php echo $lg_user; ?>">
                             <button type="button">Recolhimento</button>
                         </a>
+                        <a href="index.php?c_s=<?php echo $lg_user; ?>">
+                            <button type="button">Retornar</button>
+                        </a>
                     </div>
                 </td>
                 <?php } else { ?>

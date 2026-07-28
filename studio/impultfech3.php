@@ -26,6 +26,26 @@ function num($chave, $padrao = 0.0)
 	return (float) $valor;
 }
 
+function valor_num($valor, $padrao = 0.0)
+{
+	if (is_array($valor)) {
+		return (float) $padrao;
+	}
+
+	$valor = trim((string) $valor);
+
+	if ($valor === '') {
+		return (float) $padrao;
+	}
+
+	if (strpos($valor, ',') !== false) {
+		$valor = str_replace('.', '', $valor);
+		$valor = str_replace(',', '.', $valor);
+	}
+
+	return (float) $valor;
+}
+
 function moeda($valor)
 {
 	return number_format((float) $valor, 2, ',', '.');
@@ -167,6 +187,7 @@ $PgtoServicos = $PgtoTot;
 $Entradas = 0;
 $Errlanc = [];
 $Recolhimentos = [];
+$TotalDinheiro = moeda(valor_num($Dinheiro) - valor_num($PgtoTot));
 
 // Obtendo o Total Arrecadado
 $sqlTT = "select vlrec from registro where datarec = '$fech_data_registro' and tiporec <> '8' ";
@@ -1108,40 +1129,6 @@ if ($PixCNPJ == '') {
 								<?php
 								}
 
-								if ($NumPgtos > 0 && $PgtoServicos > 0.00) {
-								?>
-									<tr>
-										<td width="43%" style="border: none; padding: 0in">
-											<p>
-												<font class="fonte-rel">
-													<font size="1" class="fs-6">
-														<i>Despesas</i>
-													</font>
-												</font>
-											</p>
-										</td>
-										<td width="25%" style="border: none; padding: 0in">
-											<p class="txt-centro">
-												<font class="fonte-rel">
-													<font size="1" class="fs-6">
-														<i><?= $NumPgtos ?></i>
-													</font>
-												</font>
-											</p>
-										</td>
-										<td width="32%" style="border: none; padding: 0in">
-											<p>
-												<font class="fonte-rel">
-													<font size="1" class="fs-6">
-														<i>R$ <?= $PgtoServicos ?></i>
-													</font>
-												</font>
-											</p>
-										</td>
-									</tr>
-								<?php
-								}
-
 								if ($NEstorno > 0 && $ValorEstorno > 0.00) {
 								?>
 									<tr>
@@ -1537,6 +1524,22 @@ if ($PixCNPJ == '') {
 											</p>
 										</td>
 									</tr>
+									<tr>
+										<td width="68%" bgcolor="#eeeeee" style="background: #eeeeee; border: none; padding: 0in">
+											<p class="txt-esq">
+												<font class="fonte-rel">
+													<font size="1" class="fs-6"><i><b>T. DINHEIRO</b></i></font>
+												</font>
+											</p>
+										</td>
+										<td width="32%" bgcolor="#eeeeee" style="background: #eeeeee; border: none; padding: 0in">
+											<p>
+												<font class="fonte-rel">
+													<font size="1" class="fs-6"><i><b>R$ <?= $TotalDinheiro ?></b></i></font>
+												</font>
+											</p>
+										</td>
+									</tr>
 								</table>
 							</div>
 
@@ -1705,7 +1708,7 @@ if ($PixCNPJ == '') {
 				</div>
 			<?php } ?>
 
-			<?php if (!empty($FechamentoF) || !empty($GavAut) || !empty($DifCx)) { ?>
+			<?php if (!empty($Dinheiro) || !empty($PgtoTot)) { ?>
 				<div class="bloco-4 bloco-esq">
 					<table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
 						<tr>
@@ -1726,21 +1729,21 @@ if ($PixCNPJ == '') {
 							<td width="33%" bgcolor="#eeeeee" style="background:#eeeeee; border:none; padding:0in">
 								<p class="txt-centro">
 									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>VALOR REAL</b></font>
+										<font size="1" class="fs-6"><b>TOTAL DINHEIRO</b></font>
 									</font>
 								</p>
 							</td>
 							<td width="33%" bgcolor="#eeeeee" style="background:#eeeeee; border:none; padding:0in">
 								<p class="txt-centro">
 									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>GAVETA</b></font>
+										<font size="1" class="fs-6"><b>DESPESAS</b></font>
 									</font>
 								</p>
 							</td>
 							<td width="34%" bgcolor="#eeeeee" style="background:#eeeeee; border:none; padding:0in">
 								<p class="txt-centro">
 									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>DIFERENÇA</b></font>
+										<font size="1" class="fs-6"><b>SALDO FINAL</b></font>
 									</font>
 								</p>
 							</td>
@@ -1749,21 +1752,21 @@ if ($PixCNPJ == '') {
 							<td style="border:none; padding:0in">
 								<p class="txt-centro">
 									<font class="fonte-rel">
-										<font size="1" class="fs-6"><i>R$ <?= $FechamentoF ?></i></font>
+										<font size="1" class="fs-6"><i>R$ <?= $Dinheiro ?></i></font>
 									</font>
 								</p>
 							</td>
 							<td style="border:none; padding:0in">
 								<p class="txt-centro">
 									<font class="fonte-rel">
-										<font size="1" class="fs-6"><i>R$ <?= $GavAut ?></i></font>
+										<font size="1" class="fs-6"><i>R$ <?= $PgtoTot ?></i></font>
 									</font>
 								</p>
 							</td>
 							<td style="border:none; padding:0in">
 								<p class="txt-centro">
 									<font class="fonte-rel">
-										<font size="1" class="fs-6"><i>R$ <?= $DifCx ?></i></font>
+										<font size="1" class="fs-6"><i>R$ <?= $TotalDinheiro ?></i></font>
 									</font>
 								</p>
 							</td>
