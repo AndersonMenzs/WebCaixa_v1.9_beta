@@ -131,6 +131,7 @@ $RCLFFmt           = moeda($RCLF);
 $SRVFFmt           = moeda($SRVF);
 $VTRFFmt           = moeda($VTRF);
 $PgtoTotFmt        = moeda($PgtoTot);
+$TotalDinheiroFmt  = moeda($Dinheiro - $PgtoTot);
 
 $RecolhFmt         = moeda($Recolh);
 $TotPgtoFmt        = moeda($TotPgto);
@@ -161,6 +162,33 @@ $ape_abertura = $lnA['ape_operador'];
 $hr_abertura_obj = DateTime::createFromFormat('H:i:s', $hr_abertura);
 if ($hr_abertura_obj) {
     $hr_abertura = $hr_abertura_obj->format('H:i');
+}
+
+$Recolhimentos = [
+    'hora' => [],
+    'envelope' => [],
+    'matricula' => [],
+    'valor' => [],
+];
+$dataRecolhObj = DateTime::createFromFormat('d/m/Y', trim($dataFch));
+
+if (!$dataRecolhObj) {
+    $dataRecolhObj = DateTime::createFromFormat('Y-m-d', trim($dataFch));
+}
+
+if ($dataRecolhObj) {
+    $dataRecolh = mysqli_real_escape_string($conec, $dataRecolhObj->format('Y-m-d'));
+    $sqlRecolh = "select hrdep, envelope, matreceb, valor from depositos where dtdep = '$dataRecolh' ";
+    $rsRecolh  = mysqli_query($conec, $sqlRecolh) or die("Erro #4C!");
+
+    while ($lnRecolh = mysqli_fetch_assoc($rsRecolh)) {
+        $Recolhimentos['hora'][] = $lnRecolh['hrdep'];
+        $Recolhimentos['envelope'][] = $lnRecolh['envelope'];
+        $Recolhimentos['matricula'][] = $lnRecolh['matreceb'];
+        $Recolhimentos['valor'][] = moeda($lnRecolh['valor']);
+    }
+
+    mysqli_free_result($rsRecolh);
 }
 
 ?>
@@ -1007,40 +1035,6 @@ if ($hr_abertura_obj) {
 								<?php
 								}
 
-								if ($NumPgtos > 0 && $PgtoServicos > 0.00) {
-								?>
-									<tr>
-										<td width="43%" style="border: none; padding: 0in">
-											<p>
-												<font class="fonte-rel">
-													<font size="1" class="fs-6">
-														<i>Despesas</i>
-													</font>
-												</font>
-											</p>
-										</td>
-										<td width="25%" style="border: none; padding: 0in">
-											<p class="txt-centro">
-												<font class="fonte-rel">
-													<font size="1" class="fs-6">
-														<i><?= $NumPgtos ?></i>
-													</font>
-												</font>
-											</p>
-										</td>
-										<td width="32%" style="border: none; padding: 0in">
-											<p>
-												<font class="fonte-rel">
-													<font size="1" class="fs-6">
-														<i>R$ <?= $PgtoServicosFmt ?></i>
-													</font>
-												</font>
-											</p>
-										</td>
-									</tr>
-								<?php
-								}
-
 								if ($NEstorno > 0 && $ValorEstorno > 0.00) {
 								?>
 									<tr>
@@ -1418,6 +1412,22 @@ if ($hr_abertura_obj) {
 											</p>
 										</td>
 									</tr>
+									<tr>
+										<td width="68%" bgcolor="#eeeeee" style="background: #eeeeee; border: none; padding: 0in">
+											<p class="txt-esq">
+												<font class="fonte-rel">
+													<font size="1" class="fs-6"><i><b>T. DINHEIRO</b></i></font>
+												</font>
+											</p>
+										</td>
+										<td width="32%" bgcolor="#eeeeee" style="background: #eeeeee; border: none; padding: 0in">
+											<p>
+												<font class="fonte-rel">
+													<font size="1" class="fs-6"><i><b>R$ <?= $TotalDinheiroFmt ?></b></i></font>
+												</font>
+											</p>
+										</td>
+									</tr>
 								</table>
 							</div>
 
@@ -1586,7 +1596,7 @@ if ($hr_abertura_obj) {
 				</div>
 			<?php } ?>
 
-			<?php if (!empty($FechamentoF) || !empty($GavAut) || !empty($DifCx)) { ?>
+			<?php if (!empty($Dinheiro) || !empty($PgtoTot)) { ?>
 				<div class="bloco-4 bloco-esq">
 					<table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
 						<tr>
@@ -1607,21 +1617,21 @@ if ($hr_abertura_obj) {
 							<td width="33%" bgcolor="#eeeeee" style="background:#eeeeee; border:none; padding:0in">
 								<p class="txt-centro">
 									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>VALOR REAL</b></font>
+										<font size="1" class="fs-6"><b>TOTAL DINHEIRO</b></font>
 									</font>
 								</p>
 							</td>
 							<td width="33%" bgcolor="#eeeeee" style="background:#eeeeee; border:none; padding:0in">
 								<p class="txt-centro">
 									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>GAVETA</b></font>
+										<font size="1" class="fs-6"><b>DESPESAS</b></font>
 									</font>
 								</p>
 							</td>
 							<td width="34%" bgcolor="#eeeeee" style="background:#eeeeee; border:none; padding:0in">
 								<p class="txt-centro">
 									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>DIFERENÇA</b></font>
+										<font size="1" class="fs-6"><b>SALDO FINAL</b></font>
 									</font>
 								</p>
 							</td>
@@ -1630,21 +1640,21 @@ if ($hr_abertura_obj) {
 							<td style="border:none; padding:0in">
 								<p class="txt-centro">
 									<font class="fonte-rel">
-										<font size="1" class="fs-6"><i>R$ <?= $FechamentoFFmt ?></i></font>
+										<font size="1" class="fs-6"><i>R$ <?= $DinheiroFmt ?></i></font>
 									</font>
 								</p>
 							</td>
 							<td style="border:none; padding:0in">
 								<p class="txt-centro">
 									<font class="fonte-rel">
-										<font size="1" class="fs-6"><i>R$ <?= $GavAutFmt ?></i></font>
+										<font size="1" class="fs-6"><i>R$ <?= $PgtoTotFmt ?></i></font>
 									</font>
 								</p>
 							</td>
 							<td style="border:none; padding:0in">
 								<p class="txt-centro">
 									<font class="fonte-rel">
-										<font size="1" class="fs-6"><i>R$ <?= $DifCxFmt ?></i></font>
+										<font size="1" class="fs-6"><i>R$ <?= $TotalDinheiroFmt ?></i></font>
 									</font>
 								</p>
 							</td>
@@ -1811,178 +1821,6 @@ if ($hr_abertura_obj) {
 				</table>
 			<?php } ?>
 			</div>
-
-			<?php if (!empty($Oper['matopf']) && is_array($Oper['matopf'])) { ?>
-				<div class="bloco-full bloco-operadores">
-
-					<table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
-						<tr>
-							<td width="100%" bgcolor="#b2b2b2" style="background: #b2b2b2; border: 1px solid #000000; padding: 0in">
-								<p class="txt-centro">
-									<font class="fonte-rel">
-										<font size="1" class="fs-6">
-											<b>OPERADORES CADASTRADOS NO SISTEMA</b>
-										</font>
-									</font>
-								</p>
-							</td>
-						</tr>
-					</table>
-
-					<table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
-						<tr valign="top">
-							<td width="25%" bgcolor="#cccccc" style="background: #cccccc; border: none; padding: 0in">
-								<p class="txt-centro">
-									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>FUNCIONÁRIO</b></font>
-									</font>
-								</p>
-							</td>
-							<td width="25%" bgcolor="#cccccc" style="background: #cccccc; border: none; padding: 0in">
-								<p class="txt-centro">
-									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>FUNÇÃO</b></font>
-									</font>
-								</p>
-							</td>
-							<td width="25%" bgcolor="#cccccc" style="background: #cccccc; border: none; padding: 0in">
-								<p class="txt-centro">
-									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>HORA</b></font>
-									</font>
-								</p>
-							</td>
-							<td width="25%" bgcolor="#cccccc" style="background: #cccccc; border: none; padding: 0in">
-								<p class="txt-centro">
-									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>CADASTRADO</b></font>
-									</font>
-								</p>
-							</td>
-						</tr>
-
-						<?php
-						$totalOper = count($Oper['matopf']);
-						for ($i = 0; $i < $totalOper; $i++) {
-							$matOpf = htmlspecialchars($Oper['matopf'][$i] ?? '', ENT_QUOTES, 'UTF-8');
-							$cargo  = htmlspecialchars($Oper['cargo'][$i] ?? '', ENT_QUOTES, 'UTF-8');
-							$tempo  = htmlspecialchars($Oper['tempo'][$i] ?? '', ENT_QUOTES, 'UTF-8');
-							$respf  = htmlspecialchars($Oper['respf'][$i] ?? '', ENT_QUOTES, 'UTF-8');
-						?>
-							<tr valign="top">
-								<td width="25%" style="border: none; padding: 0in">
-									<p class="txt-centro">
-										<font class="fonte-rel">
-											<font size="1" class="fs-6"><i><?= $matOpf ?></i></font>
-										</font>
-									</p>
-								</td>
-								<td width="25%" style="border: none; padding: 0in">
-									<p class="txt-centro">
-										<font class="fonte-rel">
-											<font size="1" class="fs-6"><i><?= $cargo ?></i></font>
-										</font>
-									</p>
-								</td>
-								<td width="25%" style="border: none; padding: 0in">
-									<p class="txt-centro">
-										<font class="fonte-rel">
-											<font size="1" class="fs-6"><i><?= $tempo ?></i></font>
-										</font>
-									</p>
-								</td>
-								<td width="25%" style="border: none; padding: 0in">
-									<p class="txt-centro">
-										<font class="fonte-rel">
-											<font size="1" class="fs-6"><i><?= $respf ?></i></font>
-										</font>
-									</p>
-								</td>
-							</tr>
-						<?php } ?>
-					</table>
-
-				</div>
-			<?php } ?>
-
-			<?php if (!empty($SolicSenha['solicitante']) && is_array($SolicSenha['solicitante'])) { ?>
-				<div class="bloco-full">
-
-					<table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
-						<tr>
-							<td width="100%" bgcolor="#b2b2b2" style="background: #b2b2b2; border: 1px solid #000000; padding: 0in">
-								<p class="txt-centro">
-									<font class="fonte-rel">
-										<font size="1" class="fs-6">
-											<b>SOLICITAÇÕES DE SENHA PROVISÓRIA</b>
-										</font>
-									</font>
-								</p>
-							</td>
-						</tr>
-					</table>
-
-					<table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
-						<tr valign="top">
-							<td width="34%" bgcolor="#cccccc" style="background: #cccccc; border: none; padding: 0in">
-								<p class="txt-centro">
-									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>SOLICITANTE</b></font>
-									</font>
-								</p>
-							</td>
-							<td width="33%" bgcolor="#cccccc" style="background: #cccccc; border: none; padding: 0in">
-								<p class="txt-centro">
-									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>DATA</b></font>
-									</font>
-								</p>
-							</td>
-							<td width="33%" bgcolor="#cccccc" style="background: #cccccc; border: none; padding: 0in">
-								<p class="txt-centro">
-									<font class="fonte-rel">
-										<font size="1" class="fs-6"><b>AUTORIZADO</b></font>
-									</font>
-								</p>
-							</td>
-						</tr>
-
-						<?php
-						$totalSenha = count($SolicSenha['solicitante']);
-						for ($i = 0; $i < $totalSenha; $i++) {
-							$solicitante = htmlspecialchars($SolicSenha['solicitante'][$i] ?? '', ENT_QUOTES, 'UTF-8');
-							$data        = htmlspecialchars($SolicSenha['data'][$i] ?? '', ENT_QUOTES, 'UTF-8');
-							$autorizado  = htmlspecialchars($SolicSenha['autorizado'][$i] ?? '', ENT_QUOTES, 'UTF-8');
-						?>
-							<tr valign="top">
-								<td width="34%" style="border: none; padding: 0in">
-									<p class="txt-centro">
-										<font class="fonte-rel">
-											<font size="1" class="fs-6"><i><?= $solicitante ?></i></font>
-										</font>
-									</p>
-								</td>
-								<td width="33%" style="border: none; padding: 0in">
-									<p class="txt-centro">
-										<font class="fonte-rel">
-											<font size="1" class="fs-6"><i><?= $data ?></i></font>
-										</font>
-									</p>
-								</td>
-								<td width="33%" style="border: none; padding: 0in">
-									<p class="txt-centro">
-										<font class="fonte-rel">
-											<font size="1" class="fs-6"><i><?= $autorizado ?></i></font>
-										</font>
-									</p>
-								</td>
-							</tr>
-						<?php } ?>
-					</table>
-
-				</div>
-			<?php } ?>
-
 			<?php if (!empty($Recolhimentos['hora']) && is_array($Recolhimentos['hora'])) { ?>
 				<div class="bloco-full bloco-recolhimentos">
 
@@ -2090,6 +1928,84 @@ if ($hr_abertura_obj) {
 								</p>
 							</td>
 						</tr>
+					</table>
+
+				</div>
+			<?php } ?>
+
+			<?php if (!empty($SolicSenha['solicitante']) && is_array($SolicSenha['solicitante'])) { ?>
+				<div class="bloco-full">
+
+					<table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
+						<tr>
+							<td width="100%" bgcolor="#b2b2b2" style="background: #b2b2b2; border: 1px solid #000000; padding: 0in">
+								<p class="txt-centro">
+									<font class="fonte-rel">
+										<font size="1" class="fs-6">
+											<b>SOLICITAÇÕES DE SENHA PROVISÓRIA</b>
+										</font>
+									</font>
+								</p>
+							</td>
+						</tr>
+					</table>
+
+					<table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
+						<tr valign="top">
+							<td width="34%" bgcolor="#cccccc" style="background: #cccccc; border: none; padding: 0in">
+								<p class="txt-centro">
+									<font class="fonte-rel">
+										<font size="1" class="fs-6"><b>SOLICITANTE</b></font>
+									</font>
+								</p>
+							</td>
+							<td width="33%" bgcolor="#cccccc" style="background: #cccccc; border: none; padding: 0in">
+								<p class="txt-centro">
+									<font class="fonte-rel">
+										<font size="1" class="fs-6"><b>DATA</b></font>
+									</font>
+								</p>
+							</td>
+							<td width="33%" bgcolor="#cccccc" style="background: #cccccc; border: none; padding: 0in">
+								<p class="txt-centro">
+									<font class="fonte-rel">
+										<font size="1" class="fs-6"><b>AUTORIZADO</b></font>
+									</font>
+								</p>
+							</td>
+						</tr>
+
+						<?php
+						$totalSenha = count($SolicSenha['solicitante']);
+						for ($i = 0; $i < $totalSenha; $i++) {
+							$solicitante = htmlspecialchars($SolicSenha['solicitante'][$i] ?? '', ENT_QUOTES, 'UTF-8');
+							$data        = htmlspecialchars($SolicSenha['data'][$i] ?? '', ENT_QUOTES, 'UTF-8');
+							$autorizado  = htmlspecialchars($SolicSenha['autorizado'][$i] ?? '', ENT_QUOTES, 'UTF-8');
+						?>
+							<tr valign="top">
+								<td width="34%" style="border: none; padding: 0in">
+									<p class="txt-centro">
+										<font class="fonte-rel">
+											<font size="1" class="fs-6"><i><?= $solicitante ?></i></font>
+										</font>
+									</p>
+								</td>
+								<td width="33%" style="border: none; padding: 0in">
+									<p class="txt-centro">
+										<font class="fonte-rel">
+											<font size="1" class="fs-6"><i><?= $data ?></i></font>
+										</font>
+									</p>
+								</td>
+								<td width="33%" style="border: none; padding: 0in">
+									<p class="txt-centro">
+										<font class="fonte-rel">
+											<font size="1" class="fs-6"><i><?= $autorizado ?></i></font>
+										</font>
+									</p>
+								</td>
+							</tr>
+						<?php } ?>
 					</table>
 
 				</div>

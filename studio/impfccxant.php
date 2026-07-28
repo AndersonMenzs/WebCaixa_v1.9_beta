@@ -94,6 +94,7 @@ $SRVtot = post('srvf');
 $VTRtot = post('vtrf');
 $OUTtot = post('outf');
 $PgtoTot = post('pgtotot');
+$TotalDinheiro = moeda(valor_num($Dinheiro) - valor_num($PgtoTot));
 
 $Recolh = post('recolh', '0,00');
 $TotPgto = post('totpgto', '0,00');
@@ -1023,40 +1024,6 @@ if ($hr_abertura_obj) {
                                 <?php
                                 }
 
-                                if (valor_num($NumPgtos) > 0 && valor_num($PgtoServicos) > 0) {
-                                ?>
-                                    <tr>
-                                        <td width="43%" style="border: none; padding: 0in">
-                                            <p>
-                                                <font class="fonte-rel">
-                                                    <font size="1" class="fs-6">
-                                                        <i>Despesas</i>
-                                                    </font>
-                                                </font>
-                                            </p>
-                                        </td>
-                                        <td width="25%" style="border: none; padding: 0in">
-                                            <p class="txt-centro">
-                                                <font class="fonte-rel">
-                                                    <font size="1" class="fs-6">
-                                                        <i><?= $NumPgtos ?></i>
-                                                    </font>
-                                                </font>
-                                            </p>
-                                        </td>
-                                        <td width="32%" style="border: none; padding: 0in">
-                                            <p>
-                                                <font class="fonte-rel">
-                                                    <font size="1" class="fs-6">
-                                                        <i>R$ <?= $PgtoServicos ?></i>
-                                                    </font>
-                                                </font>
-                                            </p>
-                                        </td>
-                                    </tr>
-                                <?php
-                                }
-
                                 if (valor_num($NEstorno) > 0 && valor_num($ValorEstorno) > 0) {
                                 ?>
                                     <tr>
@@ -1305,7 +1272,6 @@ if ($hr_abertura_obj) {
                                             </p>
                                         </td>
                                     </tr>
-
                                     <?php if (valor_num($DDPtot) > 0) { ?>
                                         <tr>
                                             <td width="68%" style="border: none; padding: 0in">
@@ -1467,6 +1433,22 @@ if ($hr_abertura_obj) {
                                             <p>
                                                 <font class="fonte-rel">
                                                     <font size="1" class="fs-6"><i><b>R$ <?= $PgtoTot ?></b></i></font>
+                                                </font>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="68%" bgcolor="#eeeeee" style="background: #eeeeee; border: none; padding: 0in">
+                                            <p class="txt-esq">
+                                                <font class="fonte-rel">
+                                                    <font size="1" class="fs-6"><i><b>T. DINHEIRO</b></i></font>
+                                                </font>
+                                            </p>
+                                        </td>
+                                        <td width="32%" bgcolor="#eeeeee" style="background: #eeeeee; border: none; padding: 0in">
+                                            <p>
+                                                <font class="fonte-rel">
+                                                    <font size="1" class="fs-6"><i><b>R$ <?= $TotalDinheiro ?></b></i></font>
                                                 </font>
                                             </p>
                                         </td>
@@ -1639,7 +1621,7 @@ if ($hr_abertura_obj) {
                 </div>
             <?php } ?>
 
-            <?php if (!empty($FechamentoF) || !empty($GavAut) || !empty($DifCx)) { ?>
+            <?php if (!empty($Dinheiro) || !empty($PgtoTot)) { ?>
                 <div class="bloco-4 bloco-esq">
                     <table width="100%" cellpadding="4" cellspacing="0" style="margin-bottom: 0.05in">
                         <tr>
@@ -1660,21 +1642,21 @@ if ($hr_abertura_obj) {
                             <td width="33%" bgcolor="#eeeeee" style="background:#eeeeee; border:none; padding:0in">
                                 <p class="txt-centro">
                                     <font class="fonte-rel">
-                                        <font size="1" class="fs-6"><b>VALOR REAL</b></font>
+                                        <font size="1" class="fs-6"><b>TOTAL DINHEIRO</b></font>
                                     </font>
                                 </p>
                             </td>
                             <td width="33%" bgcolor="#eeeeee" style="background:#eeeeee; border:none; padding:0in">
                                 <p class="txt-centro">
                                     <font class="fonte-rel">
-                                        <font size="1" class="fs-6"><b>GAVETA</b></font>
+                                        <font size="1" class="fs-6"><b>DESPESAS</b></font>
                                     </font>
                                 </p>
                             </td>
                             <td width="34%" bgcolor="#eeeeee" style="background:#eeeeee; border:none; padding:0in">
                                 <p class="txt-centro">
                                     <font class="fonte-rel">
-                                        <font size="1" class="fs-6"><b>DIFERENÇA</b></font>
+                                        <font size="1" class="fs-6"><b>SALDO FINAL</b></font>
                                     </font>
                                 </p>
                             </td>
@@ -1683,21 +1665,21 @@ if ($hr_abertura_obj) {
                             <td style="border:none; padding:0in">
                                 <p class="txt-centro">
                                     <font class="fonte-rel">
-                                        <font size="1" class="fs-6"><i>R$ <?= $FechamentoF ?></i></font>
+                                        <font size="1" class="fs-6"><i>R$ <?= $Dinheiro ?></i></font>
                                     </font>
                                 </p>
                             </td>
                             <td style="border:none; padding:0in">
                                 <p class="txt-centro">
                                     <font class="fonte-rel">
-                                        <font size="1" class="fs-6"><i>R$ <?= $GavAut ?></i></font>
+                                        <font size="1" class="fs-6"><i>R$ <?= $PgtoTot ?></i></font>
                                     </font>
                                 </p>
                             </td>
                             <td style="border:none; padding:0in">
                                 <p class="txt-centro">
                                     <font class="fonte-rel">
-                                        <font size="1" class="fs-6"><i>R$ <?= $DifCx ?></i></font>
+                                        <font size="1" class="fs-6"><i>R$ <?= $TotalDinheiro ?></i></font>
                                     </font>
                                 </p>
                             </td>
