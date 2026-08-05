@@ -1733,7 +1733,7 @@ if ($hr_abertura_obj) {
                             <td width="34%" bgcolor="#eeeeee" style="background:#eeeeee; border:none; padding:0in">
                                 <p class="txt-centro">
                                     <font class="fonte-rel">
-                                        <font size="1" class="fs-6"><b>NUMERÁRIO</b></font>
+                                        <font size="1" class="fs-6"><b>DIFERENÇA</b></font>
                                     </font>
                                 </p>
                             </td>
