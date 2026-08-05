@@ -55,7 +55,7 @@
     include "sitcaixa.php";
     include "valida_caixa.php";
 
-    $Recolh = 300.00;
+    //$Recolh = 300.00;
     $sqlRecolh = "select vlr_config from config_sys where cod_config = 'RECOLH' order by id desc limit 1";
     $rsRecolh  = mysqli_query($conec, $sqlRecolh) or die("Erro de Banco de Dados #0. Contate seu Administrador.");
     if ($lnRecolh = mysqli_fetch_array($rsRecolh)) {
@@ -202,7 +202,7 @@
 
     $SisRot = "S-7.2";
     mysqli_close($conec);
-    mysqli_close($conec_digital); ?>
+    //mysqli_close($conec_digital); ?>
 
 </body>
 
