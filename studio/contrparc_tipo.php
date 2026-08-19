@@ -312,10 +312,10 @@
 						<font color='gold' size='4'><b><i>Vlr. Prestação</i></b></font>
 					</td>
 					<td width="9%" align="center">
-						<font color='gold' size='4'><b><i>Vlr. Recebido</i></b></font>
+						<font color='gold' size='4'><b><i>Vlr. Pago</i></b></font>
 					</td>
 					<td width="9%" align="center">
-						<font color='gold' size='4'><b><i>Rest. Parcela</i></b></font>
+						<font color='gold' size='4'><b><i>Rest. Parcela Anterior</i></b></font>
 					</td>
 					<td width="7%" align="center">
 						<font color='gold' size='4'><b><i>Nº Prestação</i></b></font>

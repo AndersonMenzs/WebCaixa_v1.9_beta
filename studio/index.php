@@ -308,6 +308,18 @@
 
 			if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $chcx == 'f' and $AtuSen == 'ok') { ?>
 				<tr>
+					<td width="35%">
+					<td width="35%">
+						<a href="pedido_maleta.php?c_s=<?php echo $lg_user ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
+						<font size='4'><b><i>- Pedido Maleta</i></b></font>
+					</td>
+					<td width="30%"></td>
+				</tr>
+			<?php
+			}
+
+			if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $chcx == 'f' and $AtuSen == 'ok') { ?>
+				<tr>
 					<td width="35%"></td>
 					<td width="35%">
 						<a href="pgtos.php?c_s=<?php echo $lg_user; ?>"><img src="./images/star4.gif" width="25" border="0" align="top"></a>
