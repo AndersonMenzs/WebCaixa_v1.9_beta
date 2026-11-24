@@ -185,19 +185,19 @@
     if (isset($_REQUEST['mat_vend'])) $mat_vend = trim($_REQUEST['mat_vend']);
 
     $matVendEsc = htmlspecialchars($mat_vend, ENT_QUOTES, 'UTF-8');
+   
+   include "us_sist.php";
+   if ($ch == 'no') {
+      include "us_cad.php";
+   }
 
-    include "conexao.php";
-    include "dbselect.php";
+   include "conexao.php";
+   include "dbselect.php";
+   include "valida_caixa.php";
 
-    include "us_sist.php";
-    if ($ch == 'no') {
-        include "us_cad.php";
-    }
-    include "valida_caixa.php";
-
-    if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
-        bloquear_se_caixa_anterior_aberto($conec, $lg_user);
-    }
+   if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
+      bloquear_se_caixa_anterior_aberto($conec, $lg_user);
+   }
      
     ?>
 

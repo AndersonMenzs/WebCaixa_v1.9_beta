@@ -83,7 +83,7 @@
 
     $sql = "SELECT numdoc, datarec FROM registro
             WHERE numdoc >= $NumDocInicial
-              AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK', 'CHV', 'PRODK')
+              AND subtipo IN ('TXP', 'TXPG', 'TXC', 'PROD', 'BOOK', 'CHV', 'PRODK', 'BRIN')
             ORDER BY numdoc DESC LIMIT 1";
     $rs = mysqli_query($conec, $sql) or die("Erro ao consultar o próximo documento.");
     $ln = mysqli_fetch_assoc($rs);

@@ -5,17 +5,17 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style type="text/css">
         body {
-            margin-top: 3%;
-            margin-left: 3%;
-            margin-right: 3%;
+            margin-top: 5%;
+            margin-left: 5%;
+            margin-right: 5%;
             border: 3px solid gray;
-            padding: 10px;
+            padding: 10px 10px 10px 10px;
             font-family: sans-serif;
         }
 
         .campos {
             background-color: #C0C0C0;
-            font: 16px sans-serif;
+            font: 12px sans-serif;
             color: #000000;
         }
     </style>
@@ -59,7 +59,20 @@ if ($ch === 'no') {
 
 if ($ch === 'ok-enc' || $ch === 'ok-cai' || $ch === 'ok-adm' || $ch === 'ok') {
 ?>
-    <font color="gold" size="6"><br><b><center><u><i>CONFIRMAÇÃO DO BRINDE</i></u></center></b></font><br>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="9%">
+                <a href="brindes.php?c_s=<?php echo $lg_userUrl; ?>"><img src="./images/voltar.gif" alt="Voltar"></a>
+            </td>
+            <td width="82%" align="center">
+                <font color="gold" size="6"><b><center><u><i>CONFIRMAÇÃO DO BRINDE</i></u></center></b></font>
+            </td>
+            <td width="9%">
+                <a href="brindes.php?c_s=<?php echo $lg_userUrl; ?>"><img src="./images/voltar.gif" alt="Voltar"></a>
+            </td>
+        </tr>
+    </table>
+    <br>
 
     <form name="confbrinde" method="post" action="gerabrindes.php" autocomplete="off">
         <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
@@ -98,25 +111,30 @@ if ($ch === 'ok-enc' || $ch === 'ok-cai' || $ch === 'ok-adm' || $ch === 'ok') {
 
         <p>
             <center>
-                <input type="submit" name="btenviar" value="Confirmar">
+                <input id="ghost_click" type="submit" name="btenviar" value="Autenticar" autofocus>
                 &nbsp;&nbsp;
                 <input type="button" value="Retornar" onclick="window.history.back()">
             </center>
         </p>
+        <center>
+            <font color="#FFFFFF" size="3"><span id="msg"></span></font>
+        </center>
     </form>
 <?php } else { ?>
     <br><br>
     <center>
-        <font size="6"><b>Acesso <font color="gold"><u>não autorizado</u></font>!</b></font>
+        <font size="6"><b>Acesso <font color="gold"><blink>não autorizado</blink></font>!!!</b></font>
     </center>
     <br>
-    <center><a href="servrec.php?c_s=<?php echo $lg_userUrl; ?>"><img src="images/voltar.gif"></a></center>
+    <center><a href="servrec.php?c_s=<?php echo $lg_userUrl; ?>"><img src="images/voltar.gif" alt="Voltar"></a></center>
 <?php }
 
 $SisRot = "S-7.2.1.1";
 include "rodape.php";
 mysqli_close($conec);
 ?>
+
+<script src="./js/ghost_click.js"></script>
 
 </body>
 
