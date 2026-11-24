@@ -198,6 +198,7 @@
     if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') {
         bloquear_se_caixa_anterior_aberto($conec, $lg_user);
     }
+     
     ?>
 
     <table width='100%' border='0' cellpadding='0' cellspacing='0'>

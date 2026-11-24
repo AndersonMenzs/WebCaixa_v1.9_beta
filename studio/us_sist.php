@@ -34,7 +34,7 @@ if ($lnu) {
     $psu = null;
     $hier = null;
 }
-echo $lgu . "-" . $psu . "-" . $hier . "<br>";
+
 if (($lg == $user and $psu == $pss and $hier == "S") or ($lgu == $user and $psu == $pss and $hier == "A")) {
    $ch = 'ok';
 } else {

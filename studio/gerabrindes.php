@@ -41,6 +41,8 @@
     $rsOperador = mysqli_query($conec, $sqlOperador);
     $operador = $rsOperador ? mysqli_fetch_assoc($rsOperador) : null;
 
+    include "conexao.php";
+    include "dbselect.php";
     include "us_sist.php";
 
     if (($ch === 'ok' || $ch === 'ok-enc' || $ch === 'ok-cai' || $ch === 'ok-adm') && $operador) {
@@ -52,16 +54,16 @@
         $Reg = $ultimo && $ultimo['datarec'] === $dtRec ? (int)$ultimo['reg'] + 1 : 1;
 
         $TipoRec = '10';
-        $SubTipo = 'TXPG';
+        $SubTipo = 'BRIND';
         $MatVendEsc = mysqli_real_escape_string($conec, $Mat_Vend);
         $VendedoraEsc = mysqli_real_escape_string($conec, $Vendedora);
         $ClienteEsc = mysqli_real_escape_string($conec, $Cliente);
         $NDocEsc = mysqli_real_escape_string($conec, $NDoc);
         $MatEsc = mysqli_real_escape_string($conec, $Mat);
         $CodBrindeEsc = mysqli_real_escape_string($conec, $CodBrinde);
+        $sqlBrinde = "SELECT cod_prod FROM produtos WHERE cod_prod = '91'";
+        $resBrinde = mysqli_query($conec, $sqlBrinde) or die("Não foi possível localizar o brinde.");
 
-        $sqlBrinde = "SELECT cod_prod FROM produtos WHERE cod_prod = '$CodBrindeEsc' AND desc_prod = 'B' LIMIT 1";
-        $resBrinde = mysqli_query($conec, $sqlBrinde);
         if (!$resBrinde || !mysqli_fetch_assoc($resBrinde)) {
             die("O brinde selecionado não está mais disponível.");
         }
