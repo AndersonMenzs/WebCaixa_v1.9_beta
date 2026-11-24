@@ -175,6 +175,14 @@
                                         border="0" align="top"></a>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td align='center'></td>
+                            <td align='center'>
+                                <a href="brindes.php?c_s=<?php echo $lg_user; ?>"><img src="./images/brindes.gif"
+                                        width="150" border="0" align="top"></a>
+                            </td></td>
+                        </tr>
                     </table>
                 </td>
             </tr>

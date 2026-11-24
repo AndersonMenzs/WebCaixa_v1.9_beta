@@ -153,7 +153,7 @@
 	if ($Quitacao && $ValorQuitacaoCents > 0 && ($ValorPagamentosCents + $CreditoAplicadoQuitacaoCents) != $ValorQuitacaoCents) {
 		$SisRot = "S-7.2.2.1";
 		include "./rodape.php";
-		echo "<script>alert('Valor recebido + Restante Parcela incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
+		echo "<script>alert('Valor recebido + Restante Parcela Anterior incorreto para quitação. O valor correto é R$ " . number_format($ValorQuitacaoCents / 100, 2, ',', '.') . ".'); window.history.back();</script>";
 		exit;
 	}
 
@@ -289,7 +289,7 @@
 
 				<tr>
 					<td width="45%" align="right">
-						<font color='gold' size='5'><b><i>Valor Recebido </i></b></font>
+						<font color='gold' size='5'><b><i>Valor Pago </i></b></font>
 					</td>
 					<td width="55%" align="center">
 							<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $VrRecebidoF; ?></i></b></font>
@@ -298,7 +298,7 @@
 					<?php if ($CreditoCobrancaF > 0) { ?>
 						<tr>
 							<td width="45%" align="right">
-								<font color='gold' size='5'><b><i>Restante Parcela </i></b></font>
+								<font color='gold' size='5'><b><i>Restante Parcela Anterior </i></b></font>
 							</td>
 							<td width="55%" align="center">
 								<font color='#FFFFFF' size='5'><b><i><?php echo "R$ " . $CreditoCobranca; ?></i></b></font>

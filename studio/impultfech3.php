@@ -77,7 +77,7 @@ include "conexao.php";
 include "dbselect.php";
 
 $fech_data_sql = mysqli_real_escape_string($conec, $fech_data);
-$sql = "select * from antfech where datafecha = '$fech_data_sql'";
+$sql = "select * from antfech where datafch = '$fech_data_sql'";
 $rs  = mysqli_query($conec, $sql) or die("Não foi possível Reimprimir o Fechamento do Caixa");
 $ln = mysqli_fetch_array($rs);
 

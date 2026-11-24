@@ -447,9 +447,9 @@ if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $action == 'salvar')
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style type="text/css">
         body {
-            margin-top: 5%;
-            margin-left: 3%;
-            margin-right: 3%;
+            margin-top: 2%;
+            margin-left: 2%;
+            margin-right: 2%;
             border: 3px solid gray;
             padding: 10px 10px 10px 10px;
             font-family: sans-serif;
@@ -524,12 +524,7 @@ if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $action == 'salvar')
 <?php if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
     <font color="gold" size="6"><br>
         <b><center><u><i>PEDIDO MALETA</i></u></center></b>
-    </font>
-    <center>
-        <font color="lime" size="3">
-            WebDigital: <?php echo pedido_maleta_h($dbselectDigital); ?> | Estudio: <?php echo pedido_maleta_h($codigoEstudio); ?>
-        </font>
-    </center><br><br>
+    </font><br><br>
 
     <?php if ($mensagem != '') { ?>
         <center><font color="<?php echo pedido_maleta_h($tipoMensagem); ?>" size="4"><b><?php echo pedido_maleta_h($mensagem); ?></b></font></center><br>
@@ -537,9 +532,9 @@ if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $action == 'salvar')
 
     <form name="frmconsulta" method="post" action="pedido_maleta.php?c_s=<?php echo pedido_maleta_h($lg_user); ?>">
         <input type="hidden" name="action" value="consultar">
-        <table border="10" cellpadding="10" cellspacing="0" align="center">
+        <table border="5" cellpadding="10" cellspacing="0" align="center">
             <tr>
-                <td><font size="4"><b><i>Envelope</i></b></font></td>
+                <td><font color="gold" size="5"><b><i>Envelope</i></b></font></td>
                 <td><input type="text" name="envelope" size="18" maxlength="20" class="campos" value="<?php echo pedido_maleta_h($envelope); ?>"></td>
                 <td align="center">
                     <input type="submit" value="Consultar">&nbsp;&nbsp;
@@ -554,15 +549,15 @@ if (($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') and $action == 'salvar')
             <input type="hidden" name="action" value="salvar">
             <input type="hidden" name="envelope" value="<?php echo pedido_maleta_h($envelope); ?>">
 
-            <table border="10" cellpadding="10" cellspacing="0" align="center">
+            <table border="5" cellpadding="10" cellspacing="0" align="center">
                 <tr>
-                    <td><font size="4"><b><i>Envelope</i></b></font></td>
+                    <td><font color='gold' size='5'><b><i>Envelope</i></b></font></td>
                     <td><input class="campos" type="text" size="18" value="<?php echo pedido_maleta_h($dados['envelope'] ?? ''); ?>" readonly></td>
-                    <td><font size="4"><b><i>Pasta</i></b></font></td>
+                    <td><font color='gold' size='5'><b><i>Pasta</i></b></font></td>
                     <td><input class="campos" type="text" size="24" value="<?php echo pedido_maleta_h($dados['pasta'] ?? ''); ?>" readonly></td>
                 </tr>
                 <tr>
-                    <td><font size="4"><b><i>PC</i></b></font></td>
+                    <td><font color='gold' size='5'><b><i>PC</i></b></font></td>
                     <td><input class="campos" type="text" size="18" value="<?php echo pedido_maleta_h($dados['pc'] ?? ''); ?>" readonly></td>
                     <td><font size="4"><b><i>Modelo</i></b></font></td>
                     <td><input class="campos" type="text" size="36" value="<?php echo pedido_maleta_h($dados['nomeModelo'] ?? ''); ?>" readonly></td>

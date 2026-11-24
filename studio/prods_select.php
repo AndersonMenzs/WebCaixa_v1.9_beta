@@ -385,7 +385,7 @@
                                 <?php
 
                                 // Pacotes
-                                $sql_Pct = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND cod_prod NOT IN ('1','2','3','4','5','6','7','8','9','10','11','12') ORDER BY nome_prod ASC";
+                                $sql_Pct = "SELECT * FROM produtos WHERE desc_prod <> 'x' AND desc_prod <> 'B'AND cod_prod NOT IN ('1','2','3','4','5','6','7','8','9','10','11','12') ORDER BY nome_prod ASC";
                                 $res_Pct = mysqli_query($conec, $sql_Pct) or die("File Error #1. Contate seu Administrador.");
 
                                 while ($row_Pct = mysqli_fetch_assoc($res_Pct)) {

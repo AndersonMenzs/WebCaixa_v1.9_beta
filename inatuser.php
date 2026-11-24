@@ -9,15 +9,26 @@ $AnoHoje = date('Y');
 $MesHoje = date('m');
 $DiaHoje = date('d');
 
+echo $DiaCad . " - " . $MesCad . " - " . $AnoCad ."<br>";
+echo $DiaHoje . " - " . $MesHoje . " - " . $AnoHoje ."<br>";
+
 // Cálculo do timestamp das duas datas
 $timestamp1 = mktime(0, 0, 0, $MesCad, $DiaCad, $AnoCad);
 $timestamp2 = mktime(0, 0, 0, $MesHoje, $DiaHoje, $AnoHoje);
 
+echo $timestamp1 ."<br>";
+echo $timestamp2 ."<br>";
+
 // Diferença em segundos
 $segundos_diferenca = $timestamp1 - $timestamp2;
 
+echo $segundos_diferenca ."<br>";
+
 // Diferença em dias
 $dias_diferenca = abs($segundos_diferenca / (60 * 60 * 24));
+
+echo $dias_diferenca ."<br>";
+echo $MatI ."<br>";
 
 // Removendo o Usuário
 if ($dias_diferenca > 45 && $dias_diferenca < 120) {

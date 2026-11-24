@@ -114,6 +114,8 @@ error_reporting(E_ALL);
 		include "./inatuser.php";
 	}
 
+		//include "./inatuser.php";
+
 	// Consultando o Último Acesso
 	$sql = "select * from datafix";
 	$rs  = mysqli_query($conec, $sql) or die("Erro de Acesso #2. Contate seu Administrador.");

@@ -103,7 +103,7 @@
 
             $K = 0;
 
-            while ($lnP  = mysqli_fetch_array($rsP) and $K < 5) {
+            while ($lnP  = mysqli_fetch_array($rsP) and $K < 10) {
                 $K = $K + 1;
 
                 $Fita = $lnP['fita'];
@@ -113,7 +113,7 @@
                 $m3 = substr($Mat, 6, 3);
                 $dv = substr($Mat, 10, 1);
                 $MatF  = "$m1$m2$m3$dv";
-                $datafech = $lnP['datafecha'];
+                $datafech = $lnP['datafch'];
 
             ?>
 
@@ -195,7 +195,7 @@
         <center><a href='index.php'><img src='images/voltar.gif'></a></center><br><br>
     <?php
     } ?>
-    <meta http-equiv="refresh" content="60;URL=./index.php?c_s=<?php echo $lg_user; ?>">
+    <meta http-equiv="refresh" content=URL=./index.php?c_s=<?php echo $lg_user; ?>">
 
     <?php
 
