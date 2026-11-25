@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/post_once.php';
 
 //Debug
 

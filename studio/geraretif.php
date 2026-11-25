@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/post_once.php';
 
 // Preparando as variáveis
 $empresa        = "ESTRELLA PHOTO STUDIO";

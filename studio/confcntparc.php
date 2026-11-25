@@ -236,6 +236,7 @@
 
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
 		<form name="confentr" method="post" action="geracntparc.php" onsubmit="return checkdata()">
+			<input type="hidden" name="submission_token" value="<?php echo bin2hex(random_bytes(32)); ?>">
 			<table width="70%" border="5" cellpadding="5" cellspacing="0" align="center">
 				<tr>
 					<td width="45%" align="right">

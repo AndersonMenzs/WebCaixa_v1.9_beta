@@ -274,6 +274,7 @@
 	if ($ch == 'ok-enc' or $ch == 'ok-cai' or $ch == 'ok') { ?>
 		<table width="80%" border="5" cellpadding="10" cellspacing="0" align="center">
 			<form name="confentr" method="post" action="geraprods.php" onSubmit='JavaScript:return checkdata()'>
+				<input type="hidden" name="submission_token" value="<?php echo bin2hex(random_bytes(32)); ?>">
 				<tr>
 					<td width="30%" align="center">
 						<font color='gold' size='5'><b><i>Documento Nº </i></b></font>

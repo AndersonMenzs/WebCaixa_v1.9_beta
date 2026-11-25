@@ -75,6 +75,7 @@ if ($ch === 'ok-enc' || $ch === 'ok-cai' || $ch === 'ok-adm' || $ch === 'ok') {
     <br>
 
     <form name="confbrinde" method="post" action="gerabrindes.php" autocomplete="off">
+        <input type="hidden" name="submission_token" value="<?php echo bin2hex(random_bytes(32)); ?>">
         <table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
             <tr>
                 <td width="30%" align="center"><font color="gold" size="5"><b><i>Nº Documento</i></b></font></td>

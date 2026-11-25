@@ -162,6 +162,7 @@
 	?>
 		<table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
 			<form name="confentr" method="post" action="gerapropentr.php" onsubmit="return checkdata()" autocomplete="off">
+				<input type="hidden" name="submission_token" value="<?php echo bin2hex(random_bytes(32)); ?>">
 				<tr>
 					<td width="30%" align="center">
 						<font color='gold' size='5'><b><i>Nº da Proposta</i></b></font>

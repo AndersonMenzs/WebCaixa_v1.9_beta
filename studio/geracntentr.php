@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/post_once.php';
 
 // Debug
 ini_set('error_log', 'php_errors.log');

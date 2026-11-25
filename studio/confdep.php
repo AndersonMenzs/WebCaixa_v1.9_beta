@@ -96,6 +96,7 @@
 		} else { ?>
 			<table width="70%" border="5" cellpadding="10" cellspacing="0" align="center">
 				<form name="confentr" method="post" action="geradep.php" OnSubmit="JavaScript:return checkdata()">
+					<input type="hidden" name="submission_token" value="<?php echo bin2hex(random_bytes(32)); ?>">
 					<tr>
 						<td width="40%" align="center">
 							<font color='gold' size='5'><b><i>Nº do Envelope</i></b></font>
