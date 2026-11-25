@@ -43,6 +43,10 @@
     $ch      = '';
 
     $dataH = date('Y-m-d');
+
+    // Conectando ao Banco de Dados
+    include "./conexao.php";
+    
     ?>
 </head>
 
